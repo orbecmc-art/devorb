@@ -161,7 +161,7 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 **Orçamento:** `debugging` é a primeira skill a passar pelo processo. Depois dela, quem constrói mede o custo real, estima o restante e mostra ao dono antes de seguir. Os testes usam o mesmo modelo que o dono usa no Mac, fixado em cada rodada, e `--max-cost-usd` serve de teto.
 
-**Ferramenta de teste:** `claude plugin eval`, nativo, com casos em `evals/`, graders e comparação sem plugin. Ela não roda script depois do agente, então as checagens ocultas são graders sobre os arquivos finais, que o agente não consegue ler. No Windows nativo, casos com Bash exigem WSL2, então os testes rodam no Mac. A documentação não cobre comparar duas versões do mesmo plugin. Rodar nos dois diretórios e comparar o `--json` é uma inferência a confirmar. Os scripts do teste de fusão estão em `spike-devorb-debugging/harness/`.
+**Ferramenta de teste:** `claude plugin eval`, nativo, com casos em `evals/`, graders e comparação sem plugin. Ela não roda script depois do agente, então as checagens ocultas são graders sobre os arquivos finais, que o agente não consegue ler. No Windows nativo, casos com Bash exigem WSL2, então os testes rodam no Mac. A documentação não cobre comparar duas versões do mesmo plugin. Rodar nos dois diretórios e comparar o `--json` é uma inferência a confirmar. Os scripts do teste de fusão estão em `docs/spike-devorb-debugging/harness/`.
 
 **Comparação com o ponytail ligado:** Superpowers com ponytail contra DevOrb com ponytail, de preferência no Mac. O ponytail já manda procurar todos os chamadores e corrigir a causa em código compartilhado, então parte do ganho visto no teste pode já existir no dia a dia do dono.
 
@@ -202,7 +202,7 @@ O dono ainda vai enviar os repositórios. As etapas seguem o mesmo processo de f
 
 ## O que já se sabe sobre a fusão
 
-O teste de depuração está em `spike-devorb-debugging/FUSAO.md`. A skill fundida ficou menor que as duas fontes e foi a única a corrigir o bug na origem, em 2 de 2 rodadas. O resultado está enviesado: as regras novas foram escritas depois de ver a falha nesse mesmo bug. A skill ainda é descartável, e `debugging` só é aceita depois de passar pelo processo acima.
+O teste de depuração está em `docs/spike-devorb-debugging/FUSAO.md`. A skill fundida ficou menor que as duas fontes e foi a única a corrigir o bug na origem, em 2 de 2 rodadas. O resultado está enviesado: as regras novas foram escritas depois de ver a falha nesse mesmo bug. A skill ainda é descartável, e `debugging` só é aceita depois de passar pelo processo acima.
 
 ## Sucesso
 

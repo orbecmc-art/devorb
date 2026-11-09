@@ -1,0 +1,12 @@
+{
+  "name": "devorb",
+  "owner": { "name": "orbecmc-art" },
+  "description": "Marketplace pessoal do plugin DevOrb.",
+  "plugins": [
+    {
+      "name": "devorb",
+      "source": "./",
+      "description": "Plugin pessoal que funde Superpowers e as skills do Matt Pocock em um fluxo único."
+    }
+  ]
+}

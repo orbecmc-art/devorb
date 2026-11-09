@@ -1,0 +1,104 @@
+{
+  "using-devorb": {
+    "invocation": "hook",
+    "level": "full",
+    "ceilingTokens": 875,
+    "status": "planned"
+  },
+  "aligning": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "planning": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "implementing": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 5000,
+    "status": "planned"
+  },
+  "tdd": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "debugging": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "verifying": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "reviewing": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "finishing": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "writing-skills": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 5000,
+    "status": "planned"
+  },
+  "evolving": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "domain-modeling": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "codebase-design": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "improve-architecture": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "prototype": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "handoff": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
+  "retro": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  }
+}

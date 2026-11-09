@@ -1,0 +1,18 @@
+{
+  "sources": [
+    {
+      "name": "superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "license": "MIT",
+      "lastAbsorbed": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "paths": ["skills/", "hooks/"]
+    },
+    {
+      "name": "mattpocock-skills",
+      "url": "https://github.com/mattpocock/skills",
+      "license": "MIT",
+      "lastAbsorbed": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "paths": ["skills/engineering/", "skills/productivity/"]
+    }
+  ]
+}
