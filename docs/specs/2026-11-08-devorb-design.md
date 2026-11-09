@@ -21,7 +21,7 @@ Ele não quer ficar pegando um pouco de cada plugin. Quer que tudo se funda em u
 ## Não objetivos
 
 - Absorver o ponytail. Ele continua um plugin separado.
-- Absorver as fontes novas inteiras. Da Trail of Bits entram 6 de 98 skills, do Spartan, 3, do ECC, 7 de 314, e do gstack, 7 de 63.
+- Absorver as fontes novas inteiras. Na base, entram 6 de 98 skills da Trail of Bits, 3 do Spartan, 7 de 314 do ECC e 7 de 63 do gstack. O setor de design tem a própria seleção.
 - Incluir skills de agência (n8n, Kommo, Meta Ads). Elas têm outro público e pesariam em todo projeto.
 - Suportar outros agentes (Codex, Cursor e afins). É só Claude Code.
 - Coletar métricas de retrabalho ou tempo. A comparação de cenários responde com menos esforço.
@@ -57,6 +57,7 @@ O projeto fracassa, mesmo funcionando, se:
 - Trazer na primeira versão os seis itens que só o Matt tem: `domain-modeling`, `codebase-design`, `improve-architecture`, `prototype`, `handoff` e `retro`.
 - Trazer quatro fontes novas, recomendadas a ele: as diretrizes do Karpathy, a Trail of Bits, o `webapp-testing` da Anthropic e o `ai-toolkit` (Spartan). Ele aprovou a seleção de Claude, que fica só com as partes de "Fontes novas".
 - Trazer mais duas fontes que ele considera importantes: o ECC e o gstack. A seleção é de Claude e entra na revisão do pull request. O plugin `everything-claude-code`, nome antigo do ECC, foi desinstalado do PC e agora só fornece ideias.
+- Fundir também a parte de construção visual. Ele enviou seis repositórios (`emilkowalski/skills`, `pbakaus/impeccable`, `paper-design/shaders`, `Nutlope/hallmark`, `cathrynlavery/diagram-design` e `nateherkai/scroll-craft`) e citou a `ui-ux-pro-max`. A seleção é de Claude e entra na revisão do pull request.
 
 ### De Claude, que o dono pode rever
 
@@ -115,7 +116,7 @@ Itens que só o Matt tem e que entram na primeira versão, por decisão do dono:
 | `domain-modeling` | `domain-modeling` (glossário e ADRs) | Automática |
 | `codebase-design` | `codebase-design` | Automática |
 | `improve-architecture` | `improve-codebase-architecture` | Manual |
-| `prototype` | `prototype` | Manual |
+| `prototype` | `prototype`, com uma ideia de Emil `prototype` | Manual |
 | `handoff` | `handoff`, com uma ideia de `context-save` | Manual |
 | `retro` | `retro` | Manual |
 
@@ -235,19 +236,106 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 3. Usar em trabalho real. Para voltar, basta desligar o DevOrb e religar o Superpowers.
 4. Desinstalar o Superpowers quando o dono estiver satisfeito.
 
-## Design, depois da base
+## Setor de design
 
-É um projeto separado, com plano próprio. O plano atual termina na migração da base. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa. O teto de custo fixo vale para a base, e o design define o seu ao começar.
+Cobre a construção visual: como uma interface é decidida, escrita em tokens, posta em movimento e conferida depois de pronta. O processo é o mesmo da base: fundir, não colecionar. O caso real é fazer sites, landing pages e sistemas web que não pareçam gerados por IA. Esse caso é suposição de Claude a partir do que o dono descreveu.
 
-O dono pediu para voltar ao design logo depois do ECC e do gstack, e a base ainda não passou pelas fusões. A primeira decisão desse projeto é a ordem entre os dois.
+**Ordem:** a seleção, esta seção e o plano `docs/plans/2026-11-09-devorb-design.md` são feitos agora, neste PC, por recomendação de Claude que o dono seguiu. As fusões rodam no Mac, só depois do portão da Task 6 da base, porque ela calibra o processo e mede o custo real. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa.
 
-As etapas seguem o mesmo processo de fusão e entram em `sources.json`. O dono citou a `ui-ux-pro-max` como fonte. Claude não sabe se `frontend-design` e `taste-skill`, também instalados no PC, entram. A skill resultante entra no fluxo entre `aligning` e `implementing`, quando a tarefa tiver interface.
+### Mapa de skills do design
 
-Candidatas ainda sem avaliação:
+| Etapa | Skill | Espinha | Outras fontes | Acionamento |
+|---|---|---|---|---|
+| Dar direção | `visual-direction` | Impeccable: `SKILL.src.md`, `new-work`, `craft-floor`, `mode-persuade`, `mode-operate`, `mode-read` | Hallmark: `SKILL.md`, `gates`, `anatomy`, `imagery`, `craft`, `flow`. taste-skill: `copy`, `copy-voice`. `frontend-design`. ECC: `frontend-design-direction`. gstack: `design-html/sections/craft`, `design-consultation/sections/proposal-and-preview`, `plan-design-review/sections/review-sections` | Automática |
+| Escrever o sistema | `design-system` | Impeccable: `extract`, `document` | UI UX Pro Max: `colors.csv`. ECC: `design-system` | Automática |
+| Mover | `motion` | Emil: `animate` | Emil: `choreograph`, `gestures`, `animation-performance`, `remove-animations`, `emil-design-eng`, `apple-design`. gstack: `design-motion`. ECC: `motion-foundations`, `motion-patterns`, `motion-advanced`. `scroll-craft`: `devices`, `feel`, `verify`. `paper-shaders`: `README`, `CHANGELOG` | Automática |
+| Conferir | `ui-review` | gstack: `docs/design-lint.md`, `design-review/sections/craft-audit` | Impeccable: `audit`, `polish`, `harden`. Emil: `break-ui`, `mobile-native`. UI UX Pro Max: `ux-guidelines.csv` | Automática |
+| Diagramar | `diagram` | `diagram-design`: `SKILL.md`, `primitives-core`, `layout-budget`, `animation` | gstack: `diagram` | Manual |
 
-- **`ai-toolkit`:** `design-workflow` e `design-intelligence`.
-- **ECC:** `accessibility`, `frontend-a11y`, `design-system`, `frontend-design-direction`, `frontend-patterns`, `make-interfaces-feel-better`, `motion-foundations`, `motion-patterns` e `motion-advanced`.
-- **gstack:** `design-consultation`, `design-html`, `design-motion`, `design-review`, `design-shotgun`, `plan-design-review`, `DESIGN.md` e `review/design-checklist.md`.
+Cada arquivo acompanhado aparece em uma só linha, a da skill principal dele. Uma ideia de um arquivo pode ir para outra skill: o ledger dela registra o caminho. Na revisão mensal, a mudança em um arquivo é classificada para a skill da tabela e para cada skill cujo ledger cita aquele caminho.
+
+A `prototype` da base recebe uma ideia de Emil `prototype`, registrada na tabela da base. Fora isso, as skills deste mapa não mudam as da base, só se conectam a elas.
+
+### Fronteiras
+
+- **`visual-direction`** decide o modo, a quantidade de invenção, o conteúdo, os estados e a família tipográfica, que vem do mundo do público. Registra o contrato de direção e o piso de entrega. Não escolhe valores.
+- **`design-system`** é a única que escolhe valores: cor, escala e ritmo tipográfico, espaço, raio, borda e estados. Grava `DESIGN.md`, em projeto novo ou lendo o que já existe. As restrições de acessibilidade nascem aqui como tokens: pares de contraste, foco e o limiar de texto grande.
+- **`motion`** é a única que decide se algo se move e como, inclusive duração e curva. Se o projeto guarda esses valores como tokens, `design-system` só os grava. Scroll e shaders são referências dela, não skills à parte.
+- **`ui-review`** mede o que foi construído contra `DESIGN.md`, o contrato de direção e os pisos das outras três skills. Os passes de acessibilidade e de web no celular são dela. Relata de P0 a P3 e para, sem corrigir. Não decide estética nem valores.
+- **`browser-testing`** continua respondendo se a tela funciona, e `ui-review`, se ficou como combinado. `reviewing` só encaminha quando o diff toca interface.
+- **`diagram`** é ferramenta eventual, não etapa. Por ser manual, não custa nada em toda sessão, mas linguagem natural não a aciona.
+
+### Fluxo
+
+Quando a tarefa tem interface: `aligning` → `visual-direction` → `design-system` → `planning` → `implementing`, com `motion` quando algo se move → `verifying`, com `browser-testing` e depois `ui-review` → `reviewing` → `finishing`. Em superfície que já existe, `visual-direction` só estende e `design-system` só lê. Sem interface, nada muda.
+
+O contrato de direção fica na spec de `aligning`, em `## Direção visual`. `DESIGN.md` fica na raiz do projeto, no formato de `google-labs-code/design.md`, que a Impeccable segue: tokens no frontmatter YAML e prosa depois. Nunca é sobrescrito sem pedido.
+
+### O que entra de cada fonte
+
+Todas entram só como ideias (`textReuse: false`), mesmo as que permitiriam copiar. Partes delas derivam umas das outras sem aviso, e a skill precisa de voz própria. Os pinos estão em `fusion/sources.json`.
+
+| Fonte | Licença | Entra | Fica de fora |
+|---|---|---|---|
+| Impeccable | Apache 2.0 | Modos, escala de invenção, contrato de direção, piso de ofício, extração e auditoria | Motor em Rust, sorteio de direção, telemetria e hooks, que rodam fora da aprovação do modelo e podem baixar o motor |
+| Hallmark | MIT | Regras checáveis, material antes da forma, seções vindas do trabalho do visitante, fato nunca inventado | Lint, temas e `install-hook`, que pode alterar `~/.claude/settings.json` |
+| taste-skill | MIT | Folha de fatos e orçamento de texto | A estética única, o kit de componentes, o hook `Stop` no frontmatter e `install.sh` |
+| `frontend-design` | Apache 2.0 | Teste do espelho e os looks gastos descritos em números | O resto já está na espinha |
+| Emil | MIT | Espinha de `motion`, gestos, `break-ui` e o piso de páginas web no celular | Blocos que fixam a resposta do agente, personas, `write-swift`, `animate-expo`, `ask-sonner`, `animation-vocabulary` e o que `apple-design` deriva da Apple |
+| `scroll-craft` | MIT | Referência de scroll: clipe mapeado ao palco, trilho, reduced motion | O motor de 62 KB, `serve --lan` e `kie.mjs`, que envia chave e imagens a outro servidor |
+| `paper-shaders` | Apache 2.0 | Referência de cerca de 40 linhas: quando usar, versão exata, reduced motion, fallback sem WebGL2 | A biblioteca, que o projeto instala se quiser. Não é uma skill |
+| `diagram-design` | MIT | Decidir se desenha, Mermaid ou SVG, orçamento, conectores e acessibilidade, em cerca de 12 tipos | 45 tipos, importadores, perfis e exportação |
+| UI UX Pro Max | MIT | Esquema de 16 papéis de cor em pares e as linhas de acessibilidade, reescritas | Busca em Python, as 192 paletas, `stack/`, `design`, `brand`, `banner-design` e `slides` |
+| ECC, mais 5 skills | MIT | Estados, espécime e detalhes da biblioteca Motion | `taste*`, que são de vídeo, `brand-discovery` e `frontend-a11y`, com exemplo de código ruim |
+| gstack, mais 6 skills e `docs/design-lint.md` | MIT | Medir o renderizado, regras de lint, um só momento de movimento | Binários, daemon, `design-shotgun` e perfil de gosto |
+| `ai-toolkit` | Sem arquivo de licença | Nada: tabelas, e embute a UI UX Pro Max | `design-workflow` e `design-intelligence` |
+
+**UI UX Pro Max:** o dono a citou, e por isso o motivo fica explícito. A busca é BM25 sobre CSV, e Grep a substitui. Conferimos 1.152 pares de cor das 192 paletas, e nenhum fica abaixo de 4,5:1. Mas elas usam só 50 cores primárias distintas, com `#2563EB` 17 vezes e `#7C3AED` 16 vezes, então semear com elas reproduz a cara padrão que o projeto quer evitar. O que vale é a estrutura em pares, não as cores.
+
+**Banners, logos e slides** não entram, porque não são etapa de desenvolvimento e dependem de chaves de geração de imagem. Se o dono usa essas skills da UI UX Pro Max, o plugin fica instalado só para isso. É decisão dele, na Task D8 do plano.
+
+**Conflitos estruturais já decididos.** Os conflitos de cada skill estão no plano, na task dela.
+
+- **Sorteio ou plano livre:** o Impeccable exige um sorteio com binário próprio. Vence o plano livre com o teste do espelho, sem script nem serviço.
+- **Uma estética para tudo:** o taste-skill impõe uma só. Perde: quem decide é o modo da superfície, e sistema não recebe tratamento de landing.
+- **Fatos e envio falso:** taste-skill aceita preço plausível marcado, e gstack simula sucesso de formulário. Vence o Hallmark, que proíbe os dois: fato ausente vira lacuna visível.
+- **Listas de fontes:** uma fonte recomenda o que outra proíbe. Nenhuma lista vira lei: em Persuade, fonte saturada exige motivo registrado, e o brief vence.
+
+### Limites
+
+- **Custo fixo:** até 250 tokens no setor, somando as quatro descrições automáticas, além dos 706 da base. Os três plugins visuais instalados no PC custam hoje cerca de 1.982.
+- **Por skill ao ser chamada:** teto de 2.500 tokens, com o detalhe em `references/`.
+- **Valores de partida:** são estimativa de Claude, e valem as regras de "Limites de tamanho".
+
+### Testes
+
+Mesmo processo de "Como fundir uma skill", com três diferenças:
+
+- **Braços:** `none` em todas. Na fusão, `visual-direction` e `design-system` também comparam com `ui-ux-pro-max`, porque é o que o dono citou e usa, e sem esse braço o antiobjetivo de piorar o dia a dia não seria medido. É a única fonte nova que vira braço. Na revisão mensal, os braços continuam os que a `evolving` define, com `none`.
+- **O que os graders leem:** CSS, HTML, tokens e relatórios finais. Render só se a sondagem de Chromium da Task 23 passar. Grader não vê gosto.
+- **Portão do dono:** por isso, `visual-direction` só é aceita depois de o dono ver páginas geradas com e sem a skill.
+
+`visual-direction` é de nível completo. As outras quatro são de nível leve.
+
+### Revisão mensal
+
+Acompanhar 17 fontes tem custo. Medido com o comparador, a partir de pinos de 30 dias antes, os caminhos do design mudaram em 34 arquivos, somando as fontes novas e os caminhos novos do ECC e do gstack, contra cerca de 60 nos caminhos da base. Nenhum deles era script ou nome estranho. Isso só pesa quando as skills estiverem `done`. Se a revisão mensal passar dos 15 minutos previstos em "Sucesso", a primeira medida é tirar caminhos da fonte mais barulhenta.
+
+### Regras próprias candidatas
+
+Nenhuma fonte as traz, e Claude as propõe a partir do próprio conhecimento. Precisam de um cenário que as justifique.
+
+- A fonte escolhida precisa ter os acentos do português, porque os sites do dono são em português.
+- O foco usa `outline`, por causa de `forced-colors`.
+- Texto grande, no WCAG, é 24 px, ou 18,66 px em negrito.
+
+Nenhuma fonte cobre `animation-timeline` nem View Transitions. É uma lacuna, não uma regra: só entra se um caso real pedir.
+
+### Sucesso do setor
+
+- As cinco skills passam na comparação, e `visual-direction` passa pelo portão do dono.
+- O custo fixo do setor não passa de 250 tokens.
+- O dono usa as skills em um site real e desinstala os plugins visuais que elas substituem.
 
 ## O que já se sabe sobre a fusão
 
@@ -256,7 +344,7 @@ O teste de depuração está em `docs/spike-devorb-debugging/FUSAO.md`. A skill 
 ## Sucesso
 
 - Cada skill da base passa na comparação do processo de fusão.
-- O custo fixo por sessão não passa do Superpowers de hoje.
+- O custo fixo por sessão da base não passa do Superpowers de hoje. O setor de design tem teto próprio.
 - O dono usa o DevOrb em trabalho real no Mac e desinstala o Superpowers.
 - O primeiro pull request mensal chega sozinho e pode ser revisado em até 15 minutos.
 

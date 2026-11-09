@@ -72,7 +72,12 @@
         "skills/browser-qa/",
         "skills/intent-driven-development/",
         "skills/change-impact/",
-        "skills/click-path-audit/"
+        "skills/click-path-audit/",
+        "skills/frontend-design-direction/SKILL.md",
+        "skills/design-system/",
+        "skills/motion-foundations/",
+        "skills/motion-patterns/",
+        "skills/motion-advanced/"
       ]
     },
     {
@@ -89,7 +94,132 @@
         "benchmark/sections/vet-the-number.md.tmpl",
         "modernize/SKILL.md.tmpl",
         "document-release/SKILL.md.tmpl",
-        "context-save/SKILL.md.tmpl"
+        "context-save/SKILL.md.tmpl",
+        "docs/design-lint.md",
+        "design-html/sections/craft.md.tmpl",
+        "design-consultation/sections/proposal-and-preview.md.tmpl",
+        "design-review/sections/craft-audit.md.tmpl",
+        "plan-design-review/sections/review-sections.md.tmpl",
+        "design-motion/SKILL.md.tmpl",
+        "design-motion/sections/motion.md.tmpl",
+        "diagram/SKILL.md.tmpl"
+      ]
+    },
+    {
+      "name": "impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "license": "Apache-2.0",
+      "textReuse": false,
+      "lastAbsorbed": "cf7ea4a8fe56f3e186e9ffaca3124937e36e6430",
+      "paths": [
+        "skill/SKILL.src.md",
+        "skill/reference/new-work.md",
+        "skill/reference/craft-floor.md",
+        "skill/reference/mode-persuade.md",
+        "skill/reference/mode-operate.md",
+        "skill/reference/mode-read.md",
+        "skill/reference/extract.md",
+        "skill/reference/document.md",
+        "skill/reference/audit.md",
+        "skill/reference/polish.md",
+        "skill/reference/harden.md"
+      ]
+    },
+    {
+      "name": "hallmark",
+      "url": "https://github.com/Nutlope/hallmark",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "407fa689f4a276f2fd389208d271d0fef08f5058",
+      "paths": [
+        "skills/hallmark/SKILL.md",
+        "skills/hallmark/references/gates.md",
+        "skills/hallmark/references/anatomy.md",
+        "skills/hallmark/references/imagery.md",
+        "skills/hallmark/references/craft.md",
+        "skills/hallmark/references/flow.md"
+      ]
+    },
+    {
+      "name": "taste-skill",
+      "url": "https://github.com/Leonxlnx/taste-skill",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "f6b76575f949707b4e3c37cd86cb44b0b98643e8",
+      "paths": [
+        "skills/taste-skill/references/copy.md",
+        "skills/taste-skill/references/copy-voice.md"
+      ]
+    },
+    {
+      "name": "frontend-design",
+      "url": "https://github.com/anthropics/claude-plugins-official",
+      "license": "Apache-2.0",
+      "textReuse": false,
+      "lastAbsorbed": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "paths": ["plugins/frontend-design/skills/frontend-design/SKILL.md"]
+    },
+    {
+      "name": "emil-skills",
+      "url": "https://github.com/emilkowalski/skills",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "715c1807e08c497cfd1dc4feb450a2a3300ef2a9",
+      "paths": [
+        "skills/animate/SKILL.md",
+        "skills/animation-performance/SKILL.md",
+        "skills/choreograph/SKILL.md",
+        "skills/gestures/SKILL.md",
+        "skills/remove-animations/SKILL.md",
+        "skills/emil-design-eng/SKILL.md",
+        "skills/apple-design/SKILL.md",
+        "skills/mobile-native/SKILL.md",
+        "skills/break-ui/SKILL.md",
+        "skills/prototype/SKILL.md"
+      ]
+    },
+    {
+      "name": "scroll-craft",
+      "url": "https://github.com/nateherkai/scroll-craft",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "75d81f74e83692add18cd7a8a8e078b8a887a579",
+      "paths": [
+        "plugins/nateherk-design/skills/scroll-craft/references/devices.md",
+        "plugins/nateherk-design/skills/scroll-craft/references/feel.md",
+        "plugins/nateherk-design/skills/scroll-craft/references/verify.md"
+      ]
+    },
+    {
+      "name": "paper-shaders",
+      "url": "https://github.com/paper-design/shaders",
+      "license": "Apache-2.0",
+      "textReuse": false,
+      "lastAbsorbed": "b6e6e7f73faf614f0c9f4e635451d4c3ed47bad0",
+      "paths": ["README.md", "CHANGELOG.md"]
+    },
+    {
+      "name": "diagram-design",
+      "url": "https://github.com/cathrynlavery/diagram-design",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "6a7f19fcc132b39b126bea90167679b46b14bcc4",
+      "paths": [
+        "skills/diagram-design/SKILL.md",
+        "skills/diagram-design/references/primitives-core.md",
+        "skills/diagram-design/references/animation.md",
+        "skills/diagram-design/references/layout-budget.md"
+      ]
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "4f2dbb67e64969a9a30ab00742f2d55d66ddec2b",
+      "paths": [
+        "src/ui-ux-pro-max/data/colors.csv",
+        "src/ui-ux-pro-max/data/ux-guidelines.csv"
       ]
     }
   ]
