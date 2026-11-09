@@ -175,7 +175,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
 - Produces: `evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation }) -> string[]`.
 - Produces: `decide({ cases, runs }) -> { accepted, regressions, belowBar, gaps }`.
 - Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>]`, que salva `fusion/results/<data>-<skill>.md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
-- Produces: `parseArms(text: string) -> string[]`. Aceita só `devorb`, `superpowers`, `mattpocock-skills` e `none`, e qualquer outro nome dá erro. `none` é o braço sem plugin: roda com `--ablation with-without`, e a pontuação sem plugin entra em `decide` como uma linha de base.
+- Produces: `parseArms(text: string) -> string[]`. Aceita só `devorb`, `superpowers`, `mattpocock-skills` e `none`, e qualquer outro nome dá erro. `none` é o braço sem plugin: `prepareArm` cria `.arms/none/` com um plugin vazio e as cópias dos casos, a rodada usa `--ablation none` e não entra no cache de linhas de base, e a pontuação entra em `decide` como uma linha de base.
 
 - [ ] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`. Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
 - [ ] **Step 1: Sondar a ferramenta com um caso mínimo.** Crie `evals/probe/case.yaml` com um `scaffold_script`, um prompt que usa Bash e um grader `regex`. Rode com o Superpowers clonado no pino como alvo. Confirme e anote no commit:
@@ -201,6 +201,7 @@ assert.deepEqual(d({ c: { devorb: 0, sp: 0 } }).gaps, ['c']);         // nenhum 
 assert.equal(d({ c: { devorb: 0, sp: 0 } }).accepted, true);
 assert.equal(d({ c: { devorb: 0.33, sp: 1 } }).accepted, false);
 assert.equal(d({}).accepted, false);                                  // nenhum caso encontrado não conta como aprovado
+assert.deepEqual(d({ c: { devorb: 1, none: 0 } }).regressions, []);
 assert.deepEqual(parseArms('devorb,none'), ['devorb', 'none']);
 assert.throws(() => parseArms('devorb,trailofbits-skills'), /trailofbits-skills/);
 assert.deepEqual(
@@ -250,7 +251,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
 - Consumes: `tools/compare.mjs`, os casos da Task 5.
 - Produces: o formato de ledger: Origem por parte, Conflitos resolvidos, Regras próprias (com o caso que as justifica), Fora, Decisões por commit de fonte (`fonte@sha:caminho | adotado ou recusado | motivo`).
 
-- [ ] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`. Se a sondagem da Task 4 mostrar que `tool_used: Skill` não pontua com `--ablation with-without`, use `--ablation none` mais uma rodada separada sem plugin.
+- [ ] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`. Se a sondagem da Task 4 mostrar que `tool_used: Skill` não pontua com `--ablation with-without`, use o braço `none` na comparação. Um subagente novo também cria `evals-reserved/using-devorb-*`, como na Task 5, porque esta skill é de nível completo.
 - [ ] **Step 2: Copiar a skill do teste para `skills/debugging/`,** sem `harness/`, `LICENSES/` e `FUSAO.md`. Funda as ideias das fontes novas, sem passar de 2.500 tokens (a skill do teste usa 1.978):
   - **Trail of Bits (`implement-patch`, `variant-analysis`):** nomear a regra quebrada e procurar toda violação dela. Mínimo é a menor mudança que corrige essa regra, não a menor em linhas. Registrar cada variante como corrigida ou não, com motivo. Na busca, partir do caso exato e generalizar um elemento por vez, parando quando mais da metade dos resultados for ruído.
   - **Spartan (`service-debugging`):** conferir deploy e configuração antes de culpar o código, e ler os logs antes de reiniciar.
