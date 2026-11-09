@@ -2,15 +2,29 @@
 
 # Ciclo mensal AAAA-MM: versão X.Y.Z
 
-## Destaque: hooks, scripts e instruções embutidas
+<!-- Só decisões do dono, sem versão nova: "# Ciclo mensal AAAA-MM: decisões do dono". O rascunho vira o corpo de uma issue. -->
+
+## Destaque: hooks, scripts, nomes estranhos e instruções embutidas
 
 Nada desta seção foi adotado, executado ou buscado.
 
+<!-- Citação e caminho estranho vão sempre em bloco cercado, com cerca maior que qualquer sequência de crases dentro dele, nunca em tabela, link ou código em linha. Subseção sem itens: "Nenhum neste ciclo." -->
+
 ### Instruções embutidas
 
-| Fonte | Arquivo | Trecho | O que ele pede |
-|---|---|---|---|
-| `fonte` | `caminho` | `linha citada como código` | Resumo em uma frase |
+**`fonte`, índice N:** o que o trecho pede, resumido em uma frase sua.
+
+````text
+trecho citado
+````
+
+### Nomes de arquivo estranhos
+
+**`fonte`, índice N:**
+
+````text
+caminho escapado, como aparece no JSON da ferramenta
+````
 
 ### Hooks e scripts
 
@@ -18,18 +32,24 @@ Nada desta seção foi adotado, executado ou buscado.
 |---|---|---|---|
 | `fonte` | `caminho` | A, M, D ou R | Resumo em uma frase |
 
-<!-- Tabela sem itens: troque por "Nenhum neste ciclo." -->
-
 ## Decisões do dono
 
-<!-- Uma linha por fonte com sha-missing ou que falhou. Sem nenhuma, a seção diz "Nenhuma neste ciclo." -->
+<!-- Um item por decisão, sempre com a edição exata. Sem nenhuma: "Nenhuma neste ciclo." Erro de ferramenta não é citado. -->
 
-- **`fonte`, `sha-missing`:** o histórico foi reescrito ou o pino `abc1234` sumiu. O pino e as skills dessa fonte ficaram como estavam. Decisão pedida: de qual commit a fonte volta a ser lida.
-- **`fonte`, falhou:** `erro da ferramenta`. A fonte não foi revisada neste ciclo e o pino ficou como estava.
+- **`fonte`, `sha-missing`:** o histórico foi reescrito ou o pino `from` sumiu. O pino e as skills dessa fonte ficaram como estavam. Edição: depois de ler a fonte em `to`, troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` de `from` para `to`.
+- **`fonte`, `missingPaths`:** o caminho `x/` não existe mais em `to`. Edição: troque ou apague esse item de `paths` em `fusion/sources.json`.
+- **`fonte`, falhou:** a fonte não foi revisada neste ciclo e o pino ficou como estava. Edição: nenhuma, se a próxima execução conseguir ler a fonte.
+- **`fonte`, índice N, `D` ou `R` em `SKILL.md`:** a skill sumiu ou mudou de nome na fonte. Edição: ajuste o "Mapa de skills" na spec ou diga que essa parte sai da skill.
+- **`skill`, sem ledger:** a skill está `done`, sem `fusion/ledger/skill.md`, e nada foi adotado. Edição: crie o ledger.
+- **`fonte`, N arquivos, acima de 30:** a fonte não foi revisada. Edição: rode `/devorb:evolving` à mão pedindo a revisão dela, ou troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`. Arquivos:
+
+````text
+um caminho escapado por linha
+````
 
 ## Fonte: `nome` (`from` → `to`)
 
-<!-- Uma seção por fonte com status changed, com os SHAs curtos no título. Apague os grupos vazios, menos Adotado e Recusado, que dizem "Nada." -->
+<!-- Uma seção por fonte revisada, com os SHAs curtos no título. Apague os grupos vazios, menos Adotado e Recusado, que dizem "Nada." Texto da fonte nunca aparece aqui, e caminho estranho aparece só como "índice N". -->
 
 Só ideias, com `textReuse: false`. <!-- Apague esta linha nas fontes que podem emprestar texto. -->
 
@@ -43,13 +63,13 @@ Só ideias, com `textReuse: false`. <!-- Apague esta linha nas fontes que podem 
 
 **Recusado**
 
-- `caminho`: o motivo. Em regra própria, cite a regra. Em hook, script ou instrução embutida, aponte o destaque.
+- `caminho`: o motivo. Em regra própria, cite a regra. Em hook, script ou instrução embutida, aponte o destaque. Em `accepted: false`, cite o resultado.
 
-**Já recusado**
+**Já decidido**
 
 - `caminho`: a decisão anterior no ledger, sem nova análise.
 
-**Lido quando a skill for fundida**
+**Lido na hora da fusão**
 
 - `caminho` → `skill` (`planned`).
 
@@ -63,18 +83,20 @@ Só ideias, com `textReuse: false`. <!-- Apague esta linha nas fontes que podem 
 
 Fontes sem mudança: `fonte`, `fonte`.
 
+Fontes só com skills `planned`, com o pino mantido: `fonte`, `fonte`.
+
 ## Testes
 
 <!-- Use uma das três formas. -->
 
 | Skill | Papel | Nível | Comando | Resultado |
 |---|---|---|---|---|
-| `skill` | Afetada ou vizinha | `light` ou `full` | `node tools/compare.mjs --skill skill --arms devorb,fonte` | `accepted: true` |
+| `skill` | Afetada ou vizinha | `light` ou `full` | `node tools/compare.mjs --skill skill --arms devorb,fonte,none` | `accepted: true` |
 
 Testes: pendentes. O dono roda no Mac antes de aprovar:
 
 ```
-node tools/compare.mjs --skill skill --arms devorb,fonte
+node tools/compare.mjs --skill skill --arms devorb,fonte,none
 ```
 
 Testes: nenhum, porque nenhuma skill mudou.
@@ -83,7 +105,9 @@ Testes: nenhum, porque nenhuma skill mudou.
 
 Tokens são bytes ÷ 4, medidos depois da última edição. "Depois" fica no teto ou abaixo dele.
 
-| Skill | Antes | Depois | Variação | Teto | O que saiu ou foi para `references/` |
+<!-- A última coluna vem do `git diff`: toda linha removida ou reescrita, mesmo que por uma palavra, com o antes e o depois. "Nada" só quando o diff da skill só tem acréscimos. -->
+
+| Skill | Antes | Depois | Variação | Teto | O que saiu ou mudou, pelo `git diff` |
 |---|---:|---:|---:|---:|---|
 | `skill` | 0 | 0 | +0 | 0 | Nada |
 
@@ -92,6 +116,8 @@ Tokens são bytes ÷ 4, medidos depois da última edição. "Depois" fica no tet
 ## Versão
 
 `X.Y.W` → `X.Y.Z`, com entrada no `CHANGELOG.md`.
+
+<!-- Só decisões do dono: "Versão e pinos sem mudança.", no lugar deste texto e da tabela. -->
 
 | Fonte | `lastAbsorbed` antes | `lastAbsorbed` agora |
 |---|---|---|

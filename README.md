@@ -26,10 +26,12 @@ claude plugin enable superpowers@claude-plugins-official
 
 ## Ciclo mensal
 
-A skill `evolving` compara cada fonte de `fusion/sources.json` com o último commit absorvido, só nas pastas acompanhadas. Sem mudança, ela não gera commit. Com mudança, abre um pull request em português dizendo o que adotou, o que recusou e por quê. Só o dono faz o merge, e nada de terceiros entra sozinho.
+A skill `evolving` compara cada fonte de `fusion/sources.json` com o último commit absorvido, só nas pastas acompanhadas. Sem mudança, ou com mudança que só alimenta skills ainda não fundidas, ela não gera commit. Com mudança em skill pronta, abre um pull request em português dizendo o que adotou, o que recusou e por quê. Só o dono faz o merge, e nada de terceiros entra sozinho.
 
 - **Rodar à mão:** `/devorb:evolving`, ou peça um ensaio para parar no rascunho `fusion/pr-draft.md`.
 - **Rodar sozinho:** a tarefa agendada usa o prompt de `fusion/routine-prompt.md`.
+- **Conferir:** um mês sem pull request não prova que o ciclo funcionou. No dia 2, veja o histórico da tarefa e a linha de status no começo da mensagem final: `OK sem mudança`, `OK com pull request`, `OK aguardando revisão`, `PARCIAL` ou `FALHOU`. Os dois últimos também abrem uma issue, se a API deixar.
+- **Depois do merge:** apague a branch `claude/evolve-*`. Enquanto ela existir, o mês seguinte para em `OK aguardando revisão`.
 - **Testes:** enquanto `tools/compare.mjs` não existir, ou se ele não rodar na nuvem, o pull request chega com "Testes: pendentes". Rode os comandos indicados nele no Mac antes de aprovar.
 
 ## Desenvolvimento
