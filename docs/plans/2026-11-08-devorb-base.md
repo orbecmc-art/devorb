@@ -16,8 +16,8 @@
 
 - Nome do plugin: `devorb`. Só Claude Code. Sem suporte a outros agentes.
 - Pinos iniciais: Superpowers `22f0b463e7a5e579904dd6211a520321035526f7` (7.0.2) e Matt Pocock `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` (1.3.2). Ponytail 5.3.3, com o commit resolvido na Task 4.
-- Fontes novas, com pinos em `fusion/sources.json`: Karpathy, `webapp-testing` da Anthropic, 6 skills da Trail of Bits e 3 do Spartan. Só as pastas listadas lá são usadas e acompanhadas.
-- Fonte com `textReuse: false` (Karpathy, Trail of Bits, Spartan) só fornece ideias, escritas com palavras próprias e creditadas no ledger. Nunca copie texto dela.
+- Fontes novas, com pinos em `fusion/sources.json`: Karpathy, `webapp-testing` da Anthropic, 6 skills da Trail of Bits, 3 do Spartan, 7 do ECC e 8 arquivos do gstack. Só os caminhos listados lá são usados e acompanhados, além das duas regras de `lib/plan-reality.ts` citadas na Task 11.
+- Fonte com `textReuse: false` (Karpathy, Trail of Bits, Spartan, ECC, gstack) só fornece ideias, escritas com palavras próprias e creditadas no ledger. Nunca copie texto dela.
 - Custo fixo: soma das descrições das skills não manuais até 706 tokens. `using-devorb` até 3.500 bytes (a do Superpowers tem 3.192).
 - Por skill ao ser chamada: 2.500 tokens, exceto `implementing` e `writing-skills`, com 5.000. `SKILL.md` abaixo de 20.000 bytes. Tokens estimados como bytes ÷ 4, o que bate com `claude plugin details` nas fontes.
 - Saída do hook SessionStart: até 10.000 caracteres.
@@ -255,6 +255,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
 - [ ] **Step 2: Copiar a skill do teste para `skills/debugging/`,** sem `harness/`, `LICENSES/` e `FUSAO.md`. Funda as ideias das fontes novas, sem passar de 2.500 tokens (a skill do teste usa 1.978):
   - **Trail of Bits (`implement-patch`, `variant-analysis`):** nomear a regra quebrada e procurar toda violação dela. Mínimo é a menor mudança que corrige essa regra, não a menor em linhas. Registrar cada variante como corrigida ou não, com motivo. Na busca, partir do caso exato e generalizar um elemento por vez, parando quando mais da metade dos resultados for ruído.
   - **Spartan (`service-debugging`):** conferir deploy e configuração antes de culpar o código, e ler os logs antes de reiniciar.
+  - **ECC (`click-path-audit`), só ideia:** quando um controle "não faz nada" e não há erro, seguir as chamadas em ordem, listando o que cada uma grava e zera, até achar a que desfaz outra. Comparar o estado final com a promessa do rótulo. É a ideia mais fraca desta skill e sai primeiro se ela passar do teto.
 
   Escreva os dois ledgers a partir de `FUSAO.md`, com o crédito dessas fontes. "Procurar outros chamadores" continua marcada como regra própria. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
 - [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb`, com `--ablation with-without` nos casos novos. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
@@ -301,8 +302,11 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 
 **Interfaces:** recebe de `devorb:implementing` e `devorb:debugging`, usa `devorb:browser-testing` quando a tarefa tem interface, entrega para `devorb:reviewing`.
 
-- [ ] **Aplicar a receita.** Fonte única: `verification-before-completion`, adaptada e enxugada.
+- [ ] **Aplicar a receita.** Fonte principal: `verification-before-completion`, adaptada e enxugada, mais as ideias abaixo.
   - **Preservar:** a função-portão, a tabela de falhas comuns, a reversão para checar o vermelho e a conferência de relatos de agentes pelo diff.
+  - **ECC (`verification-loop`), só ideia:** se o pedido depende de ambiente implantado, relatar esse ambiente à parte das checagens locais, como verificado, falhou, não feito ou não se aplica. Teste local, revisão ou merge não provam o resultado no alvo.
+  - **ECC (`loop-design-check`) e gstack (`review/gate-integrity.md`, `verify`), só ideias:** verde só vale se o diff não apagou, pulou nem afrouxou teste. Zero testes executados é falha, e exit 0 sozinho não prova nada. Mock ou leitura de código não valem como execução real. "Já estava vermelho" exige vermelho anterior à primeira edição ou na branch base.
+  - **gstack (`benchmark`) e ECC (`benchmark-optimization-loop`), só ideias:** afirmação de desempenho usa a mesma entrada, 5 rodadas alternadas por lado, mediana e faixa, e conta os erros. Diferença menor que a variação é "sem diferença", e variante que quebra os testes é rejeitada.
   - **Caso realista:** um agente anterior deixou uma nota "tudo passou", mas um teste falha. Grader `llm` no `last_message`: mostra a saída real e não declara sucesso.
 
 ### Task 9: `domain-modeling` (leve, 2.500)
@@ -324,6 +328,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 - [ ] **Aplicar a receita.** Fontes: `brainstorming` na versão pinada, `grilling`, `grill-me` e `grill-with-docs`.
   - **Decisões:** uma pergunta por vez e aberta é o padrão. A rodada de sabatina, com perguntas numeradas e resposta recomendada, só roda quando o usuário pede. Fatos são levantados por subagente, decisões vêm do usuário. Sem jargão de processo. `aligning` é dona do documento de design.
   - **Preservar:** a primeira mensagem, a trava de não construir antes da aprovação, o revisor independente, a condição de término do Matt (nada em aberto e entendimento confirmado).
+  - **ECC (`intent-driven-development`), só ideia:** o código mostra como o sistema age hoje, não o que o negócio exige. Retenção, SLA, preço e conformidade achados nele viram suposição a confirmar, nunca fato descoberto. Isso limita a regra do Matt de consultar o código em vez de perguntar.
   - **Levar como unidade:** companheiro visual e seus scripts.
   - **Mover para `references/`:** tabela de tamanho do trabalho e sinais de alerta, para caber no teto.
   - **Caso realista:** "quero um app de agendamento". Graders: `regex` `not_contains` para código no `last_message`, `llm` para uma só pergunta aberta.
@@ -338,6 +343,8 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 - [ ] **Aplicar a receita.** Fontes: `writing-plans`, `to-spec` e `to-tickets`.
   - **Decisões:** o documento de `aligning` é a spec, então `to-spec` não gera artefato separado. O plano segue o formato do Superpowers, e a proibição de caminhos e código do Matt não se aplica a ele. As tasks são fatias verticais em ordem linear. Remover tudo de tracker e labels.
   - **Preservar:** bloco de interfaces, restrições globais, revisão de passos que não decidem nada, seams nomeados no plano, expand-contract em refatorações largas.
+  - **ECC (`change-impact`), só ideia:** em migração de dados, interface pública, autenticação ou release, o plano traz ordem de deploy, janela de compatibilidade, recuperação e efeitos irreversíveis. Item faltando bloqueia o plano.
+  - **gstack (`lib/plan-reality.ts`, de `plan-eng-review`), só ideias:** antes das tasks, ler o `git log` da branch base nos arquivos citados, para ver se o trabalho já foi feito, e conferir no `--help` ou no registro cada comando, flag e rota que o plano cita. O arquivo não é acompanhado, porque o ciclo mensal recusa `.ts` como script.
   - **Caso realista:** dada uma spec pequena, escrever o plano. Graders `regex` para `### Task 1` e `llm` para interfaces.
 
 ### Task 12: `codebase-design` (leve, 2.500)
@@ -373,6 +380,10 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 - [ ] **Aplicar a receita.** Fontes: `requesting-code-review`, `receiving-code-review` e `code-review`, mais as ideias abaixo.
   - **Trail of Bits, só ideias:** o eixo Spec usa os vereditos implementado, parcial, contradito, além da spec, ausente e indecidível, e "ausente" mostra o que foi buscado (`spec-to-code-compliance`). Uma revisão de risco extra roda só quando o diff toca login, criptografia, chamada externa ou remove validação: conta os chamadores, lê o histórico do código removido e descreve o ataque (`differential-review`). Ao receber revisão, reescrever a acusação com as próprias palavras antes de aceitá-la (`fp-check`).
   - **Spartan (`js-security-audit`), só ideias:** quando o diff mexe em dependência, conferir se o pacote existe de verdade, porque o modelo pode inventar nomes, e ler o diff do lockfile.
+  - **gstack (`review`), só ideias:**
+    - Se o diff toca teste, CI ou configuração, ler cada afrouxamento: teste apagado ou pulado, assert exato virou faixa, timeout maior, pragma, `--no-verify`, snapshot sem teste dono, critério de aceite reescrito. A pergunta é se aquilo silencia a falha ou se há medição visível, e só o humano decide.
+    - Valor novo, como enum ou status, ou entrada afrouxada: ler cada consumidor, inclusive fora do diff. Um achado é uma classe: buscar nos irmãos e classificar pelo pior.
+    - A revisão de risco também dispara com checagem que falha aberta, chamada paga sem teto e operação externa repetível. Nesse caso, supor que a rodada anterior morreu depois de cada linha e ver se o resultado converge.
   - **Decisões:** dois eixos em subagentes novos e paralelos, Padrões e Spec, sem fundir os resultados. Dentro de cada eixo, Critical, Important e Minor, porque o laço de correção precisa da severidade. O eixo Spec lista o que faltou e o que sobrou. O ponto fixo padrão é o merge-base com a branch base, sem perguntar. Os padrões do repositório vencem a lista de smells. A descrição cobre pedir e receber revisão.
   - **Preservar:** revisor com contexto preciso e sem o histórico da sessão, verificar antes de aplicar sugestão, nada de concordância performática.
   - **Caso realista:** diff com um bug plantado, um comportamento não pedido e uma validação removida. Grader `llm` no `last_message`: acha os três, os dois primeiros em eixos separados, e a validação dispara a revisão de risco.
@@ -386,6 +397,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 - [ ] **Aplicar a receita.** Fontes: `finishing-a-development-branch` e `pr`.
   - **Decisões:** o usuário escolhe entre merge, pull request ou manter. O template de pull request do repositório vence. Sem ele, usar Resumo, Evidência e Perigo de merge do Matt.
   - **Preservar:** suíte verde antes do menu, confirmação da branch base, descarte só com confirmação digitada, nunca remover com `--force`.
+  - **gstack (`modernize`, `document-release`), só ideias:** ausência de conflito não prova nada: se a base andou, ler seus commits desde o merge-base e ver se mudou algo de que a branch depende. Em rebase, explicar cada hunk do `range-diff`. Antes do menu, extrair do diff a superfície pública alterada, como comando, flag, variável ou rota, procurá-la nos documentos e apontar o que envelheceu.
   - **Caso realista:** terminar uma branch com teste falhando. Grader `llm` no `last_message`: não oferece o merge.
 
 ### Task 16: `writing-skills` (leve, 5.000)
@@ -410,6 +422,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
   - **Preservar em `improve-architecture`:** pontos quentes pelo git log e relatório HTML antes de qualquer interface.
   - **Preservar em `prototype`:** escolher entre lógica e interface, protótipo marcado como descartável e fácil de rodar.
   - **Preservar em `handoff`:** apontar para os artefatos em vez de copiá-los, escrever em pasta temporária e ocultar segredos.
+  - **gstack (`context-save`), só ideia, em `handoff`:** cada pendência diz como se sabe: executado, lido ou presumido. Quem retoma confere primeiro os presumidos.
   - **Preservar em `retro`:** olhar o ambiente e não o código, regra mecânica vira checagem automática e regra de julgamento vira padrão.
 
 ### Task 23: `browser-testing` (leve, 2.500)
@@ -421,9 +434,10 @@ Roda depois da Task 17 e antes da Fase 3. O número fica fora de ordem para não
 **Interfaces:** usada por `devorb:verifying` quando a tarefa tem interface. Falha encontrada vai para `devorb:debugging`.
 
 - [ ] **Antes da receita, sondar o Chromium no sandbox.** A sondagem da Task 4 não cobre isso. Baixar Playwright e Chromium é um download: confirme com o dono antes. Crie `evals/probe-browser/case.yaml`, cujo `scaffold_script` instala os dois e cujo prompt roda um script headless que abre `about:blank` e imprime `browser-ok`, com grader `regex` `browser-ok` no `last_message`. Rode `claude plugin eval . --case probe-browser --runs 1 --scaffold --allow-tools Bash --trust-plugin --no-publish`. Esperado: o grader passa. Apague a sondagem depois. Se falhar, pare e avise o dono antes de escrever a skill. A alternativa é testar essa skill só fora do sandbox.
-- [ ] **Aplicar a receita.** Fontes: `webapp-testing` (Anthropic, texto permitido) e as ideias de `browser-qa` (Spartan).
+- [ ] **Aplicar a receita.** Fontes: `webapp-testing` (Anthropic, texto permitido) e as ideias de `browser-qa` (Spartan e ECC).
   - **Decisões:** usar primeiro o teste de navegador que o projeto já tem. Sem ele, um script Playwright headless, na linguagem do projeto, e adicionar Playwright é decisão do usuário. A skill ensina a subir o servidor em segundo plano, esperar a porta e encerrar no fim.
-  - **Conflito resolvido:** esperar um elemento específico, e usar `networkidle` só em app sem websocket nem polling.
+  - **ECC (`browser-qa`), só ideias:** comparação visual sem imagem de base é inconclusiva, nunca aprovada.
+  - **Conflitos resolvidos:** esperar um elemento específico, e usar `networkidle` só em app sem websocket nem polling. Em URL de produção, só leitura: fluxo que altera dados roda em staging ou preview, com permissão explícita e credencial de teste, mesmo que o Spartan mande enviar formulários.
   - **Preservar:** observar a página antes de agir, checar console, rede, links e formulários, testar em 1280 px e em 375 px com toque, salvar screenshot na falha, tratar erro de console como bug e aviso não.
   - **Fora:** `with_server.py`, que usa `shell=True` e exige Python, e a varredura automática de todas as páginas, que pesaria em tarefa pequena.
   - **Comparação:** sem braço de fonte, porque a Anthropic traz 19 skills juntas. R3 é `node tools/compare.mjs --skill browser-testing --arms none --baseline-only`. R6 é `node tools/compare.mjs --skill browser-testing --arms devorb,none`.

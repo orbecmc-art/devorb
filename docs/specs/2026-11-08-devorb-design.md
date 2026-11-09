@@ -21,8 +21,7 @@ Ele não quer ficar pegando um pouco de cada plugin. Quer que tudo se funda em u
 ## Não objetivos
 
 - Absorver o ponytail. Ele continua um plugin separado.
-- Absorver o `everything-claude-code`. O dono não o usa no Mac.
-- Absorver as fontes novas inteiras. Da Trail of Bits entram 6 de 98 skills, e do Spartan, 3.
+- Absorver as fontes novas inteiras. Da Trail of Bits entram 6 de 98 skills, do Spartan, 3, do ECC, 7 de 314, e do gstack, 7 de 63.
 - Incluir skills de agência (n8n, Kommo, Meta Ads). Elas têm outro público e pesariam em todo projeto.
 - Suportar outros agentes (Codex, Cursor e afins). É só Claude Code.
 - Coletar métricas de retrabalho ou tempo. A comparação de cenários responde com menos esforço.
@@ -57,6 +56,7 @@ O projeto fracassa, mesmo funcionando, se:
 - Começar pela base e seguir até o design.
 - Trazer na primeira versão os seis itens que só o Matt tem: `domain-modeling`, `codebase-design`, `improve-architecture`, `prototype`, `handoff` e `retro`.
 - Trazer quatro fontes novas, recomendadas a ele: as diretrizes do Karpathy, a Trail of Bits, o `webapp-testing` da Anthropic e o `ai-toolkit` (Spartan). Ele aprovou a seleção de Claude, que fica só com as partes de "Fontes novas".
+- Trazer mais duas fontes que ele considera importantes: o ECC e o gstack. A seleção é de Claude e entra na revisão do pull request. O plugin `everything-claude-code`, nome antigo do ECC, foi desinstalado do PC e agora só fornece ideias.
 
 ### De Claude, que o dono pode rever
 
@@ -96,15 +96,15 @@ A versão fica em `plugin.json` e sobe a cada pull request, porque uma cópia in
 | Etapa | Skill | Fontes | Acionamento |
 |---|---|---|---|
 | Entrada | `using-devorb` | `using-superpowers`, `ask-matt` | Hook |
-| Alinhar | `aligning` | `brainstorming`, `grilling`, `grill-me`, `grill-with-docs` | Automática |
-| Planejar | `planning` | `writing-plans`, `to-spec`, `to-tickets` | Automática |
+| Alinhar | `aligning` | `brainstorming`, `grilling`, `grill-me`, `grill-with-docs`, `intent-driven-development` | Automática |
+| Planejar | `planning` | `writing-plans`, `to-spec`, `to-tickets`, `change-impact`, `plan-eng-review` | Automática |
 | Implementar | `implementing` | `subagent-driven-development`, `executing-plans`, `dispatching-parallel-agents`, `using-git-worktrees`, `implement`, `implement-spec`, `karpathy-guidelines` | Automática |
 | Testar | `tdd` | `test-driven-development`, `tdd`, `property-based-testing` | Automática |
-| Depurar | `debugging` | `systematic-debugging`, `diagnosing-bugs`, `implement-patch`, `variant-analysis`, `service-debugging` | Automática |
-| Verificar | `verifying` | `verification-before-completion` | Automática |
-| Testar no navegador | `browser-testing` | `webapp-testing`, `browser-qa` | Automática |
-| Revisar | `reviewing` | `requesting-code-review`, `receiving-code-review`, `code-review`, `differential-review`, `spec-to-code-compliance`, `fp-check`, `js-security-audit` | Automática |
-| Finalizar | `finishing` | `finishing-a-development-branch`, `pr` | Automática |
+| Depurar | `debugging` | `systematic-debugging`, `diagnosing-bugs`, `implement-patch`, `variant-analysis`, `service-debugging`, `click-path-audit` | Automática |
+| Verificar | `verifying` | `verification-before-completion`, `verification-loop`, `loop-design-check`, `benchmark-optimization-loop`, `verify`, `benchmark`, `review/gate-integrity.md` | Automática |
+| Testar no navegador | `browser-testing` | `webapp-testing`, `browser-qa` (Spartan e ECC) | Automática |
+| Revisar | `reviewing` | `requesting-code-review`, `receiving-code-review`, `code-review`, `differential-review`, `spec-to-code-compliance`, `fp-check`, `js-security-audit`, `review` | Automática |
+| Finalizar | `finishing` | `finishing-a-development-branch`, `pr`, `modernize`, `document-release` | Automática |
 | Escrever skills | `writing-skills` | `writing-skills`, `writing-for-agents` | Automática |
 | Evoluir | `evolving` | Nova | Manual e agendada |
 
@@ -116,7 +116,7 @@ Itens que só o Matt tem e que entram na primeira versão, por decisão do dono:
 | `codebase-design` | `codebase-design` | Automática |
 | `improve-architecture` | `improve-codebase-architecture` | Manual |
 | `prototype` | `prototype` | Manual |
-| `handoff` | `handoff` | Manual |
+| `handoff` | `handoff`, com uma ideia de `context-save` | Manual |
 | `retro` | `retro` | Manual |
 
 "A base" são as 18 skills destas duas tabelas. `GLOSSARY.md` e `docs/adr/` são mantidos por `domain-modeling`.
@@ -131,15 +131,32 @@ O restante fica de fora até haver um caso real: `triage`, `wayfinder`, `teach`,
 | Anthropic | Apache 2.0 | `webapp-testing` | Texto permitido |
 | Trail of Bits | CC BY-SA 4.0 | `variant-analysis`, `implement-patch`, `property-based-testing`, `differential-review`, `spec-to-code-compliance`, `fp-check` | Só ideias |
 | Spartan (`c0x12c/ai-toolkit`) | MIT declarada no README, sem arquivo de licença | `browser-qa`, `js-security-audit`, `service-debugging` | Só ideias |
+| ECC (`affaan-m/ECC`, antes `everything-claude-code`) | MIT | `verification-loop`, `loop-design-check`, `benchmark-optimization-loop`, `browser-qa`, `intent-driven-development`, `change-impact`, `click-path-audit` | Só ideias |
+| gstack (`garrytan/gstack`) | MIT | Oito arquivos de `review`, `verify`, `benchmark`, `modernize`, `document-release` e `context-save`. As duas regras de `plan-eng-review` entram uma vez e não são acompanhadas | Só ideias |
 
-"Só ideias" fica marcado com `textReuse: false` em `fusion/sources.json`: a ideia é reescrita com palavras próprias e creditada no ledger, e nenhum texto é copiado. Na Trail of Bits, a CC BY-SA exigiria a mesma licença em texto copiado, se o DevOrb um dia for compartilhado. Nas outras duas, não há arquivo de licença cujo aviso possa ser mantido.
+"Só ideias" fica marcado com `textReuse: false` em `fusion/sources.json`: a ideia é reescrita com palavras próprias e creditada no ledger, e nenhum texto é copiado. Na Trail of Bits, a CC BY-SA exigiria a mesma licença em texto copiado, se o DevOrb um dia for compartilhado. No Karpathy e no Spartan, não há arquivo de licença cujo aviso possa ser mantido. No ECC e no gstack, a raiz é MIT, mas partes derivam de terceiros, e nem toda origem tem licença conferida.
+
+No gstack, o `SKILL.md` é gerado com um preâmbulo comum, que muda com frequência, então os caminhos acompanhados são os arquivos de origem. Nos 30 dias antes do pino, o gstack teve 683 commits e o ECC, 938, mas só os 8 arquivos do gstack e 2 pastas do ECC mudaram entre os caminhos escolhidos. A revisão mensal fica pequena mesmo com fontes tão ativas.
 
 **Conflitos já decididos:**
 
 - **Mudança mínima ou correção na origem:** mínimo é a menor mudança que corrige a regra quebrada, não a menor em linhas. Isso concilia a mudança cirúrgica do Karpathy com a correção na origem de `debugging`.
 - **Espera no navegador:** esperar um elemento específico, e usar `networkidle` só em app sem websocket nem polling. A Anthropic trata essa espera como crítica, e o Spartan avisa que ela nunca termina nesses apps.
+- **Ler o código ou perguntar:** o Matt manda consultar o código em vez de perguntar, e o ECC avisa que regra de negócio não se lê nele. O código responde como o sistema age hoje. Retenção, SLA, preço e conformidade achados ali viram suposição a confirmar.
+- **Enviar formulário no navegador:** o Spartan manda enviar um formulário válido, e o ECC proíbe alterar dados em produção. Em produção, só leitura. Fluxo que altera dados roda em staging ou preview, com permissão explícita e credencial de teste.
+- **Teste afrouxado:** `verifying` confere em uma linha o próprio diff, e `reviewing` guarda a lista completa, para a regra não pesar duas vezes.
 
 **Recusados:** o fluxo `/spartan:build`, que concorre com o do DevOrb, e a regra "Boil the Lake", que manda fazer sempre a versão completa. Também os hooks das fontes novas, o `with_server.py` da Anthropic, que usa `shell=True` e exige Python, e as skills de blockchain, C/C++, fuzzing, criptografia e Codex da Trail of Bits.
+
+Do ECC e do gstack, ficam de fora:
+
+- hooks, scripts, binários e o preâmbulo comum do gstack, que checa atualizações, tem telemetria opcional e lê `~/.claude.json`;
+- fluxos concorrentes: `ship`, `autoplan`, `captain`, `land-and-deploy`, `blueprint`, `plan-orchestrate` e `orch-*`;
+- personas: `office-hours`, `plan-ceo-review` e `council`;
+- `qa`, `browse` e `cso`, que dependem do daemon, de binário próprio ou de Docker;
+- `continuous-learning-v2`, cujos hooks geram regras sozinhos, o que contraria um antiobjetivo.
+
+O próprio gstack cortou `investigate` e `plan-eng-review` depois de avaliações sem ganho. Em `investigate`, foram 50,0% de acerto contra 47,2% sem a skill, em 18 tarefas. Por isso, nenhuma ideia dessas fontes vale por vir de um repositório popular: cada skill continua passando pela comparação.
 
 ### Como as skills se conectam
 
@@ -179,7 +196,7 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 | Completo | `using-devorb`, `aligning`, `implementing`, `tdd`, `debugging`, `verifying` | Um realista, um reservado e os de pressão das fontes | 3 |
 | Leve | `planning`, `reviewing`, `finishing`, `writing-skills`, `browser-testing` e os seis itens do Matt | Um realista, comparado só com a fonte principal | 2 |
 
-**Skills de uma fonte só,** como os seis itens do Matt e `verifying`, não têm dois lados para fundir: são adaptadas ao fluxo do DevOrb, enxugadas e registradas no ledger.
+**Skills de uma fonte principal,** como os seis itens do Matt e `verifying`, não têm dois lados para fundir: são adaptadas ao fluxo do DevOrb, enxugadas e registradas no ledger. As ideias de fontes novas entram nelas como frases próprias, dentro do teto.
 
 **Fontes novas não viram braço de comparação.** Elas entregam poucas partes de repositórios grandes, então os braços continuam sendo Superpowers e Matt. `browser-testing` não tem braço de fonte e compara sem plugin.
 
@@ -220,9 +237,17 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 ## Design, depois da base
 
-É um projeto separado, com plano próprio, que começa depois da migração da base. O plano atual termina nessa migração. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa. O teto de custo fixo vale para a base, e o design define o seu ao começar.
+É um projeto separado, com plano próprio. O plano atual termina na migração da base. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa. O teto de custo fixo vale para a base, e o design define o seu ao começar.
 
-O dono ainda vai enviar os repositórios. As etapas seguem o mesmo processo de fusão e entram em `sources.json`. Nesta máquina estão instalados `frontend-design`, `taste-skill` e `ui-ux-pro-max`, mas Claude não sabe se são as fontes pretendidas. O `ai-toolkit` traz `design-workflow` e `design-intelligence`, candidatas quando esse projeto começar. A skill resultante entra no fluxo entre `aligning` e `implementing`, quando a tarefa tiver interface.
+O dono pediu para voltar ao design logo depois do ECC e do gstack, e a base ainda não passou pelas fusões. A primeira decisão desse projeto é a ordem entre os dois.
+
+As etapas seguem o mesmo processo de fusão e entram em `sources.json`. O dono citou a `ui-ux-pro-max` como fonte. Claude não sabe se `frontend-design` e `taste-skill`, também instalados no PC, entram. A skill resultante entra no fluxo entre `aligning` e `implementing`, quando a tarefa tiver interface.
+
+Candidatas ainda sem avaliação:
+
+- **`ai-toolkit`:** `design-workflow` e `design-intelligence`.
+- **ECC:** `accessibility`, `frontend-a11y`, `design-system`, `frontend-design-direction`, `frontend-patterns`, `make-interfaces-feel-better`, `motion-foundations`, `motion-patterns` e `motion-advanced`.
+- **gstack:** `design-consultation`, `design-html`, `design-motion`, `design-review`, `design-shotgun`, `plan-design-review`, `DESIGN.md` e `review/design-checklist.md`.
 
 ## O que já se sabe sobre a fusão
 

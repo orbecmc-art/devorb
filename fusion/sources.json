@@ -58,6 +58,39 @@
         "toolkit/skills/js-security-audit/",
         "toolkit/skills/service-debugging/"
       ]
+    },
+    {
+      "name": "ecc",
+      "url": "https://github.com/affaan-m/ECC",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "d2ef2680594f9a17526a6e1a2e18b3d242c5d17b",
+      "paths": [
+        "skills/verification-loop/",
+        "skills/loop-design-check/",
+        "skills/benchmark-optimization-loop/",
+        "skills/browser-qa/",
+        "skills/intent-driven-development/",
+        "skills/change-impact/",
+        "skills/click-path-audit/"
+      ]
+    },
+    {
+      "name": "gstack",
+      "url": "https://github.com/garrytan/gstack",
+      "license": "MIT",
+      "textReuse": false,
+      "lastAbsorbed": "1b96d9f8538ae0f3b66dd52b75793a3767e514d4",
+      "paths": [
+        "review/gate-integrity.md",
+        "review/checklist.md",
+        "review/specialists/targeted.md",
+        "verify/SKILL.md.tmpl",
+        "benchmark/sections/vet-the-number.md.tmpl",
+        "modernize/SKILL.md.tmpl",
+        "document-release/SKILL.md.tmpl",
+        "context-save/SKILL.md.tmpl"
+      ]
     }
   ]
 }
