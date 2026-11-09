@@ -287,7 +287,7 @@ test('--show and --diff take hostile names as data, never through a shell', asyn
     assert.equal(shown.stderr, '');
     const diff = await cli(source, cacheDir, ['--diff', 'src', String(idx)]);
     assert.equal(diff.code, 0);
-    assert.match(diff.stdout, new RegExp(`^\+${body}$`, 'm'));
+    assert.ok(diff.stdout.includes(`\n+${body}\n`), diff.stdout);
     assert.ok(!diff.stdout.includes('zz.md'));
   }
   noPwned(remote.dir, cacheDir);
@@ -344,7 +344,7 @@ test('missingPaths reports a path that never existed, even when from equals to',
 });
 
 test('missingPaths keeps reporting a folder the source moved away, month after month', async () => {
-  const { remote, cacheDir, source } = setup();
+  const { remote, cacheDir, source } = setup({ ...base(), 'skills/keep.md': 'k' }); // skills/ itself survives
   const s = { ...source, paths: ['skills/a/', 'skills/'] };
   assert.deepEqual((await sourceDiff(s, { cacheDir })).missingPaths, []);
   const to = remote.mv('skills/a/SKILL.md', 'other/a/SKILL.md');
