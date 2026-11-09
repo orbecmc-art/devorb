@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2
+
+- Quatro fontes novas em `fusion/sources.json`, acompanhando só as pastas escolhidas: Karpathy, `webapp-testing` da Anthropic, Trail of Bits e Spartan.
+- `textReuse: false` marca as fontes das quais só entram ideias, escritas com palavras próprias.
+- Skill `browser-testing` no registro, ainda planejada. A base passa de 17 para 18 skills.
+- `using-devorb` ganha essa skill na tabela de etapas e fica com a descrição mais curta.
+
 ## 0.1.1
 
 - Verificador de skills (`tools/check-skills.mjs`), que roda dentro de `npm test`.

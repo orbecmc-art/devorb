@@ -13,6 +13,48 @@
       "license": "MIT",
       "lastAbsorbed": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
       "paths": ["skills/engineering/", "skills/productivity/"]
+    },
+    {
+      "name": "karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "license": "MIT (declarada, sem arquivo de licença)",
+      "textReuse": false,
+      "lastAbsorbed": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+      "paths": ["skills/karpathy-guidelines/"]
+    },
+    {
+      "name": "anthropic-skills",
+      "url": "https://github.com/anthropics/skills",
+      "license": "Apache-2.0",
+      "lastAbsorbed": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "paths": ["skills/webapp-testing/"]
+    },
+    {
+      "name": "trailofbits-skills",
+      "url": "https://github.com/trailofbits/skills",
+      "license": "CC-BY-SA-4.0",
+      "textReuse": false,
+      "lastAbsorbed": "e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff",
+      "paths": [
+        "plugins/variant-analysis/",
+        "plugins/patching-bugs/",
+        "plugins/property-based-testing/",
+        "plugins/differential-review/",
+        "plugins/spec-to-code-compliance/",
+        "plugins/fp-check/"
+      ]
+    },
+    {
+      "name": "spartan-toolkit",
+      "url": "https://github.com/c0x12c/ai-toolkit",
+      "license": "MIT (declarada no README, sem arquivo de licença)",
+      "textReuse": false,
+      "lastAbsorbed": "96b2c9d099f8507a95b9e43916f144594720a3c9",
+      "paths": [
+        "toolkit/skills/browser-qa/",
+        "toolkit/skills/js-security-audit/",
+        "toolkit/skills/service-debugging/"
+      ]
     }
   ]
 }

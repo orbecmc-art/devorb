@@ -22,6 +22,7 @@ Ele não quer ficar pegando um pouco de cada plugin. Quer que tudo se funda em u
 
 - Absorver o ponytail. Ele continua um plugin separado.
 - Absorver o `everything-claude-code`. O dono não o usa no Mac.
+- Absorver as fontes novas inteiras. Da Trail of Bits entram 6 de 98 skills, e do Spartan, 3.
 - Incluir skills de agência (n8n, Kommo, Meta Ads). Elas têm outro público e pesariam em todo projeto.
 - Suportar outros agentes (Codex, Cursor e afins). É só Claude Code.
 - Coletar métricas de retrabalho ou tempo. A comparação de cenários responde com menos esforço.
@@ -39,7 +40,7 @@ O projeto fracassa, mesmo funcionando, se:
 ## Restrições
 
 - **Máquinas:** Mac como principal e um PC com Windows. O hook precisa funcionar nos dois. O Superpowers já resolve isso com `run-hook.cmd` e `session-start`, e esse desenho deve ser reaproveitado.
-- **Licenças:** Superpowers e Matt Pocock são MIT. Os avisos ficam em `LICENSES/`.
+- **Licenças:** Superpowers e Matt Pocock são MIT, e o `webapp-testing` da Anthropic é Apache 2.0. Os avisos ficam em `LICENSES/`. As outras fontes novas só fornecem ideias, como explica "Fontes novas".
 - **Contexto:** a lista de skills é limitada a 1% da janela de contexto, e o excesso perde descrições, começando pelas menos usadas. Cada saída de hook SessionStart é limitada a 10 mil caracteres.
 - **Convivência com o ponytail (v5.3.3, lida em listagens e no repositório):** ele instala hooks em `SessionStart`, `SubagentStart` e `UserPromptSubmit` e não colide em arquivos nem ferramentas. Há conflitos leves: ele prescreve um teste depois do código, sem TDD, e questiona se algo precisa existir. O dono já usa essa combinação com o Superpowers sem queixa, então o DevOrb mantém a mesma convivência e não tenta resolver esses conflitos.
 - **Custo:** o teste de fusão de uma só etapa gastou 10 agentes e cerca de 830 mil tokens. Aplicar esse rigor a todas as skills custaria dezenas de milhões de tokens, o que não é viável. Nenhum gasto além da assinatura do dono acontece sem aprovação dele.
@@ -55,6 +56,7 @@ O projeto fracassa, mesmo funcionando, se:
 - Puxar atualizações das fontes e evoluir mensalmente.
 - Começar pela base e seguir até o design.
 - Trazer na primeira versão os seis itens que só o Matt tem: `domain-modeling`, `codebase-design`, `improve-architecture`, `prototype`, `handoff` e `retro`.
+- Trazer quatro fontes novas, recomendadas a ele: as diretrizes do Karpathy, a Trail of Bits, o `webapp-testing` da Anthropic e o `ai-toolkit` (Spartan). Ele aprovou a seleção de Claude, que fica só com as partes de "Fontes novas".
 
 ### De Claude, que o dono pode rever
 
@@ -63,6 +65,7 @@ O projeto fracassa, mesmo funcionando, se:
 - **Manual ou automática:** orquestradoras e skills de uso eventual são manuais (`disable-model-invocation: true`), o que tira a descrição do contexto. As do fluxo principal são automáticas.
 - **Aprovação:** por pull request. Nada entra sozinho.
 - **Skill nova:** depois da primeira versão, só entra com um caso real de uso. Melhoria em skill existente passa pela comparação de cenários.
+- **`browser-testing` na base:** o caso real é testar as telas dos sites e sistemas do dono antes de dizer que ficaram prontas. Esse caso é suposição de Claude, que o dono não corrigiu ao aprovar a seleção.
 - **Regras próprias são permitidas e protegidas:** no teste, a regra que parece ter causado a melhora não estava em nenhuma fonte.
 - **Língua:** skills em inglês, para comparar com as fontes. Relatórios e pull requests em português.
 - **Specs e planos:** arquivos no repositório do projeto, como o Superpowers faz hoje. O fluxo do Matt que depende de issue tracker (`triage`, `wayfinder`, publicação de spec) não entra na base.
@@ -95,11 +98,12 @@ A versão fica em `plugin.json` e sobe a cada pull request, porque uma cópia in
 | Entrada | `using-devorb` | `using-superpowers`, `ask-matt` | Hook |
 | Alinhar | `aligning` | `brainstorming`, `grilling`, `grill-me`, `grill-with-docs` | Automática |
 | Planejar | `planning` | `writing-plans`, `to-spec`, `to-tickets` | Automática |
-| Implementar | `implementing` | `subagent-driven-development`, `executing-plans`, `dispatching-parallel-agents`, `using-git-worktrees`, `implement`, `implement-spec` | Automática |
-| Testar | `tdd` | `test-driven-development`, `tdd` | Automática |
-| Depurar | `debugging` | `systematic-debugging`, `diagnosing-bugs` | Automática |
+| Implementar | `implementing` | `subagent-driven-development`, `executing-plans`, `dispatching-parallel-agents`, `using-git-worktrees`, `implement`, `implement-spec`, `karpathy-guidelines` | Automática |
+| Testar | `tdd` | `test-driven-development`, `tdd`, `property-based-testing` | Automática |
+| Depurar | `debugging` | `systematic-debugging`, `diagnosing-bugs`, `implement-patch`, `variant-analysis`, `service-debugging` | Automática |
 | Verificar | `verifying` | `verification-before-completion` | Automática |
-| Revisar | `reviewing` | `requesting-code-review`, `receiving-code-review`, `code-review` | Automática |
+| Testar no navegador | `browser-testing` | `webapp-testing`, `browser-qa` | Automática |
+| Revisar | `reviewing` | `requesting-code-review`, `receiving-code-review`, `code-review`, `differential-review`, `spec-to-code-compliance`, `fp-check`, `js-security-audit` | Automática |
 | Finalizar | `finishing` | `finishing-a-development-branch`, `pr` | Automática |
 | Escrever skills | `writing-skills` | `writing-skills`, `writing-for-agents` | Automática |
 | Evoluir | `evolving` | Nova | Manual e agendada |
@@ -115,13 +119,31 @@ Itens que só o Matt tem e que entram na primeira versão, por decisão do dono:
 | `handoff` | `handoff` | Manual |
 | `retro` | `retro` | Manual |
 
-"A base" são as 17 skills destas duas tabelas. `GLOSSARY.md` e `docs/adr/` são mantidos por `domain-modeling`.
+"A base" são as 18 skills destas duas tabelas. `GLOSSARY.md` e `docs/adr/` são mantidos por `domain-modeling`.
 
 O restante fica de fora até haver um caso real: `triage`, `wayfinder`, `teach`, `to-questionnaire`, `wizard`, `research`, `wait-what`, `diagnosing-superpowers`, `setup-matt-pocock-skills` e as pastas `misc` e `in-progress` do Matt.
 
+### Fontes novas
+
+| Fonte | Licença | Partes acompanhadas | Uso |
+|---|---|---|---|
+| Karpathy | MIT declarada, sem arquivo de licença | `karpathy-guidelines` | Só ideias |
+| Anthropic | Apache 2.0 | `webapp-testing` | Texto permitido |
+| Trail of Bits | CC BY-SA 4.0 | `variant-analysis`, `patching-bugs`, `property-based-testing`, `differential-review`, `spec-to-code-compliance`, `fp-check` | Só ideias |
+| Spartan (`c0x12c/ai-toolkit`) | MIT declarada no README, sem arquivo de licença | `browser-qa`, `js-security-audit`, `service-debugging` | Só ideias |
+
+"Só ideias" fica marcado com `textReuse: false` em `fusion/sources.json`: a ideia é reescrita com palavras próprias e creditada no ledger, e nenhum texto é copiado. Na Trail of Bits, a CC BY-SA exigiria a mesma licença em texto copiado, se o DevOrb um dia for compartilhado. Nas outras duas, não há arquivo de licença cujo aviso possa ser mantido.
+
+**Conflitos já decididos:**
+
+- **Mudança mínima ou correção na origem:** mínimo é a menor mudança que corrige a regra quebrada, não a menor em linhas. Isso concilia a mudança cirúrgica do Karpathy com a correção na origem de `debugging`.
+- **Espera no navegador:** esperar um elemento específico, e usar `networkidle` só em app sem websocket nem polling. A Anthropic trata essa espera como crítica, e o Spartan avisa que ela nunca termina nesses apps.
+
+**Recusados:** o fluxo `/spartan:build`, que concorre com o do DevOrb, e a regra "Boil the Lake", que manda fazer sempre a versão completa. Também os hooks das fontes novas, o `with_server.py` da Anthropic, que usa `shell=True` e exige Python, e as skills de blockchain, C/C++, fuzzing, criptografia e Codex da Trail of Bits.
+
 ### Como as skills se conectam
 
-O fluxo principal é: `aligning` → `planning` → `implementing` → `verifying` → `reviewing` → `finishing`. Dentro de `implementing`, `tdd` escreve os testes, e `debugging` entra quando algo falha.
+O fluxo principal é: `aligning` → `planning` → `implementing` → `verifying` → `reviewing` → `finishing`. Dentro de `implementing`, `tdd` escreve os testes, e `debugging` entra quando algo falha. Quando a tarefa tem interface, `verifying` usa `browser-testing`.
 
 - Cada skill termina com uma seção `Connects to`: o que recebe, o que usa e para quem entrega.
 - Os artefatos têm lugar fixo: specs em `docs/devorb/specs/`, planos em `docs/devorb/plans/`, glossário em `GLOSSARY.md` e decisões em `docs/adr/`.
@@ -155,9 +177,11 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 | Nível | Skills | Casos | Rodadas |
 |---|---|---|---:|
 | Completo | `using-devorb`, `aligning`, `implementing`, `tdd`, `debugging`, `verifying` | Um realista, um reservado e os de pressão das fontes | 3 |
-| Leve | `planning`, `reviewing`, `finishing`, `writing-skills` e os seis itens do Matt | Um realista, comparado só com a fonte principal | 2 |
+| Leve | `planning`, `reviewing`, `finishing`, `writing-skills`, `browser-testing` e os seis itens do Matt | Um realista, comparado só com a fonte principal | 2 |
 
 **Skills de uma fonte só,** como os seis itens do Matt e `verifying`, não têm dois lados para fundir: são adaptadas ao fluxo do DevOrb, enxugadas e registradas no ledger.
+
+**Fontes novas não viram braço de comparação.** Elas entregam poucas partes de repositórios grandes, então os braços continuam sendo Superpowers e Matt. `browser-testing` não tem braço de fonte e compara sem plugin.
 
 **Orçamento:** `debugging` é a primeira skill a passar pelo processo. Depois dela, quem constrói mede o custo real, estima o restante e mostra ao dono antes de seguir. Os testes usam o mesmo modelo que o dono usa no Mac, fixado em cada rodada, e `--max-cost-usd` serve de teto.
 
@@ -175,9 +199,9 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 **Passos:**
 
-1. Ler `fusion/sources.json` e comparar cada fonte com o último commit absorvido, só nos caminhos acompanhados. Skills novas viram candidatas.
+1. Ler `fusion/sources.json` e comparar cada fonte com o último commit absorvido, só nos caminhos acompanhados. Nas fontes novas, só as pastas escolhidas são acompanhadas, para a revisão não virar fardo. Skills novas viram candidatas.
 2. Sem mudança relevante: nenhum pull request e nenhum commit. O histórico da tarefa agendada serve de registro.
-3. Classificar cada mudança como adotar, recusar com motivo, ou candidata a skill nova. O que já foi recusado no ledger não volta para análise.
+3. Classificar cada mudança como adotar, recusar com motivo, ou candidata a skill nova. O que já foi recusado no ledger não volta para análise. De fonte com `textReuse: false`, só entram ideias reescritas.
 4. Refundir só as skills afetadas, dentro dos limites.
 5. Rodar os cenários só dessas skills e das vizinhas no fluxo.
 6. Abrir um pull request em português, com a versão nova e os commits atualizados. Ele traz, por fonte, o que mudou, o que foi adotado, o que foi recusado e por quê, a tabela de testes e a variação de tokens.
@@ -198,7 +222,7 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 É um projeto separado, com plano próprio, que começa depois da migração da base. O plano atual termina nessa migração. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa. O teto de custo fixo vale para a base, e o design define o seu ao começar.
 
-O dono ainda vai enviar os repositórios. As etapas seguem o mesmo processo de fusão e entram em `sources.json`. Nesta máquina estão instalados `frontend-design`, `taste-skill` e `ui-ux-pro-max`, mas Claude não sabe se são as fontes pretendidas. A skill resultante entra no fluxo entre `aligning` e `implementing`, quando a tarefa tiver interface.
+O dono ainda vai enviar os repositórios. As etapas seguem o mesmo processo de fusão e entram em `sources.json`. Nesta máquina estão instalados `frontend-design`, `taste-skill` e `ui-ux-pro-max`, mas Claude não sabe se são as fontes pretendidas. O `ai-toolkit` traz `design-workflow` e `design-intelligence`, candidatas quando esse projeto começar. A skill resultante entra no fluxo entre `aligning` e `implementing`, quando a tarefa tiver interface.
 
 ## O que já se sabe sobre a fusão
 
