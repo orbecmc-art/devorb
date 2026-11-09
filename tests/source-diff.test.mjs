@@ -218,3 +218,16 @@ test('--json prints reachable results, reports the failed source and exits non-z
   assert.deepEqual(JSON.parse(io.stdout).map((r) => r.name), ['src']);
   assert.match(io.stderr, /ghost/);
 });
+
+test('history rewritten after a warm cache is sha-missing too', async () => {
+  const { remote, cacheDir, source } = setup();
+  const pinned = remote.commit({ 'skills/a/SKILL.md': BODY + 'pinned\n' });
+  const pin = { ...source, lastAbsorbed: pinned };
+  assert.equal((await sourceDiff(pin, { cacheDir })).status, 'no-change'); // warms the cache
+  git(remote.dir, 'reset', '-q', '--hard', remote.first);
+  const rewritten = remote.commit({ 'skills/a/SKILL.md': BODY + 'rewritten\n' });
+  const r = await sourceDiff(pin, { cacheDir });
+  assert.equal(r.status, 'sha-missing');
+  assert.deepEqual(r.files, []);
+  assert.equal(r.to, rewritten);
+});

@@ -93,16 +93,23 @@ export async function sourceDiff(source, { cacheDir }) {
     scriptsOrHooks: [],
   };
 
-  let known = false;
-  if (SHA.test(from)) {
+  // Missing commit and non-ancestor pin (rewritten history) both mean sha-missing,
+  // so a warm cache (old commit still in the object store) agrees with a cold one.
+  // Only git's "no" exit code (1) counts; any other failure rejects.
+  const exitsOne = async (args, env) => {
     try {
-      await g(['cat-file', '-e', `${from}^{commit}`], { env: { GIT_NO_LAZY_FETCH: '1' } });
-      known = true;
-    } catch {
-      known = false;
+      await g(args, { env });
+      return false;
+    } catch (e) {
+      if (e.cause?.code === 1) return true;
+      throw e;
     }
+  };
+  if (!SHA.test(from)) return { ...result, status: 'sha-missing' };
+  const missing = await exitsOne(['rev-parse', '--verify', '--quiet', `${from}^{commit}`], { GIT_NO_LAZY_FETCH: '1' });
+  if (missing || (await exitsOne(['merge-base', '--is-ancestor', from, to]))) {
+    return { ...result, status: 'sha-missing' };
   }
-  if (!known) return { ...result, status: 'sha-missing' };
   if ((await g(['rev-parse', `${from}^{commit}`])).trim() === to) return result;
 
   const out = await g(['diff', '--name-status', '-z', '-M', `${from}..${to}`, '--', ...source.paths]);
