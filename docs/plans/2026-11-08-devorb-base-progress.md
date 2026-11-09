@@ -11,13 +11,16 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 | 3. Hook e `using-devorb` | Feita, menos a resposta do agente (Step 6) | `8de39d2..42b6b5e` |
 | Revisão geral das Tasks 1 a 3 | Feita, com correções em `e638a79` | `f9fbdee..e638a79` |
 | Fontes novas na spec, no plano e no registro | Feita, sem nenhuma fusão ainda | Versão `0.1.2` |
-| 4 em diante | Não começou. Roda no Mac | |
+| 18 e 19. Comparador e `evolving` | Feitas antes da ordem do plano, a pedido do dono. Falta a rodada formal de `claude plugin eval` | Versão `0.1.3` |
+| 20. Agendamento | Prompt pronto. A tarefa agendada é criada depois do merge | |
+| 4 a 17 e 23 | Não começaram. Rodam no Mac | |
+| 21 e 22 | Não começaram | |
 
 A base passou de 17 para 18 skills. O texto da Task 1 no plano continua falando em 17, porque registra o que foi feito naquele momento.
 
 ## Retomar no Mac
 
-A `main` já tem as Tasks 1 a 3. O pull request da branch `docs/new-sources` traz as fontes novas, e o merge dele vem antes de clonar.
+A `main` já tem as Tasks 1 a 3 e as fontes novas. As Tasks 18 a 20 vêm da branch `feat/monthly-cycle`, e o merge dela vem antes de clonar.
 
 ```bash
 git clone https://github.com/orbecmc-art/devorb.git
@@ -43,6 +46,17 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 ## Decisões tomadas na execução
 
 Cada linha traz a decisão, o motivo e o custo se estiver errada.
+
+### Ciclo mensal antes das fusões
+
+O dono pediu para fazer as Tasks 18 a 20 já, depois de saber que elas normalmente vêm depois das fusões.
+
+- Até as fusões terminarem, há pouco para refundir: só a `using-devorb` existe. Uma mudança que toca só uma skill `planned` entra como "lida na fusão", e o pino avança, porque a fusão lê a fonte inteira nesse pino. Custo: as linhas de base são refeitas quando o pino muda.
+- `tools/compare.mjs` ainda não existe, então o pull request sai com "Testes: pendentes". Custo: nenhuma tabela de testes até a Task 4.
+- O ensaio rodou com agentes separados e um avaliador às cegas, porque o `claude plugin eval` com Bash não roda neste Windows. Custo: a rodada formal no Mac pode discordar.
+- O caso original quase não separava as versões, então foi endurecido antes de escrever a skill. Custo: mais rodadas de agente.
+- Dois graders foram corrigidos depois de ver os resultados: `no-marker` varria o rascunho, que `flags-injection` exige que cite as linhas, e `no-requeue` proibia uma linha de ledger que só cita a recusa anterior. Na primeira nota, as três rodadas com a skill falharam nos dois. Custo: se a correção estiver errada, um grader ficou frouxo para caber no resultado.
+- Pino que não é ancestral da branch padrão conta como `sha-missing`, igual a um commit ausente, e o pull request pede a decisão do dono. Custo: uma decisão desnecessária em fonte com branches incomuns.
 
 ### Fontes novas
 
@@ -127,4 +141,7 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | "Run `/compact`" contradiz `phase-boundaries.md:17` | Próxima edição do arquivo |
 | O verificador lê binários como texto | Quando entrar o primeiro binário |
 | Licenças com CRLF, teste de registro superficial, licenças duplicadas no teste de fusão | Quando convier |
+| `source-diff`: git sem timeout, cache sem autorreparo, protocolos livres, `paths` vazio cobre o repositório inteiro | Antes de confiar na execução agendada por vários meses |
+| `source-diff`: skill renomeada não aparece como nova; extensões de script incompletas; caminho de erro sem teste | Quando convier |
+| Casos `evolving-*`: formato e alvos só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |

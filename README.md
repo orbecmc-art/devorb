@@ -24,6 +24,14 @@ claude plugin disable devorb@devorb
 claude plugin enable superpowers@claude-plugins-official
 ```
 
+## Ciclo mensal
+
+A skill `evolving` compara cada fonte de `fusion/sources.json` com o último commit absorvido, só nas pastas acompanhadas. Sem mudança, ela não gera commit. Com mudança, abre um pull request em português dizendo o que adotou, o que recusou e por quê. Só o dono faz o merge, e nada de terceiros entra sozinho.
+
+- **Rodar à mão:** `/devorb:evolving`, ou peça um ensaio para parar no rascunho `fusion/pr-draft.md`.
+- **Rodar sozinho:** a tarefa agendada usa o prompt de `fusion/routine-prompt.md`.
+- **Testes:** enquanto `tools/compare.mjs` não existir, ou se ele não rodar na nuvem, o pull request chega com "Testes: pendentes". Rode os comandos indicados nele no Mac antes de aprovar.
+
 ## Desenvolvimento
 
 `npm test` roda os testes de estrutura em `tests/`. A versão do plugin fica só em `.claude-plugin/plugin.json`. O design está em `docs/specs/` e o plano em `docs/plans/`.

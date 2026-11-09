@@ -2,6 +2,8 @@
 
 ## 0.1.3
 
+- `fusion/routine-prompt.md`, o prompt da execução mensal, e a explicação do ciclo no `README.md`.
+- Casos `evals/evolving-*`, com uma fonte de exemplo que traz uma melhoria real, instruções embutidas, um hook novo e uma mudança que contradiz uma regra própria.
 - `tools/source-diff.mjs` compara cada fonte com o último commit absorvido, só nos caminhos acompanhados, e aponta skills novas, hooks e scripts. Ele só lê objetos do git, sem extrair nem executar nada da fonte. Histórico reescrito aparece como `sha-missing`.
 - Skill `evolving`, manual: a revisão mensal das fontes. Classifica as mudanças, funde as ideias adotadas dentro dos tetos e escreve o pull request em português pelo modelo em `references/pr-template.md`, com hooks, scripts e instruções embutidas em destaque no topo. O agendamento ainda não está ligado.
 
