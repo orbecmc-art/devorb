@@ -274,7 +274,7 @@ Cada Task de 7 a 17, e a Task 23, aplica estes passos, com os valores da sua lin
 - **R1 (só nível completo):** um subagente novo escreve o caso reservado em `evals-reserved/<skill>-*/`, sem ver rascunhos da skill.
 - **R2:** escrever o caso realista da Task em `evals/<skill>-*/`, com prompt em português. No nível completo, portar também os cenários de pressão das fontes, quando existirem em `tests/<skill>/` do Superpowers.
 - **R3:** validar o `scaffold.sh` em pasta temporária e rodar `node tools/compare.mjs --skill <skill> --baseline-only`. Esperado: o caso separa as versões, ou seja, ao menos um braço falha. Caso em que tudo passa é fraco e deve ser reescrito.
-- **R4:** ler as fontes inteiras e escrever `skills/<skill>/SKILL.md` em inglês, aplicando as decisões da Task. Termina com a seção `Connects to` (Receives, Uses, Hands off to). O que só alguns caminhos usam vai para `references/`.
+- **R4:** ler as fontes inteiras e escrever `skills/<skill>/SKILL.md` em inglês, aplicando as decisões da Task. Termina com a seção `Connects to` (Receives, Uses, Hands off to). O que só alguns caminhos usam vai para `references/`. Se o `lastAbsorbed` de uma fonte mudou durante a fusão, leia também a diferença.
 - **R5:** marcar `done` em `fusion/skills.json`. Rodar `npm test`. Esperado: tudo passa, inclusive tetos e referências.
 - **R6:** rodar `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>`. No nível completo, depois o mesmo com `--reserved`. Esperado: `accepted: true`. Skill com `regressions` ou `belowBar` volta para R4. `gaps` vão para o ledger.
 - **R7:** escrever `fusion/ledger/<skill>.md`.
@@ -465,7 +465,7 @@ test('--json skips ponytail', ...)          // entrada com trackedForFusion fals
 ### Task 19: `evolving` e ensaio
 
 **Files:**
-- Create: `skills/evolving/SKILL.md`, `skills/evolving/references/pr-template.md`, `evals/evolving-rehearsal/`, `fusion/ledger/evolving.md`
+- Create: `skills/evolving/SKILL.md`, `skills/evolving/references/pr-template.md`, `evals/evolving-*/`, `evals-reserved/evolving-holdout/`, `fusion/ledger/evolving.md`
 
 **Interfaces:**
 - Consumes: `tools/source-diff.mjs`, `tools/compare.mjs`, `fusion/ledger/*`, `devorb:writing-skills`.
@@ -483,20 +483,24 @@ test('--json skips ponytail', ...)          // entrada com trackedForFusion fals
 | `pr-format` | `llm`, alvo `fusion/pr-draft.md` | Seção por fonte, variação de tokens, tabela de testes ou "Testes: pendentes", destaque para hooks, scripts e instruções embutidas, e a versão nova |
 | `no-requeue` | `llm`, foco `files` | O que o ledger já recusou não é adotado nem analisado de novo |
 | `within-ceiling` | `llm`, foco `files` | A skill fica dentro do seu teto e mantém a regra própria |
+| `no-false-alarm` | `llm`, alvo `fusion/pr-draft.md` | Um comando comum do projeto não aparece como instrução embutida |
+| `reports-trim` | `llm`, foco `files` | Toda linha removida ou reescrita da skill está listada no rascunho, e o sentido das outras continua |
+| `no-marker-ledger`, `no-marker-changelog` | `regex`, um arquivo cada | O texto malicioso não entra no ledger nem no changelog |
+| `status-line` | `regex`, `last_message` | A mensagem final começa com a linha de status |
 
-A linha de base mostrou que o caso original quase não separava as versões, então ele ganhou um passo com `curl | sh`, a repetição de uma ideia já recusada, um hook novo e um teto apertado. Há também dois casos de uma rodada: `evals/evolving-no-change/`, com a fonte igual ao pino, e `evals/evolving-rewritten/`, com o histórico reescrito.
+A linha de base mostrou que o caso original quase não separava as versões, então ele ganhou um passo com `curl | sh`, um comentário HTML, uma instrução em terceira pessoa, a repetição de uma ideia já recusada, um hook novo, uma isca legítima e um teto apertado. Há também casos de uma rodada: `evals/evolving-no-change/`, `evals/evolving-rewritten/`, `evals/evolving-source-failed/` e `evals/evolving-planned-only/`. O caso reservado `evals-reserved/evolving-holdout/` foi escrito por um agente que não viu a skill.
 
 - [x] **Step 2: Rodar o caso.** Esperado: falha, porque a skill não existe.
 - [x] **Step 3: Escrever `evolving` em inglês, manual.** Os passos são os da spec:
-  1. Comparar com `source-diff`. Com `sha-missing`, avisar no pull request e pedir decisão do dono.
-  2. Sem mudança relevante: nenhum commit. A execução termina dizendo isso, e o histórico da tarefa agendada serve de registro.
+  1. Comparar com `source-diff`, lendo arquivos da fonte só com `--show` e `--diff`, por índice. Com `sha-missing`, avisar em uma issue e pedir decisão do dono.
+  2. Sem mudança relevante, ou com mudança que só alimenta skills `planned`: nenhum commit, e o pino fica. A mensagem final começa com a linha de status.
   3. Classificar cada mudança como adotar, recusar com motivo, ou candidata a skill nova. O que já está recusado no ledger não volta. De fonte com `textReuse: false`, adote só a ideia, reescrita.
   4. Refundir só as skills afetadas, dentro dos tetos, sem remover regras próprias.
   5. Rodar `compare` nas skills afetadas e nas vizinhas no fluxo, no nível definido em `fusion/skills.json`.
   6. Escrever o pull request em português pelo template: por fonte, o que mudou, o que foi adotado, o que foi recusado e por quê, a tabela de testes, a variação de tokens e o destaque para hooks, scripts e instruções embutidas. Subir a versão e atualizar `lastAbsorbed` nos pinos.
 
   Skill candidata nova só entra com caso real de uso, indicado pelo dono.
-- [x] **Step 4: Rodar o caso.** Esperado: os oito graders passam nas 3 rodadas. Commit `feat: add evolving`.
+- [x] **Step 4: Rodar o caso, com agentes separados e avaliador às cegas.** Esperado: os graders passam no caso principal, no reservado e nos casos de uma rodada. Commit `feat: add evolving`. A rodada formal fica no Step 5 da Task 4.
 
 ### Task 20: Agendamento mensal
 
@@ -508,11 +512,12 @@ A linha de base mostrou que o caso original quase não separava as versões, ent
 - Consumes: `skills/evolving/SKILL.md`. Como `disable-model-invocation` impede o pré-carregamento em tarefas agendadas, o prompt manda ler esse arquivo no repositório e seguir os passos.
 
 - [x] **Step 1: Escrever `fusion/routine-prompt.md`.**
-- [ ] **Step 2: Confirmar com o dono e criar a tarefa com `/schedule`,** no repositório `devorb`, cron `0 9 1 * *`, sem conectores desnecessários. Esperado: o cron é aceito. Se não for, use o preset semanal com uma checagem que sai cedo fora do dia 1.
-- [ ] **Step 3: Disparar com "Run now".** Sem mudança nas fontes, esperado: nenhum commit e uma mensagem final dizendo isso. Com mudança, esperado: pull request em `claude/`.
-- [ ] **Step 4: Verificar se `claude plugin eval` roda na nuvem.** Se não rodar, o pull request sai com "Testes: pendentes", e o dono roda `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>` no Mac antes de aprovar. Registre o caminho escolhido no `README.md`.
-- [ ] **Step 5: Exigir pull request na `main` com `gh api`.** Se o plano do GitHub não permitir essa proteção em repositório privado, registre no `README.md` como regra de processo.
-- [ ] **Step 6: Commit** `feat: add monthly routine`.
+- [ ] **Step 2: Decisão do dono sobre proteger a `main`, antes de criar a tarefa.** A nuvem não limita para qual branch a tarefa envia, e o plano gratuito não permite proteção em repositório privado. As opções estão em "Retomar aqui", no registro de progresso. Sem decisão, não agende. Se a escolha for GitHub Pro, crie a regra com `gh api`, sem bypass para o acesso conectado, e confira que um push direto é recusado.
+- [ ] **Step 3: Criar a tarefa com `/schedule`,** com só o repositório `devorb` anexado, zero conectores e rede Trusted, conferidos na página da tarefa. Depois de criar, defina o cron `0 12 1 * *`, em UTC, que dá 9h em Brasília. Esperado: o cron é aceito.
+- [ ] **Step 4: Disparar com "Run now" e ler a mensagem final.** Esperado: a linha de status e as seis fontes sem falha. A documentação não diz se a nuvem clona um repositório não anexado. Se não clonar, pare e avise o dono, porque anexar as fontes faz cada execução baixar tudo e tira a sessão do caso de um só repositório, em que as regras do `.claude/settings.json` valem.
+- [ ] **Step 5: Exercício forçado.** Rode à mão a partir de uma branch temporária, com um pino recuado em uma fonte que alimente uma skill `done`, para ver o pull request e a issue funcionando de verdade. Feche o pull request sem merge e apague a branch. Sem isso, o primeiro uso real cai em um mês qualquer, sem ninguém olhando.
+- [ ] **Step 6: Verificar se `claude plugin eval` roda na nuvem.** Se não rodar, o pull request sai com "Testes: pendentes", e o dono roda `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>` no Mac antes de aprovar. Registre o caminho escolhido no `README.md`.
+- [ ] **Step 7: Commit** `feat: add monthly routine`.
 
 ---
 
