@@ -165,7 +165,7 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | `source-diff`: cache corrompido sem autorreparo, protocolos livres, extensões de script incompletas, caminho de erro sem teste | Quando convier |
 | `source-diff`: `--show` e `--diff` buscam a fonte de novo, então um push no meio da execução pode deslocar os índices; `--diff` de um arquivo renomeado mostra só o caminho novo | Antes de confiar na execução agendada por vários meses |
 | `source-diff`: não emite `index`, só `[]` e saída 0 se toda fonte tiver `trackedForFusion: false`, e o limite de 30 s também cobre buscas de arquivo | Quando convier |
-| `evolving`: rodada só com issue não guarda as linhas de ledger, que são refeitas no mês seguinte; a skill está com 8 bytes de folga, então o próximo acréscimo vai para `references/` | Quando convier |
+| `evolving`: rodada só com issue não guarda as linhas de ledger, que são refeitas no mês seguinte; a skill está com 8 tokens de folga, então o próximo acréscimo vai para `references/` | Quando convier |
 | `evolving`: em ensaio, `OK com pull request` aparece sem pull request; script ou nome estranho em mês só com skills `planned` aparece como contagem em uma linha; `npm test` citado em linha, não em bloco, em uma das rodadas | Quando convier |
 | Casos `evolving-*`: formato, alvos e `^` no `regex` só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |
