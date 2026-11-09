@@ -96,7 +96,7 @@ O dono aprovou a seleção. A spec, em "Fontes novas", tem o que entra e o que f
 
 ### O que fica como está
 
-- `using-devorb` fica com 3.491 bytes, 299 acima da fonte, ou cerca de 75 tokens a mais por sessão. O limite do plano permite, e a Task 6 mede. Custo: contraria o objetivo de enxugar, se isso se confirmar.
+- `using-devorb` fica com 3.498 bytes, 306 acima da fonte, ou cerca de 77 tokens a mais por sessão. O limite do plano permite, e a Task 6 mede. Custo: contraria o objetivo de enxugar, se isso se confirmar.
 - O ramo do Windows sem Git fica sem teste. O código é idêntico ao da fonte, e o Git não pode ser escondido do `cmd.exe`. Custo: um erro em um Windows sem Git.
 - Nada de CI por enquanto. O plano não prevê, e os cenários usam a assinatura do dono. Custo: um teste quebrado percebido mais tarde.
 - Nenhuma trava contra os dois plugins ligados. A spec trata isso como procedimento. Custo: texto inicial duplicado, se o dono esquecer.
