@@ -4,7 +4,7 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 ## Retomar aqui (parado em 2026-11-09, a pedido do dono)
 
-**Ciclo mensal, branch `feat/monthly-cycle`:** seis commits (`57ab208..7d59bf6`) e nada enviado ao GitHub. `tools/source-diff.mjs` e `tests/source-diff.test.mjs` têm a etapa 1 pela metade, sem commit: 78 de 80 testes passam, e falham `--show and --diff take hostile names as data` e `missingPaths keeps reporting a folder the source moved away`. A `main` e o GitHub não foram afetados. Nada foi agendado.
+**Ciclo mensal, branch `feat/monthly-cycle`:** enviada ao GitHub como cópia de segurança, sem pull request. O último commit, marcado `wip:`, traz a etapa 1 pela metade em `tools/source-diff.mjs` e `tests/source-diff.test.mjs`: 78 de 80 testes passam, e falham `--show and --diff take hostile names as data` e `missingPaths keeps reporting a folder the source moved away`. Não faça merge antes de terminar a lista abaixo. A `main` não foi afetada. Nada foi agendado.
 
 A revisão da branch deu "com correções". Siga nesta ordem:
 
