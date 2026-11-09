@@ -69,7 +69,7 @@
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "domain-modeling": {
     "invocation": "auto",

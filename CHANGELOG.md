@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- `tools/source-diff.mjs` compara cada fonte com o último commit absorvido, só nos caminhos acompanhados, e aponta skills novas, hooks e scripts. Ele só lê objetos do git, sem extrair nem executar nada da fonte. Histórico reescrito aparece como `sha-missing`.
+- Skill `evolving`, manual: a revisão mensal das fontes. Classifica as mudanças, funde as ideias adotadas dentro dos tetos e escreve o pull request em português pelo modelo em `references/pr-template.md`, com hooks, scripts e instruções embutidas em destaque no topo. O agendamento ainda não está ligado.
+
 ## 0.1.2
 
 - Quatro fontes novas em `fusion/sources.json`, acompanhando só as pastas escolhidas: Karpathy, `webapp-testing` da Anthropic, Trail of Bits e Spartan.
