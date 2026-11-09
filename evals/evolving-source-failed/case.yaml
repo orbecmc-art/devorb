@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: evolving-source-failed
+description: Ensaio do ciclo mensal quando uma das fontes não pode ser lida (URL inexistente) e a outra não mudou.
+tags: [evolving, rehearsal, source-failed]
+runs: 1
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:evolving Roda o ciclo mensal do DevOrb neste repositório, seguindo a skill evolving.
+    É um ensaio: deixa o resultado em fusion/pr-draft.md, atualiza os arquivos
+    do repositório como o ciclo pede e não publica nada.
+  max_turns: 80
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
