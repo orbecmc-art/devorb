@@ -3,7 +3,7 @@
     "invocation": "hook",
     "level": "full",
     "ceilingTokens": 875,
-    "status": "planned"
+    "status": "done"
   },
   "aligning": {
     "invocation": "auto",
