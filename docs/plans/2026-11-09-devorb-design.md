@@ -21,6 +21,7 @@
 - Toda fonte de design tem `textReuse: false`. Credite no ledger. Em `apple-design`, nada do que deriva da Apple entra como citação ou código. Em `gate-integrity`, sem os nomes de regra.
 - Sem binário, daemon, serviço pago, chave de API ou download em tempo de execução nas skills. Nenhum hook de fonte. Blocos que fixam a resposta ou a persona do agente nunca entram.
 - Grader não mede gosto. Nenhuma regra estética vira lei se a fonte for a única a sustentá-la: regra sem cenário fica fora.
+- As fontes de referência fixas (`fusion/ui-sources.json`, spec "Fontes de referência fixas") são decisão do dono: `visual-direction` as consulta primeiro, e nenhuma task tira uma delas. Ler esses sites na web é permitido. Instalar uma biblioteca no projeto do cliente é dependência do projeto, anunciada no contrato de direção.
 
 ## Review Focus
 
@@ -72,6 +73,7 @@ Cada task de D2 a D6 aplica R1 a R8 do plano da base, com estas diferenças:
 - Produces: `checkSkills` soma à parte as descrições das entradas com `sector: "design"`, com o limite `DESIGN_ALWAYS_ON_CAP = 250`. A assinatura não muda.
 - Produces: `parseArms` aceita também `ui-ux-pro-max`. `prepareArm` monta esse braço como monta o `superpowers`: o repositório inteiro no `lastAbsorbed` da entrada `ui-ux-pro-max` de `fusion/sources.json`, com a raiz como plugin (manifesto em `.claude-plugin/plugin.json`, skills em `.claude/skills/`) e sem a pasta `stack/`. É o plugin que o dono usa, e roda só dentro do sandbox de `claude plugin eval`. Se o sandbox não tiver Python, a busca dele falha, e o resultado registra isso em vez de esconder.
 
+- [ ] **Step 0: Sondar a leitura de sites no sandbox.** Crie `evals/probe-web/case.yaml`, cujo prompt usa `WebFetch` em `https://ui.shadcn.com` e imprime o título da página, com grader `regex` `shadcn` no `last_message`. Rode `claude plugin eval . --case probe-web --runs 1 --allow-tools WebFetch --trust-plugin --no-publish`. Anote o resultado no commit e apague a sondagem. Se o sandbox não ler sites, o caso da Task D2 avalia a alternativa: a skill leu a lista e disse que não conseguiu abrir as fontes.
 - [ ] **Step 1: Escrever os testes que falham.** A fixture tem duas skills de design automáticas, somando 300 tokens de descrição, e uma da base com 700.
 
 ```js
@@ -90,7 +92,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
 
 ## Task D2: `visual-direction` (completo, 2.500) (portão do dono)
 
-**Files:** `skills/visual-direction/SKILL.md`, com `references/persuade.md`, `operate.md`, `read.md`, `copy.md` e `floor.md`, mais `evals/visual-direction-*`, `evals-reserved/visual-direction-*`, `fusion/ledger/visual-direction.md`, `skills/using-devorb/SKILL.md`
+**Files:** `skills/visual-direction/SKILL.md`, com `references/persuade.md`, `operate.md`, `read.md`, `copy.md`, `floor.md` e `ui-sources.json`, este movido de `fusion/ui-sources.json` com `git mv`, mais `tests/ui-sources.test.mjs` (o caminho muda), `evals/visual-direction-*`, `evals-reserved/visual-direction-*`, `fusion/ledger/visual-direction.md`, `skills/using-devorb/SKILL.md`
 
 **Interfaces:** recebe a spec de `devorb:aligning`, grava `## Direção visual` nela e entrega para `devorb:design-system`. Escolhe a família tipográfica, mas nenhum valor.
 
@@ -98,7 +100,9 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
 
 - [ ] **Aplicar a receita.** Espinha: Impeccable.
   - **Decisões:** o modo vem do sucesso do visitante naquela superfície, não do produto: Persuade, Operate, Read ou Experience. Experience não tem arquivo próprio na fonte e fica no `SKILL.md`, a partir dos modos de `SKILL.src.md`. A invenção tem três níveis: estender, superfície nova e mundo novo. Candidatos de direção vêm do mundo do público. Antes do código, um contrato registra a direção, a primeira tela e o piso de ofício.
-  - **Fora:** o sorteio de direção, o binário, as imagens de comp e a busca no catálogo externo.
+  - **Fontes de referência fixas (decisão do dono):** o `SKILL.md` manda, antes de escolher a direção ou de fazer um componente do zero, ler `references/ui-sources.json` e consultar as fontes que combinam com as palavras do cliente, seguindo as `rules` do arquivo. As fontes com `reading: "browser"` abrem na ferramenta de navegador, quando houver uma, e as com `reading: "account"` só com a conta do dono. Essa regra fica no corpo da skill, não numa referência, e é marcada no ledger como regra do dono: nenhuma fusão a tira. O contrato de direção registra as fontes consultadas, a fundação, os especialistas e o componente de destaque, se houver um.
+  - **Emil (`pick-ui-library`), só ideias:** identificar a tarefa, não a biblioteca que o pedido citou. Olhar o `package.json` primeiro e reaproveitar o que já existe, sem trocar dependência sem pedido. Recomendar uma só biblioteca e dizer quando sai da lista.
+  - **Fora:** o sorteio de direção, o binário, as imagens de comp e a busca no catálogo externo da Impeccable.
   - **Hallmark, só ideias:**
     - Antes da forma, inventariar o que é real, as imagens e o que falta, e pedir material primeiro.
     - As seções e o fechamento vêm do trabalho do visitante: em restaurante, reservar, cardápio e horários, e não hero, números e e-mail.
@@ -126,6 +130,11 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
     - `regex` para `lang="pt-BR"` em `index.html`;
     - `llm` com foco `files`: nenhum número, depoimento ou preço inventado, ação de agendar repetida na página e fechamento que não é e-mail;
     - `llm` com foco `files`: a spec ganhou `## Direção visual`, com modo Persuade.
+  - **Caso das fontes fixas:** o scaffold cria um projeto Next com shadcn/ui e Tailwind, e a spec aprovada de uma landing "bem clean" para um escritório de arquitetura, com inscrição na newsletter que confirma por um aviso. Prompt: "segue a spec aprovada e faz a landing". Graders:
+    - `llm` no `trace`: leu `references/ui-sources.json` e, antes de escrever código, abriu ao menos uma página de `byStyle.clean` (Awwwards ou Minimal Gallery, que abrem por leitura de texto), ou disse que não conseguiu abri-la;
+    - `llm` no `last_message`: diz quais fontes consultou;
+    - `regex` para `sonner` em `package.json`;
+    - `llm` com foco `files`: no máximo um componente de destaque na página, e nenhum aviso feito à mão.
   - **Reservado (R1):** um subagente novo escreve um caso de superfície Operate em projeto que já tem identidade, a partir dos itens 2 e 3 do Review Focus.
 - [ ] **PARAR. Mostrar ao dono:** duas páginas com a skill e duas sem, nos mesmos briefs, em navegador, mais a tabela de resultados. Ele decide se a skill fica. Grader não vê gosto, então este portão não é dispensável.
 
@@ -141,6 +150,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
   - **Decisões:** primeiro ler o código e o que existe. Primitivo e semântico por padrão, e token novo só com três usos ou mais da mesma intenção. `DESIGN.md` no formato aberto, com tokens em YAML, nunca sobrescrito sem pedido.
   - **UI UX Pro Max, só ideias:** cor de superfície nasce em par, como `primary` e `on-primary`, com contraste calculado. No escuro, a marca fica e as superfícies são rederivadas. `references/color-roles.md` traz o esquema de 16 papéis, sem paletas.
   - **gstack (`craft-audit`), só ideia:** os tokens seguem o Tailwind instalado, em `tailwind.config` na v3 e em `@theme` na v4.
+  - **Fontes de referência fixas (decisão do dono):** quando a fundação é o shadcn/ui, o tema padrão dele é trocado pelos tokens do projeto, porque esse tema virou uma cara de IA. Terceiro caso: o scaffold cria um projeto com shadcn/ui no tema padrão e uma spec aprovada com direção própria. Prompt: "monta o sistema de design seguindo a spec aprovada". Grader `llm` com foco `files`: as variáveis de tema do CSS não são mais as do tema padrão.
   - **ECC (`design-system`), só ideia:** espécime autônomo com todo papel e estado, para o dono aprovar, usando só `var()`.
   - **Emil (`apple-design`), só ideias:** título grande tem tracking negativo, e o leading cai conforme o tamanho. Superfície de vidro tem a alternativa opaca para `prefers-reduced-transparency` e `prefers-contrast`.
   - **gstack (`design-lint`, `craft-audit`) e Impeccable (`audit`), só ideias:** borda de largura constante entre estados. Desabilitado se distingue por três canais, não só pela cor. Em sistemas, linha com 8 px até a borda, 16 px entre textos e 12 px sob lista.
