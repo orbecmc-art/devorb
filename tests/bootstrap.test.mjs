@@ -60,11 +60,21 @@ const LEFT_OUT = [
   '/setup-matt-pocock-skills',
 ];
 
-test('bootstrap names every non-manual skill and stays small', () => {
+// A design skill joins the bootstrap in the task that finishes it: naming it earlier would send
+// agents after a skill that does not exist yet.
+const inBootstrap = (s) => s.sector !== 'design' || s.status === 'done';
+
+test('bootstrap names every non-manual skill, design ones once done, and stays small', () => {
   const body = read('SKILL.md');
   for (const [name, s] of Object.entries(registry))
-    if (s.invocation !== 'manual' && name !== 'using-devorb') assert.ok(body.includes(`devorb:${name}`), name);
+    if (s.invocation !== 'manual' && name !== 'using-devorb' && inBootstrap(s)) assert.ok(body.includes(`devorb:${name}`), name);
   assert.ok(Buffer.byteLength(body) <= 3500);
+});
+
+test('a design skill still being planned stays out of the bootstrap', () => {
+  const body = read('SKILL.md');
+  for (const [name, s] of Object.entries(registry))
+    if (!inBootstrap(s)) assert.ok(!body.includes(`devorb:${name}`), name);
 });
 
 test('using-devorb is marked done', () => {
@@ -100,7 +110,7 @@ test('manual skills are named as running only when the user calls them', () => {
   const body = read('SKILL.md');
   assert.match(body, /Manual skills run only when the user calls them/);
   for (const [name, s] of Object.entries(registry))
-    if (s.invocation === 'manual') assert.ok(body.includes(`devorb:${name}`), name);
+    if (s.invocation === 'manual' && inBootstrap(s)) assert.ok(body.includes(`devorb:${name}`), name);
 });
 
 test('the only references are the three kept files, and the body points to each', () => {

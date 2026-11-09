@@ -548,7 +548,7 @@ A linha de base mostrou que o caso original quase não separava as versões, ent
 
 - [ ] **Step 1: Criar o caso de fluxo inteiro.** Prompt em português: "adiciona X, pode começar sem perguntas", `max_turns: 200`, 1 rodada. Graders `tool_order`: `aligning` antes de `planning`, antes de `implementing`, antes de `finishing`.
 - [ ] **Step 2: Rodar a comparação geral.** `node tools/compare.mjs --skill all --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Se perder em um cenário, aquela skill é corrigida antes de migrar.
-- [ ] **Step 3: Conferir o custo real.** Instale em modo local e rode `claude plugin details devorb@devorb`. Esperado: até 706 tokens fixos, e cada skill dentro do teto.
+- [ ] **Step 3: Conferir o custo real.** Instale em modo local e rode `claude plugin details devorb@devorb`. Esperado: até 706 tokens fixos nas skills da base, mais até 250 nas de design que já estiverem prontas, e cada skill dentro do teto.
 - [ ] **Step 4: Mostrar ao dono `fusion/results/final.md`.** Com a aprovação dele, subir para `1.0.0` e fazer o merge.
 
 ### Task 22: Instalação e troca

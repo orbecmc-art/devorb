@@ -48,10 +48,29 @@ test('new sources track only the folders chosen for fusion', () => {
   ]);
 });
 
-test('ecc tracks only whole skill folders', () => {
+test('ecc tracks skill folders, or only SKILL.md when the folder holds a script', () => {
   const ecc = sources.sources.find((s) => s.name === 'ecc');
   assert.ok(ecc?.paths.length > 0);
-  for (const p of ecc.paths) assert.match(p, /^skills\/[a-z0-9-]+\/$/);
+  for (const p of ecc.paths) assert.match(p, /^skills\/[a-z0-9-]+\/(SKILL\.md)?$/);
+});
+
+test('no source tracks code the monthly cycle would refuse every time it changes', () => {
+  for (const s of sources.sources) {
+    for (const p of s.paths) assert.doesNotMatch(p, /\.(ts|js|mjs|cjs|sh|py|ps1|cmd)$/, `${s.name}: ${p}`);
+  }
+});
+
+test('impeccable tracks its source, not the generated per-agent copies', () => {
+  const impeccable = sources.sources.find((s) => s.name === 'impeccable');
+  assert.ok(impeccable?.paths.length > 0);
+  for (const p of impeccable.paths) assert.match(p, /^skill\//);
+});
+
+test('design sources only lend ideas', () => {
+  const names = ['impeccable', 'hallmark', 'taste-skill', 'frontend-design', 'emil-skills', 'scroll-craft', 'paper-shaders', 'diagram-design', 'ui-ux-pro-max'];
+  for (const name of names) {
+    assert.equal(sources.sources.find((s) => s.name === name)?.textReuse, false, name);
+  }
 });
 
 test('gstack tracks source files, never generated skills, folders or code', () => {
@@ -78,8 +97,15 @@ test('only permissive sources with a license file may lend text', () => {
   }
 });
 
-test('registry has the 18 skills of the spec', () => {
-  assert.equal(Object.keys(registry).length, 18);
+test('registry has the 18 base skills and the 5 design skills of the spec', () => {
+  const design = Object.keys(registry).filter((name) => registry[name].sector === 'design');
+  assert.equal(Object.keys(registry).length - design.length, 18);
+  assert.deepEqual(design.sort(), ['design-system', 'diagram', 'motion', 'ui-review', 'visual-direction']);
+  assert.equal(registry.diagram.invocation, 'manual');
+  for (const name of design) {
+    assert.equal(registry[name].ceilingTokens, 2500, name);
+    if (name !== 'diagram') assert.equal(registry[name].invocation, 'auto', name);
+  }
   assert.equal(registry.evolving.invocation, 'manual');
   assert.equal(registry['using-devorb'].invocation, 'hook');
   assert.equal(registry.implementing.ceilingTokens, 5000);

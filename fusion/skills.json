@@ -106,5 +106,40 @@
     "level": "light",
     "ceilingTokens": 2500,
     "status": "planned"
+  },
+  "visual-direction": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "design"
+  },
+  "design-system": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "design"
+  },
+  "motion": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "design"
+  },
+  "ui-review": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "design"
+  },
+  "diagram": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "design"
   }
 }

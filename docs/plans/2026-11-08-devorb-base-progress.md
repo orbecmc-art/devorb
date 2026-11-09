@@ -4,7 +4,7 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 ## Retomar aqui
 
-**Próximo pedido do dono: o setor de design,** depois do merge da branch `docs/ecc-gstack-sources`, que traz o ECC e o gstack como fontes, na versão `0.1.4`. A primeira decisão desse projeto é a ordem em relação às fusões da base, que ainda não começaram (spec, "Design, depois da base").
+**Setor de design, branch `docs/design-sector`, versão `0.1.5`:** seleção das fontes, seção "Setor de design" da spec e o plano `docs/plans/2026-11-09-devorb-design.md`, à espera do merge. Nenhuma skill de design existe ainda. As fusões dele rodam no Mac, depois do portão da Task 6 da base.
 
 Continuam pendentes:
 
@@ -15,7 +15,7 @@ Continuam pendentes:
 2. **Task 20, a partir do Step 3 do plano,** se a decisão for agendar.
 3. **Rodada formal de `claude plugin eval` nos casos `evolving-*`,** no Mac, no Step 5 da Task 4.
 
-Depois disso, o plano da base segue pelo Step 0 da Task 4, no Mac.
+Depois disso, o plano da base segue pelo Step 0 da Task 4, no Mac. O plano do design começa na Task D1, depois do Step 7 da Task 6.
 
 ## Onde está
 
@@ -27,7 +27,9 @@ Depois disso, o plano da base segue pelo Step 0 da Task 4, no Mac.
 | Revisão geral das Tasks 1 a 3 | Feita, com correções em `e638a79` | `f9fbdee..e638a79` |
 | Fontes novas na spec, no plano e no registro | Feita, sem nenhuma fusão ainda | Versão `0.1.2` |
 | 18 e 19. Comparador e `evolving` | Na `main`, escritas, corrigidas e ensaiadas antes da ordem do plano, a pedido do dono. Falta a rodada formal de `claude plugin eval` | Versão `0.1.3` |
-| ECC e gstack na spec, no plano e no registro | Seleção registrada, sem nenhuma fusão ainda | Versão `0.1.4`, branch `docs/ecc-gstack-sources` |
+| ECC e gstack na spec, no plano e no registro | Na `main`, seleção registrada, sem nenhuma fusão ainda | Versão `0.1.4` |
+| Setor de design: seleção, spec e plano | 5 skills `planned`, 9 fontes novas, nenhuma fusão | Versão `0.1.5`, branch `docs/design-sector` |
+| D1 a D8 | Não começaram. Rodam no Mac, depois da Task 6 | |
 | 20. Agendamento | Só o prompt pronto. Espera a decisão do dono | |
 | 4 a 17 e 23 | Não começaram. Rodam no Mac | |
 | 21 e 22 | Não começaram | |
@@ -36,7 +38,7 @@ A base passou de 17 para 18 skills. O texto da Task 1 no plano continua falando 
 
 ## Retomar no Mac
 
-A `main` já tem as Tasks 1 a 3, as Tasks 18 e 19 e o prompt da Task 20. O merge da branch `docs/ecc-gstack-sources` vem antes de clonar.
+A `main` já tem as Tasks 1 a 3, as Tasks 18 e 19, o prompt da Task 20 e o ECC e o gstack. O merge da branch `docs/design-sector` vem antes de clonar.
 
 ```bash
 git clone https://github.com/orbecmc-art/devorb.git
@@ -52,8 +54,10 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 
 ## O que não foi verificado
 
-- `npm test` passa com 83 de 83 no Windows. Nunca rodou no Mac nem no Bash 3.2.
-- O comparador rodou nas 8 fontes reais, todas sem mudança. A partir de um pino de 30 dias antes, ECC e gstack deram `changed`, com 2 e 8 arquivos, e `--show` e `--diff` funcionaram com busca real de um arquivo por vez. O ciclo inteiro nunca rodou sobre uma mudança real dessas fontes.
+- `npm test` passa com 87 de 87 no Windows. Nunca rodou no Mac nem no Bash 3.2.
+- O comparador rodou nas 17 fontes reais, todas sem mudança e sem caminho faltando. A partir de pinos de 30 dias antes, os caminhos do design mudaram em 34 arquivos, sem script nem nome estranho.
+- Nenhuma ideia de design passou por um cenário, e nenhuma página foi gerada com ou sem as skills.
+- A partir de um pino de 30 dias antes, ECC e gstack deram `changed`, e `--show` e `--diff` funcionaram com busca real de um arquivo por vez. O ciclo inteiro nunca rodou sobre uma mudança real dessas fontes.
 - As ideias das fontes novas não passaram por nenhum cenário. A comparação é por skill, então uma ideia ruim só aparece se a skill piorar.
 - A seleção do ECC e do gstack veio de um subagente por fonte, e Claude conferiu só as linhas citadas. Parte da lista curta foi vista apenas por título ou descrição. No ECC: `error-handling`, `coding-standards`, `git-workflow`, `hexagonal-architecture`, `prompt-optimizer` e `operator-approval-loop`. No gstack: `autoplan`, `plan-ceo-review`, `plan-devex-review`, `devex-review`, `health`, `pair-agent`, `skillify` e `browse`. Só o `review` do gstack tem medição favorável na própria fonte.
 - De onde veio `review/gate-integrity.md`: ele adapta um trabalho que não está no `NOTICE.md` do gstack, com licença não verificada. Por isso a fonte é "só ideias", sem os nomes de regra dele.
@@ -110,6 +114,23 @@ O dono pediu as duas fontes. A seleção é de Claude e entra na revisão do pul
 - `verifying` deixa de ter fonte única e recebe quatro ideias. Ela parte de cerca de 830 tokens da fonte, com teto de 2.500, então deve caber. Custo: a medir na Task 8.
 - `reviewing` recebe três ideias e já tinha as da Trail of Bits e do Spartan. Custo: é a skill com mais risco de passar do teto, e o detalhe vai para `references/`.
 - Nenhuma skill nova. Custo: nenhum no custo fixo, e o registro continua com 18.
+
+### Setor de design
+
+O dono pediu o setor logo depois do ECC e do gstack, enviou seis repositórios e disse para seguir. Claude recomendou escrever a seleção, a spec e o plano agora e deixar as fusões para depois da Task 6, e o dono seguiu. Cada linha traz o custo se estiver errada.
+
+- Três subagentes leram as fontes por frente: direção, sistema e revisão, movimento e diagramas. Claude conferiu as linhas citadas e mandou ler três skills do Emil que tinham caído entre as frentes. Custo: ideias de partes vistas só por amostra, que o registro de cada relatório lista.
+- Cinco skills, não uma: direção, sistema, movimento, revisão e diagrama decidem coisas diferentes em momentos diferentes, e juntas passariam muito do teto. Custo: quatro descrições a mais no custo fixo, com teto de 250 tokens.
+- Impeccable é a espinha de `visual-direction`, porque só ela serve landing e sistema, em projeto novo ou existente. O sorteio de direção dela depende de binário e serviço externo e fica de fora, e o teste do espelho do `frontend-design` faz esse papel. Custo: as direções podem convergir mais, e o cenário precisa medir isso.
+- A UI UX Pro Max, que o dono citou, entra com a estrutura de pares de cor e as linhas de acessibilidade, e vira braço de comparação. As 192 paletas ficam de fora, porque repetem as primárias padrão do Tailwind. Custo: quem gosta das paletas prontas perde o atalho.
+- Banners, logos e slides não entram. Custo: se o dono os usa, a UI UX Pro Max fica instalada só para isso, decidido na Task D8.
+- `diagram` é manual. Custo: pedir um diagrama em linguagem natural não a aciona.
+- Shaders e scroll ficam como referências de `motion`, não como skills. Custo: um pedido imersivo carrega a referência só se `motion` mandar.
+- Todas as fontes de design só emprestam ideias, mesmo as que permitiriam copiar. Custo: mais trabalho de reescrita em cada fusão.
+- Impeccable é acompanhada em `skill/`, a fonte, e não nas 22 cópias por agente geradas dela. ECC `frontend-design-direction` é acompanhada só no `SKILL.md`, porque a pasta tem um script. Custo: nenhum, se a fonte continuar gerando as cópias.
+- Skill de design só entra em `using-devorb` na task que a termina, com teste. Custo: até lá, o fluxo não a sugere, o que é o certo.
+- Um revisor independente leu a spec e o plano como quem vai executá-los, e as correções entraram antes do pull request: os casos partem de uma spec aprovada, para `aligning` não parar numa pergunta; o braço `ui-ux-pro-max` ficou definido; os graders `regex` leem arquivos de caminho fixo; o reservado não traz a resposta; cada arquivo tem uma skill principal; e tipografia, duração e curva ganharam dono nas fronteiras. Custo: nenhum novo.
+- Achados de segurança, todos fora: o hook `Stop` do taste-skill, os hooks e a telemetria da Impeccable, o `install-hook` do Hallmark, o `kie.mjs` do scroll-craft, que envia chave e imagens a outro servidor, e o `stack/.claude/settings.json` da UI UX Pro Max, que liga todo servidor MCP e libera a leitura da pasta pessoal. Blocos que fixam a resposta do agente no Emil também ficam fora.
 
 ### Valores que o plano deixava em aberto
 
@@ -187,3 +208,4 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | `evolving`: em ensaio, `OK com pull request` aparece sem pull request; script ou nome estranho em mês só com skills `planned` aparece como contagem em uma linha; `npm test` citado em linha, não em bloco, em uma das rodadas | Quando convier |
 | Casos `evolving-*`: formato, alvos e `^` no `regex` só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |
+| `evolving` procura "the skill" de cada arquivo, no singular, mas a spec agora diz que uma mudança vale para a skill da tabela e para as que citam o caminho no ledger | Na próxima edição testada da `evolving`, antes de a primeira skill de design ficar `done` |
