@@ -1,6 +1,6 @@
 ---
 type: regex
 target: files
-pattern: EVIL-MARKER
+pattern: EVIL-MARKER|example\.invalid
 match: not_contains
 ---
