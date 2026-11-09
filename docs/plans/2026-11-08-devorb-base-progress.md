@@ -6,7 +6,7 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 **Ciclo mensal, branch `feat/monthly-cycle`:** as correções da revisão estão feitas e ensaiadas, sem merge. Nada foi agendado. Falta, nesta ordem:
 
-1. **Revisar as correções, abrir o pull request e o dono faz o merge.** A versão continua `0.1.3`.
+1. **O dono faz o merge do pull request desta branch.** A versão é `0.1.3`, e as correções já foram revisadas.
 2. **Decisão do dono antes de agendar.** A nuvem não limita para qual branch a tarefa envia, e o plano gratuito não permite proteger a `main` de um repositório privado (a API responde 403). Hoje, nada técnico impede uma instrução maliciosa de chegar à `main`.
    - **GitHub Pro com regra sem bypass:** é a proteção real, e tem custo.
    - **Rodar à mão por enquanto:** `/devorb:evolving` uma vez por mês. É a recomendação de Claude enquanto as fusões não terminam, porque o ciclo teria pouco a fazer.
@@ -53,7 +53,7 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 - `npm test` passa com 80 de 80 no Windows. Nunca rodou no Mac nem no Bash 3.2.
 - As ideias das fontes novas não passaram por nenhum cenário. A comparação é por skill, então uma ideia ruim só aparece se a skill piorar.
 - Se o Chromium roda no sandbox de `claude plugin eval`. A Task 23 começa conferindo isso.
-- O ensaio da `evolving` rodou com agentes separados e avaliador às cegas, não com `claude plugin eval`, sempre no modelo Sonnet. Última versão: caso principal com 13 de 13 e 12 de 13 critérios; caso reservado com 9 de 9, e 7 de 9 sem a skill; os quatro casos-limite passaram. O reservado rodou uma vez só, e quem corrigiu a skill leu a lista de cenários previstos, embora não os testes.
+- O ensaio da `evolving` rodou com agentes separados e avaliador às cegas, não com `claude plugin eval`, sempre no modelo Sonnet. Última versão: caso principal com 13 de 13 e 12 de 13 critérios; caso reservado com 9 de 9, e 7 de 9 sem a skill; os quatro casos-limite passaram. O reservado rodou uma vez só, e quem corrigiu a skill leu a lista de cenários previstos, embora não os testes. Depois dessas notas, a skill recebeu mais dois ajustes de lógica, testados sem avaliador às cegas, com uma rodada do caso principal e um segundo mês do reservado: teto respeitado, nada malicioso nas skills, e o segundo mês sem versão nova nem pino movido.
 - O que o ensaio mede: sem a skill, o agente também recusou o que era malicioso e não executou o nome de arquivo hostil. O ganho medido está no destaque, na linha de status, no teto e na reescrita, não em barrar ataques. Isso não prova resistência a uma instrução mais sutil.
 - A publicação real nunca rodou: pull request e issue pela API, e a checagem de revisão aberta só em leitura.
 - Se a nuvem consegue clonar uma fonte que não esteja anexada à tarefa. A documentação não diz.
@@ -164,6 +164,8 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | Licenças com CRLF, teste de registro superficial, licenças duplicadas no teste de fusão | Quando convier |
 | `source-diff`: cache corrompido sem autorreparo, protocolos livres, extensões de script incompletas, caminho de erro sem teste | Quando convier |
 | `source-diff`: `--show` e `--diff` buscam a fonte de novo, então um push no meio da execução pode deslocar os índices; `--diff` de um arquivo renomeado mostra só o caminho novo | Antes de confiar na execução agendada por vários meses |
+| `source-diff`: não emite `index`, só `[]` e saída 0 se toda fonte tiver `trackedForFusion: false`, e o limite de 30 s também cobre buscas de arquivo | Quando convier |
+| `evolving`: rodada só com issue não guarda as linhas de ledger, que são refeitas no mês seguinte; a skill está com 8 bytes de folga, então o próximo acréscimo vai para `references/` | Quando convier |
 | `evolving`: em ensaio, `OK com pull request` aparece sem pull request; script ou nome estranho em mês só com skills `planned` aparece como contagem em uma linha; `npm test` citado em linha, não em bloco, em uma das rodadas | Quando convier |
 | Casos `evolving-*`: formato, alvos e `^` no `regex` só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |
