@@ -41,7 +41,8 @@ caminho escapado, como aparece no JSON da ferramenta
 - **`fonte`, `sha-missing`:** o histórico foi reescrito ou o pino `from` sumiu. O pino e as skills dessa fonte ficaram como estavam. Edição: depois de ler a fonte em `to`, troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` de `from` para `to`.
 - **`fonte`, `missingPaths`:** o caminho `x/` não existe mais em `to`. Edição: em `fusion/sources.json`, troque ou apague esse item de `paths` e mude o `lastAbsorbed` de `fonte` para `to`.
 - **`fonte`, falhou:** a fonte não foi revisada neste ciclo e o pino ficou como estava. Edição: nenhuma, se a próxima execução conseguir ler a fonte.
-- **`fonte`, índice N, `D` ou `R` em `SKILL.md`:** a skill sumiu ou mudou de nome na fonte. Edição: ajuste o "Mapa de skills" na spec ou registre no ledger que essa parte sai da skill e, nos dois casos, mude em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`.
+- **`fonte`, índice N, `D` em `SKILL.md`:** uma skill do mapa sumiu da fonte. Edição: ajuste o "Mapa de skills" na spec ou registre no ledger que essa parte sai da skill e, nos dois casos, mude em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`.
+- **`fonte`, índice N, `R` em `SKILL.md`:** uma skill mudou de nome na fonte. Só o caminho novo é conhecido, então ela pode ser uma skill em uso. Edição: se for, ajuste o "Mapa de skills" na spec. Nos dois casos, mude em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`.
 - **`skill`, sem ledger:** a skill está `done`, sem `fusion/ledger/skill.md`, e nada foi adotado. Edição: crie o ledger.
 - **`fonte`, N arquivos de skills `done`, acima de 30:** a fonte não foi revisada. Edição: rode `/devorb:evolving` à mão pedindo a revisão dela, ou troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`. Arquivos:
 

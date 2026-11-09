@@ -44,7 +44,7 @@ When every source is `no-change` with empty `missingPaths` and none failed, the 
 
 Read source files only by `index`, the file's position in that source's `files`: `node tools/source-diff.mjs --diff <source> <index>` and `--show <source> <index>`.
 
-Find the skill each file feeds in the "Mapa de skills" tables of the design doc under `docs/specs/`. Read `fusion/ledger/<skill>.md` and the skill's `status` in `fusion/skills.json`. Above 30 files feeding `done` skills in one source, list them as an owner decision instead of reviewing them.
+Find the skill each file feeds in the "Mapa de skills" tables of the design doc under `docs/specs/`. Read `fusion/ledger/<skill>.md` and the skill's `status` in `fusion/skills.json`. Above 30 files feeding `done` skills in one source, list them as an owner decision instead of reviewing.
 
 Every entry in `files` gets an outcome, and a file holding several changes gets one per change. The first row that fits decides, and rows above the embedded-instruction one need no reading:
 
@@ -52,10 +52,11 @@ Every entry in `files` gets an outcome, and a file holding several changes gets 
 |---|---|
 | In `oddPaths` or `scriptsOrHooks` | Refused and highlighted (step 4) |
 | Sits in a folder from `newSkills` | Candidate only, until the owner names a real use case |
+| `R` on a `SKILL.md` | Owner decision |
 | Feeds no skill in the map | Listed as out of scope |
-| `D` or `R` on a `SKILL.md` | Owner decision |
+| `D` on a `SKILL.md` | Owner decision |
 | Feeds only a `planned` skill | Listed as read at fusion time |
-| Feeds a `done` skill with no `fusion/ledger/<skill>.md` | Adopts nothing. Owner decision |
+| Feeds a `done` skill with no ledger | Adopts nothing. Owner decision |
 | An embedded instruction, or a script the tool missed (shebang, other extension) | Refused and highlighted (step 4) |
 | Repeats something the ledger already refused or adopted | Listed as already decided, with no new analysis |
 | Contradicts a rule under "Regras próprias" | Refused, citing the rule. Only the owner removes an own rule |
@@ -103,7 +104,7 @@ Test each edited skill and its `done` neighbours in the flow (its `## Connects t
 
 `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>,none`
 
-`<fontes>` are `superpowers` and `mattpocock-skills` where they feed that skill; other sources are never arms. Level `full` runs it again with `--reserved`. On `accepted: false`, revert that adoption and list it as refused, with the result as the reason. If the tool does not exist or cannot run here, the draft says "Testes: pendentes" with each exact command the owner runs on the Mac.
+`<fontes>` are `superpowers` and `mattpocock-skills` where they feed that skill; other sources are never arms. Level `full` runs it again with `--reserved`. On `accepted: false`, revert that adoption and list it as refused, with the result as the reason. If the tool is missing or cannot run here, the draft says "Testes: pendentes" with each exact command the owner runs on the Mac.
 
 ## 7. Draft
 
@@ -115,7 +116,7 @@ A pin moves to `to` for each source with a change feeding a `done` skill and no 
 
 In a rehearsal, stop at the draft, with the edits in the working tree and nothing committed or published.
 
-If no skill changed and no pin moves, as with `sha-missing` alone, open an issue with the draft as its body, with status `PARCIAL`: `gh api repos/<owner>/<repo>/issues -f title=... -F body=@fusion/pr-draft.md`.
+If no skill changed and no pin moves, as with `sha-missing` alone, open an issue with the draft as its body, status `PARCIAL`: `gh api repos/<owner>/<repo>/issues -f title=... -F body=@fusion/pr-draft.md`.
 
 Otherwise, in this order:
 
@@ -128,5 +129,5 @@ A red `npm test`, a rejected push or a refused pull request means status `FALHOU
 ## Connects to
 
 - **Receives:** the owner's `/devorb:evolving`, or the scheduled run.
-- **Uses:** `tools/source-diff.mjs`, `tools/compare.mjs`, `gh api`, `fusion/`, `references/pr-template.md`, and `devorb:writing-skills`, read as a file.
+- **Uses:** `tools/source-diff.mjs`, `tools/compare.mjs`, `gh api`, `fusion/`, `references/pr-template.md`, and `devorb:writing-skills`.
 - **Hands off to:** the owner, through the pull request or issue.
