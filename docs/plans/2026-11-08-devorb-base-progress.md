@@ -4,7 +4,7 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 ## Retomar aqui
 
-**Setor de design, na `main` desde a versão `0.1.5`:** seleção das fontes, seção "Setor de design" da spec e o plano `docs/plans/2026-11-09-devorb-design.md`. Nenhuma skill de design existe ainda. As fusões dele rodam no Mac, depois do portão da Task 6 da base.
+**Setor de design, na `main` desde a versão `0.1.5`:** seleção das fontes, seção "Setor de design" da spec e o plano `docs/plans/2026-11-09-devorb-design.md`. Nenhuma skill de design existe ainda. As fontes de referência fixas, pedidas pelo dono, estão em `fusion/ui-sources.json` desde a versão `0.1.7`, e a Task D2 as leva para dentro de `visual-direction`. As fusões dele rodam no Mac, depois do portão da Task 6 da base.
 
 Continuam pendentes:
 
@@ -54,7 +54,8 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 
 ## O que não foi verificado
 
-- `npm test` passa com 87 de 87 no Windows. Nunca rodou no Mac nem no Bash 3.2.
+- `npm test` passa com 91 de 91 no Windows. Nunca rodou no Mac nem no Bash 3.2.
+- As 13 fontes de referência fixas abriram em 2026-11-09, e as licenças foram conferidas no site ou no GitHub de cada uma. Nenhum agente as consultou ainda, e não se sabe se o sandbox de testes lê sites: a Task D1 sonda isso.
 - O comparador rodou nas 17 fontes reais, todas sem mudança e sem caminho faltando. A partir de pinos de 30 dias antes, os caminhos do design mudaram em 34 arquivos, sem script nem nome estranho.
 - Nenhuma ideia de design passou por um cenário, e nenhuma página foi gerada com ou sem as skills.
 - A partir de um pino de 30 dias antes, ECC e gstack deram `changed`, e `--show` e `--diff` funcionaram com busca real de um arquivo por vez. O ciclo inteiro nunca rodou sobre uma mudança real dessas fontes.
@@ -131,6 +132,18 @@ O dono pediu o setor logo depois do ECC e do gstack, enviou seis repositórios e
 - Skill de design só entra em `using-devorb` na task que a termina, com teste. Custo: até lá, o fluxo não a sugere, o que é o certo.
 - Um revisor independente leu a spec e o plano como quem vai executá-los, e as correções entraram antes do pull request: os casos partem de uma spec aprovada, para `aligning` não parar numa pergunta; o braço `ui-ux-pro-max` ficou definido; os graders `regex` leem arquivos de caminho fixo; o reservado não traz a resposta; cada arquivo tem uma skill principal; e tipografia, duração e curva ganharam dono nas fronteiras. Custo: nenhum novo.
 - Achados de segurança, todos fora: o hook `Stop` do taste-skill, os hooks e a telemetria da Impeccable, o `install-hook` do Hallmark, o `kie.mjs` do scroll-craft, que envia chave e imagens a outro servidor, e o `stack/.claude/settings.json` da UI UX Pro Max, que liga todo servidor MCP e libera a leitura da pasta pessoal. Blocos que fixam a resposta do agente no Emil também ficam fora.
+
+### Fontes de referência fixas
+
+O dono enviou o vídeo "UI Libraries for Claude Code", de Griffin Wooldridge, e pediu que as fontes da descrição fiquem fixas e sejam consultadas primeiro, conforme o estilo pedido. Cada linha traz o custo se estiver errada.
+
+- A descrição traz bibliotecas de componentes e o Mobbin, não galerias de sites, e a lista registra exatamente isso. Custo: um pedido "clean" encontra fundação, especialistas e poucos destaques, não exemplos de sites inteiros.
+- O artigo `griffinwooldridge.com/ai-for-designers` é só a página de espera de um guia que ainda não saiu, e nada dele entrou. Custo: nenhum.
+- A transcrição do vídeo não pôde ser lida, e a regra do destaque único vem do título de um capítulo. Custo: se o vídeo diz outra coisa, a regra muda.
+- As marcas de estilo de cada fonte são de Claude, tiradas da descrição de cada site, sem ver os componentes. Custo: uma fonte pode cair no estilo errado até o dono corrigir.
+- A lista fica em `fusion/ui-sources.json` até a Task D2, porque uma pasta de skill sem `SKILL.md` quebra o verificador. Custo: um `git mv` e um caminho de teste na D2.
+- A regra de consultar a lista primeiro fica no corpo de `visual-direction` e é marcada no ledger como regra do dono. Custo: alguns tokens que não podem sair para caber no teto.
+- `pick-ui-library`, antes recusada como lista de gosto, entra pelo processo, e o caminho dela passa a ser acompanhado. Custo: um arquivo a mais na revisão mensal.
 
 ### Valores que o plano deixava em aberto
 
