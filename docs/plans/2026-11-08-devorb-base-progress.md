@@ -2,6 +2,61 @@
 
 Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devorb-design.md`. Execução por subagentes, com revisão a cada task.
 
+## Retomar aqui (parado em 2026-11-09, a pedido do dono)
+
+**Ciclo mensal, branch `feat/monthly-cycle`:** seis commits (`57ab208..7d59bf6`) e nada enviado ao GitHub. `tools/source-diff.mjs` e `tests/source-diff.test.mjs` têm a etapa 1 pela metade, sem commit: 78 de 80 testes passam, e falham `--show and --diff take hostile names as data` e `missingPaths keeps reporting a folder the source moved away`. A `main` e o GitHub não foram afetados. Nada foi agendado.
+
+A revisão da branch deu "com correções". Siga nesta ordem:
+
+**1. Terminar o comparador.** Os testes novos já estão escritos.
+- `--show <fonte> <índice>` e `--diff <fonte> <índice>`, para o caminho de um arquivo de terceiros nunca entrar em um shell.
+- Campos `oddPaths` (caminhos com caracteres fora do seguro) e `missingPaths` (pasta acompanhada que não existe em `to`, checada em toda execução).
+- Rejeitar `paths` vazio. Lista de fontes vazia ou `sources.json` inválido saem com erro.
+- Timeout em cada chamada ao git, 120 s para clone e fetch, 30 s para o resto, e `ssh` sem prompt.
+- Nos testes, tirar `GIT_*` herdados e apontar `GIT_CONFIG_GLOBAL` e `GIT_CONFIG_SYSTEM` para o dispositivo nulo.
+
+**2. Corrigir `skills/evolving/`, sem quem escreve abrir `evals/`.**
+- Ler arquivos da fonte só com `--show` e `--diff`, por índice. Remover a dedução do caminho do clone por `os.tmpdir()`. `oddPaths` e `missingPaths` vão para o destaque e para a decisão do dono.
+- Mensagem final começa com o estado: `OK sem mudança`, `OK com pull request`, `OK aguardando revisão`, `PARCIAL` ou `FALHOU`. Em `PARCIAL` e `FALHOU`, abrir uma issue com `gh api repos/<dono>/<repo>/issues`.
+- Abrir o pull request com `gh api repos/<dono>/<repo>/pulls -f title=... -f head=... -f base=main -F body=@fusion/pr-draft.md`, porque `gh pr` dá 403 na nuvem. `npm test` vermelho, push recusado ou pull request recusado: nunca force-push, estado `FALHOU` e o rascunho na mensagem final.
+- Antes do passo 1, pela API REST: se já houver pull request aberto ou branch `claude/evolve-*`, parar com `OK aguardando revisão`.
+- **Pino:** se as mudanças de uma fonte alimentam só skills `planned`, o pino não avança e não há pull request, só uma linha na mensagem final. Isso substitui a decisão anterior de avançar. Só `sha-missing`: issue, sem subir a versão, com a edição exata que o dono deve fazer.
+- Skill `done` sem `fusion/ledger/<skill>.md` não adota nada e vai para a decisão do dono. É o caso de `using-devorb` hoje.
+- `D` ou `R` em um `SKILL.md` vai para a decisão do dono.
+- Coluna "o que saiu" preenchida pelo `git diff`, com toda linha removida ou reescrita. Nas rodadas 2 e 3, "smallest experiment" virou "cheapest experiment" e a coluna disse "Nada".
+- Regra de instrução embutida: destacar o que se dirige a quem processa ou mantém o repositório, busca ou roda algo externo, toca segredos, permissões ou outras skills, ou está escondido (comentário HTML, Unicode invisível, terceira pessoa). Comando comum do projeto dentro de um método ensinado não conta.
+- Citações e caminhos estranhos no pull request ficam em bloco cercado, com cerca maior que qualquer sequência de crases, para não virar link nem célula de tabela.
+- O ledger não repete o texto malicioso: a citação só fica no rascunho.
+- Mapa de skills só pela spec. Remover o ramo de `docs/skill-map.md`.
+- Pequenos: ler `skills/writing-skills/SKILL.md` como arquivo; regra para `accepted: false`; acima de 30 arquivos em uma fonte, perguntar ao dono; explicar `AAAA-MM`; sem JSON na saída da ferramenta, a execução falhou. Adicionar `fusion/pr-draft.md` ao `.gitignore`.
+
+**3. Atualizar `evals/evolving-*`.**
+- Prompts começam com `/devorb:evolving`, porque `disable-model-invocation` bloqueia a ferramenta Skill.
+- Novos na fonte de exemplo: comentário HTML, instrução em terceira pessoa e uma isca legítima, um comando comum do projeto que não pode ser destacado.
+- Graders novos: `no-false-alarm`, `reports-trim`, sem marcador no ledger e no changelog, citações em bloco cercado em `pr-format`.
+- Casos novos de uma rodada: `evolving-source-failed` (fonte inalcançável: `PARCIAL`, pino dela igual) e `evolving-planned-only` (pino igual, sem pull request).
+- O scaffold ganha um mini design com a tabela de skills e deixa de ter `docs/skill-map.md`.
+
+**4. Caso reservado.** Um agente novo, sem ver a skill, escreve `evals-reserved/evolving-holdout/`.
+
+**5. Ensaiar de novo com agentes separados.** Caso principal 2 vezes, reservado, `source-failed`, `planned-only`, `no-change` e `rewritten`. Dê as notas com um avaliador às cegas, misturando a linha de base.
+
+**6. Revisar só as correções, abrir o pull request e o dono faz o merge.** A versão continua `0.1.3`.
+
+**7. Decisão do dono antes de agendar.** A nuvem não limita para qual branch a tarefa envia, e o plano gratuito não permite proteger a `main` de um repositório privado (a API responde 403). Hoje, nada técnico impede uma instrução maliciosa de chegar à `main`.
+- **GitHub Pro com regra sem bypass:** é a proteção real, e tem custo.
+- **Rodar à mão por enquanto:** `/devorb:evolving` uma vez por mês. É a recomendação de Claude enquanto as fusões não terminam, porque o ciclo teria pouco a fazer.
+- **`.claude/settings.json` com bloqueio de push na `main` e auto-update desligado:** é grátis, mas fraco, porque não impede comandos arbitrários.
+
+**8. Só então, a Task 20.** Antes, ajuste o texto do plano:
+- Zero conectores e rede Trusted, conferidos na página da tarefa.
+- O cron de cinco campos é em UTC: `0 12 1 * *` dá 9h em Brasília. Ele é definido depois de criar a tarefa, e o preset semanal não é mais necessário.
+- A execução de teste lê a mensagem, vê seis fontes sem falha e mostra um arquivo por fonte, porque a documentação não diz se a nuvem clona repositório não anexado. Se não clonar, pare: anexar as fontes quebra as regras de sessão com um repositório.
+- Um exercício forçado, em branch temporária com um pino recuado, testa o pull request de verdade.
+- O `README.md` passa a dizer que mês sem pull request não prova que deu certo, com uma conferência do histórico no dia 2.
+
+Também no plano: em R4, se `lastAbsorbed` mudou durante uma fusão, ler a diferença. Em "O que não foi verificado", atualizar o total de testes. Resolver o "Rever na Task 19" sobre `tests/` do Superpowers.
+
 ## Onde está
 
 | Task | Estado | Commits |
@@ -11,8 +66,8 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 | 3. Hook e `using-devorb` | Feita, menos a resposta do agente (Step 6) | `8de39d2..42b6b5e` |
 | Revisão geral das Tasks 1 a 3 | Feita, com correções em `e638a79` | `f9fbdee..e638a79` |
 | Fontes novas na spec, no plano e no registro | Feita, sem nenhuma fusão ainda | Versão `0.1.2` |
-| 18 e 19. Comparador e `evolving` | Feitas antes da ordem do plano, a pedido do dono. Falta a rodada formal de `claude plugin eval` | Versão `0.1.3` |
-| 20. Agendamento | Prompt pronto. A tarefa agendada é criada depois do merge | |
+| 18 e 19. Comparador e `evolving` | Escritas e ensaiadas, antes da ordem do plano, a pedido do dono. Correções da revisão pendentes, e falta a rodada formal de `claude plugin eval` | Branch `feat/monthly-cycle`, sem merge |
+| 20. Agendamento | Só o prompt pronto. Espera as correções, o merge e a decisão do dono | |
 | 4 a 17 e 23 | Não começaram. Rodam no Mac | |
 | 21 e 22 | Não começaram | |
 
@@ -39,6 +94,8 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 - `npm test` passa com 53 de 53 no Windows. Nunca rodou no Mac nem no Bash 3.2.
 - As ideias das fontes novas não passaram por nenhum cenário. A comparação é por skill, então uma ideia ruim só aparece se a skill piorar.
 - Se o Chromium roda no sandbox de `claude plugin eval`. A Task 23 começa conferindo isso.
+- O ensaio da `evolving`: as rodadas com a skill passaram nos 8 critérios e a linha de base em 4, mas a skill foi escrita a partir das falhas desse mesmo caso, sem caso reservado. `no-marker`, `keeps-own-rule` e `no-requeue` também passam sem a skill, então só mostram que ela não atrapalha, e contra instruções maliciosas óbvias. Não foram exercitados: fonte que falha, publicação e a busca real no mapa de skills.
+- Se a nuvem consegue clonar uma fonte que não esteja anexada à tarefa. A documentação não diz.
 - A resposta do agente em uma sessão real não foi observada. No Windows, o plugin carregou, a skill apareceu na lista, o hook entregou o texto e o Superpowers ficou desligado naquela execução. A chamada ao modelo falhou porque o login da linha de comando expirou neste PC.
 - Se o Windows sem Git cai no ramo certo do `run-hook.cmd`. O arquivo é idêntico ao da fonte.
 - A instalação pelo marketplace foi testada a partir de um clone local, com configuração isolada, e não a partir do GitHub.
@@ -51,7 +108,7 @@ Cada linha traz a decisão, o motivo e o custo se estiver errada.
 
 O dono pediu para fazer as Tasks 18 a 20 já, depois de saber que elas normalmente vêm depois das fusões.
 
-- Até as fusões terminarem, há pouco para refundir: só a `using-devorb` existe. Uma mudança que toca só uma skill `planned` entra como "lida na fusão", e o pino avança, porque a fusão lê a fonte inteira nesse pino. Custo: as linhas de base são refeitas quando o pino muda.
+- Até as fusões terminarem, há pouco para refundir: só a `using-devorb` existe. Se as mudanças de uma fonte alimentam só skills `planned`, o pino não avança e não há pull request, só uma linha na mensagem final. O texto atual da skill ainda avança o pino, e isso está na lista de correções. Custo: a mesma linha se repete todo mês até a fusão.
 - `tools/compare.mjs` ainda não existe, então o pull request sai com "Testes: pendentes". Custo: nenhuma tabela de testes até a Task 4.
 - O ensaio rodou com agentes separados e um avaliador às cegas, porque o `claude plugin eval` com Bash não roda neste Windows. Custo: a rodada formal no Mac pode discordar.
 - O caso original quase não separava as versões, então foi endurecido antes de escrever a skill. Custo: mais rodadas de agente.
