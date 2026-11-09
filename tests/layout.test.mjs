@@ -48,6 +48,28 @@ test('new sources track only the folders chosen for fusion', () => {
   ]);
 });
 
+test('ecc tracks only whole skill folders', () => {
+  const ecc = sources.sources.find((s) => s.name === 'ecc');
+  assert.ok(ecc?.paths.length > 0);
+  for (const p of ecc.paths) assert.match(p, /^skills\/[a-z0-9-]+\/$/);
+});
+
+test('gstack tracks source files, never generated skills, folders or code', () => {
+  const gstack = sources.sources.find((s) => s.name === 'gstack');
+  assert.ok(gstack?.paths.length > 0);
+  for (const p of gstack.paths) {
+    assert.doesNotMatch(p, /\/$/, `${p}: a folder brings files regenerated with the shared preamble`);
+    assert.doesNotMatch(p, /(^|\/)SKILL\.md$/, `${p}: generated from SKILL.md.tmpl`);
+    assert.doesNotMatch(p, /\.(ts|js|mjs|sh|py)$/, `${p}: the cycle refuses scripts every month`);
+  }
+});
+
+test('ecc and gstack only lend ideas, because parts of them derive from third parties', () => {
+  for (const name of ['ecc', 'gstack']) {
+    assert.equal(sources.sources.find((s) => s.name === name)?.textReuse, false, name);
+  }
+});
+
 test('only permissive sources with a license file may lend text', () => {
   for (const s of sources.sources) {
     if (s.textReuse === false) continue;
