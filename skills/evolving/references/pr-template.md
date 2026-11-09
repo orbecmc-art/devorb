@@ -1,8 +1,8 @@
-<!-- Modelo do pull request. Copie para fusion/pr-draft.md, preencha na ordem abaixo e apague estes comentários. -->
+<!-- Modelo do pull request ou da issue. Copie para fusion/pr-draft.md, preencha na ordem abaixo e apague estes comentários. -->
 
 # Ciclo mensal AAAA-MM: versão X.Y.Z
 
-<!-- Só decisões do dono, sem versão nova: "# Ciclo mensal AAAA-MM: decisões do dono". O rascunho vira o corpo de uma issue. -->
+<!-- Nenhuma skill mudou e nenhum pino avança: "# Ciclo mensal AAAA-MM: sem versão nova". O rascunho vira o corpo de uma issue. -->
 
 ## Destaque: hooks, scripts, nomes estranhos e instruções embutidas
 
@@ -28,20 +28,22 @@ caminho escapado, como aparece no JSON da ferramenta
 
 ### Hooks e scripts
 
+<!-- Hooks e scripts não são lidos neste ciclo: não adivinhe pelo nome. -->
+
 | Fonte | Arquivo | Mudança | O que faz |
 |---|---|---|---|
-| `fonte` | `caminho` | A, M, D ou R | Resumo em uma frase |
+| `fonte` | `caminho` | A, M, D ou R | Não lido |
 
 ## Decisões do dono
 
 <!-- Um item por decisão, sempre com a edição exata. Sem nenhuma: "Nenhuma neste ciclo." Erro de ferramenta não é citado. -->
 
 - **`fonte`, `sha-missing`:** o histórico foi reescrito ou o pino `from` sumiu. O pino e as skills dessa fonte ficaram como estavam. Edição: depois de ler a fonte em `to`, troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` de `from` para `to`.
-- **`fonte`, `missingPaths`:** o caminho `x/` não existe mais em `to`. Edição: troque ou apague esse item de `paths` em `fusion/sources.json`.
+- **`fonte`, `missingPaths`:** o caminho `x/` não existe mais em `to`. Edição: em `fusion/sources.json`, troque ou apague esse item de `paths` e mude o `lastAbsorbed` de `fonte` para `to`.
 - **`fonte`, falhou:** a fonte não foi revisada neste ciclo e o pino ficou como estava. Edição: nenhuma, se a próxima execução conseguir ler a fonte.
-- **`fonte`, índice N, `D` ou `R` em `SKILL.md`:** a skill sumiu ou mudou de nome na fonte. Edição: ajuste o "Mapa de skills" na spec ou diga que essa parte sai da skill.
+- **`fonte`, índice N, `D` ou `R` em `SKILL.md`:** a skill sumiu ou mudou de nome na fonte. Edição: ajuste o "Mapa de skills" na spec ou registre no ledger que essa parte sai da skill e, nos dois casos, mude em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`.
 - **`skill`, sem ledger:** a skill está `done`, sem `fusion/ledger/skill.md`, e nada foi adotado. Edição: crie o ledger.
-- **`fonte`, N arquivos, acima de 30:** a fonte não foi revisada. Edição: rode `/devorb:evolving` à mão pedindo a revisão dela, ou troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`. Arquivos:
+- **`fonte`, N arquivos de skills `done`, acima de 30:** a fonte não foi revisada. Edição: rode `/devorb:evolving` à mão pedindo a revisão dela, ou troque em `fusion/sources.json` o `lastAbsorbed` de `fonte` para `to`. Arquivos:
 
 ````text
 um caminho escapado por linha
@@ -117,7 +119,7 @@ Tokens são bytes ÷ 4, medidos depois da última edição. "Depois" fica no tet
 
 `X.Y.W` → `X.Y.Z`, com entrada no `CHANGELOG.md`.
 
-<!-- Só decisões do dono: "Versão e pinos sem mudança.", no lugar deste texto e da tabela. -->
+<!-- Nenhuma skill mudou e nenhum pino avança: "Versão e pinos sem mudança.", no lugar deste texto e da tabela. -->
 
 | Fonte | `lastAbsorbed` antes | `lastAbsorbed` agora |
 |---|---|---|

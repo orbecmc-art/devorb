@@ -30,7 +30,7 @@ A skill `evolving` compara cada fonte de `fusion/sources.json` com o último com
 
 - **Rodar à mão:** `/devorb:evolving`, ou peça um ensaio para parar no rascunho `fusion/pr-draft.md`.
 - **Rodar sozinho:** a tarefa agendada usa o prompt de `fusion/routine-prompt.md`.
-- **Conferir:** um mês sem pull request não prova que o ciclo funcionou. No dia 2, veja o histórico da tarefa e a linha de status no começo da mensagem final: `OK sem mudança`, `OK com pull request`, `OK aguardando revisão`, `PARCIAL` ou `FALHOU`. Os dois últimos também abrem uma issue, se a API deixar.
+- **Conferir:** um mês sem pull request não prova que o ciclo funcionou. No dia 2, veja o histórico da tarefa e a linha de status no começo da mensagem final: `OK sem mudança`, `OK com pull request`, `OK aguardando revisão`, `PARCIAL` ou `FALHOU`. Os dois últimos também abrem uma issue, se a API deixar. Uma execução sem linha de status conta como `FALHOU`, porque ela pode ter parado esperando uma confirmação na página da tarefa.
 - **Depois do merge:** apague a branch `claude/evolve-*`. Enquanto ela existir, o mês seguinte para em `OK aguardando revisão`.
 - **Testes:** enquanto `tools/compare.mjs` não existir, ou se ele não rodar na nuvem, o pull request chega com "Testes: pendentes". Rode os comandos indicados nele no Mac antes de aprovar.
 

@@ -15,15 +15,16 @@ Skill nova, sem fonte para fundir. O processo vem da seção "Ciclo mensal" da s
 | 5. Fundir | Spec, "Limites de tamanho", "Fontes novas" e "Como fundir uma skill", mais as regras próprias 1, 2, 4 e 8 |
 | 6. Testar | Spec, "Ciclo mensal", passo 5, e receita R6 do plano. Os braços seguem "Fontes novas não viram braço de comparação". O `accepted: false` vem da revisão da branch |
 | 7. Rascunho e `references/pr-template.md` | Spec, "Ciclo mensal", passo 6, mais as regras próprias 3, 8 e 10 |
-| 8. Publicar | Spec, "Ciclo mensal", passos 6 e 7, e a revisão da branch, sobre `gh api` e o que fazer quando a publicação falha |
+| 8. Publicar | Spec, "Ciclo mensal", passos 6 e 7, a revisão da branch, sobre `gh api` e o que fazer quando a publicação falha, e a regra própria 12 |
 
 ## Conflitos resolvidos
 
 - **"Sem mudança relevante" ou nenhuma mudança:** a spec fala em mudança relevante. A primeira versão avançava o pino de fonte que só alimenta skill `planned`, e a revisão da branch trocou essa regra: o pino fica, não há pull request nem versão nova, e a mensagem final traz uma linha sobre a fonte. O status é `OK sem mudança`.
 - **Destaque sempre, mas sem rascunho:** `scriptsOrHooks` e `oddPaths` vão sempre para o destaque, e uma fonte sem nada a fundir não gera rascunho. Nesse caso, a linha da mensagem final traz a contagem deles. Como o pino não avança, a contagem volta todo mês até a fusão.
 - **"Só `planned`" estendido:** a mesma regra vale para fonte cujas mudanças não alimentam nenhuma skill `done`, o que inclui arquivo fora do mapa e candidata a skill nova. Nenhum desses tem o que fundir.
-- **`sha-missing` sozinho estendido:** a issue com o rascunho, sem versão nova, vale para toda execução que só tem decisões do dono, como `missingPaths` ou `D` em `SKILL.md`.
-- **Pino com decisão aberta:** fonte com decisão do dono em aberto fica com o pino, mesmo se outra mudança dela foi adotada, para a pergunta voltar no mês seguinte. O que já foi adotado aparece então como "já decidido".
+- **O que abre pull request:** a versão anterior dizia "só decisões do dono", sem definir. Sob pino retido, hooks e instruções voltam como recusados, e a execução caía em versão nova sem nenhuma skill mudar. O critério agora é o efeito: skill alterada ou pino movido abre pull request. Sem isso, há rascunho e issue, sem versão nova, com status `PARCIAL`, o que inclui `sha-missing` sozinho.
+- **Pino com decisão aberta:** fonte com decisão do dono em aberto fica com o pino, mesmo se outra mudança dela foi adotada, para a pergunta voltar no mês seguinte. O que já foi adotado aparece então como "já decidido", e uma recusa já registrada para o mesmo commit não ganha outra linha.
+- **Decisão que se fecha:** um `D` continua em `from..to` enquanto o pino fica, então a edição indicada ao dono também muda o `lastAbsorbed` para `to`. O mesmo vale para `missingPaths`.
 
 ## Regras próprias
 
@@ -39,7 +40,8 @@ Regras próprias só saem com decisão explícita do dono.
 8. **A coluna do que saiu vem do `git diff`, e reescrever um passo é mudança que se relata.** Falha: nas rodadas 2 e 3 do ensaio, "smallest experiment" virou "cheapest experiment" e a coluna disse "Nada".
 9. **Instrução embutida se define pelo alvo e por estar escondida, não pela forma.** Comando comum do projeto dentro de um método ensinado não conta. Motivo: revisão da branch, para cobrir texto escondido e não marcar um passo comum.
 10. **Citação inerte.** No rascunho, citação e caminho estranho ficam em bloco cercado, com cerca maior que qualquer sequência de crases. O ledger registra a recusa sem repetir o texto. Motivo: revisão da branch, para nada virar link nem célula de tabela, e para o texto malicioso não entrar em arquivo que fica no repositório.
-11. **O que só o dono decide.** Skill `done` sem ledger não adota nada, e `D` ou `R` em `SKILL.md`, `missingPaths` e mais de 30 arquivos em uma fonte vão para a decisão do dono. Motivo: revisão da branch. `using-devorb` está sem ledger hoje.
+11. **O que só o dono decide.** Skill `done` sem ledger não adota nada, e `D` ou `R` em `SKILL.md` de skill que está no mapa, `missingPaths` e mais de 30 arquivos que alimentam skills `done` em uma fonte vão para a decisão do dono. O limite conta só esses arquivos porque a janela de um pino retido só cresce. Motivo: revisão da branch. `using-devorb` está sem ledger hoje.
+12. **Versão nova e pull request só com efeito real.** Sem skill alterada e sem pino movido, não há versão nova nem entrada no `CHANGELOG.md`. Motivo: revisão da branch. Um pino retido subiria a versão todo mês sem nenhuma skill mudar.
 
 ## Fora
 
