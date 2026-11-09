@@ -2,6 +2,20 @@
 
 Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devorb-design.md`. Execução por subagentes, com revisão a cada task.
 
+## Retomar aqui
+
+**Ciclo mensal, branch `feat/monthly-cycle`:** as correções da revisão estão feitas e ensaiadas, sem merge. Nada foi agendado. Falta, nesta ordem:
+
+1. **O dono faz o merge do pull request desta branch.** A versão é `0.1.3`, e as correções já foram revisadas.
+2. **Decisão do dono antes de agendar.** A nuvem não limita para qual branch a tarefa envia, e o plano gratuito não permite proteger a `main` de um repositório privado (a API responde 403). Hoje, nada técnico impede uma instrução maliciosa de chegar à `main`.
+   - **GitHub Pro com regra sem bypass:** é a proteção real, e tem custo.
+   - **Rodar à mão por enquanto:** `/devorb:evolving` uma vez por mês. É a recomendação de Claude enquanto as fusões não terminam, porque o ciclo teria pouco a fazer.
+   - **`.claude/settings.json` com bloqueio de push na `main` e auto-update desligado:** é grátis, mas fraco, porque não impede comandos arbitrários.
+3. **Task 20, a partir do Step 3 do plano,** se a decisão for agendar.
+4. **Rodada formal de `claude plugin eval` nos casos `evolving-*`,** no Mac, no Step 5 da Task 4.
+
+Depois disso, o plano segue pelo Step 0 da Task 4, no Mac.
+
 ## Onde está
 
 | Task | Estado | Commits |
@@ -11,13 +25,16 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 | 3. Hook e `using-devorb` | Feita, menos a resposta do agente (Step 6) | `8de39d2..42b6b5e` |
 | Revisão geral das Tasks 1 a 3 | Feita, com correções em `e638a79` | `f9fbdee..e638a79` |
 | Fontes novas na spec, no plano e no registro | Feita, sem nenhuma fusão ainda | Versão `0.1.2` |
-| 4 em diante | Não começou. Roda no Mac | |
+| 18 e 19. Comparador e `evolving` | Escritas, corrigidas e ensaiadas, antes da ordem do plano, a pedido do dono. Falta a rodada formal de `claude plugin eval` | Branch `feat/monthly-cycle`, sem merge |
+| 20. Agendamento | Só o prompt pronto. Espera o merge e a decisão do dono | |
+| 4 a 17 e 23 | Não começaram. Rodam no Mac | |
+| 21 e 22 | Não começaram | |
 
 A base passou de 17 para 18 skills. O texto da Task 1 no plano continua falando em 17, porque registra o que foi feito naquele momento.
 
 ## Retomar no Mac
 
-A `main` já tem as Tasks 1 a 3. O pull request da branch `docs/new-sources` traz as fontes novas, e o merge dele vem antes de clonar.
+A `main` já tem as Tasks 1 a 3 e as fontes novas. As Tasks 18 a 20 vêm da branch `feat/monthly-cycle`, e o merge dela vem antes de clonar.
 
 ```bash
 git clone https://github.com/orbecmc-art/devorb.git
@@ -33,9 +50,13 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 
 ## O que não foi verificado
 
-- `npm test` passa com 53 de 53 no Windows. Nunca rodou no Mac nem no Bash 3.2.
+- `npm test` passa com 80 de 80 no Windows. Nunca rodou no Mac nem no Bash 3.2.
 - As ideias das fontes novas não passaram por nenhum cenário. A comparação é por skill, então uma ideia ruim só aparece se a skill piorar.
 - Se o Chromium roda no sandbox de `claude plugin eval`. A Task 23 começa conferindo isso.
+- O ensaio da `evolving` rodou com agentes separados e avaliador às cegas, não com `claude plugin eval`, sempre no modelo Sonnet. Última versão: caso principal com 13 de 13 e 12 de 13 critérios; caso reservado com 9 de 9, e 7 de 9 sem a skill; os quatro casos-limite passaram. O reservado rodou uma vez só, e quem corrigiu a skill leu a lista de cenários previstos, embora não os testes. Depois dessas notas, a skill recebeu mais dois ajustes de lógica, testados sem avaliador às cegas, com uma rodada do caso principal e um segundo mês do reservado: teto respeitado, nada malicioso nas skills, e o segundo mês sem versão nova nem pino movido.
+- O que o ensaio mede: sem a skill, o agente também recusou o que era malicioso e não executou o nome de arquivo hostil. O ganho medido está no destaque, na linha de status, no teto e na reescrita, não em barrar ataques. Isso não prova resistência a uma instrução mais sutil.
+- A publicação real nunca rodou: pull request e issue pela API, e a checagem de revisão aberta só em leitura.
+- Se a nuvem consegue clonar uma fonte que não esteja anexada à tarefa. A documentação não diz.
 - A resposta do agente em uma sessão real não foi observada. No Windows, o plugin carregou, a skill apareceu na lista, o hook entregou o texto e o Superpowers ficou desligado naquela execução. A chamada ao modelo falhou porque o login da linha de comando expirou neste PC.
 - Se o Windows sem Git cai no ramo certo do `run-hook.cmd`. O arquivo é idêntico ao da fonte.
 - A instalação pelo marketplace foi testada a partir de um clone local, com configuração isolada, e não a partir do GitHub.
@@ -43,6 +64,20 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 ## Decisões tomadas na execução
 
 Cada linha traz a decisão, o motivo e o custo se estiver errada.
+
+### Ciclo mensal antes das fusões
+
+O dono pediu para fazer as Tasks 18 a 20 já, depois de saber que elas normalmente vêm depois das fusões.
+
+- Até as fusões terminarem, há pouco para refundir: só a `using-devorb` existe. Se as mudanças de uma fonte alimentam só skills `planned`, o pino não avança e não há pull request, só uma linha na mensagem final. Custo: a mesma linha se repete todo mês até a fusão.
+- `sha-missing` sozinho abre uma issue, sem subir a versão, porque um pull request desse tipo não corrige nada. Custo: enquanto o dono não decidir, uma issue nova por mês.
+- Decisão do dono pendente em uma fonte também segura o pino dela, mesmo que outra mudança seja adotada. Custo: a mesma mudança pode reaparecer no mês seguinte.
+- A branch `claude/evolve-*` que sobrar depois do merge segura os meses seguintes em `OK aguardando revisão`, e o `README.md` manda apagá-la. Custo: um mês parado, se o dono esquecer. Ligar o auto-delete de branches no GitHub resolve, e é decisão do dono.
+- `tools/compare.mjs` ainda não existe, então o pull request sai com "Testes: pendentes". Custo: nenhuma tabela de testes até a Task 4.
+- O ensaio rodou com agentes separados e um avaliador às cegas, porque o `claude plugin eval` com Bash não roda neste Windows. Custo: a rodada formal no Mac pode discordar.
+- O caso original quase não separava as versões, então foi endurecido antes de escrever a skill. Custo: mais rodadas de agente.
+- Dois graders foram corrigidos depois de ver os resultados: `no-marker` varria o rascunho, que `flags-injection` exige que cite as linhas, e `no-requeue` proibia uma linha de ledger que só cita a recusa anterior. Na primeira nota, as três rodadas com a skill falharam nos dois. Custo: se a correção estiver errada, um grader ficou frouxo para caber no resultado.
+- Pino que não é ancestral da branch padrão conta como `sha-missing`, igual a um commit ausente, e o pull request pede a decisão do dono. Custo: uma decisão desnecessária em fonte com branches incomuns.
 
 ### Fontes novas
 
@@ -103,7 +138,7 @@ O dono aprovou a seleção. A spec, em "Fontes novas", tem o que entra e o que f
 - O ramo do Windows sem Git fica sem teste. O código é idêntico ao da fonte, e o Git não pode ser escondido do `cmd.exe`. Custo: um erro em um Windows sem Git.
 - Nada de CI por enquanto. O plano não prevê, e os cenários usam a assinatura do dono. Custo: um teste quebrado percebido mais tarde.
 - Nenhuma trava contra os dois plugins ligados. A spec trata isso como procedimento. Custo: texto inicial duplicado, se o dono esquecer.
-- `sources.json` segue os caminhos do plano, sem `tests/` do Superpowers. Mudanças nos cenários de pressão não aparecem no ciclo mensal. Rever na Task 19. Custo: casos de pressão desatualizados.
+- `sources.json` segue os caminhos do plano, sem `tests/` do Superpowers. Mudanças nos cenários de pressão não aparecem no ciclo mensal. Decidido na Task 19: continua de fora, para a revisão mensal não crescer. Custo: casos de pressão desatualizados.
 - Matcher sem `resume`, hook ignorando `CLAUDE_PLUGIN_ROOT` e o número de 150 mil tokens em `phase-boundaries.md` vêm da fonte. Custo: o mesmo comportamento do Superpowers de hoje.
 - `/code-review` coincide com um comando nativo, pasta `planned` não é apontada, o frontmatter é lido por regex, não há regra para `*.yml`, e o `rm -rf` do teste de fusão continua. O harness resolve os comandos nativos, a regra permite rascunhos, o plano pede regex e `case.yaml`, e a Task 5 reescreve o script. Custo: pequeno, percebido no primeiro uso.
 
@@ -127,4 +162,10 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | "Run `/compact`" contradiz `phase-boundaries.md:17` | Próxima edição do arquivo |
 | O verificador lê binários como texto | Quando entrar o primeiro binário |
 | Licenças com CRLF, teste de registro superficial, licenças duplicadas no teste de fusão | Quando convier |
+| `source-diff`: cache corrompido sem autorreparo, protocolos livres, extensões de script incompletas, caminho de erro sem teste | Quando convier |
+| `source-diff`: `--show` e `--diff` buscam a fonte de novo, então um push no meio da execução pode deslocar os índices; `--diff` de um arquivo renomeado mostra só o caminho novo | Antes de confiar na execução agendada por vários meses |
+| `source-diff`: não emite `index`, só `[]` e saída 0 se toda fonte tiver `trackedForFusion: false`, e o limite de 30 s também cobre buscas de arquivo | Quando convier |
+| `evolving`: rodada só com issue não guarda as linhas de ledger, que são refeitas no mês seguinte; a skill está com 8 tokens de folga, então o próximo acréscimo vai para `references/` | Quando convier |
+| `evolving`: em ensaio, `OK com pull request` aparece sem pull request; script ou nome estranho em mês só com skills `planned` aparece como contagem em uma linha; `npm test` citado em linha, não em bloco, em uma das rodadas | Quando convier |
+| Casos `evolving-*`: formato, alvos e `^` no `regex` só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |
