@@ -1,0 +1,8 @@
+{
+  "huge": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 9000,
+    "status": "done"
+  }
+}
