@@ -58,7 +58,7 @@ O projeto fracassa, mesmo funcionando, se:
 - Trazer quatro fontes novas, recomendadas a ele: as diretrizes do Karpathy, a Trail of Bits, o `webapp-testing` da Anthropic e o `ai-toolkit` (Spartan). Ele aprovou a seleção de Claude, que fica só com as partes de "Fontes novas".
 - Trazer mais duas fontes que ele considera importantes: o ECC e o gstack. A seleção é de Claude e entra na revisão do pull request. O plugin `everything-claude-code`, nome antigo do ECC, foi desinstalado do PC e agora só fornece ideias.
 - Fundir também a parte de construção visual. Ele enviou seis repositórios (`emilkowalski/skills`, `pbakaus/impeccable`, `paper-design/shaders`, `Nutlope/hallmark`, `cathrynlavery/diagram-design` e `nateherkai/scroll-craft`) e citou a `ui-ux-pro-max`. A seleção é de Claude e entra na revisão do pull request.
-- Ter fontes de referência de UI fixas, consultadas primeiro sempre que a parte de design for usada, buscando as que combinam com o estilo que o cliente descreve, como "clean". A lista é a da descrição do vídeo "UI Libraries for Claude Code", de Griffin Wooldridge.
+- Ter fontes de referência de UI fixas, consultadas primeiro sempre que a parte de design for usada, buscando as que combinam com o estilo que o cliente descreve, como "clean". A lista é a da descrição do vídeo "UI Libraries for Claude Code", de Griffin Wooldridge, mais seis galerias de sites inteiros que Claude sugeriu e o dono aprovou.
 
 ### De Claude, que o dono pode rever
 
@@ -276,7 +276,7 @@ O contrato de direção fica na spec de `aligning`, em `## Direção visual`. `D
 
 Decisão do dono: quando a parte de design for usada, ela olha primeiro estas fontes, escolhendo as que combinam com o estilo que o cliente descreve. Se ele pede algo clean, a skill procura nas fontes marcadas como clean antes de inventar.
 
-**O que a lista é.** As 13 fontes da descrição do vídeo, sem os links de redes sociais e de afiliados. São 12 bibliotecas de componentes, em três tipos, e o Mobbin, o único acervo de telas reais:
+**O que a lista é.** São 19 fontes. Treze vêm da descrição do vídeo, sem os links de redes sociais e de afiliados: 12 bibliotecas de componentes, em três tipos, e o Mobbin, um acervo de telas reais. As outras seis são galerias de sites inteiros, que o vídeo não traz:
 
 | Tipo | Fontes | Para quê |
 |---|---|---|
@@ -284,15 +284,16 @@ Decisão do dono: quando a parte de design for usada, ela olha primeiro estas fo
 | Especialista | Sonner, Vaul, cmdk, NumberFlow | Avisos, gavetas, paleta de comandos e números animados, que a IA erra quando faz do zero |
 | Destaque | Beautiful UI, RareUI, Magic UI, Aceternity UI, 21st.dev | Um componente que chama atenção |
 | Telas reais | Mobbin | Padrões de produtos de verdade, como onboarding, preços e checkout |
+| Galeria | Awwwards, Minimal Gallery, Land-book, Lapa Ninja, SiteInspire, Godly (hoje Recent) | Sites inteiros, para estudar estrutura, ritmo e tipografia |
 
-O vídeo não traz galerias de sites inteiros, e por isso a lista ainda não tem nenhuma.
-
-**Onde fica.** Em `fusion/ui-sources.json`, até a skill `visual-direction` existir. A Task D2 a move para `skills/visual-direction/references/ui-sources.json`. Só o dono muda a lista, por pull request, e um teste garante que as 13 fontes continuam lá.
+**Onde fica.** Em `fusion/ui-sources.json`, até a skill `visual-direction` existir. A Task D2 a move para `skills/visual-direction/references/ui-sources.json`. Só o dono muda a lista, por pull request, e um teste garante que as fontes do vídeo e as galerias aprovadas continuam lá.
 
 **Como a skill usa a lista:**
 
 - Antes de escolher a direção ou de fazer um componente do zero, lê a lista e consulta as fontes do estilo pedido. A resposta diz quais consultou.
-- A fundação e os especialistas servem a qualquer estilo. Os componentes de destaque e as telas reais são escolhidos pelas palavras do cliente, que a lista agrupa em clean, ousado, animado, divertido, IA e produto.
+- A fundação e os especialistas servem a qualquer estilo. Os componentes de destaque, as telas reais e as galerias são escolhidos pelas palavras do cliente, que a lista agrupa em clean, ousado, animado, divertido, IA e produto. Quando uma galeria tem páginas por estilo, como a página "minimal" da Awwwards, a skill abre essas páginas primeiro.
+- Galeria serve para estudar estrutura, ritmo, tipografia e a primeira tela. A skill nunca copia um site, o texto ou as imagens dele.
+- Cada fonte diz como abre: por leitura de texto, só num navegador de verdade, porque a leitura simples esbarra num bloqueio contra robôs ou numa página vazia, ou só com a conta do dono. Sem o meio certo, a skill diz que pulou aquela fonte.
 - A combinação é uma fundação, o especialista de cada função no lugar de uma versão feita à mão, e no máximo um componente de destaque por página.
 - O que já está no `package.json` vem primeiro. Biblioteca nova entra no contrato de direção antes de ser instalada.
 - O tema padrão do shadcn virou uma cara de IA, então `design-system` o troca pelos tokens do projeto.
@@ -302,6 +303,7 @@ O vídeo não traz galerias de sites inteiros, e por isso a lista ainda não tem
 **Calls de Claude, que o dono pode rever:**
 
 - **Estilos:** as marcas de cada fonte vêm da descrição do próprio site.
+- **Galerias:** a escolha das seis foi de Claude, e o dono aprovou acrescentá-las. Só Awwwards e Minimal Gallery abrem por leitura de texto, e só nelas as páginas por estilo foram conferidas. Land-book, Lapa Ninja, SiteInspire e Recent barram a leitura automática, e os filtros delas não foram conferidos. O endereço da Godly hoje leva ao Recent.
 - **Destaque único:** a regra vem do título de um capítulo do vídeo. A transcrição não pôde ser lida.
 - **Vaul:** o README dele diz que o repositório não tem mais manutenção. Ele fica, com esse aviso.
 - **`pick-ui-library`:** a do Emil, que o vídeo recomenda, entra como fonte de ideias de `visual-direction`: identificar a tarefa, não a biblioteca citada, olhar o `package.json` primeiro e recomendar uma só.

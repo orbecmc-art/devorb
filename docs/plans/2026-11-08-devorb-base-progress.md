@@ -54,8 +54,8 @@ As fontes não estão no repositório. Clone cada uma no pino de `fusion/sources
 
 ## O que não foi verificado
 
-- `npm test` passa com 91 de 91 no Windows. Nunca rodou no Mac nem no Bash 3.2.
-- As 13 fontes de referência fixas abriram em 2026-11-09, e as licenças foram conferidas no site ou no GitHub de cada uma. Nenhum agente as consultou ainda, e não se sabe se o sandbox de testes lê sites: a Task D1 sonda isso.
+- `npm test` passa com 92 de 92 no Windows. Nunca rodou no Mac nem no Bash 3.2.
+- As 13 fontes do vídeo abriram em 2026-11-09, e as licenças foram conferidas no site ou no GitHub de cada uma. Das 6 galerias, 2 abrem por leitura de texto, com 9 páginas por estilo conferidas na Awwwards, e 4 só num navegador. Nenhum agente as consultou ainda, e não se sabe se o sandbox de testes lê sites: a Task D1 sonda isso.
 - O comparador rodou nas 17 fontes reais, todas sem mudança e sem caminho faltando. A partir de pinos de 30 dias antes, os caminhos do design mudaram em 34 arquivos, sem script nem nome estranho.
 - Nenhuma ideia de design passou por um cenário, e nenhuma página foi gerada com ou sem as skills.
 - A partir de um pino de 30 dias antes, ECC e gstack deram `changed`, e `--show` e `--diff` funcionaram com busca real de um arquivo por vez. O ciclo inteiro nunca rodou sobre uma mudança real dessas fontes.
@@ -137,7 +137,8 @@ O dono pediu o setor logo depois do ECC e do gstack, enviou seis repositórios e
 
 O dono enviou o vídeo "UI Libraries for Claude Code", de Griffin Wooldridge, e pediu que as fontes da descrição fiquem fixas e sejam consultadas primeiro, conforme o estilo pedido. Cada linha traz o custo se estiver errada.
 
-- A descrição traz bibliotecas de componentes e o Mobbin, não galerias de sites, e a lista registra exatamente isso. Custo: um pedido "clean" encontra fundação, especialistas e poucos destaques, não exemplos de sites inteiros.
+- A descrição traz bibliotecas de componentes e o Mobbin, não galerias de sites. Claude sugeriu seis galerias de sites inteiros, e o dono aprovou: Awwwards, Minimal Gallery, Land-book, Lapa Ninja, SiteInspire e Godly, que hoje é o Recent. Custo: a escolha das galerias é de Claude, e o dono pode trocar qualquer uma.
+- Só Awwwards e Minimal Gallery abrem por leitura de texto, e só nelas as páginas por estilo foram conferidas. As outras quatro barram a leitura automática e ficam marcadas como `reading: "browser"`. Custo: num ambiente sem navegador, um pedido clean consulta só as duas primeiras.
 - O artigo `griffinwooldridge.com/ai-for-designers` é só a página de espera de um guia que ainda não saiu, e nada dele entrou. Custo: nenhum.
 - A transcrição do vídeo não pôde ser lida, e a regra do destaque único vem do título de um capítulo. Custo: se o vídeo diz outra coisa, a regra muda.
 - As marcas de estilo de cada fonte são de Claude, tiradas da descrição de cada site, sem ver os componentes. Custo: uma fonte pode cair no estilo errado até o dono corrigir.

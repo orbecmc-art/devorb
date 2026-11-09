@@ -2,7 +2,7 @@
 
 ## 0.1.7
 
-- Fontes de referência de UI fixas, pedidas pelo dono, em `fusion/ui-sources.json`: as 13 da descrição do vídeo "UI Libraries for Claude Code", de Griffin Wooldridge. São fundações, especialistas, componentes de destaque e o Mobbin, com estilo, licença, acesso e as regras de uso. A Task D2 as leva para dentro de `visual-direction`, que passa a consultá-las primeiro.
+- Fontes de referência de UI fixas, pedidas pelo dono, em `fusion/ui-sources.json`: as 13 da descrição do vídeo "UI Libraries for Claude Code", de Griffin Wooldridge, mais seis galerias de sites inteiros aprovadas por ele. São fundações, especialistas, componentes de destaque, o Mobbin e as galerias, com estilo, licença, acesso, como cada uma abre e as regras de uso. A Awwwards tem páginas separadas por estilo. A Task D2 as leva para dentro de `visual-direction`, que passa a consultá-las primeiro.
 - A `pick-ui-library` do Emil passa a ser acompanhada na revisão mensal.
 - Spec, plano do design e registro de progresso atualizados. Um teste garante que a lista do dono continua completa.
 

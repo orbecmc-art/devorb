@@ -100,7 +100,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
 
 - [ ] **Aplicar a receita.** Espinha: Impeccable.
   - **Decisões:** o modo vem do sucesso do visitante naquela superfície, não do produto: Persuade, Operate, Read ou Experience. Experience não tem arquivo próprio na fonte e fica no `SKILL.md`, a partir dos modos de `SKILL.src.md`. A invenção tem três níveis: estender, superfície nova e mundo novo. Candidatos de direção vêm do mundo do público. Antes do código, um contrato registra a direção, a primeira tela e o piso de ofício.
-  - **Fontes de referência fixas (decisão do dono):** o `SKILL.md` manda, antes de escolher a direção ou de fazer um componente do zero, ler `references/ui-sources.json` e consultar as fontes que combinam com as palavras do cliente, seguindo as `rules` do arquivo. Essa regra fica no corpo da skill, não numa referência, e é marcada no ledger como regra do dono: nenhuma fusão a tira. O contrato de direção registra as fontes consultadas, a fundação, os especialistas e o componente de destaque, se houver um.
+  - **Fontes de referência fixas (decisão do dono):** o `SKILL.md` manda, antes de escolher a direção ou de fazer um componente do zero, ler `references/ui-sources.json` e consultar as fontes que combinam com as palavras do cliente, seguindo as `rules` do arquivo. As fontes com `reading: "browser"` abrem na ferramenta de navegador, quando houver uma, e as com `reading: "account"` só com a conta do dono. Essa regra fica no corpo da skill, não numa referência, e é marcada no ledger como regra do dono: nenhuma fusão a tira. O contrato de direção registra as fontes consultadas, a fundação, os especialistas e o componente de destaque, se houver um.
   - **Emil (`pick-ui-library`), só ideias:** identificar a tarefa, não a biblioteca que o pedido citou. Olhar o `package.json` primeiro e reaproveitar o que já existe, sem trocar dependência sem pedido. Recomendar uma só biblioteca e dizer quando sai da lista.
   - **Fora:** o sorteio de direção, o binário, as imagens de comp e a busca no catálogo externo da Impeccable.
   - **Hallmark, só ideias:**
@@ -131,7 +131,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
     - `llm` com foco `files`: nenhum número, depoimento ou preço inventado, ação de agendar repetida na página e fechamento que não é e-mail;
     - `llm` com foco `files`: a spec ganhou `## Direção visual`, com modo Persuade.
   - **Caso das fontes fixas:** o scaffold cria um projeto Next com shadcn/ui e Tailwind, e a spec aprovada de uma landing "bem clean" para um escritório de arquitetura, com inscrição na newsletter que confirma por um aviso. Prompt: "segue a spec aprovada e faz a landing". Graders:
-    - `llm` no `trace`: leu `references/ui-sources.json` e consultou ao menos uma fonte marcada como `clean` antes de escrever código, ou disse que não conseguiu abri-la;
+    - `llm` no `trace`: leu `references/ui-sources.json` e, antes de escrever código, abriu ao menos uma página de `byStyle.clean` (Awwwards ou Minimal Gallery, que abrem por leitura de texto), ou disse que não conseguiu abri-la;
     - `llm` no `last_message`: diz quais fontes consultou;
     - `regex` para `sonner` em `package.json`;
     - `llm` com foco `files`: no máximo um componente de destaque na página, e nenhum aviso feito à mão.
