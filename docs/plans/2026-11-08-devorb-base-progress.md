@@ -6,17 +6,15 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 | Task | Estado | Commits |
 |---|---|---|
-| 1. Repositório e manifestos | Feita, menos a publicação (Step 5) | `f9fbdee..a2e8b1a` |
+| 1. Repositório e manifestos | Feita e publicada | `f9fbdee..a2e8b1a` |
 | 2. Verificador de skills | Feita | `a2e8b1a..8de39d2` |
-| 3. Hook e `using-devorb` | Feita, menos a resposta do agente (Step 6) e o push | `8de39d2..42b6b5e` |
+| 3. Hook e `using-devorb` | Feita, menos a resposta do agente (Step 6) | `8de39d2..42b6b5e` |
 | Revisão geral das Tasks 1 a 3 | Feita, com correções em `e638a79` | `f9fbdee..e638a79` |
 | 4 em diante | Não começou. Roda no Mac | |
 
-`main` tem a Task 1. `feat/foundation` tem o resto, na versão `0.1.1`. O pull request de `feat/foundation` para `main` sai depois da publicação, e só o dono faz o merge.
+`main` tem a Task 1. `feat/foundation` tem o resto, na versão `0.1.1`, em um pull request para a `main`. Só o dono faz o merge.
 
 ## Retomar no Mac
-
-Os comandos pressupõem o repositório publicado.
 
 ```bash
 git clone https://github.com/orbecmc-art/devorb.git
@@ -65,7 +63,7 @@ Cada linha traz a decisão, o motivo e o custo se estiver errada.
 
 - A Task 1 foi direto para a `main`, como o plano aprovado diz, e o resto foi para a branch. Custo: só o formato do histórico.
 - O commit vem antes do Step 5, e a publicação só depois da revisão. Custo: nenhum.
-- A publicação foi barrada pela permissão automática e espera a decisão do dono, sem contorno. Custo: uma pergunta a mais.
+- A publicação foi barrada pela permissão automática e esperou a decisão do dono, sem contorno. Ele aprovou. Custo: uma pergunta a mais.
 - A ordem de publicação troca o `--push` por `--remote=origin`, com a `main` enviada primeiro, porque o `--push` a partir da branch a deixaria como padrão. Custo: uma configuração de branch padrão.
 
 ### Revisão geral

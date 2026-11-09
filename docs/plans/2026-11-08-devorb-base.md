@@ -76,7 +76,7 @@ test('registry has the 17 skills of the spec', () => {
 - [x] **Step 2: Rodar `npm test`.** Esperado: falha, porque os arquivos não existem.
 - [x] **Step 3: Criar os arquivos.** `.gitignore` cobre `.arms/`, `evals/**/results/`, `evals-reserved/**/results/` e `node_modules/`. O `README.md` em português traz instalação e como voltar ao Superpowers. `fusion/eval-config.json` fica `{ "model": null, "maxCostUsd": 20 }`, e o modelo é preenchido na Task 4.
 - [x] **Step 4: Rodar `npm test`.** Esperado: tudo passa.
-- [ ] **Step 5: Criar o repositório e publicar.** Confirme a conta com `gh auth status` (no PC é `orbecmc-art`), depois `gh repo create orbecmc-art/devorb --private --source=. --remote=origin`, `git push -u origin main` e `git push -u origin feat/foundation`. O trabalho seguinte acontece em branches e chega à `main` por pull request.
+- [x] **Step 5: Criar o repositório e publicar.** Confirme a conta com `gh auth status` (no PC é `orbecmc-art`), depois `gh repo create orbecmc-art/devorb --private --source=. --remote=origin`, `git push -u origin main` e `git push -u origin feat/foundation`. O trabalho seguinte acontece em branches e chega à `main` por pull request.
 
 ### Task 2: Verificador de skills
 
@@ -158,7 +158,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
   - `references/legacy-names.md` mapeia os nomes antigos das duas fontes para os do DevOrb, e o corpo aponta para esse arquivo em uma linha.
 - [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Marque `using-devorb` como `done` em `fusion/skills.json`.
 - [ ] **Step 6: Abrir uma sessão real** com `claude --plugin-dir .` em Windows ou Mac. Esperado: o agente cita `using-devorb` ao perguntar "que skills você tem para bugs?".
-- [ ] **Step 7: Commit** `feat: add session hook and using-devorb`, e faça o push. Daqui em diante, trabalhe no Mac.
+- [x] **Step 7: Commit** `feat: add session hook and using-devorb`, e faça o push. Daqui em diante, trabalhe no Mac.
 
 ### Task 4: Comparador de versões
 
