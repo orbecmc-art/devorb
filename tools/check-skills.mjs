@@ -1,9 +1,9 @@
-import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const MAX_BYTES = 20000;
 const ALWAYS_ON_CAP = 706;
-const LEGACY_NAMES = ['superpowers:', '/grill-me', 'setup-matt-pocock', 'docs/agents/', 'ready-for-agent', '.scratch/'];
+const LEGACY_NAMES = ['superpowers:', '/grill-me', 'setup-matt-pocock', 'docs/agents/', 'ready-for-agent', '.scratch/', '.superpowers/', 'docs/superpowers'];
 
 export const approxTokens = (text) => Math.ceil(Buffer.byteLength(text, 'utf8') / 4);
 
@@ -22,18 +22,17 @@ function frontmatter(text) {
   };
 }
 
-// Files that get scanned: SKILL.md plus everything under references/, recursively.
+// Files that get scanned: every file in the skill folder, recursively.
 function scannedFiles(dir) {
-  const files = [{ rel: 'SKILL.md', path: join(dir, 'SKILL.md') }];
+  const files = [];
   const walk = (sub, rel) => {
     for (const e of readdirSync(sub, { withFileTypes: true })) {
-      const r = `${rel}/${e.name}`;
+      const r = rel ? `${rel}/${e.name}` : e.name;
       if (e.isDirectory()) walk(join(sub, e.name), r);
       else files.push({ rel: r, path: join(sub, e.name) });
     }
   };
-  const refs = join(dir, 'references');
-  if (existsSync(refs) && statSync(refs).isDirectory()) walk(refs, 'references');
+  walk(dir, '');
   return files;
 }
 
@@ -76,6 +75,9 @@ export function checkSkills(root, registry) {
 
     if (entry.invocation === 'auto' && !(fm.description ?? '').startsWith('Use when')) {
       errors.push(`${name}: automatic skill description must start with "Use when"`);
+    }
+    if (entry.invocation === 'auto' && fm.noModelInvocation) {
+      errors.push(`${name}: automatic skill must not set disable-model-invocation`);
     }
     if (entry.invocation === 'manual' && !fm.noModelInvocation) {
       errors.push(`${name}: manual skill needs disable-model-invocation: true`);

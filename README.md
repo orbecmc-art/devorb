@@ -4,12 +4,16 @@ Plugin pessoal para o Claude Code. Funde o Superpowers e as skills do Matt Pococ
 
 ## Instalação
 
+Em cada máquina, rode `gh auth status`. Se não houver login, rode `gh auth login` antes de continuar.
+
 ```
 gh auth setup-git
 claude plugin marketplace add orbecmc-art/devorb
 claude plugin install devorb@devorb
 claude plugin disable superpowers@claude-plugins-official
 ```
+
+Depois, no Claude Code, abra `/plugin` > Marketplaces, escolha `devorb` e ligue a atualização automática.
 
 O Superpowers e o DevOrb nunca ficam ligados ao mesmo tempo. O ponytail continua sendo um plugin separado.
 

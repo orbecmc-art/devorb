@@ -2,3 +2,4 @@
 evals/**/results/
 evals-reserved/**/results/
 node_modules/
+.DS_Store

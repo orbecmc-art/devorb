@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkSkills, approxTokens } from '../tools/check-skills.mjs';
 
@@ -40,3 +42,21 @@ test('legacy-names.md still has its devorb references checked', () =>
   assert.deepEqual(errs('legacy-bad-ref'), ['a: devorb:ghost not in registry']));
 test('missing skills/ folder does not throw', () =>
   assert.deepEqual(checkSkills(fx('nonexistent'), {}), []));
+test('both scans walk every file in the skill folder', () =>
+  assert.deepEqual(errs('outside-refs').sort(), [
+    'a: devorb:ghost not in registry',
+    'a: legacy name .superpowers/',
+    'a: legacy name superpowers:',
+  ]));
+test('automatic skill must not set disable-model-invocation', () =>
+  assert.deepEqual(errs('auto-flag'), ['a: automatic skill must not set disable-model-invocation']));
+test('a stray file in skills/ is not a folder', () => {
+  const root = mkdtempSync(join(tmpdir(), 'devorb-'));
+  try {
+    mkdirSync(join(root, 'skills'));
+    writeFileSync(join(root, 'skills', '.DS_Store'), 'x');
+    assert.deepEqual(checkSkills(root, {}), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

@@ -104,7 +104,7 @@ test('manual skills are named as running only when the user calls them', () => {
 });
 
 test('the only references are the three kept files, and the body points to each', () => {
-  assert.deepEqual(readdirSync(skillPath('references')).sort(), REFERENCES);
+  assert.deepEqual(readdirSync(skillPath('references')).filter((f) => !f.startsWith('.')).sort(), REFERENCES);
   const body = read('SKILL.md');
   for (const file of REFERENCES) assert.ok(body.includes(`references/${file}`), file);
 });

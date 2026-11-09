@@ -40,3 +40,7 @@ test('registry has the 17 skills of the spec', () => {
   assert.equal(registry['using-devorb'].invocation, 'hook');
   assert.equal(registry.implementing.ceilingTokens, 5000);
 });
+
+test('package.json sets the Node floor for the test glob', () => {
+  assert.deepEqual(pkg.engines, { node: '>=22' });
+});
