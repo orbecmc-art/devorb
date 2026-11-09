@@ -10,6 +10,8 @@
 
 **Spec:** `docs/specs/2026-11-08-devorb-design.md`. Leia junto com este plano.
 
+**Estado:** `docs/plans/2026-11-08-devorb-base-progress.md` diz o que já foi feito, as decisões tomadas na execução e como retomar no Mac. Leia antes de continuar.
+
 ## Global Constraints
 
 - Nome do plugin: `devorb`. Só Claude Code. Sem suporte a outros agentes.
@@ -49,7 +51,7 @@
 - Produces: `fusion/sources.json`, um objeto `{ "sources": [{ "name", "url", "license", "lastAbsorbed", "paths": string[] }] }`. `superpowers` acompanha `skills/` e `hooks/`. `mattpocock-skills` acompanha `skills/engineering/` e `skills/productivity/`.
 - Produces: `npm test` roda `node --test "tests/**/*.test.mjs"`. O glob explícito evita pegar os testes dos cenários em `evals/`.
 
-- [ ] **Step 1: Escrever o teste que falha**
+- [x] **Step 1: Escrever o teste que falha**
 
 ```js
 test('plugin and marketplace agree', () => {
@@ -71,10 +73,10 @@ test('registry has the 17 skills of the spec', () => {
 });
 ```
 
-- [ ] **Step 2: Rodar `npm test`.** Esperado: falha, porque os arquivos não existem.
-- [ ] **Step 3: Criar os arquivos.** `.gitignore` cobre `.arms/`, `evals/**/results/`, `evals-reserved/**/results/` e `node_modules/`. O `README.md` em português traz instalação e como voltar ao Superpowers. `fusion/eval-config.json` fica `{ "model": null, "maxCostUsd": 20 }`, e o modelo é preenchido na Task 4.
-- [ ] **Step 4: Rodar `npm test`.** Esperado: tudo passa.
-- [ ] **Step 5: Criar o repositório e publicar.** Confirme a conta com `gh auth status` (no PC é `orbecmc-art`), depois `gh repo create orbecmc-art/devorb --private --source=. --push`. O trabalho seguinte acontece em branches e chega à `main` por pull request.
+- [x] **Step 2: Rodar `npm test`.** Esperado: falha, porque os arquivos não existem.
+- [x] **Step 3: Criar os arquivos.** `.gitignore` cobre `.arms/`, `evals/**/results/`, `evals-reserved/**/results/` e `node_modules/`. O `README.md` em português traz instalação e como voltar ao Superpowers. `fusion/eval-config.json` fica `{ "model": null, "maxCostUsd": 20 }`, e o modelo é preenchido na Task 4.
+- [x] **Step 4: Rodar `npm test`.** Esperado: tudo passa.
+- [ ] **Step 5: Criar o repositório e publicar.** Confirme a conta com `gh auth status` (no PC é `orbecmc-art`), depois `gh repo create orbecmc-art/devorb --private --source=. --remote=origin`, `git push -u origin main` e `git push -u origin feat/foundation`. O trabalho seguinte acontece em branches e chega à `main` por pull request.
 
 ### Task 2: Verificador de skills
 
@@ -86,7 +88,7 @@ test('registry has the 17 skills of the spec', () => {
 - Consumes: `fusion/skills.json`.
 - Produces: `checkSkills(root: string, registry: object) -> string[]`, a lista de erros, vazia quando está tudo certo. `approxTokens(text: string) -> number`, bytes ÷ 4 arredondado para cima.
 
-- [ ] **Step 1: Escrever os testes que falham, um por regra, cada um com uma pasta em `tests/fixtures/skills/`.** Mensagens exatas:
+- [x] **Step 1: Escrever os testes que falham, um por regra, cada um com uma pasta em `tests/fixtures/skills/`.** Mensagens exatas:
 
 ```js
 assert.deepEqual(checkSkills(fx('valid'), reg), []);
@@ -104,12 +106,12 @@ assert.deepEqual(errs('planned-ref'), []); // citar uma skill "planned" é váli
 assert.deepEqual(errs('legacy-allowed'), []); // references/legacy-names.md está isento
 ```
 
-Nomes legados bloqueados: `superpowers:`, `/grill-me`, `setup-matt-pocock`, `docs/agents/`, `ready-for-agent`, `.scratch/`. A isenção vale só para `references/legacy-names.md`. Só SKILL.md e `references/` são varridos.
+Nomes legados bloqueados: `superpowers:`, `/grill-me`, `setup-matt-pocock`, `docs/agents/`, `ready-for-agent`, `.scratch/`, `.superpowers/`, `docs/superpowers`. A isenção vale só para `references/legacy-names.md`. Toda a pasta da skill é varrida.
 
-- [ ] **Step 2: Rodar `npm test`.** Esperado: falha com `checkSkills is not a function`.
-- [ ] **Step 3: Implementar `checkSkills` e `approxTokens` em `tools/check-skills.mjs`.** Frontmatter lido por regex simples. O custo fixo soma `approxTokens(name + description)` das skills não manuais.
-- [ ] **Step 4: Adicionar em `tests/repo.test.mjs` o teste `the real tree passes`,** com `checkSkills('.', registry)` vazio. Rodar `npm test`. Esperado: tudo passa.
-- [ ] **Step 5: Commit** `feat: add skill checker`.
+- [x] **Step 2: Rodar `npm test`.** Esperado: falha com `checkSkills is not a function`.
+- [x] **Step 3: Implementar `checkSkills` e `approxTokens` em `tools/check-skills.mjs`.** Frontmatter lido por regex simples. O custo fixo soma `approxTokens(name + description)` das skills não manuais.
+- [x] **Step 4: Adicionar em `tests/repo.test.mjs` o teste `the real tree passes`,** com `checkSkills('.', registry)` vazio. Rodar `npm test`. Esperado: tudo passa.
+- [x] **Step 5: Commit** `feat: add skill checker`.
 
 ### Task 3: Hook e `using-devorb`
 
@@ -121,7 +123,7 @@ Nomes legados bloqueados: `superpowers:`, `/grill-me`, `setup-matt-pocock`, `doc
 - Consumes: `fusion/skills.json`.
 - Produces: a saída do hook, `{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"..."}}`, com o corpo de `using-devorb`.
 
-- [ ] **Step 1: Escrever os testes que falham.**
+- [x] **Step 1: Escrever os testes que falham.**
 
 ```js
 test('hook emits the bootstrap as additionalContext', () => {
@@ -145,16 +147,16 @@ test('bootstrap names every non-manual skill and stays small', () => {
 
 `runHook` executa `bash hooks/session-start`, resolvendo o caminho absoluto do bash antes de esvaziar o PATH.
 
-- [ ] **Step 2: Rodar `npm test`.** Esperado: falha, porque os arquivos não existem.
-- [ ] **Step 3: Criar o hook.** `hooks.json` segue o da fonte, com matcher `startup|clear|compact`. `session-start` parte do da fonte, lê `skills/using-devorb/SKILL.md` e mantém só o ramo de saída do Claude Code. Remova Cursor, Copilot e Muse.
-- [ ] **Step 4: Escrever `using-devorb`, fundindo `using-superpowers` e `ask-matt`.** Decisões:
+- [x] **Step 2: Rodar `npm test`.** Esperado: falha, porque os arquivos não existem.
+- [x] **Step 3: Criar o hook.** `hooks.json` segue o da fonte, com matcher `startup|clear|compact`. `session-start` parte do da fonte, lê `skills/using-devorb/SKILL.md` e mantém só o ramo de saída do Claude Code. Remova Cursor, Copilot e Muse.
+- [x] **Step 4: Escrever `using-devorb`, fundindo `using-superpowers` e `ask-matt`.** Decisões:
   - Mantém a regra de checar skills antes de responder, o `SUBAGENT-STOP` e a tabela de racionalizações.
   - Precedência em três níveis: instruções do usuário e do projeto, depois o fluxo do DevOrb, depois a skill específica. Skill manual só roda quando chamada.
   - Tabela de etapa para `devorb:<skill>`. Trabalho novo entra por `devorb:aligning`, bug por `devorb:debugging`.
   - O roteador do Matt não vira skill. A árvore de fronteiras de fase vai para `references/phase-boundaries.md`.
   - Dos sete arquivos de ferramentas da fonte, só `claude-code-tools.md` fica.
   - `references/legacy-names.md` mapeia os nomes antigos das duas fontes para os do DevOrb, e o corpo aponta para esse arquivo em uma linha.
-- [ ] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Marque `using-devorb` como `done` em `fusion/skills.json`.
+- [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Marque `using-devorb` como `done` em `fusion/skills.json`.
 - [ ] **Step 6: Abrir uma sessão real** com `claude --plugin-dir .` em Windows ou Mac. Esperado: o agente cita `using-devorb` ao perguntar "que skills você tem para bugs?".
 - [ ] **Step 7: Commit** `feat: add session hook and using-devorb`, e faça o push. Daqui em diante, trabalhe no Mac.
 
@@ -172,11 +174,14 @@ test('bootstrap names every non-manual skill and stays small', () => {
 - Produces: `decide({ cases, runs }) -> { accepted, regressions, belowBar, gaps }`.
 - Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>]`, que salva `fusion/results/<data>-<skill>.md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
 
+- [ ] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`. Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
 - [ ] **Step 1: Sondar a ferramenta com um caso mínimo.** Crie `evals/probe/case.yaml` com um `scaffold_script`, um prompt que usa Bash e um grader `regex`. Rode com o Superpowers clonado no pino como alvo. Confirme e anote no commit:
   - `claude plugin eval <dir>` aceita um diretório qualquer como alvo.
   - `--scaffold` e `--allow-tools Bash Edit Write` funcionam no Mac.
   - Se o `--json` traz pontuação e custo por rodada.
   - Se o campo `plugins` do caso consegue carregar dois plugins juntos, para o braço com ponytail.
+  - Se `tool_used: Skill` entra na pontuação com `--ablation with-without`, comparando o `--json` nos dois modos. A ajuda da ferramenta diz que esse grader pode virar só um indicador.
+  - Se uma rodada consegue ler `evals/` e `evals-reserved/` pela raiz do plugin, já que `source: "./"` leva o repositório inteiro. Se conseguir, `prepareArm` tira essas pastas da cópia usada como plugin.
 
   Salve a saída real em `tests/fixtures/eval-result.json`. Pergunte ao dono qual modelo ele usa e preencha `fusion/eval-config.json`.
 
@@ -192,6 +197,7 @@ assert.deepEqual(d({ c: { devorb: 0.5, sp: 0.6 } }).belowBar, ['c']); // abaixo 
 assert.deepEqual(d({ c: { devorb: 0, sp: 0 } }).gaps, ['c']);         // nenhum braço chega lá: lacuna
 assert.equal(d({ c: { devorb: 0, sp: 0 } }).accepted, true);
 assert.equal(d({ c: { devorb: 0.33, sp: 1 } }).accepted, false);
+assert.equal(d({}).accepted, false);                                  // nenhum caso encontrado não conta como aprovado
 assert.deepEqual(
   evalArgs({ armDir: 'a', caseGlob: 'debugging-*', runs: 3, model: 'm', maxCostUsd: 20, jsonPath: 'o.json', ablation: 'none' }),
   ['plugin','eval','a','--case','debugging-*','--runs','3','--model','m','--scaffold','--allow-tools','Bash','Edit','Write',
@@ -239,7 +245,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
 - Consumes: `tools/compare.mjs`, os casos da Task 5.
 - Produces: o formato de ledger: Origem por parte, Conflitos resolvidos, Regras próprias (com o caso que as justifica), Fora, Decisões por commit de fonte (`fonte@sha:caminho | adotado ou recusado | motivo`).
 
-- [ ] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`.
+- [ ] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`. Se a sondagem da Task 4 mostrar que `tool_used: Skill` não pontua com `--ablation with-without`, use `--ablation none` mais uma rodada separada sem plugin.
 - [ ] **Step 2: Copiar a skill do teste para `skills/debugging/`,** sem `harness/`, `LICENSES/` e `FUSAO.md`. Escreva os dois ledgers a partir de `FUSAO.md`. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
 - [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb`, com `--ablation with-without` nos casos novos. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
 - [ ] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
@@ -310,6 +316,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
   - **Levar como unidade:** companheiro visual e seus scripts.
   - **Mover para `references/`:** tabela de tamanho do trabalho e sinais de alerta, para caber no teto.
   - **Caso realista:** "quero um app de agendamento". Graders: `regex` `not_contains` para código no `last_message`, `llm` para uma só pergunta aberta.
+  - **Depois da skill:** rodar de novo `node tools/compare.mjs --skill using-devorb --arms devorb,superpowers`, porque até aqui `aligning` não existia.
 
 ### Task 11: `planning` (leve, 2.500)
 
@@ -340,7 +347,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 
 - [ ] **Aplicar a receita.** Fontes: `subagent-driven-development`, `executing-plans`, `dispatching-parallel-agents`, `using-git-worktrees`, `implement` e `implement-spec`.
   - **Decisões:** o padrão é sequencial, com subagente novo e revisão a cada task. Paralelo só quando o plano marca as tasks como independentes, com worktree por task e branch de integração, e fica em `references/parallel.md`. A execução na própria sessão fica em `references/inline.md`. Valem as quatro condições de parada do Superpowers. Worktree pede consentimento. Nunca na branch principal sem consentimento. A entrega termina no menu de `finishing`, sem marcar pull request como pronto sozinho.
-  - **Preservar:** ledger e git como verdade de recuperação, decisões em vez de paradas, subagente alimentado por arquivo.
+  - **Preservar:** ledger e git como verdade de recuperação, decisões em vez de paradas, subagente alimentado por arquivo, a escolha de modelo e a lista final de decisões tomadas, porque `skills/using-devorb/references/claude-code-tools.md` cita essas duas últimas.
   - **Levar:** `sdd-workspace`, `sdd-repo`, `task-brief`, `review-package`, `task-start` e `task-done`, com os caminhos relativos corrigidos e a pasta renomeada para `.devorb/sdd`. Os scripts são revisados por uma pessoa nesta Task, fora do ciclo automático.
   - **Caso realista:** plano de duas tasks em repositório pequeno, `max_turns: 150`. Graders: `llm` no `trace` para revisão por task, `regex` nos arquivos finais.
   - **Reservado:** um plano que contradiz a spec, em que o certo é parar.
@@ -381,7 +388,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 
 ### Task 17: `improve-architecture`, `prototype`, `handoff` e `retro` (leve, 2.500, manuais)
 
-**Files:** as quatro pastas em `skills/`, com `HTML-REPORT.md`, `LOGIC.md` e `UI.md` em `references/`, mais `evals/manual-*` e os ledgers
+**Files:** as quatro pastas em `skills/`, com `HTML-REPORT.md`, `LOGIC.md` e `UI.md` em `references/`, mais `evals/<skill>-*` e os ledgers
 
 **Interfaces:** chamadas só pelo usuário, usando `devorb:codebase-design`, `devorb:aligning`, `devorb:domain-modeling` e `devorb:writing-skills`.
 
@@ -415,6 +422,7 @@ test('new skill folder', ...)               // newSkills ['skills/b']
 test('hooks and scripts are flagged', ...)  // scriptsOrHooks ['hooks/session-start','skills/a/scripts/x.sh']
 test('tracked file deleted', ...)           // change 'D'
 test('rewritten history', ...)              // lastAbsorbed ausente: status 'sha-missing', sem exceção
+test('--json skips ponytail', ...)          // entrada com trackedForFusion false fica de fora
 ```
 
 - [ ] **Step 2: Rodar `npm test`.** Esperado: falha.
