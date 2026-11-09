@@ -4,7 +4,7 @@ Plano: `docs/plans/2026-11-08-devorb-base.md`. Spec: `docs/specs/2026-11-08-devo
 
 ## Retomar aqui
 
-**Setor de design, branch `docs/design-sector`, versão `0.1.5`:** seleção das fontes, seção "Setor de design" da spec e o plano `docs/plans/2026-11-09-devorb-design.md`, à espera do merge. Nenhuma skill de design existe ainda. As fusões dele rodam no Mac, depois do portão da Task 6 da base.
+**Setor de design, na `main` desde a versão `0.1.5`:** seleção das fontes, seção "Setor de design" da spec e o plano `docs/plans/2026-11-09-devorb-design.md`. Nenhuma skill de design existe ainda. As fusões dele rodam no Mac, depois do portão da Task 6 da base.
 
 Continuam pendentes:
 
@@ -28,7 +28,7 @@ Depois disso, o plano da base segue pelo Step 0 da Task 4, no Mac. O plano do de
 | Fontes novas na spec, no plano e no registro | Feita, sem nenhuma fusão ainda | Versão `0.1.2` |
 | 18 e 19. Comparador e `evolving` | Na `main`, escritas, corrigidas e ensaiadas antes da ordem do plano, a pedido do dono. Falta a rodada formal de `claude plugin eval` | Versão `0.1.3` |
 | ECC e gstack na spec, no plano e no registro | Na `main`, seleção registrada, sem nenhuma fusão ainda | Versão `0.1.4` |
-| Setor de design: seleção, spec e plano | 5 skills `planned`, 9 fontes novas, nenhuma fusão | Versão `0.1.5`, branch `docs/design-sector` |
+| Setor de design: seleção, spec e plano | Na `main`, 5 skills `planned`, 9 fontes novas, nenhuma fusão | Versão `0.1.5` |
 | D1 a D8 | Não começaram. Rodam no Mac, depois da Task 6 | |
 | 20. Agendamento | Só o prompt pronto. Espera a decisão do dono | |
 | 4 a 17 e 23 | Não começaram. Rodam no Mac | |
@@ -38,7 +38,7 @@ A base passou de 17 para 18 skills. O texto da Task 1 no plano continua falando 
 
 ## Retomar no Mac
 
-A `main` já tem as Tasks 1 a 3, as Tasks 18 e 19, o prompt da Task 20 e o ECC e o gstack. O merge da branch `docs/design-sector` vem antes de clonar.
+A `main` já tem as Tasks 1 a 3, as Tasks 18 e 19, o prompt da Task 20, o ECC e o gstack, e o plano do setor de design. Pode clonar direto.
 
 ```bash
 git clone https://github.com/orbecmc-art/devorb.git

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6
+
+- Registro de progresso sem as linhas que ainda tratavam o setor de design como à espera do merge.
+
 ## 0.1.5
 
 - Setor de design na spec e no plano `docs/plans/2026-11-09-devorb-design.md`: cinco skills planejadas (`visual-direction`, `design-system`, `motion`, `ui-review` e `diagram`, esta manual), marcadas com `"sector": "design"` no registro. Nenhuma foi escrita ainda.
