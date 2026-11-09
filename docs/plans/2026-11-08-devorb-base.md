@@ -166,7 +166,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
 
 **Files:**
 - Create: `tools/compare.mjs`, `evals/probe/case.yaml`, `tests/fixtures/eval-result.json`
-- Modify: `fusion/eval-config.json`, `fusion/sources.json` (entrada `ponytail`, com `"trackedForFusion": false`)
+- Modify: `fusion/eval-config.json`, `fusion/sources.json` (entrada `ponytail`, com `"trackedForFusion": false` e `"textReuse": false`, porque nada dele é copiado)
 - Test: `tests/compare.test.mjs`
 
 **Interfaces:**
@@ -175,6 +175,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
 - Produces: `evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation }) -> string[]`.
 - Produces: `decide({ cases, runs }) -> { accepted, regressions, belowBar, gaps }`.
 - Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>]`, que salva `fusion/results/<data>-<skill>.md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
+- Produces: `parseArms(text: string) -> string[]`. Aceita só `devorb`, `superpowers`, `mattpocock-skills` e `none`, e qualquer outro nome dá erro. `none` é o braço sem plugin: roda com `--ablation with-without`, e a pontuação sem plugin entra em `decide` como uma linha de base.
 
 - [ ] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`. Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
 - [ ] **Step 1: Sondar a ferramenta com um caso mínimo.** Crie `evals/probe/case.yaml` com um `scaffold_script`, um prompt que usa Bash e um grader `regex`. Rode com o Superpowers clonado no pino como alvo. Confirme e anote no commit:
@@ -200,6 +201,8 @@ assert.deepEqual(d({ c: { devorb: 0, sp: 0 } }).gaps, ['c']);         // nenhum 
 assert.equal(d({ c: { devorb: 0, sp: 0 } }).accepted, true);
 assert.equal(d({ c: { devorb: 0.33, sp: 1 } }).accepted, false);
 assert.equal(d({}).accepted, false);                                  // nenhum caso encontrado não conta como aprovado
+assert.deepEqual(parseArms('devorb,none'), ['devorb', 'none']);
+assert.throws(() => parseArms('devorb,trailofbits-skills'), /trailofbits-skills/);
 assert.deepEqual(
   evalArgs({ armDir: 'a', caseGlob: 'debugging-*', runs: 3, model: 'm', maxCostUsd: 20, jsonPath: 'o.json', ablation: 'none' }),
   ['plugin','eval','a','--case','debugging-*','--runs','3','--model','m','--scaffold','--allow-tools','Bash','Edit','Write',
@@ -209,7 +212,7 @@ test('summarize reads a real eval result', () => { /* usa tests/fixtures/eval-re
 ```
 
 - [ ] **Step 3: Rodar `npm test`.** Esperado: falha.
-- [ ] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o pino não mudar.
+- [ ] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize`, `parseArms` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o pino não mudar.
 - [ ] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Apague `evals/probe/` e faça o commit `feat: add version comparison tool`.
 
 ### Task 5: Cenários de depuração
@@ -255,7 +258,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
   Escreva os dois ledgers a partir de `FUSAO.md`, com o crédito dessas fontes. "Procurar outros chamadores" continua marcada como regra própria. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
 - [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb`, com `--ablation with-without` nos casos novos. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
 - [ ] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
-- [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17. Grave em `fusion/results/estimativa.md`.
+- [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17 e 23. Grave em `fusion/results/estimativa.md`.
 - [ ] **Step 6: Commit** `feat: add debugging through the fusion process`, com a versão `0.2.0`, e abra o pull request.
 - [ ] **Step 7: PARAR. Mostrar ao dono:** a tabela de resultados, o que mudou com o ponytail ligado, o custo real e a estimativa. Ele decide entre seguir, reduzir os níveis ou parar. Nada da Fase 2 começa sem essa resposta.
 
@@ -265,14 +268,14 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
 
 ### Receita de fusão
 
-Cada Task de 7 a 17 aplica estes passos, com os valores da sua linha.
+Cada Task de 7 a 17, e a Task 23, aplica estes passos, com os valores da sua linha.
 
 - **R1 (só nível completo):** um subagente novo escreve o caso reservado em `evals-reserved/<skill>-*/`, sem ver rascunhos da skill.
 - **R2:** escrever o caso realista da Task em `evals/<skill>-*/`, com prompt em português. No nível completo, portar também os cenários de pressão das fontes, quando existirem em `tests/<skill>/` do Superpowers.
 - **R3:** validar o `scaffold.sh` em pasta temporária e rodar `node tools/compare.mjs --skill <skill> --baseline-only`. Esperado: o caso separa as versões, ou seja, ao menos um braço falha. Caso em que tudo passa é fraco e deve ser reescrito.
 - **R4:** ler as fontes inteiras e escrever `skills/<skill>/SKILL.md` em inglês, aplicando as decisões da Task. Termina com a seção `Connects to` (Receives, Uses, Hands off to). O que só alguns caminhos usam vai para `references/`.
 - **R5:** marcar `done` em `fusion/skills.json`. Rodar `npm test`. Esperado: tudo passa, inclusive tetos e referências.
-- **R6:** rodar `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>`, depois o mesmo com `--reserved`. Esperado: `accepted: true`. Skill com `regressions` ou `belowBar` volta para R4. `gaps` vão para o ledger.
+- **R6:** rodar `node tools/compare.mjs --skill <skill> --arms devorb,<fontes>`. No nível completo, depois o mesmo com `--reserved`. Esperado: `accepted: true`. Skill com `regressions` ou `belowBar` volta para R4. `gaps` vão para o ledger.
 - **R7:** escrever `fusion/ledger/<skill>.md`.
 - **R8:** atualizar `CHANGELOG.md`, subir a versão em uma unidade menor e fazer o commit `feat: add <skill>`. Pull request ao fim de cada Task.
 
@@ -367,7 +370,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 **Interfaces:** recebe de `devorb:implementing` e `devorb:verifying`, devolve achados com severidade para o laço de correção de `implementing`.
 
 - [ ] **Aplicar a receita.** Fontes: `requesting-code-review`, `receiving-code-review` e `code-review`, mais as ideias abaixo.
-  - **Trail of Bits, só ideias:** o eixo Spec usa os vereditos implementado, parcial, contradito, além da spec, ausente e indecidível, e "ausente" mostra o que foi buscado (`spec-to-code-compliance`). Uma revisão de risco extra roda só quando o diff toca login, criptografia, chamada externa, transferência de valor ou remove validação: conta os chamadores, lê o histórico do código removido e descreve o ataque (`differential-review`). Ao receber revisão, reescrever a acusação com as próprias palavras antes de aceitá-la (`fp-check`).
+  - **Trail of Bits, só ideias:** o eixo Spec usa os vereditos implementado, parcial, contradito, além da spec, ausente e indecidível, e "ausente" mostra o que foi buscado (`spec-to-code-compliance`). Uma revisão de risco extra roda só quando o diff toca login, criptografia, chamada externa ou remove validação: conta os chamadores, lê o histórico do código removido e descreve o ataque (`differential-review`). Ao receber revisão, reescrever a acusação com as próprias palavras antes de aceitá-la (`fp-check`).
   - **Spartan (`js-security-audit`), só ideias:** quando o diff mexe em dependência, conferir se o pacote existe de verdade, porque o modelo pode inventar nomes, e ler o diff do lockfile.
   - **Decisões:** dois eixos em subagentes novos e paralelos, Padrões e Spec, sem fundir os resultados. Dentro de cada eixo, Critical, Important e Minor, porque o laço de correção precisa da severidade. O eixo Spec lista o que faltou e o que sobrou. O ponto fixo padrão é o merge-base com a branch base, sem perguntar. Os padrões do repositório vencem a lista de smells. A descrição cobre pedir e receber revisão.
   - **Preservar:** revisor com contexto preciso e sem o histórico da sessão, verificar antes de aplicar sugestão, nada de concordância performática.
@@ -412,18 +415,19 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 
 Roda depois da Task 17 e antes da Fase 3. O número fica fora de ordem para não renumerar as tasks seguintes.
 
-**Files:** `skills/browser-testing/SKILL.md`, `skills/browser-testing/references/playwright.md`, `evals/browser-testing-*`, `fusion/ledger/browser-testing.md`
+**Files:** `skills/browser-testing/SKILL.md`, `skills/browser-testing/references/playwright.md`, `evals/browser-testing-*`, `fusion/ledger/browser-testing.md`, `LICENSES/NOTICE.md`
 
-**Interfaces:** usada por `devorb:verifying` e `devorb:debugging` quando há interface. Falha encontrada vai para `devorb:debugging`.
+**Interfaces:** usada por `devorb:verifying` quando a tarefa tem interface. Falha encontrada vai para `devorb:debugging`.
 
-- [ ] **Antes da receita, conferir se o Chromium roda no sandbox de `claude plugin eval`.** A sondagem da Task 4 não cobre isso. Se não rodar, avise o dono antes de escrever a skill.
+- [ ] **Antes da receita, sondar o Chromium no sandbox.** A sondagem da Task 4 não cobre isso. Baixar Playwright e Chromium é um download: confirme com o dono antes. Crie `evals/probe-browser/case.yaml`, cujo `scaffold_script` instala os dois e cujo prompt roda um script headless que abre `about:blank` e imprime `browser-ok`, com grader `regex` `browser-ok` no `last_message`. Rode `claude plugin eval . --case probe-browser --runs 1 --scaffold --allow-tools Bash --trust-plugin --no-publish`. Esperado: o grader passa. Apague a sondagem depois. Se falhar, pare e avise o dono antes de escrever a skill. A alternativa é testar essa skill só fora do sandbox.
 - [ ] **Aplicar a receita.** Fontes: `webapp-testing` (Anthropic, texto permitido) e as ideias de `browser-qa` (Spartan).
   - **Decisões:** usar primeiro o teste de navegador que o projeto já tem. Sem ele, um script Playwright headless, na linguagem do projeto, e adicionar Playwright é decisão do usuário. A skill ensina a subir o servidor em segundo plano, esperar a porta e encerrar no fim.
   - **Conflito resolvido:** esperar um elemento específico, e usar `networkidle` só em app sem websocket nem polling.
   - **Preservar:** observar a página antes de agir, checar console, rede, links e formulários, testar em 1280 px e em 375 px com toque, salvar screenshot na falha, tratar erro de console como bug e aviso não.
   - **Fora:** `with_server.py`, que usa `shell=True` e exige Python, e a varredura automática de todas as páginas, que pesaria em tarefa pequena.
-  - **Comparação:** sem braço de fonte, porque a Anthropic traz 20 skills juntas. R3 e R6 comparam com a versão sem plugin, com `--ablation with-without`.
-  - **Caso realista:** app web pequeno, com testes unitários verdes e um botão que não faz nada. Pedido: "terminei a tela, confere antes de eu avisar o cliente". Grader `llm` no `last_message`: acha o botão pelo navegador e não declara sucesso.
+  - **Comparação:** sem braço de fonte, porque a Anthropic traz 19 skills juntas. R3 é `node tools/compare.mjs --skill browser-testing --arms none --baseline-only`. R6 é `node tools/compare.mjs --skill browser-testing --arms devorb,none`.
+  - **Crédito:** registrar no ledger o que veio do `webapp-testing` e o que mudou, e citar a fonte em `LICENSES/NOTICE.md`.
+  - **Caso realista:** app web pequeno, com Playwright já instalado pelo `scaffold.sh` e testes unitários verdes. O botão de salvar falha só em execução: ele chama uma rota montada em tempo de execução, que responde 404. Pedido: "terminei a tela, confere antes de eu avisar o cliente". Graders: `llm` no `trace`, um navegador abriu a tela e clicou no botão; `llm` no `last_message`, aponta a falha e não declara sucesso.
 
 ---
 
@@ -437,7 +441,7 @@ Roda depois da Task 17 e antes da Fase 3. O número fica fora de ordem para não
 
 **Interfaces:**
 - Consumes: uma entrada de `fusion/sources.json`.
-- Produces: `sourceDiff(source, { cacheDir }) -> Promise<{ name, from, to, status: 'no-change'|'changed'|'sha-missing', files: [{ path, change: 'A'|'M'|'D'|'R' }], newSkills: string[], scriptsOrHooks: string[] }>` e `node tools/source-diff.mjs --json`.
+- Produces: `sourceDiff(source, { cacheDir }) -> Promise<{ name, from, to, textReuse: boolean, status: 'no-change'|'changed'|'sha-missing', files: [{ path, change: 'A'|'M'|'D'|'R' }], newSkills: string[], scriptsOrHooks: string[] }>` e `node tools/source-diff.mjs --json`.
 
 - [ ] **Step 1: Escrever os testes que falham,** com repositórios git locais criados em pasta temporária.
 
@@ -446,6 +450,7 @@ test('no new commits', ...)                 // status 'no-change', files []
 test('change in a tracked path', ...)       // status 'changed', [{ path:'skills/a/SKILL.md', change:'M' }]
 test('change outside tracked paths', ...)   // status 'no-change'
 test('new skill folder', ...)               // newSkills ['skills/b']
+test('new skill in a nested path', ...)     // newSkills ['plugins/x/skills/b']
 test('hooks and scripts are flagged', ...)  // scriptsOrHooks ['hooks/session-start','skills/a/scripts/x.sh']
 test('tracked file deleted', ...)           // change 'D'
 test('rewritten history', ...)              // lastAbsorbed ausente: status 'sha-missing', sem exceção

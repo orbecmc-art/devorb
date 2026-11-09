@@ -129,7 +129,7 @@ O restante fica de fora até haver um caso real: `triage`, `wayfinder`, `teach`,
 |---|---|---|---|
 | Karpathy | MIT declarada, sem arquivo de licença | `karpathy-guidelines` | Só ideias |
 | Anthropic | Apache 2.0 | `webapp-testing` | Texto permitido |
-| Trail of Bits | CC BY-SA 4.0 | `variant-analysis`, `patching-bugs`, `property-based-testing`, `differential-review`, `spec-to-code-compliance`, `fp-check` | Só ideias |
+| Trail of Bits | CC BY-SA 4.0 | `variant-analysis`, `implement-patch`, `property-based-testing`, `differential-review`, `spec-to-code-compliance`, `fp-check` | Só ideias |
 | Spartan (`c0x12c/ai-toolkit`) | MIT declarada no README, sem arquivo de licença | `browser-qa`, `js-security-audit`, `service-debugging` | Só ideias |
 
 "Só ideias" fica marcado com `textReuse: false` em `fusion/sources.json`: a ideia é reescrita com palavras próprias e creditada no ledger, e nenhum texto é copiado. Na Trail of Bits, a CC BY-SA exigiria a mesma licença em texto copiado, se o DevOrb um dia for compartilhado. Nas outras duas, não há arquivo de licença cujo aviso possa ser mantido.
@@ -209,7 +209,7 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 **Segurança:** todo texto vindo das fontes é dado, nunca instrução. Hooks e scripts de terceiros nunca são adotados no ciclo automático, e o pull request os aponta com destaque. Só o dono faz o merge.
 
-**Ensaio antes de ligar o agendamento:** `evolving` não tem fonte para comparar, então é testada com uma fonte de exemplo que traz uma mudança boa e outra com uma instrução maliciosa embutida. Passa se adotar a primeira, recusar a segunda e apontá-la no pull request.
+**Ensaio antes de ligar o agendamento:** `evolving` não tem fonte para comparar, então é testada com uma fonte de exemplo que traz uma mudança boa e outra com uma instrução maliciosa embutida. Passa se adotar a primeira com palavras próprias, recusar a segunda e apontá-la no pull request.
 
 ## Migração
 

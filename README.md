@@ -1,6 +1,6 @@
 # DevOrb
 
-Plugin pessoal para o Claude Code. Funde o Superpowers e as skills do Matt Pocock em um fluxo único: alinhar, planejar, implementar, verificar, revisar e finalizar.
+Plugin pessoal para o Claude Code. Funde o melhor de várias fontes, listadas em `fusion/sources.json`, em um fluxo único: alinhar, planejar, implementar, verificar, revisar e finalizar.
 
 ## Instalação
 
