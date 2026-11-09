@@ -195,7 +195,7 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 ## Ciclo mensal
 
-**Gatilho:** uma tarefa agendada do Claude Code (`/schedule`), com cron como `0 9 1 * *`. Há também o comando manual `/devorb:evolving`. A tarefa agendada está em prévia de pesquisa, usa a cota da assinatura e publica em branches `claude/`. Ela é desligada se o GitHub ficar 72 horas desconectado. O preset mensal não existe, então é preciso confirmar o cron personalizado.
+**Gatilho:** uma tarefa agendada do Claude Code (`/schedule`), com cron como `0 12 1 * *`, em UTC. Há também o comando manual `/devorb:evolving`. A tarefa agendada está em prévia de pesquisa e usa a cota da assinatura. Por padrão ela publica em branches `claude/`, mas isso é só um padrão. Ela é desligada se o GitHub ficar 72 horas desconectado. O cron personalizado é definido depois de criar a tarefa.
 
 **Passos:**
 
