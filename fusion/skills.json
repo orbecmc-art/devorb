@@ -41,6 +41,12 @@
     "ceilingTokens": 2500,
     "status": "planned"
   },
+  "browser-testing": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned"
+  },
   "reviewing": {
     "invocation": "auto",
     "level": "light",

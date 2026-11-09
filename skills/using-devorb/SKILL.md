@@ -1,6 +1,6 @@
 ---
 name: using-devorb
-description: Use when starting any conversation or deciding which skill fits a request
+description: Use when starting any conversation
 ---
 
 <SUBAGENT-STOP>
@@ -23,7 +23,7 @@ Before entering plan mode, invoke `devorb:aligning` if you haven't aligned yet.
 2. The DevOrb flow.
 3. The specific skill.
 
-Skip a step only when the user explicitly says so. Domain skills run after the process skill that sets the approach.
+Skip a step only when level 1 explicitly says so. Domain skills run after the process skill that sets the approach.
 
 ## Routing
 
@@ -37,6 +37,7 @@ New work enters through `devorb:aligning`. A bug enters through `devorb:debuggin
 | While building: test first | `devorb:tdd` |
 | Anything fails or surprises you | `devorb:debugging` |
 | Before claiming it works | `devorb:verifying` |
+| Changed a web UI | `devorb:browser-testing` |
 | Asking for or receiving a review | `devorb:reviewing` |
 | Integrating the branch | `devorb:finishing` |
 | Domain terms and decisions: `GLOSSARY.md`, `docs/adr/` | `devorb:domain-modeling` |
