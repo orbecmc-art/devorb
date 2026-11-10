@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 const PATH = '../fusion/ui-sources.json';
 const data = JSON.parse(readFileSync(new URL(PATH, import.meta.url), 'utf8'));
 
-const KINDS = ['foundation', 'specialist', 'standout', 'screens', 'gallery'];
+const KINDS = ['foundation', 'specialist', 'standout', 'screens', 'gallery', 'systems'];
 const ACCESS = ['free', 'free-and-paid', 'paid'];
 const READING = ['text', 'browser', 'account'];
 
@@ -18,13 +18,22 @@ const OWNER_LIST = [
 // Whole-site galleries, suggested by Claude and approved by the owner on 2026-11-09.
 const GALLERIES = ['Awwwards', 'Minimal Gallery', 'Land-book', 'Lapa Ninja', 'SiteInspire', 'Godly (now Recent)'];
 
+// Sent by the owner on 2026-11-10.
+const OWNER_SENT = ['getdesign.md'];
+
 const names = (from) => data.entries.filter((e) => e.from === from).map((e) => e.name).sort();
 
-test('ui sources keep the owner list from the video and the approved galleries', () => {
+test('ui sources keep the owner list from the video, the approved galleries and what the owner sent', () => {
   assert.match(data.source, /youtube\.com\/watch\?v=zsCGS-Yzjnw/);
   assert.deepEqual(names('video'), [...OWNER_LIST].sort());
   assert.deepEqual(names('gallery'), [...GALLERIES].sort());
-  assert.equal(data.entries.length, OWNER_LIST.length + GALLERIES.length);
+  assert.deepEqual(names('owner'), [...OWNER_SENT].sort());
+  assert.equal(data.entries.length, OWNER_LIST.length + GALLERIES.length + OWNER_SENT.length);
+});
+
+test('brand systems are studied for structure, never applied to a client', () => {
+  for (const e of data.entries.filter((x) => x.kind === 'systems')) assert.match(e.note, /never apply/i, e.name);
+  assert.match(data.rules.join(' '), /Operate/);
 });
 
 test('every ui source is complete', () => {

@@ -60,9 +60,10 @@ const LEFT_OUT = [
   '/setup-matt-pocock-skills',
 ];
 
-// A design skill joins the bootstrap in the task that finishes it: naming it earlier would send
-// agents after a skill that does not exist yet.
-const inBootstrap = (s) => s.sector !== 'design' || s.status === 'done';
+// A skill of a sector, or one registered with `bootstrap: "when-done"`, joins the bootstrap in the
+// task that finishes it: naming it earlier would send agents after a skill that does not exist yet.
+const joinsWhenDone = (s) => Boolean(s.sector) || s.bootstrap === 'when-done';
+const inBootstrap = (s) => !joinsWhenDone(s) || s.status === 'done';
 
 test('bootstrap names every non-manual skill, design ones once done, and stays small', () => {
   const body = read('SKILL.md');
@@ -71,7 +72,7 @@ test('bootstrap names every non-manual skill, design ones once done, and stays s
   assert.ok(Buffer.byteLength(body) <= 3500);
 });
 
-test('a design skill still being planned stays out of the bootstrap', () => {
+test('a skill that joins when done stays out of the bootstrap while planned', () => {
   const body = read('SKILL.md');
   for (const [name, s] of Object.entries(registry))
     if (!inBootstrap(s)) assert.ok(!body.includes(`devorb:${name}`), name);

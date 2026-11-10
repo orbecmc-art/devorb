@@ -55,7 +55,7 @@ Cada task de D2 a D6 aplica R1 a R8 do plano da base, com estas diferenças:
 - **Graders:** um `regex` lê um só arquivo, então o prompt ou o scaffold fixa o caminho de cada arquivo que um `regex` lê. O resto usa `llm` com foco `files`. `file_exists` negado não foi sondado na Task 4: use `llm`.
 - **Reservado (só D2):** o plano diz o tema, nunca a resposta certa. Quem escreve a skill não lê `evals-reserved/`.
 - **R3:** `node tools/compare.mjs --skill <skill> --arms <braços> --baseline-only`.
-- **R4:** leia só os caminhos da fonte que o Mapa de skills do design atribui a esta skill.
+- **R4:** leia os caminhos que o Mapa de skills do design atribui a esta skill, mais os que a task cita pelo nome. Quando um caminho casa com mais de uma linha do mapa, vale o fragmento mais longo.
 - **R5:** ao marcar `done`, adicione a skill a `skills/using-devorb/SKILL.md`, como a task indica. O teste de `tests/bootstrap.test.mjs` passa a exigir isso. Depois rode `node tools/compare.mjs --skill using-devorb --arms devorb,superpowers`.
 - **R6:** `node tools/compare.mjs --skill <skill> --arms devorb,<braços>`, com os braços da task.
 - **R8:** o pull request de cada task atualiza o estado em `docs/plans/2026-11-08-devorb-base-progress.md`.
@@ -66,20 +66,21 @@ Cada task de D2 a D6 aplica R1 a R8 do plano da base, com estas diferenças:
 
 **Files:**
 - Modify: `tools/check-skills.mjs`, `tests/check-skills.test.mjs`, `tools/compare.mjs`, `tests/compare.test.mjs`
-- Create: `tests/fixtures/skills/always-on-design/`
+- Create: `tests/fixtures/skills/always-on-design/`, `tests/fixtures/skills/always-on-mobile/`
 
 **Interfaces:**
 - Consumes: `checkSkills(root, registry)`, `parseArms(text)`, `prepareArm({ name, ref }, { root })`.
-- Produces: `checkSkills` soma à parte as descrições das entradas com `sector: "design"`, com o limite `DESIGN_ALWAYS_ON_CAP = 250`. A assinatura não muda.
+- Produces: `checkSkills` soma à parte as descrições das entradas de cada setor, com os limites `SECTOR_CAPS = { design: 250, mobile: 150 }`. A assinatura não muda. A mensagem é `always-on <setor>: <n> tokens > <limite>`.
 - Produces: `parseArms` aceita também `ui-ux-pro-max`. `prepareArm` monta esse braço como monta o `superpowers`: o repositório inteiro no `lastAbsorbed` da entrada `ui-ux-pro-max` de `fusion/sources.json`, com a raiz como plugin (manifesto em `.claude-plugin/plugin.json`, skills em `.claude/skills/`) e sem a pasta `stack/`. É o plugin que o dono usa, e roda só dentro do sandbox de `claude plugin eval`. Se o sandbox não tiver Python, a busca dele falha, e o resultado registra isso em vez de esconder.
 
 - [ ] **Step 0: Sondar a leitura de sites no sandbox.** Crie `evals/probe-web/case.yaml`, cujo prompt usa `WebFetch` em `https://ui.shadcn.com` e imprime o título da página, com grader `regex` `shadcn` no `last_message`. Rode `claude plugin eval . --case probe-web --runs 1 --allow-tools WebFetch --trust-plugin --no-publish`. Anote o resultado no commit e apague a sondagem. Se o sandbox não ler sites, o caso da Task D2 avalia a alternativa: a skill leu a lista e disse que não conseguiu abrir as fontes.
-- [ ] **Step 1: Escrever os testes que falham.** A fixture tem duas skills de design automáticas, somando 300 tokens de descrição, e uma da base com 700.
+- [ ] **Step 1: Escrever os testes que falham.** A fixture `always-on-design` tem duas skills de design automáticas, somando 300 tokens de descrição, e uma da base com 700. A fixture `always-on-mobile` tem duas skills mobile automáticas, somando 200.
 
 ```js
 test('design skills have their own always-on cap', () => {
   assert.ok(errs('always-on-design').includes('always-on design: 300 tokens > 250'));
   assert.ok(!errs('always-on-design').some((e) => e.startsWith('always-on: ')));
+  assert.ok(errs('always-on-mobile').includes('always-on mobile: 200 tokens > 150'));
 });
 assert.deepEqual(parseArms('devorb,ui-ux-pro-max,none'), ['devorb', 'ui-ux-pro-max', 'none']);
 assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
@@ -117,6 +118,8 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
   - **`frontend-design` e Hallmark, só ideias:** teste do espelho: um brief vizinho daria o mesmo plano? Se sim, mudar uma decisão e dizer qual. Os looks gastos ficam descritos em números, para poder calibrar.
   - **ECC (`frontend-design-direction`) e gstack (`review-sections`), só ideias:** tabela de funcionalidade por estado (carregando, vazio, erro, sucesso, parcial e sem permissão), com o que o usuário vê, o gatilho e a próxima ação.
   - **gstack (`proposal-and-preview`), só ideia:** conferir nome, pesos, licença e URL da fonte antes de usá-la.
+  - **genjutsu (`tells`), só ideias, em `floor.md`:** vícios de IA a evitar além dos já listados: status inventado, como um selo "operacional" sem dado, faixa de relógio, código de seção vazio, três cards iguais, brilho ou blob de enfeite.
+  - **Monich (`TAG-VOCABULARY`), só ideia:** cada estilo diz também onde não serve. Em superfície Operate, nenhum componente de destaque, como já dizem as `rules` de `ui-sources.json`.
   - **Conflitos:**
     - Eyebrow: fica só se traz fato, destino ou identificador que faria falta.
     - Dados de amostra: em mock, valores variados e nomes de exemplo.
@@ -156,6 +159,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
   - **gstack (`design-lint`, `craft-audit`) e Impeccable (`audit`), só ideias:** borda de largura constante entre estados. Desabilitado se distingue por três canais, não só pela cor. Em sistemas, linha com 8 px até a borda, 16 px entre textos e 12 px sob lista.
   - **Acessibilidade como tokens:** pares com contraste de pelo menos 4,5:1, ou 3:1 em texto grande, e o token de foco. Regras próprias candidatas, que só entram com um cenário: foco com `outline`, por `forced-colors`, e texto grande é 24 px, ou 18,66 px em negrito.
   - **Conflito:** o tamanho do corpo depende do modo, e não há um piso único.
+  - **getdesign.md, só ideias, em `references/design-md.md`:** uma seção de lacunas conhecidas, uma nota que diz qual fonte livre substitui uma proprietária, e os estados como chaves próprias, como `button-primary-hover`. Os arquivos de marcas reais servem para ver a estrutura, nunca como valores para um cliente.
   - **Própria:** `references/contrast.md` traz um trecho curto em Node, escrito aqui, que calcula o contraste de um par. Sem dependências.
   - **Fora:** as 192 paletas, a busca e qualquer dial de estilo. A skill não sugere cores de fábrica: elas saem do contrato de direção.
   - **`using-devorb`:** acrescentar `devorb:design-system` à linha de interface.
@@ -168,7 +172,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
 
 ## Task D4: `motion` (leve, 2.500)
 
-**Files:** `skills/motion/SKILL.md`, com `references/choreography.md`, `gestures.md`, `performance.md`, `scroll.md` e `shaders.md`, mais `evals/motion-*`, `fusion/ledger/motion.md`, `skills/using-devorb/SKILL.md`
+**Files:** `skills/motion/SKILL.md`, com `references/choreography.md`, `gestures.md`, `performance.md`, `scroll.md`, `shaders.md`, `gsap.md`, `motion-lib.md`, `transitions.md` e `three.md`, mais `evals/motion-*`, `fusion/ledger/motion.md`, `skills/using-devorb/SKILL.md`
 
 **Interfaces:** usada por `devorb:implementing` sempre que algo se move. Auditar e remover animação são modos dela, não skills à parte.
 
@@ -177,7 +181,7 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
 - [ ] **Aplicar a receita.** Espinha: Emil (`animate`), na ordem: anima? → propósito → ferramenta → propriedade → curva → interrupção → reduced motion. Inclui a tabela do que nunca entregar.
   - **Emil, só ideias:**
     - Atalho ou ação feita mais de 100 vezes por dia não anima. Zero código é sucesso.
-    - Ease-out forte para entrar e sair, nunca `ease-in`. Interface até 300 ms. Sem `transition: all` nem `scale(0)`.
+    - Ease-out forte para entrar e sair, nunca `ease-in`. Até 300 ms em modal, menu e aviso, e até 500 ms em gaveta, troca de página e momento único. Sem `transition: all` nem `scale(0)`.
     - Reduced motion mantém opacidade e a mudança de estado, e corta o movimento. Nada de `0.01ms` global, que apaga o retorno útil (com Impeccable `audit`).
     - Foco aparece na hora: `outline` e `box-shadow` ficam fora da `transition` (com gstack `design-lint`).
     - Transição, não keyframes, no que dispara rápido. Em React, escrever em `ref.style`. Variável CSS no pai não move os filhos.
@@ -187,6 +191,13 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
     - **`references/choreography.md`:** uma entrada por contêiner, sem stagger em interface frequente, saída simultânea, stagger de 30 a 80 ms sem ser uniforme, hero de 100 a 150 ms.
     - **`references/gestures.md`:** dedo abaixado é 1:1, sem spring. Ao soltar, spring com a velocidade. Dispensar por distância ou velocidade. Arrasto preserva o offset da pega, captura o ponteiro e tem histerese de uns 10 px. Snap pelo ponto projetado da velocidade, e resistência crescente na borda.
     - **Modo remover:** tirar também o estado inicial oculto e as esperas de `transitionend`.
+  - **Escada de ferramenta (Motion AI Kit, genjutsu e as fontes da D4), no `SKILL.md`:** o que o `package.json` já tem vem primeiro. Sem nada, CSS. Motion para interface React com saída, layout ou gesto. GSAP para timeline pinada, texto dividido ou morph de SVG. Projeto novo usa o pacote `motion`, nunca junto com `framer-motion`.
+  - **transitions.dev e genjutsu, só ideias, no `SKILL.md`:** fechar é mais curto que abrir, sem atraso nem overshoot, salvo pares simétricos como abas e acordeão. Stagger total de até uns 300 ms. Laço infinito só quando mostra um estado real, e movimento automático acima de 5 s tem botão de pausa.
+  - **`references/gsap.md` (`gsap-skills`), só ideias:** ScrollTrigger só em timeline ou tween de topo, criado de cima para baixo, e `refresh()` depois de fontes e imagens. Scrub ou `toggleActions`, nunca os dois, e sem `markers`. Anima o filho do elemento pinado. Em React, `useGSAP` com `scope`, ou `ctx.revert()` na limpeza, com `contextSafe` nos handlers. Reduced motion por `gsap.matchMedia()`. Texto dividido só depois de `document.fonts.ready`, com nome acessível no pai e `aria-hidden` nos pedaços.
+  - **`references/motion-lib.md` (Motion AI Kit), só ideias:** um `<MotionConfig reducedMotion="user">` na raiz. `AnimatePresence` fica montado, com a condição dentro. Saída em Radix ou Base UI usa o estado içado e `forceMount` ou `keepMounted`. `layoutId` com `useId()`. `Reorder` tem alternativa pelo teclado.
+  - **`references/transitions.md` (transitions.dev e genjutsu `css-native`), só ideias:** acordeão por `grid-template-rows`, de `0fr` a `1fr`, com padding no filho, nunca `max-height` chutado. Indicador de abas nasce sem transição. Chevron gira em vez de mudar a forma. Mais de uns 40 px de deslocamento só em gaveta. Blur nunca num fade simples. `@starting-style` com `allow-discrete`. View Transitions com o próprio reduced motion.
+  - **`references/three.md` (three.js `docs/llms.txt`, genjutsu `threejs-r3f`, Monich `performance`), só ideias, umas 40 linhas.** O three.js não é acompanhado: leia `docs/llms.txt` de `https://github.com/mrdoob/three.js` no commit `0a980dcf032223a274fcdd60ab56330f1321cca0`, com `gh api "repos/mrdoob/three.js/contents/docs/llms.txt?ref=0a980dcf032223a274fcdd60ab56330f1321cca0"`, sem clonar o repositório. Ideias: 3D só quando o objeto é o foco de um brief imersivo; inclinar um card é CSS. Versão exata, import dinâmico, DPR até 2, render sob demanda e `dispose()` ao sair. Pôster estático sem WebGL, durante o carregamento e em reduced motion.
+  - **`references/performance.md` e `scroll.md`, mais:** laço de quadro (rAF, `useFrame`) sem `setState` e sem alocar memória. `animation-timeline` só dentro de `@supports`, com o conteúdo visível por padrão.
   - **gstack (`design-motion`), só ideias:** um momento autoral por página. A seção fica completa sem JavaScript. Observer a 30%, uma vez.
   - **ECC (`motion-*`), só ideias:** `AnimatePresence` exige `key` e `exit`. Em Next, `"use client"`. Laço infinito pausa em `visibilitychange`.
   - **`references/scroll.md` (`scroll-craft`), só ideias:** clipe mapeado a toda a vida visível do palco. O scroll grava o alvo, e o rAF persegue. O hero já começa visível. O trilho mede o overflow e vira scroll nativo em reduced motion. Scrub pede GOP denso e sem áudio, e iOS precisa de `play()`. Curva de sentimento antes dos atos, com um só pico, no maior span. Só com brief imersivo: o padrão de landing é um momento.
@@ -198,7 +209,10 @@ assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
     - Conteúdo oculto: markup completo, nunca `initial` condicional.
     - Propriedades: `transform` e `opacity` por padrão, com `clip-path` e `filter` aceitos, blur até 14 px.
     - Reduced motion corta movimento, nunca alcance: navegação e rastreio de gesto ficam.
-  - **Fora:** `will-change` preventivo, animar blur em tela cheia, easing espelhado do `apple-design`, os presets de `motion-*`, o motor do `scroll-craft`, `kie.mjs`, geração de vídeo.
+    - Ferramenta padrão: o `gsap-skills` manda usar GSAP sempre. Vence a escada, que começa no CSS.
+    - Altura: anima só em disclosure pequeno, como acordeão.
+    - Cena pinada em toda página, como o Monich pede: vence o momento único.
+  - **Fora:** `will-change` preventivo, animar blur em tela cheia, easing espelhado do `apple-design`, os presets de `motion-*`, o motor do `scroll-craft`, `kie.mjs`, geração de vídeo. Também MotionScore, o MCP e o gerador do Motion AI Kit, que dependem do plano pago, os valores e snippets do transitions.dev, que a licença não deixa redistribuir, e os templates e modelos 3D do Monich.
   - **`using-devorb`:** acrescentar `devorb:motion` à linha de interface.
   - **Caso realista:** o scaffold cria um projeto React com a paleta de comandos em `src/CommandPalette.jsx`, o modal em `src/ConfirmModal.jsx`, a landing em `src/Landing.jsx`, todo o CSS em `src/styles.css`, e a spec aprovada. Prompt: "anima a paleta de comandos e o modal de confirmação, e coloca um fundo animado na landing, como a spec pede". Graders:
     - `regex` `not_contains` para `transition:\s*all`, `scale\(0\)` e `ease-in[^-]`, cada um em `src/styles.css`;
@@ -220,6 +234,13 @@ Só depois das Tasks 8 e 23 da base.
     - Primeiro nomear o modo de cada seção, porque Inter em painel passa e em landing, não.
     - Medir valores computados contra o declarado, e o que `DESIGN.md` autoriza não vira achado.
     - Classificar cada desvio: token ausente, implementação pontual, desencontro conceitual ou defeito local.
+  - **genjutsu (`design-audit`, `desktop-principles`), só ideias:**
+    - Cada checagem termina em achado, limpa ou não aplicável, e não aplicável conta como não conferido.
+    - Os vícios de IA são lidos no texto exibido, não nas classes. Um vício só passa se o contrato o nomeia numa frase citada; palavra de clima não autoriza.
+    - Inventário de cores, raios e durações com `arquivo:linha`, sem veredito.
+    - Atalho de uma letra sem modificador não dispara enquanto se digita, e os atalhos do navegador não são sequestrados.
+    - Menu hambúrguer em tela larga é defeito num sistema.
+  - **reanimate (`capture`), só ideia:** ler a duração e a curva reais com `document.getAnimations()`, em vez de confiar no CSS.
   - **gstack, Impeccable e Emil, só ideia:** dizer o que foi medido e como. URL não medida nunca passa, e sem navegador o relatório diz "só código".
   - **Emil (`break-ui`), só ideias, em `references/worst-case.md`:** mapear os valores renderizados com limite. Fixture de pior caso plausível, entrando pela borda de dados, mais vazio, um e enorme. Tabela de sintoma para causa, como "1 members".
   - **Emil (`mobile-native`), só ideias, em `references/mobile-web.md`:** `dvh` e `svh`, inputs de 16 px, sem `user-scalable=no`, `inputmode`, `env()` com `viewport-fit=cover`, `touch-action: manipulation` e `overscroll-behavior: contain` em painéis. Sem PWA. O que não foi conferido em aparelho é dito.

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Construir o plugin DevOrb com as 18 skills da base, fundidas e testadas, com o ciclo mensal ligado, até substituir o Superpowers no Mac.
+**Goal:** Construir o plugin DevOrb com as 19 skills da base, fundidas e testadas, com o ciclo mensal ligado, até substituir o Superpowers no Mac.
 
 **Architecture:** Plugin Claude Code em repositório privado, com o marketplace na raiz. As skills ficam em `skills/`, os casos de teste em `evals/` e o registro de cada fusão em `fusion/`. Ferramentas pequenas em Node, sem dependências, checam limites e comparam versões usando `claude plugin eval`.
 
@@ -16,8 +16,8 @@
 
 - Nome do plugin: `devorb`. Só Claude Code. Sem suporte a outros agentes.
 - Pinos iniciais: Superpowers `22f0b463e7a5e579904dd6211a520321035526f7` (7.0.2) e Matt Pocock `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` (1.3.2). Ponytail 5.3.3, com o commit resolvido na Task 4.
-- Fontes novas, com pinos em `fusion/sources.json`: Karpathy, `webapp-testing` da Anthropic, 6 skills da Trail of Bits, 3 do Spartan, 7 do ECC e 8 arquivos do gstack. Só os caminhos listados lá são usados e acompanhados, além das duas regras de `lib/plan-reality.ts` citadas na Task 11.
-- Fonte com `textReuse: false` (Karpathy, Trail of Bits, Spartan, ECC, gstack) só fornece ideias, escritas com palavras próprias e creditadas no ledger. Nunca copie texto dela.
+- Fontes novas, com pinos em `fusion/sources.json`: Karpathy, `webapp-testing` da Anthropic, 6 skills da Trail of Bits, 3 do Spartan, 7 do ECC, 8 arquivos do gstack e a `security-audit` da Cloudflare, mais o zip do dono, lido uma vez. Só os caminhos listados lá são usados e acompanhados, além das duas regras de `lib/plan-reality.ts` citadas na Task 11.
+- Fonte com `textReuse: false` (Karpathy, Trail of Bits, Spartan, ECC, gstack, Cloudflare e o zip do dono) só fornece ideias, escritas com palavras próprias e creditadas no ledger. Nunca copie texto dela.
 - Custo fixo: soma das descrições das skills não manuais até 706 tokens. `using-devorb` até 3.500 bytes (a do Superpowers tem 3.192).
 - Por skill ao ser chamada: 2.500 tokens, exceto `implementing` e `writing-skills`, com 5.000. `SKILL.md` abaixo de 20.000 bytes. Tokens estimados como bytes ÷ 4, o que bate com `claude plugin details` nas fontes.
 - Saída do hook SessionStart: até 10.000 caracteres.
@@ -184,6 +184,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
   - Se o `--json` traz pontuação e custo por rodada.
   - Se o campo `plugins` do caso consegue carregar dois plugins juntos, para o braço com ponytail.
   - Se `tool_used: Skill` entra na pontuação com `--ablation with-without`, comparando o `--json` nos dois modos. A ajuda da ferramenta diz que esse grader pode virar só um indicador.
+  - Se a ferramenta de subagente pode ser liberada num caso, como a Task 24 precisa.
   - Se uma rodada consegue ler `evals/` e `evals-reserved/` pela raiz do plugin, já que `source: "./"` leva o repositório inteiro. Se conseguir, `prepareArm` tira essas pastas da cópia usada como plugin.
 
   Salve a saída real em `tests/fixtures/eval-result.json`. Pergunte ao dono qual modelo ele usa e preencha `fusion/eval-config.json`.
@@ -260,7 +261,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
   Escreva os dois ledgers a partir de `FUSAO.md`, com o crédito dessas fontes. "Procurar outros chamadores" continua marcada como regra própria. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
 - [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb`, com `--ablation with-without` nos casos novos. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
 - [ ] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
-- [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17 e 23. Grave em `fusion/results/estimativa.md`.
+- [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17, 23 e 24, nas D2 a D6 do plano de design e nas tasks do plano mobile. Grave em `fusion/results/estimativa.md`.
 - [ ] **Step 6: Commit** `feat: add debugging through the fusion process`, com a versão `0.2.0`, e abra o pull request.
 - [ ] **Step 7: PARAR. Mostrar ao dono:** a tabela de resultados, o que mudou com o ponytail ligado, o custo real e a estimativa. Ele decide entre seguir, reduzir os níveis ou parar. Nada da Fase 2 começa sem essa resposta.
 
@@ -270,7 +271,7 @@ Graders ficam escondidos do agente, porque uma rodada não consegue ler o diret�
 
 ### Receita de fusão
 
-Cada Task de 7 a 17, e a Task 23, aplica estes passos, com os valores da sua linha.
+Cada Task de 7 a 17, e as Tasks 23 e 24, aplica estes passos, com os valores da sua linha.
 
 - **R1 (só nível completo):** um subagente novo escreve o caso reservado em `evals-reserved/<skill>-*/`, sem ver rascunhos da skill.
 - **R2:** escrever o caso realista da Task em `evals/<skill>-*/`, com prompt em português. No nível completo, portar também os cenários de pressão das fontes, quando existirem em `tests/<skill>/` do Superpowers.
@@ -380,6 +381,7 @@ Cada Task lista só o que a receita não decide. Se uma decisão abaixo se mostr
 - [ ] **Aplicar a receita.** Fontes: `requesting-code-review`, `receiving-code-review` e `code-review`, mais as ideias abaixo.
   - **Trail of Bits, só ideias:** o eixo Spec usa os vereditos implementado, parcial, contradito, além da spec, ausente e indecidível, e "ausente" mostra o que foi buscado (`spec-to-code-compliance`). Uma revisão de risco extra roda só quando o diff toca login, criptografia, chamada externa ou remove validação: conta os chamadores, lê o histórico do código removido e descreve o ataque (`differential-review`). Ao receber revisão, reescrever a acusação com as próprias palavras antes de aceitá-la (`fp-check`).
   - **Spartan (`js-security-audit`), só ideias:** quando o diff mexe em dependência, conferir se o pacote existe de verdade, porque o modelo pode inventar nomes, e ler o diff do lockfile.
+  - **Cloudflare (`security-audit`) e zip do dono, só ideias:** pista não resolvida fica como "precisa validar", sem severidade, com o fato que falta e o que a resolveria. Citar o nome de um sanitizador não prova nada: a revisão confere se toda rota até o ponto sensível passa por ele e falha fechada. O resto da auditoria fica em `security-audit` (Task 24).
   - **gstack (`review`), só ideias:**
     - Se o diff toca teste, CI ou configuração, ler cada afrouxamento: teste apagado ou pulado, assert exato virou faixa, timeout maior, pragma, `--no-verify`, snapshot sem teste dono, critério de aceite reescrito. A pergunta é se aquilo silencia a falha ou se há medição visível, e só o humano decide.
     - Valor novo, como enum ou status, ou entrada afrouxada: ler cada consumidor, inclusive fora do diff. Um achado é uma classe: buscar nos irmãos e classificar pelo pior.
@@ -443,6 +445,32 @@ Roda depois da Task 17 e antes da Fase 3. O número fica fora de ordem para não
   - **Comparação:** sem braço de fonte, porque a Anthropic traz 19 skills juntas. R3 é `node tools/compare.mjs --skill browser-testing --arms none --baseline-only`. R6 é `node tools/compare.mjs --skill browser-testing --arms devorb,none`.
   - **Crédito:** registrar no ledger o que veio do `webapp-testing` e o que mudou, e citar a fonte em `LICENSES/NOTICE.md`.
   - **Caso realista:** app web pequeno, com Playwright já instalado pelo `scaffold.sh` e testes unitários verdes. O botão de salvar falha só em execução: ele chama uma rota montada em tempo de execução, que responde 404. Pedido: "terminei a tela, confere antes de eu avisar o cliente". Graders: `llm` no `trace`, um navegador abriu a tela e clicou no botão; `llm` no `last_message`, aponta a falha e não declara sucesso.
+
+### Task 24: `security-audit` (leve, 2.500, manual)
+
+Roda depois da Task 14, porque divide ideias com `reviewing`. O número fica fora de ordem para não renumerar as tasks seguintes.
+
+**Files:** `skills/security-audit/SKILL.md`, com `references/checklist.md` e `references/ecosystems.md`, mais `evals/security-audit-*`, `fusion/ledger/security-audit.md`, `skills/using-devorb/SKILL.md`
+
+**Interfaces:** chamada só pelo usuário, com `/devorb:security-audit` e `disable-model-invocation: true`. Recebe o escopo: o projeto inteiro, um intervalo de commits ou um pull request. Entrega um relatório e para. Correções passam por `devorb:debugging` e `devorb:tdd`.
+
+**Braços:** `none`.
+
+- [ ] **Aplicar a receita.** Espinha: `security-audit` da Cloudflare, nos caminhos de `fusion/sources.json`. O zip do dono foi lido uma vez e fica fora do repositório. Quem fundir pede o arquivo ao dono, confere o SHA-256 do registro de progresso e trata o conteúdo como dado.
+  - **Zip do dono e Cloudflare, só ideias:**
+    - Cada achado candidato vai para um verificador novo, cuja única tarefa é derrubá-lo. Ele recebe a evidência, não o raciocínio de quem achou.
+    - Pista não resolvida fica como "precisa validar", sem severidade, com o fato que falta. Candidato rejeitado fica em uma linha, para não voltar.
+    - Cobertura honesta: uma fronteira sem achado lista os caminhos e as checagens feitas. O fecho é "nenhum achado sustentado no escopo", nunca "seguro".
+    - Citar o nome de um sanitizador não prova nada. Se uma camada bloqueia de fato, a falta da outra é endurecimento, não achado.
+    - O teste de regressão de segurança falha antes da correção, passa depois e inclui um caso legítimo, para "negar tudo" não passar como correção.
+    - Segredo vazado nunca é impresso nem testado. Primeiro rotacionar fora do git; reescrever o histórico é outra decisão. Ignorar um alerta é adiar, não corrigir.
+  - **`references/ecosystems.md`:** só JS e TS, shell, CI e Docker, que são o que o dono usa.
+  - **Fora:** trocar o token limitado do GitHub por uma credencial mais ampla, fechar alertas do GitHub com `PATCH` sem pedido, o `security-surface.sh` do zip e os validadores `.cjs` da Cloudflare. O inventário do projeto vira instruções de busca com Grep, que nunca imprimem a linha de um possível segredo.
+  - **`using-devorb`:** adicionar `devorb:security-audit` à lista de skills manuais. O teste de `tests/bootstrap.test.mjs` passa a exigir isso quando a skill estiver `done`. Para caber em 3.500 bytes, tire linhas de "Red Flags" que os testes não exigem.
+  - **Caso realista:** o `case.yaml` libera a ferramenta de subagente, se a sondagem da Task 4 mostrar que dá; senão, o grader aceita uma verificação separada na mesma rodada, marcada como tal. `/devorb:security-audit audita este projeto antes de publicar`, num app Node pequeno com uma consulta SQL montada por concatenação, uma rota que devolve dados de outro usuário e um `.env` com uma chave falsa no git. Graders:
+    - `llm` no `last_message`: os dois primeiros aparecem como achados com evidência, e o fecho não diz "seguro";
+    - `regex` `not_contains` com o valor da chave falsa, no `last_message`, e `llm` no `trace` para a chave nunca aparecer em comando nem em resposta;
+    - `llm` no `trace`: cada achado passou por uma verificação separada antes de entrar.
 
 ---
 
@@ -544,11 +572,11 @@ A linha de base mostrou que o caso original quase não separava as versões, ent
 - Modify: `.claude-plugin/plugin.json`, `CHANGELOG.md`
 
 **Interfaces:**
-- Consumes: as 18 skills e `tools/compare.mjs`.
+- Consumes: as 19 skills da base e `tools/compare.mjs`.
 
-- [ ] **Step 1: Criar o caso de fluxo inteiro.** Prompt em português: "adiciona X, pode começar sem perguntas", `max_turns: 200`, 1 rodada. Graders `tool_order`: `aligning` antes de `planning`, antes de `implementing`, antes de `finishing`.
+- [ ] **Step 1: Criar o caso de fluxo inteiro.** Prompt em português: "adiciona exportação em CSV da lista de pedidos, pode começar sem perguntas", `max_turns: 200`, 1 rodada. Graders `tool_order`: `aligning` antes de `planning`, antes de `implementing`, antes de `finishing`.
 - [ ] **Step 2: Rodar a comparação geral.** `node tools/compare.mjs --skill all --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Se perder em um cenário, aquela skill é corrigida antes de migrar.
-- [ ] **Step 3: Conferir o custo real.** Instale em modo local e rode `claude plugin details devorb@devorb`. Esperado: até 706 tokens fixos nas skills da base, mais até 250 nas de design que já estiverem prontas, e cada skill dentro do teto.
+- [ ] **Step 3: Conferir o custo real.** Instale em modo local e rode `claude plugin details devorb@devorb`. Esperado: até 706 tokens fixos nas skills da base, mais até 250 nas de design e até 150 nas de mobile que já estiverem prontas, e cada skill dentro do teto.
 - [ ] **Step 4: Mostrar ao dono `fusion/results/final.md`.** Com a aprovação dele, subir para `1.0.0` e fazer o merge.
 
 ### Task 22: Instalação e troca

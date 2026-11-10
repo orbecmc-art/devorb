@@ -107,6 +107,13 @@
     "ceilingTokens": 2500,
     "status": "planned"
   },
+  "security-audit": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "bootstrap": "when-done"
+  },
   "visual-direction": {
     "invocation": "auto",
     "level": "full",
@@ -141,5 +148,26 @@
     "ceilingTokens": 2500,
     "status": "planned",
     "sector": "design"
+  },
+  "native-app": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "mobile"
+  },
+  "device-testing": {
+    "invocation": "auto",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "mobile"
+  },
+  "mobile-release": {
+    "invocation": "manual",
+    "level": "light",
+    "ceilingTokens": 2500,
+    "status": "planned",
+    "sector": "mobile"
   }
 }

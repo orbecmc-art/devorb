@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.8
+
+- Roteiro de lançamento no registro de progresso: o lançamento, na `1.0.0`, é trocar o Superpowers pelo DevOrb depois das fusões da base, que rodam no Mac. Design e mobile vêm em seguida.
+- Skill manual `security-audit` planejada na base (Task 24), com a da Cloudflare como espinha e as ideias da skill que o dono enviou num zip. `reviewing` ganha duas ideias de segurança.
+- Setor mobile na spec e no plano `docs/plans/2026-11-10-devorb-mobile.md`: `native-app`, `device-testing` e `mobile-release`, esta manual, com as skills da Expo, do Android, do Material 3 e de mobile do genjutsu e do Emil.
+- `motion` ganha referências de GSAP, Motion, transitions.dev e three.js, e `ui-review`, ideias do genjutsu e do reanimate. getdesign.md entra nas fontes de referência de UI.
+- Fontes acompanhadas: 27, com 133 caminhos. Ficam fora, por decisão do dono, jogos, Higgsfield e os MCPs do Mobbin e do Figma.
+- Testes: a `security-audit` só entra em `using-devorb` quando estiver pronta, o registro tem as 3 skills mobile, e as fontes mobile só emprestam ideias.
+
 ## 0.1.7
 
 - Fontes de referência de UI fixas, pedidas pelo dono, em `fusion/ui-sources.json`: as 13 da descrição do vídeo "UI Libraries for Claude Code", de Griffin Wooldridge, mais seis galerias de sites inteiros aprovadas por ele. São fundações, especialistas, componentes de destaque, o Mobbin e as galerias, com estilo, licença, acesso, como cada uma abre e as regras de uso. A Awwwards tem páginas separadas por estilo. A Task D2 as leva para dentro de `visual-direction`, que passa a consultá-las primeiro.
