@@ -1,10 +1,10 @@
 {
-  "source": "Owner's list. Entries with from 'video' are the sources in the description of 'UI Libraries for Claude Code (Ban the AI Look)', Griffin Wooldridge, https://www.youtube.com/watch?v=zsCGS-Yzjnw, read on 2026-11-09, minus social and affiliate links. Entries with from 'gallery' are whole-site galleries Claude suggested and the owner approved on 2026-11-09. Styles, notes, reading checks and the rules' wording are Claude's calls; the owner changes this file by pull request.",
+  "source": "Owner's list. Entries with from 'video' are the sources in the description of 'UI Libraries for Claude Code (Ban the AI Look)', Griffin Wooldridge, https://www.youtube.com/watch?v=zsCGS-Yzjnw, read on 2026-11-09, minus social and affiliate links. Entries with from 'gallery' are whole-site galleries Claude suggested and the owner approved on 2026-11-09. Entries with from 'owner' are sources the owner sent himself, on 2026-11-10. Styles, notes, reading checks and the rules' wording are Claude's calls; the owner changes this file by pull request.",
   "rules": [
     "Look here first, before building a component from scratch or choosing a direction. Name in the answer which entries you consulted.",
     "Foundations and specialists serve every style. Match standouts, screens and galleries by the client's words in 'styles'; when an entry has 'byStyle', open those pages first.",
     "Galleries show whole sites: study layout, rhythm, type and how the first screen is built, then make it the client's own. Never copy a site, its text or its images.",
-    "Stack: one foundation, the specialist for each job it covers (toasts, drawers, command menus, animated numbers) instead of a hand-built version, and at most one standout component per page (the one-standout rule).",
+    "Stack: one foundation, the specialist for each job it covers (toasts, drawers, command menus, animated numbers) instead of a hand-built version, and at most one standout component per page (the one-standout rule). On Operate surfaces (dashboards, admin, settings) use no standout at all: a system's identity lives in its details.",
     "Reuse what package.json already has. A new library is named in the direction contract before it is installed.",
     "Default shadcn has become an AI look of its own: when shadcn/ui is the foundation, restyle its theme tokens from the project's direction.",
     "Check the license of the exact component before copying it. On 21st.dev each component belongs to its author; on Aceternity UI only the free tier is free.",
@@ -244,6 +244,18 @@
       "access": "free",
       "reading": "browser",
       "note": "https://godly.website now redirects here."
+    },
+    {
+      "name": "getdesign.md",
+      "from": "owner",
+      "url": "https://github.com/VoltAgent/awesome-design-md/tree/main/design-md",
+      "kind": "systems",
+      "for": "About 85 DESIGN.md files that read the design systems of public brands, in the same format DevOrb's DESIGN.md follows. Study how a system is written: token names, states as their own keys, a known-gaps section.",
+      "styles": ["product", "clean", "bold"],
+      "license": "MIT text; each brand's identity, logos and fonts belong to the brand",
+      "access": "free-and-paid",
+      "reading": "text",
+      "note": "Study the structure; never apply a brand's colors, fonts or signature to a client. Do not run its npx installer. The site https://getdesign.md has paid parts; the files open as text on GitHub."
     }
   ]
 }
