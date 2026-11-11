@@ -171,14 +171,14 @@ test('bootstrap names every non-manual skill and stays small', () => {
 
 **Interfaces:**
 - Consumes: `fusion/sources.json`, `fusion/eval-config.json`.
-- Produces: `prepareArm({ name, ref }, { root }) -> Promise<string>`, que cria `.arms/<name>@<sha>/` com o plugin naquele commit e cópias frescas de `evals/` e `evals-reserved/`.
+- Produces: `prepareArm({ name, ref }, { root, suite, withPonytail, ponytailRef }) -> Promise<string>`, que cria `.arms/<name>@<sha>/` com o plugin naquele commit e uma cópia fresca só da suíte ativa, `evals/` ou `evals-reserved/`: a sondagem mostrou que uma rodada lê a outra. O braço `devorb` é a árvore de trabalho, sem `docs/`, `fusion/results/` e `fusion/ledger/`.
 - Produces: `evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation }) -> string[]`.
 - Produces: `decide({ cases, runs }) -> { accepted, regressions, belowBar, gaps }`.
 - Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>]`, que salva `fusion/results/<data>-<skill>.md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
 - Produces: `parseArms(text: string) -> string[]`. Aceita só `devorb`, `superpowers`, `mattpocock-skills` e `none`, e qualquer outro nome dá erro. `none` é o braço sem plugin: `prepareArm` cria `.arms/none/` com um plugin vazio e as cópias dos casos, a rodada usa `--ablation none` e não entra no cache de linhas de base, e a pontuação entra em `decide` como uma linha de base.
 
-- [ ] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`. Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
-- [ ] **Step 1: Sondar a ferramenta com um caso mínimo.** Crie `evals/probe/case.yaml` com um `scaffold_script`, um prompt que usa Bash e um grader `regex`. Rode com o Superpowers clonado no pino como alvo. Confirme e anote no commit:
+- [x] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`, trocando o nome pelo do Superpowers instalado (no Mac do dono, `superpowers@superpowers-dev`). Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
+- [x] **Step 1: Sondar a ferramenta com um caso mínimo.** Crie `evals/probe/case.yaml` com um `scaffold_script`, um prompt que usa Bash e um grader `regex`. Rode com o Superpowers clonado no pino como alvo. Confirme e anote no commit:
   - `claude plugin eval <dir>` aceita um diretório qualquer como alvo.
   - `--scaffold` e `--allow-tools Bash Edit Write` funcionam no Mac.
   - Se o `--json` traz pontuação e custo por rodada.
@@ -190,7 +190,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
   Salve a saída real em `tests/fixtures/eval-result.json`. Pergunte ao dono qual modelo ele usa e preencha `fusion/eval-config.json`.
 
   **Se o Mac recusar o sandbox ou o campo `plugins` não carregar dois plugins, pare e avise o dono antes de seguir:** o resto do plano depende disso. A alternativa é um executor próprio com `claude -p --plugin-dir` em configuração isolada.
-- [ ] **Step 2: Escrever os testes que falham.** O empate é medido contra a melhor linha de base, com tolerância de uma rodada.
+- [x] **Step 2: Escrever os testes que falham.** O empate é medido contra a melhor linha de base, com tolerância de uma rodada.
 
 ```js
 const d = (cases, runs = 3) => decide({ cases, runs });
@@ -213,9 +213,9 @@ assert.deepEqual(
 test('summarize reads a real eval result', () => { /* usa tests/fixtures/eval-result.json e confere pontuação e custo */ });
 ```
 
-- [ ] **Step 3: Rodar `npm test`.** Esperado: falha.
-- [ ] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize`, `parseArms` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o pino não mudar.
-- [ ] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Apague `evals/probe/` e faça o commit `feat: add version comparison tool`. Depois, rode `claude plugin eval . --case "evolving-*" --scaffold --allow-tools Bash Edit Write --trust-plugin --no-publish`, porque o ensaio da Task 19 rodou com agentes separados. Esperado: o mesmo resultado, inclusive o alvo `source: file` do grader `regex` `no-marker`.
+- [x] **Step 3: Rodar `npm test`.** Esperado: falha.
+- [x] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize`, `parseArms` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o pino não mudar.
+- [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Apague `evals/probe/` e faça o commit `feat: add version comparison tool`. Depois, rode `claude plugin eval . --case "evolving-*" --scaffold --allow-tools Bash Edit Write --trust-plugin --no-publish`, porque o ensaio da Task 19 rodou com agentes separados. Esperado: o mesmo resultado, inclusive o alvo `source: file` do grader `regex` `no-marker`. No Mac, isso rodou com `node tools/compare.mjs --skill evolving --arms devorb --ablation with-without`; o resultado está em `fusion/results/2026-11-11-evolving.md`.
 
 ### Task 5: Cenários de depuração
 
@@ -228,19 +228,21 @@ test('summarize reads a real eval result', () => { /* usa tests/fixtures/eval-re
 
 Graders ficam escondidos do agente, porque uma rodada não consegue ler o diretório de testes. A ferramenta não roda script depois do agente, então as checagens ocultas são graders `regex` e `llm` sobre os arquivos finais.
 
-- [ ] **Step 1: Portar o bug do teste de fusão.** `scaffold.sh` sai de `docs/spike-devorb-debugging/harness/build.sh`, só a parte do repositório de pagamentos. O prompt é o mesmo pedido em português do teste de fusão. `execution`: `max_turns: 60`, `timeout_seconds: 900`, `allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]`.
-- [ ] **Step 2: Escrever os graders.**
+- [x] **Step 1: Portar o bug do teste de fusão.** `scaffold.sh` sai de `docs/spike-devorb-debugging/harness/build.sh`, só a parte do repositório de pagamentos. O prompt é o mesmo pedido em português do teste de fusão. Ele não ficou guardado no repositório, então foi reescrito em volta do único trecho literal em `FUSAO.md`, "só faz parar de falhar, do jeito mais rápido". `execution`: `max_turns: 60`, `timeout_seconds: 900`, `allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]`.
+- [x] **Step 2: Escrever os graders.**
 
 | Grader | Tipo | Critério |
 |---|---|---|
-| `source-fix` (peso 3) | `llm`, foco `files` | A correção está em `src/store.js`, e qualquer leitor vê as próprias escritas. Chamar `flushNow()` nos chamadores não conta |
-| `no-sleep` | `regex`, alvo `test/payment-processing.test.js` | `sleep\(` com `match: not_contains` |
-| `deterministic-test` | `llm`, foco `files` | Existe teste que força a janela longa do lote e falha sempre no código original |
-| `refund-covered` | `llm`, foco `files` | `refundPayment` fica correto, por consequência ou por teste |
+| `source-fix` (peso 3) | `llm`, foco `{source: file, path: src/store.js}` | A correção está em `src/store.js`, e qualquer leitor vê as próprias escritas. Chamar `flushNow()` nos chamadores não conta |
+| `no-sleep` | `regex`, alvo `test/payment-processing.test.js` | `await\s+sleep\(\|setTimeout\([^)]*\d` com `match: not_contains` |
+| `deterministic-test` | `llm`, foco `trace` | Existe teste que força a janela longa do lote e falha sempre no código original |
+| `refund-covered` | `llm`, foco `trace` | `refundPayment` fica correto, por consequência ou por teste |
 
-- [ ] **Step 3: Portar os três cenários de pressão** de `tests/systematic-debugging/pressure-scenarios/` do Superpowers, com o nome da skill neutro. Grader: `regex` no `last_message`, `^\W*A\b`.
-- [ ] **Step 4: Criar o caso reservado com um subagente novo.** Ele recebe só: "um repositório Node pequeno com um bug cuja correção óbvia trata o sintoma, de forma diferente de um store com lote", mais o formato de caso. Ele não lê `docs/spike-devorb-debugging/` nem `skills/`. Os casos reservados ficam em `evals-reserved/`, fora da busca normal da ferramenta. Quem escreve a skill não abre essa pasta até terminá-la.
-- [ ] **Step 5: Validar cada `scaffold.sh` em uma pasta temporária.** Esperado: o repositório nasce, o bug aparece e `node --test` falha na maior parte das rodadas. Commit `test: add debugging scenarios`.
+Foco `files` num grader `llm` mostra ao juiz só os nomes dos arquivos criados, nunca o conteúdo, e deixa de fora os que já existiam. Para julgar um arquivo, use `{source: file, path}`. Use `trace` só quando a mudança cobre vários arquivos. `tests/graders.test.mjs` barra o foco `files`.
+
+- [x] **Step 3: Portar os três cenários de pressão** de `tests/systematic-debugging/pressure-scenarios/` do Superpowers, com o nome da skill neutro. Grader: `regex` no `last_message`, `^\W*A\W*(\n|$)`, com o prompt pedindo só a letra na primeira linha. A versão `^\W*A\b` aprovava "A opção C".
+- [x] **Step 4: Criar o caso reservado com um subagente novo.** Ele recebe só: "um repositório Node pequeno com um bug cuja correção óbvia trata o sintoma, de forma diferente de um store com lote", mais o formato de caso. Ele não lê `docs/spike-devorb-debugging/` nem `skills/`. Os casos reservados ficam em `evals-reserved/`, fora da busca normal da ferramenta. Quem escreve a skill não abre essa pasta até terminá-la.
+- [x] **Step 5: Validar cada `scaffold.sh` em uma pasta temporária.** Esperado: o repositório nasce, o bug aparece e `node --test` falha na maior parte das rodadas. Commit `test: add debugging scenarios`.
 
 ### Task 6: `debugging` e `using-devorb` pelo processo (portão do dono)
 

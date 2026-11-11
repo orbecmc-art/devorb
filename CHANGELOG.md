@@ -8,6 +8,9 @@
 - Por decisão do dono, o braço `superpowers` e o ponytail usam sempre o commit mais recente da branch principal, conferido na hora. `mattpocock-skills` usa o `lastAbsorbed`. Linhas de base dessas fontes ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas por caso enquanto o caso, o modelo, as rodadas, o ponytail e a ablação forem os mesmos.
 - Modelo dos testes: `claude-opus-5-5`, com teto de US$ 20 por braço (cada chamada de `claude plugin eval`). O ponytail entra em `fusion/sources.json` sem ser acompanhado e sem emprestar texto.
 - Os 5 casos `evals/evolving-*` não carregavam: o `pattern` com `: ` sem aspas era YAML inválido. As expressões ficaram iguais, agora entre aspas, e um teste impede que isso volte.
+- git dentro do sandbox do Mac: o `/usr/bin/git` é um atalho do `xcrun`, que o sandbox bloqueia. Cada braço agora leva uma cópia do git real, posta no PATH da rodada. O cache do `source-diff` virou um repositório bare, porque o sandbox não deixa gravar `.git/config`.
+- Graders `llm` com `focus: files` viam só os nomes dos arquivos criados, nunca o conteúdo. Agora cada grader lê o arquivo que julga, e um teste barra o foco `files`.
+- Cenários de depuração da Task 5: o bug de pagamentos do teste de fusão, os três cenários de pressão do Superpowers traduzidos e com o nome da skill neutro, e um caso reservado escrito por um agente que não viu os outros.
 
 ## 0.1.8
 
