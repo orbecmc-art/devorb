@@ -6,7 +6,7 @@
   "costUsd": 0.31493,
   "partial": false,
   "suite": {
-    "root": "/private/tmp/claude-501/-Users-gabriel-Documents-devorb--claude-worktrees-devorb-subagentes-task4-43565b/01a7c783-b336-4196-8345-c71702177096/scratchpad/probe/superpowers",
+    "root": "/tmp/probe/superpowers",
     "ablation": "with-without",
     "modelOverride": "sonnet",
     "caseFilter": "p*",
@@ -16,12 +16,12 @@
       {
         "name": "ponytail",
         "version": "5.3.3",
-        "path": "/private/tmp/claude-501/-Users-gabriel-Documents-devorb--claude-worktrees-devorb-subagentes-task4-43565b/01a7c783-b336-4196-8345-c71702177096/scratchpad/probe/superpowers/_extra/ponytail"
+        "path": "/tmp/probe/superpowers/_extra/ponytail"
       },
       {
         "name": "superpowers",
         "version": "7.0.2",
-        "path": "/private/tmp/claude-501/-Users-gabriel-Documents-devorb--claude-worktrees-devorb-subagentes-task4-43565b/01a7c783-b336-4196-8345-c71702177096/scratchpad/probe/superpowers"
+        "path": "/tmp/probe/superpowers"
       }
     ]
   },

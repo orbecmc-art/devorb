@@ -24,7 +24,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
    - **GitHub Pro com regra sem bypass:** é a proteção real, e tem custo.
    - **Rodar à mão:** recomendação de Claude enquanto as fusões não terminam.
    - **`.claude/settings.json` com bloqueio de push na `main`:** é grátis, mas fraco.
-2. ~~Rodada formal de `claude plugin eval` nos casos `evolving-*`~~: feita em 2026-11-11, no Step 5 da Task 4. Com a skill, 3 casos passaram nas 2 rodadas, e 2 casos em 1 de 2, cada um perdendo um único grader. Sem a skill, nenhum caso passou. Detalhes em `fusion/results/2026-11-11-evolving.md`.
+2. ~~Rodada formal de `claude plugin eval` nos casos `evolving-*`~~: feita em 2026-11-11, no Step 5 da Task 4. Com a skill, 3 casos passaram nas 2 rodadas, e 2 casos em 1 de 2, cada um perdendo um único grader. Sem a skill, nenhum caso passou. Detalhes em `fusion/results/2026-11-11-evolving-with-without.md`.
 
 ## Onde está
 
@@ -48,7 +48,7 @@ O Mac do dono já está pronto: Node 24, `gh` logado e a linha de comando do Cla
 
 - Node 22 ou mais novo, `git` e o `gh` logado (`gh auth login` e `gh auth setup-git`).
 - A linha de comando do Claude Code logada, porque os testes a chamam: `curl -fsSL https://claude.ai/install.sh | bash` e `claude auth login`.
-- O Superpowers e o ponytail continuam instalados: as comparações usam os dois. O ponytail não tem endereço no repositório: a Task 4 resolve o commit dele a partir da instalação do Mac, com `claude plugin details`.
+- O Superpowers e o ponytail podem continuar instalados, mas as comparações não usam a instalação: `tools/compare.mjs` baixa cada fonte do GitHub, no commit mais recente para Superpowers e ponytail.
 - Para a Task 24, o zip `Security audit-0.1.0-v1.zip` que o dono enviou, com SHA-256 `d21bd32b1d687bb6f73574854103349b596f6b02a1399acd821522d4e03dd143`. Ele não fica no repositório.
 
 **Depois:**
@@ -63,7 +63,7 @@ cd devorb
 
 Abra o Claude Code nessa pasta e cole:
 
-> Continue o plano do DevOrb com subagentes. Leia docs/plans/2026-11-08-devorb-base-progress.md, seção "Roteiro de lançamento", e siga a partir do Step 0 da Task 4.
+> Continue o plano do DevOrb com subagentes. Leia docs/plans/2026-11-08-devorb-base-progress.md, seção "Roteiro de lançamento", e siga a partir de onde o registro diz que parou.
 
 Para quem coordena a execução: o ledger fica em `.superpowers/sdd/2026-11-08-devorb-base/progress.md`, fora do git (a pasta está no `.gitignore`), com o relatório da sondagem ao lado. Numa máquina nova, crie-o de novo a partir deste arquivo. Não refaça as tasks feitas.
 
@@ -71,7 +71,7 @@ As fontes não estão no repositório. Busque cada uma no pino de `fusion/source
 
 ## O que não foi verificado
 
-- `npm test` passa no Mac, com Bash 3.2: 96 de 96 antes da Task 4 e 117 depois dela.
+- `npm test` passa no Mac, com Bash 3.2: 96 de 96 antes da Task 4, 117 depois dela e 126 no fim da branch das Tasks 4 e 5.
 - `tools/compare.mjs` só rodou de verdade na rodada formal da `evolving`, sem braço de fonte. O cache de linhas de base, os braços `superpowers` e `mattpocock-skills` e o `--with-ponytail` só rodaram com um `claude` falso nos testes. O formato de uma rodada que termina em erro foi deduzido do campo `error`, sem ver um erro real.
 - A sessão real do Step 0 mostrou o fluxo DevOrb, mas o agente não escreveu o nome `using-devorb` e apresentou skills `planned` como prontas.
 - As fontes de 2026-11-10 foram lidas por três subagentes, e Claude conferiu as linhas citadas. Da Cloudflare, só o resumo e a lista de arquivos foram lidos: a Task 24 lê a skill inteira. O m3.material.io não abriu, e o Material 3 vem só do `material-3-skill`.
@@ -211,10 +211,10 @@ A sondagem do Step 1 rodou 8 casos com Sonnet e custou US$ 1,07. O que ela mudou
 - **Braço só com a suíte ativa.** Numa rodada normal o agente leu um arquivo de `evals-reserved/` dentro do plugin, porque só a pasta de casos ativa é bloqueada. Por isso `prepareArm` copia só `evals/` ou só `evals-reserved/`, nunca as duas. Um canário depois confirmou que nada acima da raiz do plugin pode ser lido, então os braços continuam em `.arms/`. Custo: nenhum.
 - **Braço `devorb` sem respostas.** O braço é uma cópia da árvore de trabalho, porque a comparação roda antes do commit. Ficam fora `docs/`, onde está o bug do teste de fusão, `fusion/results/`, `fusion/ledger/` e `.superpowers/`. Custo: o braço difere do plugin instalado nessas pastas, que não têm skill.
 - **Ponytail dentro do braço.** O campo `plugins` de um caso troca o alvo e só aceita caminhos dentro dele. O ponytail vai para `<braço>/_extra/ponytail`, e cada caso recebe os dois caminhos. No braço `without` do `with-without`, o ponytail também sai, então uma linha de base com ponytail usa o braço `none`.
-- **`tool_used: Skill`** só conta na nota com `--ablation none`, que é o padrão do comparador. No `with-without`, ele vira só um indicador. É isso que os casos da Task 6 usam.
+- **`tool_used: Skill`** só conta na nota com `--ablation none`, que é o padrão do comparador. No `with-without`, ele vira só um indicador. Os casos de `using-devorb` da Task 6 rodam com `--ablation none` e o braço `none`.
 - **`decide` usa a taxa de aprovação de cada caso.** O empate tolera uma rodada a menos que a melhor linha de base. Uma lacuna exige pelo menos uma linha de base, e todos os braços em 0. Caso que não carregou, rodada com erro da ferramenta ou nenhum caso encontrado dão `accepted: false`.
 - **Os 5 casos `evolving-*` não carregavam:** `pattern: ^STATUS: ...` sem aspas é YAML inválido, e todos os casos são lidos antes do filtro `--case`. O padrão ganhou aspas, e um teste confere o frontmatter dos graders.
-- `--baseline-only` sem `--arms` roda `superpowers,mattpocock-skills,none`, como o R3 pede. Relatórios: `<data>-<skill>[-reserved][-baseline].md`.
+- `--baseline-only` sem `--arms` roda `superpowers,mattpocock-skills,none`, como o R3 pede. Relatórios: `<data>-<skill>[-reserved][-ponytail][-<ablação>][-baseline].md`, para uma rodada não apagar a outra do mesmo dia. As linhas de base em `fusion/results/baselines/` são commitadas, para valerem em outra máquina; o braço `devorb` não as lê.
 - Os hooks das fontes rodam durante o `claude plugin eval`: o SessionStart do Superpowers e o do ponytail, os dois na versão mais recente. O download nunca roda nada; o eval carrega cada braço como plugin. Custo: o que entrar na `main` deles roda no Mac do dono durante a comparação. Isso foi aceito para a linha de base ser justa.
 - A identidade do git no Mac é a mesma do PC (`orbecmc-art`).
 - **git dentro do sandbox.** No Mac, o `/usr/bin/git` é um atalho do `xcrun`, e o sandbox do eval nega `/Library/Developer/CommandLineTools`. Por isso nenhum comando git rodava dentro de uma rodada. A primeira rodada formal da `evolving` deu 0% por isso: a skill respondeu `STATUS: FALHOU`, como manda. `prepareArm` agora copia o git real para `<braço>/_extra/git` e roda o `claude` com ele no PATH. Se a cópia falhar, o relatório diz. Custo: cerca de 23 MB por braço.
@@ -272,7 +272,6 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | "the reference harness" em `claude-code-tools.md:3` | Task 13 |
 | Faltam fixtures de CRLF, descrição entre aspas, exclusão de manuais e `SKILL.md` ausente | Até a Task 17 |
 | `using-devorb` manda chamar skills que ainda não existem, o que gasta turnos na Task 6 | Anotar nos resultados da Task 6 |
-| `validate.sh` do teste de fusão usa `sed -i` sem sufixo, que falha no Mac | Task 5, se reaproveitar |
 | "Run `/compact`" contradiz `phase-boundaries.md:17` | Próxima edição do arquivo |
 | O verificador lê binários como texto | Quando entrar o primeiro binário |
 | Licenças com CRLF, teste de registro superficial, licenças duplicadas no teste de fusão | Quando convier |
@@ -281,14 +280,14 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | `source-diff`: não emite `index`, só `[]` e saída 0 se toda fonte tiver `trackedForFusion: false`, e o limite de 30 s também cobre buscas de arquivo | Quando convier |
 | `evolving`: rodada só com issue não guarda as linhas de ledger, que são refeitas no mês seguinte; a skill está com 8 tokens de folga, então o próximo acréscimo vai para `references/` | Quando convier |
 | `evolving`: em ensaio, `OK com pull request` aparece sem pull request; script ou nome estranho em mês só com skills `planned` aparece como contagem em uma linha; `npm test` citado em linha, não em bloco, em uma das rodadas | Quando convier |
-| Casos `evolving-*`: formato, alvos e `^` no `regex` só confirmados na rodada formal | Task 4 |
 | `checkSkills('.')` depende da pasta atual; caminho longo de fixture; descrição YAML em bloco | Quando convier |
+| `--skill all` com braços de fonte: os scaffolds `evolving-*` precisam de `tools/` e falham fora do braço `devorb`, o que vira erro de rodada e bloqueia a aprovação. Correção: pular `evolving-*` nos outros braços | Antes da Task 21, Step 2 |
 | `compare.mjs`: com `--ablation with-without`, o relatório mostra só o braço com o plugin; o sem plugin fica só no `--json` | Antes de comparar outra skill assim |
 | `evolving`: em 1 de 4 rodadas de `source-failed`, a resposta não começou com a linha de status | Na próxima edição testada da `evolving` |
 | Caso `debugging-flaky-payment`: o repositório entregue mantém o commit com `await sleep(1000)`, como no teste de fusão, e falha só em cerca de 2 de 10 rodadas (9 de 10 sem o sleep). O plano pedia falha na maior parte; mantido de propósito, porque nenhum grader roda os testes | Ver na Task 6 se o agente reproduz |
 | Cenário de pressão `outage`: no teste de fusão, todos os braços escolheram C; deve dar lacuna, não separação | Task 6 |
 | Graders `trace` dependem do teto de cerca de 100 mil caracteres do trace; rodadas longas podem perder as últimas edições | Se um resultado parecer errado |
-| Holdout da `evolving`: o `regex` de tamanho conta caracteres, não bytes; o juiz de `pr-draft.md` ficou com 4 graders `llm`, o que pesa mais o rascunho | Próxima edição testada da `evolving` |
+| `evolving`: o `regex` de tamanho do ensaio e do holdout conta caracteres, não bytes; no holdout, o juiz de `pr-draft.md` ficou com 4 graders `llm`, o que pesa mais o rascunho | Próxima edição testada da `evolving` |
 | `compare.mjs`: o arquivo de cache tem um por caso, então rodar com e sem ponytail, ou com outro `--ablation`, sobrescreve a outra linha de base e paga de novo | Antes da Task 21, que roda com ponytail |
 | `compare.mjs`: os testes deixam pastas em `$TMPDIR`, como os de `source-diff`; os testes da linha de comando não rodam no Windows; `globRegex` poderia ser `startsWith` | Quando convier |
 | `compare.mjs`: erro de rodada em qualquer braço do JSON, inclusive no `without`, impede o cache e bloqueia a aprovação, o que pode pagar uma rodada a mais | Se custar caro |

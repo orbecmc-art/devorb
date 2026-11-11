@@ -267,6 +267,7 @@ function parseArgs(argv) {
   if (!opts.skill || !opts.arms) throw new Error('--skill and --arms are required');
   if (!/^(all|[a-z0-9][a-z0-9-]*)$/.test(opts.skill)) throw new Error(`bad skill name ${JSON.stringify(opts.skill)}`);
   if (opts.runs !== undefined && !/^[1-9]\d*$/.test(opts.runs)) throw new Error(`--runs must be a positive integer, got ${JSON.stringify(opts.runs)}`);
+  if (!['none', 'with-without'].includes(opts.ablation)) throw new Error(`--ablation must be none or with-without, got ${JSON.stringify(opts.ablation)}`);
   return opts;
 }
 
@@ -368,7 +369,8 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
       out(`${arm.label}: claude plugin eval ${caseGlob}\n`);
       const code = await runClaude(
         claude,
-        evalArgs({ armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath, ablation: opts.ablation, evalDir: suite }),
+        // The no-plugin arm has nothing to ablate: with-without would only double its cost.
+        evalArgs({ armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath, ablation: name === 'none' ? 'none' : opts.ablation, evalDir: suite }),
         env,
       );
       if (!existsSync(jsonPath)) throw new Error(`arm ${arm.label}: claude plugin eval exited ${code} without writing ${jsonPath}`);
@@ -397,8 +399,12 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
   if (arms.some((a) => caseNames.some((c) => a.cases[c]?.errors))) blockers.push('rodadas com erro da ferramenta');
   const accepted = outcome.accepted && !!devorb && blockers.length === 0;
   const date = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD in local time
-  // A baseline-only report never overwrites the day's devorb verdict.
-  const reportPath = join(root, 'fusion', 'results', `${date}-${opts.skill}${opts.reserved ? '-reserved' : ''}${devorb ? '' : '-baseline'}.md`);
+  // One report per variant of the same day, so a baseline-only or ponytail run never overwrites the devorb verdict.
+  const suffix = [opts.reserved && 'reserved', opts.withPonytail && 'ponytail', opts.ablation !== 'none' && opts.ablation, !devorb && 'baseline']
+    .filter(Boolean)
+    .map((s) => `-${s}`)
+    .join('');
+  const reportPath = join(root, 'fusion', 'results', `${date}-${opts.skill}${suffix}.md`);
   mkdirSync(dirname(reportPath), { recursive: true });
   writeFileSync(
     reportPath,

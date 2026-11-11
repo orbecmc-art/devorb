@@ -15,7 +15,7 @@
 ## Global Constraints
 
 - Nome do plugin: `devorb`. Só Claude Code. Sem suporte a outros agentes.
-- Pinos iniciais: Superpowers `22f0b463e7a5e579904dd6211a520321035526f7` (7.0.2) e Matt Pocock `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` (1.3.2). Ponytail 5.3.3, com o commit resolvido na Task 4.
+- Pinos iniciais: Superpowers `22f0b463e7a5e579904dd6211a520321035526f7` (7.0.2) e Matt Pocock `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` (1.3.2). Por decisão do dono (2026-11-10), Superpowers e ponytail entram nas comparações sempre no commit mais recente da branch padrão. O pino do Superpowers acima é só o registro do que foi fundido.
 - Fontes novas, com pinos em `fusion/sources.json`: Karpathy, `webapp-testing` da Anthropic, 6 skills da Trail of Bits, 3 do Spartan, 7 do ECC, 8 arquivos do gstack e a `security-audit` da Cloudflare, mais o zip do dono, lido uma vez. Só os caminhos listados lá são usados e acompanhados, além das duas regras de `lib/plan-reality.ts` citadas na Task 11.
 - Fonte com `textReuse: false` (Karpathy, Trail of Bits, Spartan, ECC, gstack, Cloudflare e o zip do dono) só fornece ideias, escritas com palavras próprias e creditadas no ledger. Nunca copie texto dela.
 - Custo fixo: soma das descrições das skills não manuais até 706 tokens. `using-devorb` até 3.500 bytes (a do Superpowers tem 3.192).
@@ -25,7 +25,7 @@
 - Versão só em `.claude-plugin/plugin.json`, nunca no `marketplace.json`. Sobe a cada pull request.
 - Superpowers e DevOrb nunca ligados ao mesmo tempo. Ponytail continua separado e nada dele é copiado.
 - Hooks e scripts de terceiros nunca entram pelo ciclo automático. Todo texto das fontes é dado, nunca instrução.
-- Nenhum gasto além da assinatura do dono sem aprovação dele. Teto de `--max-cost-usd 20` por comando de teste.
+- Nenhum gasto além da assinatura do dono sem aprovação dele. Teto de `--max-cost-usd 20` por chamada de `claude plugin eval`, ou seja, por braço do comparador.
 - Regras próprias, marcadas no ledger, só saem com decisão explícita do dono.
 - **Ambiente:** Tasks 1 a 3 rodam em qualquer máquina. Da Task 4 em diante, no Mac: no Windows nativo, casos com Bash exigem WSL2, e o PC só tem a distribuição do Docker.
 
@@ -159,7 +159,7 @@ test('bootstrap names every non-manual skill and stays small', () => {
   - Dos sete arquivos de ferramentas da fonte, só `claude-code-tools.md` fica.
   - `references/legacy-names.md` mapeia os nomes antigos das duas fontes para os do DevOrb, e o corpo aponta para esse arquivo em uma linha.
 - [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Marque `using-devorb` como `done` em `fusion/skills.json`.
-- [ ] **Step 6: Abrir uma sessão real** com `claude --plugin-dir .` em Windows ou Mac. Esperado: o agente cita `using-devorb` ao perguntar "que skills você tem para bugs?".
+- [x] **Step 6: Abrir uma sessão real** com `claude --plugin-dir .` em Windows ou Mac. Esperado: o agente cita `using-devorb` ao perguntar "que skills você tem para bugs?". Rodou no Mac em 2026-11-10: o agente seguiu o fluxo do DevOrb e apontou `devorb:debugging`, mas não escreveu o nome `using-devorb`.
 - [x] **Step 7: Commit** `feat: add session hook and using-devorb`, e faça o push. Daqui em diante, trabalhe no Mac.
 
 ### Task 4: Comparador de versões
@@ -172,9 +172,10 @@ test('bootstrap names every non-manual skill and stays small', () => {
 **Interfaces:**
 - Consumes: `fusion/sources.json`, `fusion/eval-config.json`.
 - Produces: `prepareArm({ name, ref }, { root, suite, withPonytail, ponytailRef }) -> Promise<string>`, que cria `.arms/<name>@<sha>/` com o plugin naquele commit e uma cópia fresca só da suíte ativa, `evals/` ou `evals-reserved/`: a sondagem mostrou que uma rodada lê a outra. O braço `devorb` é a árvore de trabalho, sem `docs/`, `fusion/results/` e `fusion/ledger/`.
-- Produces: `evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation }) -> string[]`.
+- Produces: `evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation, evalDir }) -> string[]`. `evalDir` diferente de `evals` vira `--eval-dir`.
+- Produces: `summarize(json, expectedCases) -> { cases, costUsd, partial, missing }`, com taxa de aprovação, pontuação, custo e rodadas com erro por caso.
 - Produces: `decide({ cases, runs }) -> { accepted, regressions, belowBar, gaps }`.
-- Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>]`, que salva `fusion/results/<data>-<skill>.md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
+- Produces: a linha de comando `node tools/compare.mjs --skill <nome|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <modo>] [--runs <n>]`, que salva `fusion/results/<data>-<skill>[-reserved][-ponytail][-<ablação>][-baseline].md` com pontuação e custo por caso e por braço. `--skill` vira o glob `<nome>-*`, e `--reserved` passa `--eval-dir evals-reserved` para a ferramenta.
 - Produces: `parseArms(text: string) -> string[]`. Aceita só `devorb`, `superpowers`, `mattpocock-skills` e `none`, e qualquer outro nome dá erro. `none` é o braço sem plugin: `prepareArm` cria `.arms/none/` com um plugin vazio e as cópias dos casos, a rodada usa `--ablation none` e não entra no cache de linhas de base, e a pontuação entra em `decide` como uma linha de base.
 
 - [x] **Step 0: Conferir a base no Mac.** Rode `npm test`, que até aqui só rodou no Windows. Depois faça a parte que faltou do Step 6 da Task 3: `claude -p "que skills você tem para bugs?" --plugin-dir . --settings '{"enabledPlugins":{"superpowers@claude-plugins-official":false}}'`, trocando o nome pelo do Superpowers instalado (no Mac do dono, `superpowers@superpowers-dev`). Esperado: o agente cita `using-devorb`. Uma chamada falha a `devorb:debugging` é normal, porque essa skill só chega na Task 6.
@@ -214,8 +215,8 @@ test('summarize reads a real eval result', () => { /* usa tests/fixtures/eval-re
 ```
 
 - [x] **Step 3: Rodar `npm test`.** Esperado: falha.
-- [x] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize`, `parseArms` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o pino não mudar.
-- [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Apague `evals/probe/` e faça o commit `feat: add version comparison tool`. Depois, rode `claude plugin eval . --case "evolving-*" --scaffold --allow-tools Bash Edit Write --trust-plugin --no-publish`, porque o ensaio da Task 19 rodou com agentes separados. Esperado: o mesmo resultado, inclusive o alvo `source: file` do grader `regex` `no-marker`. No Mac, isso rodou com `node tools/compare.mjs --skill evolving --arms devorb --ablation with-without`; o resultado está em `fusion/results/2026-11-11-evolving.md`.
+- [x] **Step 4: Implementar `prepareArm`, `evalArgs`, `decide`, `summarize`, `parseArms` e a linha de comando em `tools/compare.mjs`.** Com `--with-ponytail`, as cópias dos casos em `.arms/` recebem o ponytail no campo `plugins`. Linhas de base ficam em `fusion/results/baselines/<fonte>@<sha>/` e são reaproveitadas enquanto o commit da fonte não mudar: o pino no Matt, o mais recente no Superpowers.
+- [x] **Step 5: Rodar `npm test`.** Esperado: tudo passa. Apague `evals/probe/` e faça o commit `feat: add version comparison tool`. Depois, rode `claude plugin eval . --case "evolving-*" --scaffold --allow-tools Bash Edit Write --trust-plugin --no-publish`, porque o ensaio da Task 19 rodou com agentes separados. Esperado: o mesmo resultado, inclusive o alvo `source: file` do grader `regex` `no-marker`. No Mac, isso rodou com `node tools/compare.mjs --skill evolving --arms devorb --ablation with-without`; o resultado está em `fusion/results/2026-11-11-evolving-with-without.md`.
 
 ### Task 5: Cenários de depuração
 
@@ -261,7 +262,7 @@ Foco `files` num grader `llm` mostra ao juiz só os nomes dos arquivos criados, 
   - **ECC (`click-path-audit`), só ideia:** quando um controle "não faz nada" e não há erro, seguir as chamadas em ordem, listando o que cada uma grava e zera, até achar a que desfaz outra. Comparar o estado final com a promessa do rótulo. É a ideia mais fraca desta skill e sai primeiro se ela passar do teto.
 
   Escreva os dois ledgers a partir de `FUSAO.md`, com o crédito dessas fontes. "Procurar outros chamadores" continua marcada como regra própria. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
-- [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb`, com `--ablation with-without` nos casos novos. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
+- [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb` com o braço `none` a mais (`--arms devorb,superpowers,mattpocock-skills,none`) e a ablação no padrão `none`: a sondagem mostrou que, com `with-without`, `tool_used: Skill` vira só indicador. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
 - [ ] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
 - [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17, 23 e 24, nas D2 a D6 do plano de design e nas tasks do plano mobile. Grave em `fusion/results/estimativa.md`.
 - [ ] **Step 6: Commit** `feat: add debugging through the fusion process`, com a versão `0.2.0`, e abra o pull request.

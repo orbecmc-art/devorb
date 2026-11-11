@@ -5,7 +5,7 @@ import {
   chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, statSync, symlinkSync, writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { decide, evalArgs, parseArms, prepareArm, resolveRef, runCli, summarize } from '../tools/compare.mjs';
 
@@ -313,6 +313,7 @@ const modeFile = new URL('./mode.json', import.meta.url);
 const mode = existsSync(modeFile) ? JSON.parse(readFileSync(modeFile, 'utf8')) : {};
 appendFileSync(new URL('./log', import.meta.url), arm + ' ' + at('--runs') + ' ' + at('--case') + '\\n');
 appendFileSync(new URL('./env', import.meta.url), [arm, process.env.PATH.split(':')[0], process.env.GIT_EXEC_PATH ?? '-', process.env.HOME ?? '-'].join(' ') + '\\n');
+appendFileSync(new URL('./ablation', import.meta.url), arm + ' ' + at('--ablation') + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
 const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
 writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
@@ -325,6 +326,7 @@ process.exitCode = mode.partial ? 2 : 0;
     bin,
     log: () => read(join(dir, 'log')).trim().split('\n'),
     env: () => read(join(dir, 'env')).trim().split('\n'),
+    ablation: () => read(join(dir, 'ablation')).trim().split('\n'),
     mode: (m) => writeFileSync(join(dir, 'mode.json'), JSON.stringify(m)),
   };
 }
@@ -344,6 +346,26 @@ test('CLI runs claude with the bundled git first on PATH, and with the plain env
   assert.match(read(skip.stdout.trim().split('\n').at(-1)), /\n- git não empacotado no braço `none`: Command failed: xcrun --find git \| xcrun: error: unable to find git\n/);
   assert.ok(!existsSync(git));
   assert.equal(fake.env()[1], `none ${process.env.PATH.split(':')[0]} - ${process.env.HOME}`);
+});
+
+test('CLI runs the none arm without ablation and names reports apart by suite, ponytail and ablation', async () => {
+  const { root } = makeRoot();
+  const fake = fakeClaude();
+  const report = async (...flags) => {
+    const run = io(root, fake.bin);
+    assert.equal(await runCli(['--skill', 'demo', ...flags], run), 0, run.stderr);
+    return basename(run.stdout.split('\n').find((l) => l.endsWith('.md')));
+  };
+  const date = new Date().toLocaleDateString('sv-SE');
+  assert.equal(await report('--arms', 'devorb,none', '--ablation', 'with-without'), `${date}-demo-with-without.md`);
+  const devorb = `devorb@${git(root, 'rev-parse', '--short', 'HEAD')}`;
+  assert.deepEqual(fake.ablation(), [`${devorb} with-without`, 'none none'], 'the no-plugin arm has nothing to ablate');
+  assert.equal(await report('--arms', 'devorb', '--with-ponytail'), `${date}-demo-ponytail.md`);
+  assert.equal(await report('--arms', 'none', '--reserved', '--with-ponytail', '--ablation', 'with-without'), `${date}-demo-reserved-ponytail-with-without-baseline.md`);
+
+  const bad = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'none', '--ablation', '../x'], bad), 2);
+  assert.match(bad.stderr, /ablation/);
 });
 
 test('CLI drops a git the source ships, so claude gets the plain env', async () => {
