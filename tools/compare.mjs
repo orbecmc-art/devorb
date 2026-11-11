@@ -22,8 +22,9 @@ const LOCAL_TIMEOUT_MS = 30_000;
 const EPSILON = 1e-9;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const USAGE =
-  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>]\n' +
+  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>] [--concurrency <n>]\n' +
   '  --baseline-only skips devorb; without --arms it runs superpowers,mattpocock-skills,none\n' +
+  '  --concurrency 1-8 (default 1): eval runs at once, all on one credential and rate limit\n' +
   '  evolving-* cases need tools/source-diff.mjs in the arm, so compare them only with --arms devorb --ablation with-without\n';
 
 export function parseArms(text) {
@@ -34,12 +35,14 @@ export function parseArms(text) {
   return arms;
 }
 
-export function evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation, evalDir = 'evals' }) {
+export function evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, ablation, evalDir = 'evals', concurrency = 1 }) {
   return [
     'plugin', 'eval', armDir, '--case', caseGlob,
     ...(evalDir === 'evals' ? [] : ['--eval-dir', evalDir]),
     '--runs', String(runs), '--model', model, '--scaffold', '--allow-tools', 'Bash', 'Edit', 'Write',
-    '--ablation', ablation, '--json', jsonPath, '--max-cost-usd', String(maxCostUsd), '--threshold', '0', '--trust-plugin', '--no-publish',
+    '--ablation', ablation, '--json', jsonPath, '--max-cost-usd', String(maxCostUsd),
+    ...(concurrency > 1 ? ['-j', String(concurrency)] : []),
+    '--threshold', '0', '--trust-plugin', '--no-publish',
   ];
 }
 
@@ -257,7 +260,7 @@ function suiteCases(root, files, suite) {
 function parseArgs(argv) {
   const opts = { withPonytail: false, baselineOnly: false, reserved: false, ablation: 'none' };
   const flags = { '--with-ponytail': 'withPonytail', '--baseline-only': 'baselineOnly', '--reserved': 'reserved' };
-  const values = { '--skill': 'skill', '--arms': 'arms', '--ablation': 'ablation', '--runs': 'runs' };
+  const values = { '--skill': 'skill', '--arms': 'arms', '--ablation': 'ablation', '--runs': 'runs', '--concurrency': 'concurrency' };
   for (let i = 0; i < argv.length; i++) {
     if (flags[argv[i]]) opts[flags[argv[i]]] = true;
     else if (values[argv[i]] && i + 1 < argv.length) opts[values[argv[i]]] = argv[++i];
@@ -268,6 +271,7 @@ function parseArgs(argv) {
   if (!/^(all|[a-z0-9][a-z0-9-]*)$/.test(opts.skill)) throw new Error(`bad skill name ${JSON.stringify(opts.skill)}`);
   if (opts.runs !== undefined && !/^[1-9]\d*$/.test(opts.runs)) throw new Error(`--runs must be a positive integer, got ${JSON.stringify(opts.runs)}`);
   if (!['none', 'with-without'].includes(opts.ablation)) throw new Error(`--ablation must be none or with-without, got ${JSON.stringify(opts.ablation)}`);
+  if (opts.concurrency !== undefined && !/^[1-8]$/.test(opts.concurrency)) throw new Error(`--concurrency must be an integer from 1 to 8, got ${JSON.stringify(opts.concurrency)}`);
   return opts;
 }
 
@@ -370,7 +374,11 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
       const code = await runClaude(
         claude,
         // The no-plugin arm has nothing to ablate: with-without would only double its cost.
-        evalArgs({ armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath, ablation: name === 'none' ? 'none' : opts.ablation, evalDir: suite }),
+        // Concurrency stays out of the cache key: it changes speed, not results.
+        evalArgs({
+          armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath,
+          ablation: name === 'none' ? 'none' : opts.ablation, evalDir: suite, concurrency: Number(opts.concurrency ?? 1),
+        }),
         env,
       );
       if (!existsSync(jsonPath)) throw new Error(`arm ${arm.label}: claude plugin eval exited ${code} without writing ${jsonPath}`);

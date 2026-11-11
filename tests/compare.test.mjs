@@ -133,6 +133,14 @@ test('evalArgs adds --eval-dir for the reserved suite only', () => {
   assert.deepEqual(evalArgs({ ...base, evalDir: 'evals' }), evalArgs(base));
 });
 
+test('evalArgs adds -j after --max-cost-usd only for more than one run at once', () => {
+  const base = { armDir: 'a', caseGlob: '*', runs: 2, model: 'm', maxCostUsd: 5, jsonPath: 'o.json', ablation: 'none' };
+  const args = evalArgs({ ...base, concurrency: 3 });
+  assert.deepEqual(args.slice(args.indexOf('--max-cost-usd'), args.indexOf('--threshold')), ['--max-cost-usd', '5', '-j', '3']);
+  assert.deepEqual(args.filter((x) => x !== '-j' && x !== '3'), evalArgs(base));
+  assert.deepEqual(evalArgs({ ...base, concurrency: 1 }), evalArgs(base));
+});
+
 test('summarize reads a real eval result', () => {
   const json = JSON.parse(read(new URL('./fixtures/eval-result.json', import.meta.url)));
   const s = summarize(json, ['probe', 'ponytail-probe', 'debugging-gone']);
@@ -314,6 +322,7 @@ const mode = existsSync(modeFile) ? JSON.parse(readFileSync(modeFile, 'utf8')) :
 appendFileSync(new URL('./log', import.meta.url), arm + ' ' + at('--runs') + ' ' + at('--case') + '\\n');
 appendFileSync(new URL('./env', import.meta.url), [arm, process.env.PATH.split(':')[0], process.env.GIT_EXEC_PATH ?? '-', process.env.HOME ?? '-'].join(' ') + '\\n');
 appendFileSync(new URL('./ablation', import.meta.url), arm + ' ' + at('--ablation') + '\\n');
+appendFileSync(new URL('./args', import.meta.url), JSON.stringify(a) + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
 const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
 writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
@@ -327,6 +336,7 @@ process.exitCode = mode.partial ? 2 : 0;
     log: () => read(join(dir, 'log')).trim().split('\n'),
     env: () => read(join(dir, 'env')).trim().split('\n'),
     ablation: () => read(join(dir, 'ablation')).trim().split('\n'),
+    args: () => read(join(dir, 'args')).trim().split('\n').map((l) => JSON.parse(l)),
     mode: (m) => writeFileSync(join(dir, 'mode.json'), JSON.stringify(m)),
   };
 }
@@ -366,6 +376,26 @@ test('CLI runs the none arm without ablation and names reports apart by suite, p
   const bad = io(root, fake.bin);
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'none', '--ablation', '../x'], bad), 2);
   assert.match(bad.stderr, /ablation/);
+});
+
+test('CLI passes --concurrency through as -j, keeps it out of the cache key and rejects bad values', async () => {
+  const { root, superpowers } = makeRoot();
+  const fake = fakeClaude();
+  const jobs = () => fake.args().map((a) => (a.includes('-j') ? a[a.indexOf('-j') + 1] : '-'));
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers', '--concurrency', '3'], io(root, fake.bin)), 0);
+  assert.deepEqual(jobs(), ['3', '3']);
+  const cacheFile = join(root, 'fusion', 'results', 'baselines', `superpowers@${superpowers.sha}`, 'evals', 'demo-one.json');
+  assert.equal('concurrency' in JSON.parse(read(cacheFile)), false);
+
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers'], io(root, fake.bin)), 0);
+  assert.deepEqual(jobs(), ['3', '3', '-'], 'default 1 adds no -j, and the cached baseline is reused');
+
+  for (const bad of ['0', '9', '2.5', 'x']) {
+    const run = io(root, fake.bin);
+    assert.equal(await runCli(['--skill', 'demo', '--arms', 'none', '--concurrency', bad], run), 2, bad);
+    assert.match(run.stderr, /--concurrency/);
+  }
+  assert.equal(fake.args().length, 3);
 });
 
 test('CLI drops a git the source ships, so claude gets the plain env', async () => {
