@@ -12,7 +12,7 @@ Then loosen one thing per query, for example a name turned into a wildcard, or t
 
 ## Clear a candidate before you count it
 
-For each hit, look for what keeps the bad value out: a guard or a validation earlier on the path, a type that cannot hold it, callers that never pass it. Read the whole function and its callers. A candidate counts only when you fail to clear it. Code that nothing calls today still counts, below the live paths.
+For each hit, look for what keeps the bad value out: a guard or a validation earlier on the path, a type that cannot hold it, callers that never pass it. Read the whole function and its callers. A candidate counts only when you fail to clear it. Unused code still counts, ranked after the live paths.
 
 ## Write it down
 

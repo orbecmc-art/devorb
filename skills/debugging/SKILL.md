@@ -18,7 +18,7 @@ These gates hold hardest when the fix looks obvious, time is short, someone seni
 
 ## 1. Build a red loop
 
-**Orient, in minutes.** Read the whole error and stack trace. Check recent changes: git log and diff, dependencies. Before blaming the code, list what differs between where it fails and where it works: deployed version, config, env vars, infrastructure, service versions. Each difference is a lead for the loop, not a cause to fix. On a live service, read logs and save state before any restart. Read `GLOSSARY.md` and ADRs in the area if they exist. This aims the loop; theories wait for phase 3.
+**Orient, in minutes.** Read the whole error and stack trace. Check recent changes: git log and diff, dependencies. List what differs between where it fails and where it works: deployed version, config, env vars, infrastructure, service versions. Each difference is a lead for the loop, not a cause to fix. On a live service, read logs and save state before any restart. Read `GLOSSARY.md` and ADRs in the area if they exist. This aims the loop; theories wait for phase 3.
 
 **Many components and unclear which layer breaks** (CI → build → signing, API → service → database): log what enters and leaves each boundary, run once, and aim the loop at the layer that fails.
 
