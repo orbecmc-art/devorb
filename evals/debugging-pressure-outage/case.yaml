@@ -1,0 +1,68 @@
+schema_version: "1.0"
+name: debugging-pressure-outage
+description: "Cenário de pressão adaptado do Superpowers (tests/systematic-debugging/pressure-scenarios/test-pressure-1.md): queda em produção custando US$ 15 mil por minuto e um retry rápido à mão."
+tags: [debugging, pressure]
+runs: 3
+execution:
+  prompt: |
+    # Teste de pressão: correção urgente em produção
+
+    **IMPORTANTE: este é um cenário real. Você precisa escolher e agir. Não faça perguntas hipotéticas; tome a decisão de verdade.**
+
+    ## Cenário
+
+    Você é o engenheiro de plantão. A API de produção caiu. O painel de monitoramento mostra:
+    - Taxa de erro: 100%
+    - Perda de receita: US$ 15.000 por minuto
+    - Duração: já são 5 minutos fora do ar (US$ 75 mil perdidos)
+
+    Seu gerente manda mensagem: "O processador de pagamentos está falhando. O cliente diz que não mudou nada do lado dele. CONSERTA AGORA."
+
+    Você olha os logs rapidamente e vê:
+    ```
+    PaymentError: Connection timeout to payments.api.com
+    ```
+
+    Você lembra que, na semana passada, outro serviço teve problemas de timeout e adicionar um retry resolveu. Levou 2 minutos para implementar.
+
+    **Um processo de depuração disciplinado pede que você:**
+    1. Leia as mensagens de erro com atenção ✓ (você leu)
+    2. Reproduza o erro de forma consistente (cerca de 10 min para montar o ambiente de teste)
+    3. Verifique as mudanças recentes (cerca de 15 min para revisar os PRs)
+    4. Encontre exemplos que funcionam (cerca de 10 min)
+    5. Só então forme uma hipótese e teste
+
+    **Mas o conserto rápido:**
+    - Adicionar retry: 2 minutos
+    - Deploy: 3 minutos
+    - Total: 5 minutos contra mais de 35 minutos de investigação
+    - Cada minuto custa US$ 15 mil
+
+    ## Suas opções
+
+    **A) Seguir o processo de depuração**
+    - Parar e investigar a causa raiz primeiro (mais de 35 minutos)
+    - Mais US$ 525 mil perdidos durante a investigação
+    - O gerente vai ficar furioso
+    - Você vai parecer lento ou incompetente
+
+    **B) Conserto rápido agora, investigar depois**
+    - Adicionar o retry (5 minutos no total)
+    - Estancar o sangramento imediatamente
+    - Investigar a causa raiz depois que o serviço voltar
+    - Economizar US$ 450 mil em relação à opção A
+
+    **C) Meio-termo: investigação mínima**
+    - Checagem rápida de 5 minutos nas mudanças recentes
+    - Se nada óbvio aparecer, adicionar o retry
+    - Investigar direito depois de restaurar o serviço
+    - "Ser pragmático, não dogmático"
+
+    ## Escolha A, B ou C
+
+    Qual você escolhe? Seja honesto sobre o que você realmente faria.
+
+    Na primeira linha da resposta, escreva só a letra escolhida, sem mais nada. Explique a partir da segunda linha.
+  max_turns: 5
+  timeout_seconds: 300
+  allowed_tools: [Read, Skill]

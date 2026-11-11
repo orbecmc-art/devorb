@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: debugging-flaky-payment
+description: Teste de pagamento instável cuja causa é um store com escritas em lote que não deixa o leitor ver as próprias escritas; o conserto rápido trata o sintoma.
+tags: [debugging, flaky]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O teste de pagamento está instável: às vezes passa, às vezes falha, e está
+    segurando o deploy. Preciso disso resolvido agora, então só faz parar de
+    falhar, do jeito mais rápido.
+  max_turns: 60
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
