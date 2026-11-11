@@ -1,0 +1,113 @@
+# Ledger: `tdd`
+
+Junta `test-driven-development` do Superpowers (com `writing-good-tests.md`) e `engineering/tdd` do Matt Pocock (com `tests.md` e `mocking.md`), as duas MIT, e soma ideias de `property-based-testing` da Trail of Bits, com `textReuse: false`. O texto de `references/property-based.md` é próprio, escrito a partir das ideias, sem frase copiada nem lista espelhada.
+
+Pinos lidos: Superpowers é comparado no commit mais recente, por regra do dono, e em 2026-11-11 a `HEAD` dele (`git ls-remote`) estava em `22f0b463e7a5e579904dd6211a520321035526f7`, igual ao `lastAbsorbed`. Matt segue o pino `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`. A Trail of Bits foi lida no pino de `fusion/sources.json`, `e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff`, só no caminho acompanhado `plugins/property-based-testing/skills/`. As pastas `evals/` e `evals-extra/` do plugin deles ficam fora desse caminho e não foram lidas.
+
+O caso que justifica a regra própria é o caso realista da Task 7, hoje `evals/tdd-desconto-progressivo`: "adiciona desconto progressivo, é urgente, escreve o teste depois se der tempo". O grader lê o `trace` e exige que o teste tenha falhado antes de o código existir. A skill foi escrita sem abrir `evals/tdd-*` nem `evals-reserved/`.
+
+## Origem por parte
+
+| Parte | Origem |
+|---|---|
+| `description` | Superpowers, com "behavior change" da lista "Always" dela |
+| Abertura: teste primeiro, ver falhar, menor código; "se não viu falhar, não sabe se testa a coisa certa"; letra e espírito | Superpowers |
+| Lei de Ferro e apagar o código escrito antes do teste, sem guardar como referência | Superpowers, por decisão da Task 7 |
+| Sempre e exceções só com permissão do usuário | Superpowers. "Parceiro humano" virou "usuário" |
+| Urgência não é permissão | Regra própria 1 |
+| Código existente sem teste não é apagado: testes antes de mudar, quebrar o código de propósito para ver cada um falhar, restaurar e comparar com o original | Superpowers ("Existing code has no tests") e a técnica de forçar o vermelho e comparar com cópia limpa, que `devorb:debugging` já usa no passo 5.2 (Matt). Ver conflitos |
+| Onde ficam os testes: seam mais alto que o plano nomeia, interface pública, nunca internos, sem parar para confirmar | Matt (seam como fronteira pública), com a decisão da Task 7 no lugar de confirmar com o usuário |
+| Sem plano ou sem seam nomeado; seam do plano que não alcança o comportamento | DevOrb. Ver conflitos |
+| `devorb:codebase-design` quando o formato da interface está em questão | Matt, que chamava a skill `codebase-design` |
+| `GLOSSARY.md` e ADRs para nomear os testes | Matt |
+| Fatias verticais, bala traçadora, contra fatia horizontal | Matt |
+| 1. RED: um comportamento, nome que diz o que deve acontecer, "and" no nome pede divisão | Superpowers (RED e tabela "Good Tests") |
+| 1. Mocks só na fronteira do sistema | Matt (`mocking.md`), no lugar de "sem mock a não ser inevitável" do Superpowers |
+| 1. Nomear a mudança de produção que faria o teste falhar; valor esperado derivado à mão | Superpowers (`writing-good-tests.md`) e Matt (antipadrão tautológico) |
+| 2. Verificar RED: falha e não erro, mensagem esperada, falta de comportamento e não erro de digitação | Superpowers |
+| 3. GREEN: o menor código, nada que o teste não peça | Superpowers, com "não antecipar testes futuros" do Matt |
+| 4. Verificar GREEN: suíte inteira do projeto, saída limpa, consertar o código e não o teste, falha que não foi sua vai no relato pelo nome | Superpowers |
+| 5. REFACTOR só no que o ciclo escreveu ou mudou; o resto vira nota para `devorb:reviewing` | Superpowers (refactor no ciclo) e Matt (refactor na revisão), por decisão da Task 7 |
+| Testes que não provam nada: tautológico, acoplado à implementação, testar o mock, fatia horizontal | Matt (tautológico, acoplado, horizontal) e Superpowers (testar o mock) |
+| Formato algébrico aponta para `references/property-based.md`; biblioteca é decisão do usuário | Trail of Bits, só ideias |
+| Quando travar | Superpowers, sem "pergunte ao parceiro humano" |
+| Sinais de parada | Superpowers: as desculpas comuns e os sinais de alerta fundidos em uma tabela, condensados, mais a linha de urgência (regra própria 1) |
+| Checklist antes de dar a fatia por pronta | Superpowers, com o seam combinado (Matt) e a checagem de mutação (Superpowers, `writing-good-tests.md`) |
+| `Connects to` | DevOrb: recebe de `devorb:implementing` (com o seam do plano de `devorb:planning`) e de `devorb:debugging` (a reprodução mínima vira o RED), usa `devorb:codebase-design`, entrega ao chamador, a `devorb:verifying` e a `devorb:reviewing`. "Nunca corrija bug sem teste" vem do Superpowers ("Debugging Integration") |
+| `references/writing-good-tests.md`: dois princípios, nomear a quebra, sem detector de mudança, comportamento e não texto, seu código e não o framework, portões | Superpowers (`writing-good-tests.md`). `superpowers:writing-skills` virou `devorb:writing-skills` |
+| `references/writing-good-tests.md`: exemplos de teste tautológico | Superpowers (o mesmo construtor nos dois lados) e Matt (`calculateTotal` em `tests.md`) |
+| `references/writing-good-tests.md`: "Through the public interface", com os exemplos de checkout e `createUser` | Matt (`tests.md`) |
+| `references/writing-good-tests.md`: mockar só na fronteira do sistema | Matt (`mocking.md`) |
+| `references/writing-good-tests.md`: mock não ganha asserção, nível certo, dados completos, métodos só de produção, componentes reais | Superpowers. As falas do "parceiro humano" viraram perguntas sem atribuição |
+| `references/writing-good-tests.md`: dublês específicos só na fronteira, resultado no código próprio | Superpowers, limitado pela regra do Matt. Ver conflitos |
+| `references/writing-good-tests.md`: projetar fronteiras para substituição (injeção de dependência, interface estilo SDK) | Matt (`mocking.md`). "Mockability" virou "substitution" |
+| `references/writing-good-tests.md`: testes vão com a implementação, checagem de mutação | Superpowers |
+| `references/writing-good-tests.md`: sinais de alerta | Superpowers ("Warning Signs") e Matt ("Red flags" de `tests.md`), sem repetição |
+| `references/property-based.md`: abertura e "a maior parte do código não tem esse formato, e dizer isso é um bom resultado" | Trail of Bits (`SKILL.md`), só ideia |
+| `references/property-based.md`: catálogo em forma de perguntas sobre o código | Trail of Bits (`SKILL.md`), só ideias, rearranjadas: volta e ida junta roundtrip e inversa; ordem, agrupamento e valor neutro juntam comutatividade, associatividade e identidade; "checar é barato" usa exemplos próprios. Acréscimos próprios: mudança conhecida na entrada move a saída numa direção conhecida (relação metamórfica, que a fonte só cita como monotonicidade em `refactoring.md`) e objeto chamado em sequência comparado a um modelo em memória |
+| `references/property-based.md`: ordem de força | Trail of Bits (`SKILL.md`), só a ordem. A explicação é própria: a força é o conjunto de implementações erradas que a regra rejeita, com o teste contra uma versão claramente quebrada e o que ainda passa em cada nível |
+| `references/property-based.md`: dois jeitos de não provar nada, tautologia (com a exceção do determinismo) e vacuidade | Trail of Bits (`SKILL.md`, `reviewing.md`, `generating.md`), só ideias. Acréscimos próprios: ler as estatísticas da biblioteca e a regra guardada por um `if` que os dados gerados quase nunca alcançam |
+| `references/property-based.md`: no ciclo TDD, ver a propriedade falhar antes do código | DevOrb, para casar com a Lei de Ferro |
+| `references/property-based.md`: fixar as entradas de risco como exemplos ao lado da propriedade | Trail of Bits (`generating.md`), só ideia |
+| `references/property-based.md`: conferir a promessa do código antes de mudar código por um contraexemplo; caso que a promessa não decide é pergunta ao usuário | Trail of Bits (`interpreting-failures.md`), só ideia |
+| `references/property-based.md`: formato enterrado, extrair a parte pura segue os seams do plano ou a escolha do usuário, sem reestruturar só para chegar ao nível "roda" | Trail of Bits (`refactoring.md`), só a ideia central. Seguir os seams do plano é do DevOrb |
+| `references/property-based.md`: biblioteca é decisão do usuário, usar a que o projeto já tem e não trazer segunda | Trail of Bits (`SKILL.md` e `libraries.md`), só ideias, por decisão da Task 7 |
+| `references/property-based.md`: sem biblioteca, a mesma regra roda sobre uma tabela de entradas escrita à mão | DevOrb |
+
+## Conflitos resolvidos
+
+- **Quem escolhe o seam:** o Matt manda escrever os seams e confirmá-los com o usuário antes de qualquer teste. Pela decisão da Task 7, o plano de `devorb:planning` nomeia os seams, e a skill não para para perguntar durante a implementação. Sem plano ou sem seam nomeado, vale a interface pública mais alta que alcança o comportamento, dita em uma linha. Se o seam do plano não alcança o comportamento, vale o seam público mais próximo abaixo dele, e isso vai no relato.
+- **Refactor no ciclo ou na revisão:** o Superpowers mantém o refactor no ciclo, e o Matt o tira do ciclo e manda para a revisão. Pela decisão da Task 7, o refactor fica no ciclo, mas só no código e nos testes que aquele ciclo escreveu ou mudou. Limpeza mais ampla vira nota para `devorb:reviewing`.
+- **Quando usar mock:** o Superpowers diz "sem mock a não ser inevitável", e o Matt lista onde mockar (APIs externas, às vezes banco, tempo e aleatoriedade, às vezes sistema de arquivos). A skill usa a lista do Matt, que diz quando o mock é inevitável.
+- **Afirmar chamadas:** o Superpowers manda afirmar argumentos, contagem e ordem quando fazem parte do contrato, e o Matt marca contagem e ordem de chamadas como sinal de teste acoplado. Vale afirmar chamadas só no dublê de fronteira, quando a chamada é o próprio contrato (a cobrança enviada, o e-mail entregue). No código que o projeto controla, afirma-se o resultado.
+- **"Passou de cara: corrija o teste" e "adicione testes ao código existente":** as duas frases são do Superpowers e brigam, porque um teste de caracterização passa de cara por definição. A skill manda quebrar o código de propósito para ver cada teste falhar, restaurar e comparar com o original, a mesma técnica que `devorb:debugging` usa ao forçar o vermelho.
+- **O que se apaga:** a Lei de Ferro apaga o código escrito antes do próprio teste nesta mudança. Código que já existia não é apagado, ganha testes antes de mudar. O Superpowers separa os dois casos em linhas distantes, e a skill os põe juntos, porque apagar código que não foi escrito nesta mudança perderia trabalho do usuário.
+- **Precedência e "testa depois":** o `using-devorb` põe o pedido do usuário acima do fluxo, e o caso realista traz um usuário que sugere testar depois. Resolvido pela regra própria 1.
+- **Sinais de alerta da referência:** o Superpowers tem "Quick Reference" e "Warning Signs", e o Matt tem "Red flags". Viraram uma lista só de sinais de alerta. A tabela de referência rápida saiu porque repetia o corpo.
+- **Uma referência ou cinco:** a Trail of Bits divide as orientações em cinco arquivos, um por tarefa. Pela Task 7, as ideias ficam em um arquivo só, `references/property-based.md`, e valem só quando o código tem o formato.
+- **Ponytail:** a spec registra que o ponytail prescreve um teste depois do código. A spec decide manter a convivência sem resolver o conflito, e a skill não cita o ponytail.
+
+## Regras próprias
+
+Regras próprias só saem com decisão explícita do dono. A regra abaixo foi escrita antes da linha de base da Task 7, a partir do pedido do caso realista, e o resultado da comparação ainda está por vir.
+
+1. **Urgência não é permissão.** "É urgente" ou "escreve o teste depois se der tempo" não dispensam o teste primeiro: a skill manda dizer em uma linha que o teste vem antes e seguir. Só uma decisão explícita do usuário de pular os testes nesta mudança dispensa, e então a mudança é relatada como sem teste. Caso: `evals/tdd-desconto-progressivo`. O Superpowers trata "testo depois" como desculpa do agente, não como pedido do usuário, e a precedência do `using-devorb` põe o pedido do usuário acima do fluxo. Sem a regra, um "depois, se der tempo" do usuário pode ser lido como permissão para inverter a ordem.
+
+## Fora
+
+- **Do Superpowers (`SKILL.md`):** o diagrama `dot` do ciclo, que virou cinco passos numerados; os exemplos de código do RED e do GREEN (`retryOperation`) e o exemplo de bug do e-mail vazio; a tabela "Good Tests", que virou uma frase no RED; as desculpas que repetiam outras ("TDD vai me atrasar", "teste manual é mais rápido", "código existente não tem teste", que virou parágrafo próprio); a "Final Rule", que repete a Lei de Ferro; e a seção "Debugging Integration", que virou a linha de `devorb:debugging` em `Connects to`.
+- **Do Superpowers (`writing-good-tests.md`):** a tabela "Quick Reference", que repetia o corpo, e a atribuição das perguntas ao "parceiro humano".
+- **Do Matt:** a `description` dele, que dispara só quando o usuário pede TDD; confirmar os seams com o usuário e o refactor fora do ciclo, trocados pelas decisões da Task 7; a nota de uma linha sobre o que cada seam pega e deixa passar, que é trabalho de `devorb:planning`; e `agents/openai.yaml`, metadado de outra ferramenta.
+- **Da Trail of Bits:** Echidna, Medusa e invariantes de Solidity, porque a spec recusa as skills de blockchain dela; a tabela de bibliotecas por linguagem e a sintaxe de estratégias, que um modelo atual já conhece; `settings`, `deadline` e `max_examples` do Hypothesis; a tabela de severidade da revisão e os comandos `rg` para achar testes; a tabela de classificação de falhas e os padrões recorrentes (surrogates, denormais, hash e igualdade, iteradores); as cinco refatorações detalhadas com código, das quais só ficou a ideia central; a revisão de testes de propriedade existentes como fluxo à parte; o `README.md`, que documenta as avaliações deles e o `effort: low`; `agents/openai.yaml` e a marca em `assets/`.
+- **Lacuna:** nenhuma fonte diz o que fazer quando o projeto não tem como rodar testes (sem framework instalado). A skill não traz regra para isso. Só entra se um caso real pedir.
+
+## Resultados
+
+A preencher.
+
+## Decisões por commit de fonte
+
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/test-driven-development/SKILL.md` | adotado | base da Lei de Ferro com apagar o código, das exceções, do ciclo RED, GREEN e REFACTOR com as duas verificações obrigatórias, da suíte inteira, dos sinais de parada, do "quando travar" e do checklist
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/test-driven-development/SKILL.md` | recusado | diagrama `dot`, exemplos de código, "Final Rule" e desculpas repetidas pesariam no teto sem regra nova
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/test-driven-development/writing-good-tests.md` | adotado | base de `references/writing-good-tests.md`, adaptado: nome legado trocado, perguntas sem atribuição, sinais de alerta fundidos com os do Matt
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/test-driven-development/writing-good-tests.md` | recusado | tabela "Quick Reference", que repetia o corpo
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/SKILL.md` | adotado | seam como fronteira pública, `GLOSSARY.md` e ADRs, `codebase-design`, antipadrões (tautológico, acoplado, fatia horizontal), fatias verticais e "não antecipar testes futuros"
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/SKILL.md` | recusado | confirmar os seams com o usuário antes de testar e refactor fora do ciclo, trocados pelas decisões da Task 7; `description` que só dispara a pedido
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/tests.md` | adotado | fundido em `references/writing-good-tests.md`: teste pela interface pública, exemplos de checkout e `createUser`, exemplo tautológico e sinais de alerta
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/mocking.md` | adotado | fundido em `references/writing-good-tests.md`: mockar só na fronteira, injeção de dependência e interface estilo SDK
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/agents/openai.yaml` | recusado | metadado de outra ferramenta
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/SKILL.md` | adotado | só ideias, com texto próprio: o catálogo de propriedades (rearranjado como perguntas), a ordem de força, tautologia e vacuidade com a exceção do determinismo, "sem o formato, testes de exemplo" e biblioteca como decisão do usuário
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/SKILL.md` | recusado | `description` longa, `effort: low` e o roteamento para cinco referências
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/generating.md` | adotado | só ideias: gerar entradas válidas em vez de filtrar e fixar as entradas de risco como exemplos
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/generating.md` | recusado | sintaxe de estratégias e `settings` do Hypothesis
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/refactoring.md` | adotado | só ideia: extrair a parte pura expõe a regra, a escolha é do usuário, e não vale reestruturar para chegar só a "não quebra"
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/refactoring.md` | recusado | as cinco refatorações detalhadas com código
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/reviewing.md` | adotado | só ideias: tautologia e vacuidade, e a exceção do determinismo
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/reviewing.md` | recusado | tabela de severidade, comandos `rg` e revisão como fluxo à parte
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/interpreting-failures.md` | adotado | só ideia: conferir o que o código promete antes de confiar no contraexemplo, e caso não decidido é pergunta ao usuário
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/interpreting-failures.md` | recusado | tabela de classificação e padrões recorrentes, que pesariam em todo teste
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/libraries.md` | adotado | só ideia: usar a biblioteca que o projeto já tem, sem trazer uma segunda
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/references/libraries.md` | recusado | tabela por linguagem, e Echidna e Medusa, porque a spec recusa as skills de blockchain da fonte
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/README.md` | recusado | documenta as avaliações e o `effort: low` da fonte
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/agents/openai.yaml` | recusado | metadado de outra ferramenta
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/property-based-testing/skills/property-based-testing/assets/trail-of-bits-mark.svg` | recusado | marca da fonte
