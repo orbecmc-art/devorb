@@ -146,10 +146,10 @@ test('summarize reads a real eval result', () => {
   const s = summarize(json, ['probe', 'ponytail-probe', 'debugging-gone']);
   const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} vs ${b}`);
   const { costUsd: probeCost, ...probe } = s.cases.probe;
-  assert.deepEqual(probe, { score: 1, passRate: 1, runs: 1, errors: 0 });
+  assert.deepEqual(probe, { score: 1, passRate: 1, runs: 1, errors: 0, maxTurns: 0 });
   near(probeCost, 0.0539035 + 0.0444267); // with and without arms
   const { costUsd: onlyCost, ...only } = s.cases['ponytail-only-probe'];
-  assert.deepEqual(only, { score: 0.75, passRate: 0, runs: 1, errors: 0 });
+  assert.deepEqual(only, { score: 0.75, passRate: 0, runs: 1, errors: 0, maxTurns: 0 });
   near(onlyCost, 0.0623431 + 0.0412562);
   assert.equal(s.costUsd, 0.31493);
   near(Object.values(s.cases).reduce((sum, c) => sum + c.costUsd, 0), s.costUsd);
@@ -158,12 +158,17 @@ test('summarize reads a real eval result', () => {
   assert.deepEqual(summarize(json).missing, []);
 });
 
-test('summarize counts runs that failed for infrastructure reasons', () => {
+test('summarize counts tool errors apart from runs that hit the case max_turns', () => {
   const json = JSON.parse(read(new URL('./fixtures/eval-result.json', import.meta.url)));
-  json.cases.find((c) => c.name === 'probe').arms.with[0].error = 'sandbox failed to start';
+  const run = (name) => json.cases.find((c) => c.name === name).arms.with[0];
+  run('probe').error = 'sandbox failed to start';
+  run('ponytail-probe').error = 'exit 1: Reached maximum number of turns (8)';
+  run('ponytail-only-probe').error = '';
   const s = summarize(json);
-  assert.equal(s.cases.probe.errors, 1);
-  assert.equal(s.cases['ponytail-probe'].errors, 0);
+  assert.deepEqual([s.cases.probe.errors, s.cases.probe.maxTurns], [1, 0]);
+  assert.deepEqual([s.cases['ponytail-probe'].errors, s.cases['ponytail-probe'].maxTurns], [0, 1], 'max_turns is the agent, scored by graders');
+  assert.equal(s.cases['ponytail-probe'].score, 1);
+  assert.deepEqual([s.cases['ponytail-only-probe'].errors, s.cases['ponytail-only-probe'].maxTurns], [0, 0], 'an empty error is no error');
 });
 
 test('prepareArm none: empty plugin plus only the active suite', async () => {
@@ -326,7 +331,7 @@ appendFileSync(new URL('./args', import.meta.url), JSON.stringify(a) + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
 const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
 writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
-  { name, aggregates: { score: rate, passRate: rate }, arms: { with: [{ costUsd: 0.2, judgeCostUsd: 0.05, error: mode.error ? 'boom' : null }] } }
+  { name, aggregates: { score: rate, passRate: rate }, arms: { with: [{ costUsd: 0.2, judgeCostUsd: 0.05, error: typeof mode.error === 'string' ? mode.error : mode.error ? 'boom' : null }] } }
 )) }));
 process.exitCode = mode.partial ? 2 : 0;
 `);
@@ -435,7 +440,7 @@ test('CLI runs each arm, caches source baselines per case and writes the report'
   assert.equal(cached.withPonytail, false);
   assert.equal(cached.ablation, 'none');
   assert.match(cached.caseHash, /^[0-9a-f]{64}$/);
-  assert.deepEqual(cached.summary, { score: 0.5, passRate: 0.5, costUsd: 0.25, runs: 1, errors: 0 });
+  assert.deepEqual(cached.summary, { score: 0.5, passRate: 0.5, costUsd: 0.25, runs: 1, errors: 0, maxTurns: 0 });
 
   const second = io(root, fake.bin);
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers,none'], second), 0, second.stderr);
@@ -500,6 +505,20 @@ test('CLI does not accept when an eval run errors, even if the pass rates would'
   const report = read(run.stdout.split('\n').find((l) => l.endsWith('-demo.md')));
   assert.match(report, /Aprovado: não \(rodadas com erro da ferramenta\)/);
   assert.match(report, /Regressões \(pior que a melhor linha de base por mais de uma rodada\): nenhuma/);
+});
+
+test('CLI reports runs that hit the case max_turns without blocking approval or caching', async () => {
+  const { root, superpowers } = makeRoot();
+  const fake = fakeClaude();
+  fake.mode({ error: 'exit 1: Reached maximum number of turns (8)' });
+  const run = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers'], run), 0, run.stderr);
+  assert.match(run.stdout, /accepted: true/);
+  const report = read(run.stdout.split('\n').find((l) => l.endsWith('-demo.md')));
+  assert.match(report, /Rodadas com erro da ferramenta: nenhuma/);
+  assert.match(report, /Rodadas que atingiram o limite de turnos do caso: `devorb@[0-9a-f]{7}: demo-one \(1\)`, `superpowers@[0-9a-f]{7}: demo-one \(1\)`/);
+  const cacheFile = join(root, 'fusion', 'results', 'baselines', `superpowers@${superpowers.sha}`, 'evals', 'demo-one.json');
+  assert.equal(JSON.parse(read(cacheFile)).summary.maxTurns, 1);
 });
 
 test('CLI --baseline-only defaults to the source arms and none, with mattpocock-skills at its pin', async () => {

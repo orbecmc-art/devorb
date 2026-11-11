@@ -66,17 +66,22 @@ export function decide({ cases, runs }) {
 
 // One `claude plugin eval --json` output: score and pass rate of arm `with`, cost of every arm
 // (so per-case costs add up to the total under with-without), and runs the tool itself failed
-// (`error`), which say nothing about the skill. Cases that failed to load are absent.
+// (`error`), which say nothing about the skill. Hitting the case's own max_turns also sets
+// `error`, but that is the agent's behavior, already scored by the graders: counted apart.
+// Cases that failed to load are absent.
+const MAX_TURNS = /Reached maximum number of turns/;
 export function summarize(json, expectedCases = []) {
   const cases = {};
   for (const c of json.cases) {
     const allRuns = Object.values(c.arms ?? {}).flat();
+    const failed = allRuns.filter((r) => typeof r.error === 'string' && r.error.trim() !== '');
     cases[c.name] = {
       score: c.aggregates.score,
       passRate: c.aggregates.passRate,
       costUsd: allRuns.reduce((sum, r) => sum + (r.costUsd ?? 0) + (r.judgeCostUsd ?? 0), 0),
       runs: c.arms?.with?.length ?? 0,
-      errors: allRuns.filter((r) => r.error != null).length,
+      errors: failed.filter((r) => !MAX_TURNS.test(r.error)).length,
+      maxTurns: failed.filter((r) => MAX_TURNS.test(r.error)).length,
     };
   }
   return { cases, costUsd: json.costUsd, partial: json.partial === true, missing: expectedCases.filter((n) => !(n in cases)) };
@@ -308,7 +313,8 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
     }
   }
   const missing = arms.filter((a) => a.missing.length).map((a) => `${a.label}: ${a.missing.join(', ')}`);
-  const errors = arms.flatMap((a) => caseNames.filter((c) => a.cases[c]?.errors).map((c) => `${a.label}: ${c} (${a.cases[c].errors})`));
+  const perCase = (field) => arms.flatMap((a) => caseNames.filter((c) => a.cases[c]?.[field]).map((c) => `${a.label}: ${c} (${a.cases[c][field]})`));
+  const errors = perCase('errors');
   const verdict = !hasDevorb ? 'não se aplica (só linhas de base)' : accepted ? 'sim' : blockers.length ? `não (${blockers.join(', ')})` : 'não';
   lines.push(
     '',
@@ -317,6 +323,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
     `- Casos ausentes (não carregaram ou não rodaram): ${list(missing, 'nenhum')}`,
     `- Rodadas parciais (teto de custo atingido): ${list(arms.filter((a) => a.partial).map((a) => a.label), 'nenhuma')}`,
     `- Rodadas com erro da ferramenta: ${list(errors, 'nenhuma')}`,
+    `- Rodadas que atingiram o limite de turnos do caso: ${list(perCase('maxTurns'), 'nenhuma')}`,
     ...arms.filter((a) => a.gitSkip).map((a) => `- ${gitSkipNote(`\`${a.label}\``, a.gitSkip)}`),
     '',
     '## Decisão',
