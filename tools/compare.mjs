@@ -242,7 +242,7 @@ const pct = (v) => `${Math.round(v * 100)}%`;
 const usd = (v) => `US$ ${v.toFixed(4)}`;
 const list = (xs, none) => (xs.length ? xs.map((x) => `\`${x}\``).join(', ') : none);
 
-function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailRef, arms, caseNames, outcome, accepted, hasDevorb }) {
+function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailRef, arms, caseNames, outcome, accepted, blockers, hasDevorb }) {
   const lines = [
     `# Comparação de versões: ${skill}`,
     '',
@@ -264,7 +264,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
   }
   const missing = arms.filter((a) => a.missing.length).map((a) => `${a.label}: ${a.missing.join(', ')}`);
   const errors = arms.flatMap((a) => caseNames.filter((c) => a.cases[c]?.errors).map((c) => `${a.label}: ${c} (${a.cases[c].errors})`));
-  const verdict = !hasDevorb ? 'não se aplica (só linhas de base)' : accepted ? 'sim' : outcome.accepted ? 'não (casos do devorb ausentes)' : 'não';
+  const verdict = !hasDevorb ? 'não se aplica (só linhas de base)' : accepted ? 'sim' : blockers.length ? `não (${blockers.join(', ')})` : 'não';
   lines.push(
     '',
     `Custo total desta execução: ${usd(arms.reduce((s, a) => s + a.costUsd, 0))} (linhas de base em cache não contam).`,
@@ -342,14 +342,19 @@ async function compare(opts, armNames, { root, claude, out }) {
   );
   const outcome = decide({ cases: decideCases, runs });
   const devorb = arms.find((a) => a.name === 'devorb');
-  const accepted = outcome.accepted && devorb?.missing.length === 0;
+  // The plan gates on the printed `accepted:`, so anything that makes the rates untrustworthy blocks it:
+  // an errored baseline run lowers the best baseline and can hide a regression.
+  const blockers = [];
+  if (devorb?.missing.length) blockers.push('casos do devorb ausentes');
+  if (arms.some((a) => caseNames.some((c) => a.cases[c]?.errors))) blockers.push('rodadas com erro da ferramenta');
+  const accepted = outcome.accepted && !!devorb && blockers.length === 0;
   const date = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD in local time
   // A baseline-only report never overwrites the day's devorb verdict.
   const reportPath = join(root, 'fusion', 'results', `${date}-${opts.skill}${opts.reserved ? '-reserved' : ''}${devorb ? '' : '-baseline'}.md`);
   mkdirSync(dirname(reportPath), { recursive: true });
   writeFileSync(
     reportPath,
-    report({ date, skill: opts.skill, suite, caseGlob, runs, model: config.model, ablation: opts.ablation, ponytailRef, arms, caseNames, outcome, accepted, hasDevorb: !!devorb }),
+    report({ date, skill: opts.skill, suite, caseGlob, runs, model: config.model, ablation: opts.ablation, ponytailRef, arms, caseNames, outcome, accepted, blockers, hasDevorb: !!devorb }),
   );
   out(`${reportPath}\n`);
   if (devorb) out(`accepted: ${accepted}\n`);

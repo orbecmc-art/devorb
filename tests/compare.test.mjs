@@ -364,6 +364,18 @@ test('CLI does not accept when a devorb case is missing', async () => {
   assert.match(report, /Casos ausentes \(não carregaram ou não rodaram\): `devorb@[0-9a-f]{7}: demo-two`/);
 });
 
+test('CLI does not accept when an eval run errors, even if the pass rates would', async () => {
+  const { root } = makeRoot();
+  const fake = fakeClaude();
+  fake.mode({ error: true });
+  const run = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers'], run), 0, run.stderr);
+  assert.match(run.stdout, /accepted: false/);
+  const report = read(run.stdout.split('\n').find((l) => l.endsWith('-demo.md')));
+  assert.match(report, /Aprovado: não \(rodadas com erro da ferramenta\)/);
+  assert.match(report, /Regressões \(pior que a melhor linha de base por mais de uma rodada\): nenhuma/);
+});
+
 test('CLI --baseline-only defaults to the source arms and none, with mattpocock-skills at its pin', async () => {
   const { root, superpowers } = makeRoot();
   const fake = fakeClaude();
