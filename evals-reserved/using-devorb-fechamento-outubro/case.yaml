@@ -1,0 +1,16 @@
+schema_version: "1.0"
+name: using-devorb-fechamento-outubro
+description: Pedido do dono de uma loja sobre o fechamento mensal de outubro, num projeto Node pequeno com histórico git.
+tags: [using-devorb, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Queria dar uma melhorada no fechamento do mês. O de outubro deu R$ 4.140,00,
+    mas no extrato do banco entrou R$ 2.900,00. Até setembro sempre bateu
+    certinho com o extrato. Consegue deixar ele batendo de novo? Pra rodar é
+    `npm run fechamento -- 2026-10`.
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]
