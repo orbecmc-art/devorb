@@ -60,6 +60,8 @@ function makeRoot() {
     'evals/demo-one/graders/g.md': '---\ntype: regex\npattern: ok\n---\n',
     'evals/other-two/case.yaml': CASE('other-two'),
     'evals-reserved/demo-hold/case.yaml': CASE('demo-hold'),
+    'docs/x.md': 'the bug and its fix',
+    'fusion/results/r.md': 'an earlier report',
     'fusion/eval-config.json': '{ "model": "m", "maxCostUsd": 1 }',
     'fusion/skills.json': '{ "demo": { "level": "light" } }',
     'fusion/sources.json': JSON.stringify({
@@ -70,7 +72,7 @@ function makeRoot() {
       ],
     }),
   });
-  writeTree(root.dir, { 'skills/x/NEW.md': 'uncommitted', 'evals/demo-one/results/old.json': '{}' });
+  writeTree(root.dir, { 'skills/x/NEW.md': 'uncommitted', 'evals/demo-one/results/old.json': '{}', '.superpowers/l.md': 'ledger' });
   return { root: root.dir, ponytail, superpowers };
 }
 
@@ -151,7 +153,8 @@ test('prepareArm devorb: working tree with uncommitted files, one suite, no .git
   assert.equal(dir, join(root, '.arms', `devorb@${git(root, 'rev-parse', '--short', 'HEAD')}`));
   assert.equal(read(join(dir, 'skills', 'x', 'NEW.md')), 'uncommitted');
   assert.ok(existsSync(join(dir, 'evals', 'demo-one', 'case.yaml')));
-  for (const gone of ['evals-reserved', '.git', '.arms']) assert.ok(!existsSync(join(dir, gone)), gone);
+  assert.ok(existsSync(join(dir, 'fusion', 'sources.json')));
+  for (const gone of ['evals-reserved', '.git', '.arms', 'docs', 'fusion/results', '.superpowers']) assert.ok(!existsSync(join(dir, gone)), gone);
 
   writeFileSync(join(root, 'skills', 'x', 'NEW.md'), 'edited');
   await prepareArm({ name: 'devorb' }, { root });

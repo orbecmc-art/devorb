@@ -13,6 +13,9 @@ const SOURCE_ARMS = new Set(['superpowers', 'mattpocock-skills']);
 // Owner decision of 2026-11-10: superpowers and ponytail always run at the latest commit of their default branch.
 const LATEST = new Set(['superpowers', 'ponytail']);
 const SUITES = ['evals', 'evals-reserved'];
+// Answers the agent under test must not read: docs/ holds the bugs and fixes the cases test,
+// fusion/results/ earlier reports, .superpowers/ the coordinator ledger.
+const NOT_IN_DEVORB_ARM = [...SUITES.map((s) => `${s}/`), 'docs/', 'fusion/results/', '.superpowers/'];
 const FULL_SHA = /^[0-9a-f]{40}$/;
 const NETWORK_TIMEOUT_MS = 120_000;
 const LOCAL_TIMEOUT_MS = 30_000;
@@ -164,7 +167,7 @@ export async function prepareArm({ name, ref }, { root, suite = 'evals', withPon
     const sha = (await git(['rev-parse', '--short', 'HEAD'], { cwd: root, what: 'devorb' })).trim();
     dir = join(root, '.arms', `devorb@${sha}`);
     fresh(dir);
-    copyFiles(root, files.filter((p) => !SUITES.some((s) => inSuite(p, s))), dir);
+    copyFiles(root, files.filter((p) => !NOT_IN_DEVORB_ARM.some((x) => p.startsWith(x))), dir);
   } else {
     dir = join(root, '.arms', `${name}@${ref}`);
     await fetchAt(findSource(root, name), ref, dir);

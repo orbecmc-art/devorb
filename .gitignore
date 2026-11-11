@@ -4,3 +4,4 @@ evals-reserved/**/results/
 fusion/pr-draft.md
 node_modules/
 .DS_Store
+.superpowers/
