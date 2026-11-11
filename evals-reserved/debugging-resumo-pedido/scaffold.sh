@@ -84,7 +84,6 @@ import { memoize } from './memo.js';
 const BASE = { 0: 1500, 1: 1700, 2: 2200, 3: 2400, 4: 2900, 5: 3100, 6: 3400, 7: 2600, 8: 2300, 9: 2500 };
 const POR_KG_EXTRA = 450;
 
-// O checkout cota o mesmo CEP várias vezes enquanto o cliente mexe no carrinho.
 export const cotarFrete = memoize(function cotarFrete(cep, pesoKg = 1) {
   const regiao = cep.replace(/\D/g, '')[0];
   const extra = Math.max(0, Math.ceil(pesoKg) - 1) * POR_KG_EXTRA;
