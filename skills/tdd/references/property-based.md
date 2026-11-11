@@ -2,53 +2,51 @@
 
 **Read this when:** the code under test follows a general rule that should hold for every valid input, not just for the cases you can list by hand.
 
-An example test pins one input you picked. A property test states a rule, lets a generator throw many inputs at it, and when one breaks the rule, cuts that input down to the smallest version that still fails. It pays off only when the code really follows such a rule. Most code doesn't, and then example tests are the right tool; reporting that is a good result, not a failure.
+First decide whether such a rule exists. Most code has none, and for that code example tests stay the right tool: "no rule here" is a valid finding, so write the examples and say so in one line. When the rule does exist, you state it once and a library supplies the inputs, hundreds per run. On a failure, the library shrinks the input to the smallest one that still breaks the rule. An example test covers only the input you chose.
 
 ## Does the code have the shape?
 
-Ask these questions about the code. Each "yes" gives you a rule to assert.
+Each question below that gets a "yes" hands you a rule to assert.
 
-- **Is there an operation that undoes it?** Then going there and back returns the input: `parse(format(x))` equals `x`. Serialisers, codecs, unit conversions, encryption.
-- **Is there a version you already trust?** A naive, older or slower implementation must give the same answer as the code under test for every input. Optimisations, rewrites, caches, ports.
-- **Is checking an answer much cheaper than producing it?** Then check the answer instead of the steps: the factors multiply back to the number, the route starts and ends where asked, the schedule breaks no constraint.
-- **Does running it twice change anything?** For anything that cleans up, the second pass must leave the result alone: `clean(clean(x))` equals `clean(x)`. Formatters, normalisers, deduplication, migrations.
-- **Is there something it must keep?** A count, a total, the set of items, a balance: equal before and after. Transfers between accounts, reshaping data, filters that only reorder.
-- **Does a known change to the input move the output in a known direction?** A larger cart never lowers the discount rate; adding a matching record never shrinks the result. Pricing, scoring, ranking, limits.
-- **Should order, grouping or a neutral value not matter?** Swapping the arguments, regrouping them, or combining with the empty value leaves the result the same. Merges, sums, set operations, replicated state.
-- **Is it an object you call in sequences?** After any sequence of calls, it agrees with a tiny in-memory model of what it should hold. Caches, queues, repositories, carts.
+- **Is it an object you call in sequences?** Run random sequences of calls against it and against a tiny in-memory model of what it should hold; after every step the two agree. Session stores, undo stacks, inventories, rate limiters.
+- **Is there a version you already trust?** For every input, the code under test and the trusted version return the same answer. A plain loop beside the SQL query that replaces it, a memoised function beside its uncached twin, the legacy endpoint beside the new one.
+- **Is there an operation that undoes it?** Then going there and back returns the input: `decode(encode(x))` equals `x`. Base64, a CSV export read back by the importer, an amount in cents printed as text and parsed again.
+- **Is there something it must keep?** Measure it before and after; it doesn't move. Splitting a bill keeps the total, paging through results returns every row exactly once, a sort keeps the same items.
+- **Does running it twice change anything?** Code that tidies something must leave tidy input alone: `normalise(normalise(x))` equals `normalise(x)`. Phone-number normalisers, slug generators, upserts, "mark as read".
+- **Does a known change to the input move the output in a known direction?** Adding an item never lowers the cart total; raising the minimum rating never adds results; a later deadline never makes a task more urgent.
+- **Should order, grouping or a neutral value not matter?** Swapping the arguments, regrouping them, or adding the empty value leaves the result alone. Merging config maps, adding money, the union of tag sets, counters synced between devices.
+- **Is checking an answer much cheaper than producing it?** Check the answer and skip the steps: a solved sudoku obeys the grid rules, a generated timetable books no room twice, the change handed back adds up to the amount owed.
 
-## Choose the strongest rule the code supports
+## How much a rule proves
 
-A rule is only as strong as the wrong implementations it rejects. Try each candidate against an obviously broken version, such as one that returns its input untouched or an empty value. If the rule still holds, it is weak.
+Run each candidate rule against a deliberately broken version of the code, such as one that returns its input unchanged or returns an empty value. If the broken version still satisfies the rule, the rule proves little. Ranked from the rule that rejects the most wrong versions to the one that rejects the fewest:
 
-From weakest to strongest:
+- **The output is pinned:** a round trip, agreement with a trusted version, or a check that decides the answer completely (for a sort: in order, and the same items). Hardly any wrong version survives.
+- **It settles:** a second pass changes nothing. A version that settles on the wrong value survives.
+- **Something is kept:** a count, a total or the set of items is unchanged. A wrong order, or a wrong value with the right total, survives.
+- **The form is right:** type, length or range. Any wrong value of the right form survives.
+- **It runs:** no crash and no undocumented exception. Almost every broken version survives.
 
-1. **It runs.** No crash and no exception outside the documented ones. Nearly every broken version also runs.
-2. **The output has the right form.** Type, length or range are right. A wrong value of the right form still passes.
-3. **Something is kept.** A count, total or membership survives. The wrong order, or a wrong value with the right total, still passes.
-4. **It settles.** A second pass changes nothing. A version that settles on the wrong value still passes.
-5. **The output is pinned.** A round trip, agreement with a trusted version, or a check that fully decides the answer (ordered and holding the same items, for a sort). Very little survives.
+Start at the top and take the first rule the code supports. If only "it runs" is left, a property test seldom earns its place, and never earns a new dependency: write example tests and say so.
 
-Aim for the top. Level 1 alone is seldom worth a property test, and never worth a new dependency. Look once more for a stronger rule; if there is none, write example tests and say so.
+## Green, yet empty
 
-## When a passing property means nothing
+**Tautological:** the expected value is computed the way the code computes it (`expect(add(a, b)).toBe(a + b)`, the same builder on both sides). It passes by construction and can never disagree with the code. Assert a rule that bounds the output without recomputing it: a law, a round trip, a reference written another way. One exception: calling the function twice on one input and comparing is a real check when the code can vary between runs, because it reads the clock or walks an unordered map.
 
-**Tautology: the test restates the code.** `expect(applyTax(p)).toBe(p * 1.2)` when `applyTax` multiplies by 1.2, or an expected value built by the same helper the code uses. A bug that both sides share can never fail it. Use a rule that limits the output without computing it the same way: a law, a round trip, a reference written differently. Calling the function twice on one input and comparing is the exception: for code that may not be deterministic, such as output built from an unordered map or code that reads the time, that comparison is a real check.
-
-**Vacuity: the test never reaches the interesting inputs.** If the test discards every generated input that doesn't meet a precondition, and most don't, the run is green on the few that are left. Two preconditions that can't both hold leave nothing at all to check, and the run still reports success. Have the generator build only valid inputs instead of filtering afterwards, and read the library's statistics for how many cases ran and how many were thrown away. A rule guarded by an `if` that generated data rarely enters has the same flaw.
+**Vacuous:** the run is green because almost nothing was checked. Generated inputs filtered by a precondition few of them meet leave a handful of cases; two preconditions that contradict each other leave none, and the run still passes. The same holds for a rule inside an `if` the generated data seldom enters. Make the generator build valid inputs instead of rejecting invalid ones, and read the run's statistics: cases tried, cases discarded.
 
 ## In the TDD cycle
 
 A property is a test like any other: write it, run it, watch it fail, then write the code. The generator usually finds a failing input before the behavior exists; read it and confirm it fails because the behavior is missing.
 
-Keep the inputs you already know are risky (empty, zero, the limits of the type) as fixed examples beside the property, so every run covers them and not only the lucky ones.
+A random generator may never hit the inputs you already know are dangerous. Pin them as fixed examples next to the property (empty, zero, the type's limits), so every run checks them.
 
-Before changing code to satisfy a failing input, check that the code promises to handle it: the types, the docs, the spec, the existing tests. Outside that promise, narrow the generator. Where the promise says nothing about that input, ask the user: it is a decision, not a bug.
+A failing input is not yet a bug. Look up what the code promises for it: types, docs, spec, existing tests. The promise excludes it? Narrow the generator. The promise covers it? Fix the code. The promise is silent? Supporting that input is the user's choice, so ask. If the user is away or this runs as a subagent, keep example tests for the promised inputs and name the open input in your report.
 
-## When the shape is buried
+## When the rule has no seam
 
-The rule can be real yet out of reach of any test: a price calculated inside a function that also writes to the database, a message built and sent in the same call, a list sorted in place. Pulling the pure part out gives the rule a seam. That is a design change, so it follows the seams in the plan. If the plan didn't foresee it, tell the user which rule it would make testable and let them choose. Don't restructure code only to reach level 1.
+Sometimes the rule is real but no test can reach it: a total computed inside a handler that also writes the HTTP response, a slug built and saved in the same call, a timestamp rounded inside the logger. Pulling the pure part into its own function gives the rule a seam. That is a design change, so it follows the seams in the plan. If the plan didn't foresee it, name the rule the extraction would expose and let the user choose. If the user is away or this runs as a subagent, keep example tests and put that rule in your report. Never restructure code only to check that it runs.
 
-## The library is the user's call
+## Libraries
 
-Already a property-testing library in the project? Write the property with it, and don't bring in a second one. If none is installed, don't install one. Ask the user once, and make the question concrete: show the exact rule it would let you check. Until they agree, keep to example tests. Without a library, the same rule can still run over a hand-written table of inputs: you lose the search and the shrinking, not the rule.
+No property-testing library in the project? The rule still works over a hand-written table of inputs; you lose generation and shrinking, not the rule. Installing a library is the user's decision: ask once, naming the exact rule it would let you check, and keep to example tests until they agree. If the project already has one, use it, and don't add a second.

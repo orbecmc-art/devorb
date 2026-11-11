@@ -176,10 +176,6 @@ BEFORE adding a mock or test helper:
     Unmock it or delete the assertion.
 ```
 
-## Tests ship with the implementation
-
-The TDD cycle (failing test, minimal implementation, refactor) is what "complete" means. Ship the tests the behavior needs and only those: trivial code and human prose earn none, and a test written to satisfy process costs maintenance forever.
-
 ## The mutation check
 
 Before finishing, mentally mutate the production code. At least one test should fail for each realistic mutation:
@@ -198,14 +194,8 @@ A mutation nothing catches marks the behavior as unprotected, or the test as tau
 - Expected values are hidden behind loops, builders or helpers
 - The test can fail only through a panic, crash or missing selector
 - The test fails on every intentional change, never on accidental breakage
-- The test breaks on a refactor that kept the behavior
 - The name describes how, not what
-- The test mocks an internal collaborator, tests a private method, or asserts calls on code you own
-- The test checks through a side channel (a database query, a file) instead of the interface
 - The test greps source text, or asserts a removed symbol stays removed
 - The test would still matter if only the framework remained
 - The test exists for coverage, checking no side effect or outcome
-- An assertion checks a `*-mock` test ID, or fails if you remove the mock
-- A method is called only from test files
-- Mock setup is more than half the test, or you can't explain why the mock is needed
 - Mocking "just to be safe"

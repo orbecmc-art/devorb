@@ -11,13 +11,13 @@ Write the test first. Watch it fail. Write the least code that makes it pass. If
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST.
 ```
 
-Wrote production code before its test? Delete it and start over from the test. Don't keep it as a reference, don't adapt it while writing the test, don't look at it. Delete means delete.
+Wrote code in this change before its test? Delete it and start over from the test. Don't keep it as a reference, don't adapt it while writing the test, don't look at it. Delete means delete.
 
 **Always:** new features, bug fixes, refactoring, behavior changes. **Exceptions, only with the user's permission:** throwaway prototypes, generated code, configuration files.
 
-**Urgency is not permission.** "It's urgent" or "add the test later if there's time" does not waive the test: say in one line that you're writing it first, and do. Only an explicit user decision to skip tests for this change waives it; then report the change as untested.
+**Urgency is not permission.** A direct instruction about method ("code first", "no TDD here", "skip the tests") is level 1 in `devorb:using-devorb`: follow it, and report the change as not test-first (untested, if tests were skipped). A deferral ("it's urgent", "add the test later if there's time") states a priority, not a method, so the test still comes first: say so in one line, and do it.
 
-**Existing code without tests** is not deleted. Before changing it, add tests for the behavior you will touch. They pass at once, so break the code briefly to watch each one fail, then restore it and diff against the original.
+**Existing code** (anything not written in this change, including the user's uncommitted work) is not deleted. Before changing it, add tests for the behavior you will touch. They pass at once, so to watch each one fail: copy the file, break the code briefly, run the test, restore from the copy, and confirm the diff against the copy is empty. Never restore with `git checkout` or `git stash`.
 
 ## Where tests go
 
@@ -25,13 +25,15 @@ Wrote production code before its test? Delete it and start over from the test. D
 
 Name tests in the project's domain language: read `GLOSSARY.md` and the ADRs in the area if they exist.
 
+Does the code have an undo, a trusted version to agree with, a total it must conserve, or a cleanup that settles on a second pass? Read `references/property-based.md`. Adding a property-testing library is the user's call; use example tests meanwhile.
+
 ## The cycle
 
 Work in **vertical slices**: one test, one minimal implementation, repeat. Each test is a tracer bullet that answers what the last cycle taught you. Never write all the tests first and then all the code: bulk tests check imagined behavior and fix the test structure before you understand the code.
 
 ### 1. RED: one failing test
 
-One behavior, and a name that says what should happen ("and" in the name: split it). Real code; mocks only at system boundaries. Before writing the body, name the production change that would make it fail. Derive the expected value by hand (a literal, a worked example, the spec), never with the code under test or its helpers. Read `references/writing-good-tests.md` whenever you write or change a test, a mock or a test helper.
+One behavior, and a name that says what should happen ("and" in the name: split it). Real code; mocks only at system boundaries. Before writing the body, name the production change that would make it fail. Derive the expected value by hand (a literal, a worked example, the spec), never with the code under test or its helpers. Read `references/writing-good-tests.md` before adding a mock, test double, helper or cleanup, or when you can't name the break.
 
 ### 2. Verify RED: watch it fail
 
@@ -49,9 +51,9 @@ The simplest code that passes this test. No feature the test doesn't demand, no 
 
 ### 4. Verify GREEN: watch it pass
 
-Mandatory. Run the test, then the project's whole suite (`npm test`, `pytest`, `cargo test`, whatever the repo uses), even when the task names one file. Confirm the new test passes, the others still pass, and the output has no errors or warnings.
+Mandatory. Run the test, then the project's whole suite (`npm test`, `pytest`, `cargo test`, whatever the repo uses), even when the task names one file. Confirm the new test passes, the others still pass, and the output has no errors or warnings. No test runner? Use the language's built-in one if it has one; adding a test framework is the user's call, like the property library.
 
-Test fails? Fix the code, not the test. Another test fails? Fix it now. A failure you didn't cause still goes in your report, by name.
+Test fails? Fix the code, not the test. Another test fails because of your change? Fix it now. One that already failed goes in your report by name; leave it.
 
 ### 5. REFACTOR: only what this cycle touched
 
@@ -66,8 +68,6 @@ Then the next failing test for the next behavior.
 - **Testing the mock:** the assertion passes when the mock is there and fails when it isn't, so it says nothing about the code.
 - **Horizontal slices:** all the tests first, then all the code.
 
-**Algebraic shape** (encode and decode, a normaliser, a parser, a comparator, a numeric rule, an invariant over state): read `references/property-based.md`. If the project has no property-testing library, adding one is the user's decision; keep going with example tests meanwhile.
-
 ## When stuck
 
 | Problem | Do |
@@ -79,7 +79,7 @@ Then the next failing test for the next behavior.
 
 ## Stop signs
 
-Each of these means: delete the code written before its test, and start over from RED.
+Each of these means: delete the code you wrote in this change before its test, and start over from RED.
 
 | Thought | Reality |
 |---|---|
@@ -91,7 +91,7 @@ Each of these means: delete the code written before its test, and start over fro
 | "I'll keep it as a reference" | You'll adapt it. That's testing after. |
 | "I need to explore first" | Fine. Throw the exploration away, then start with RED. |
 | "This is hard to test" | Hard to test means hard to use. Listen to the test. |
-| "The test passed right away" | It tests existing behavior, or nothing. |
+| "The test passed right away" | It tests existing behavior (existing code: see above), or nothing. |
 | "This case is different" / "spirit, not ritual" | That is the rationalisation this skill exists to stop. |
 
 ## Before calling a slice done
@@ -104,7 +104,7 @@ Each of these means: delete the code written before its test, and start over fro
 - [ ] Edge cases and error paths are covered
 - [ ] Each realistic mutation (wrong constant or branch, missing side effect, empty return) fails at least one test
 
-Can't tick every box? You skipped TDD: start over.
+Can't tick every box? You skipped TDD: go back to RED for what's missing; delete only code you wrote before its test.
 
 ## Connects to
 
