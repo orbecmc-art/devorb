@@ -1,8 +1,8 @@
 import { execFile, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { devNull } from 'node:os';
-import { basename, dirname, join, relative, sep } from 'node:path';
+import { basename, delimiter, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 
@@ -159,7 +159,36 @@ function copyFiles(root, files, dest) {
 const inSuite = (p, suite) => p.startsWith(`${suite}/`);
 const posix = (p) => p.split(sep).join('/');
 
-export async function prepareArm({ name, ref }, { root, suite = 'evals', withPonytail = false, ponytailRef }) {
+// The real git behind the /usr/bin/git shim, as <prefix>/bin/git.
+async function xcrunGitPrefix() {
+  const { stdout } = await run('xcrun', ['--find', 'git'], { timeout: LOCAL_TIMEOUT_MS });
+  return dirname(dirname(stdout.trim()));
+}
+
+// Inside the eval sandbox on macOS the /usr/bin/git shim fails: the sandbox denies reading
+// CommandLineTools, but the arm dir is readable, so each arm carries its own git.
+async function bundleGit(dir, gitPrefix, err) {
+  const dest = join(dir, '_extra', 'git');
+  rmSync(dest, { recursive: true, force: true }); // never trust a git the source itself ships
+  if (!gitPrefix) return;
+  try {
+    const prefix = await gitPrefix();
+    for (const p of ['bin/git', 'libexec/git-core']) {
+      if (!existsSync(join(prefix, p))) throw new Error(`${join(prefix, p)} not found`);
+    }
+    for (const p of ['bin/git', 'libexec/git-core', 'share/git-core/templates']) {
+      if (existsSync(join(prefix, p))) cpSync(join(prefix, p), join(dest, p), { recursive: true, verbatimSymlinks: true });
+    }
+  } catch (e) {
+    rmSync(dest, { recursive: true, force: true });
+    err(`${basename(dir)}: git not bundled, runs use the system git: ${e.message.trim()}\n`);
+  }
+}
+
+export async function prepareArm(
+  { name, ref },
+  { root, suite = 'evals', withPonytail = false, ponytailRef, gitPrefix = null, err = (s) => process.stderr.write(s) },
+) {
   if (!ARMS.includes(name)) throw new Error(`unknown arm ${JSON.stringify(name)}`);
   const files = await listFiles(root);
   let dir;
@@ -194,6 +223,7 @@ export async function prepareArm({ name, ref }, { root, suite = 'evals', withPon
       writeFileSync(file, `${text}${text.endsWith('\n') ? '' : '\n'}plugins: ${JSON.stringify(plugins)}\n`);
     }
   }
+  await bundleGit(dir, gitPrefix, err);
   return dir;
 }
 
@@ -230,9 +260,9 @@ function parseArgs(argv) {
   return opts;
 }
 
-function runClaude(claude, args) {
+function runClaude(claude, args, env) {
   return new Promise((resolve, reject) => {
-    const child = spawn(claude, args, { stdio: ['ignore', 'inherit', 'inherit'] });
+    const child = spawn(claude, args, { stdio: ['ignore', 'inherit', 'inherit'], env });
     child.on('error', (e) => reject(new Error(`cannot run ${claude}: ${e.message}`, { cause: e })));
     child.on('close', resolve);
   });
@@ -284,7 +314,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
   return lines.join('\n');
 }
 
-async function compare(opts, armNames, { root, claude, out }) {
+async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
   const config = readJson(root, 'fusion/eval-config.json');
   if (!config.model) throw new Error('fusion/eval-config.json: model is null; set the eval model first');
   const registry = readJson(root, 'fusion/skills.json');
@@ -315,13 +345,18 @@ async function compare(opts, armNames, { root, claude, out }) {
     }
     // shortcut: one uncached case reruns the whole glob; split per case if baselines get expensive.
     if (expected.some((c) => !arm.cases[c.name])) {
-      const armDir = await prepareArm({ name, ref }, { root, suite, withPonytail: opts.withPonytail, ponytailRef });
+      const armDir = await prepareArm({ name, ref }, { root, suite, withPonytail: opts.withPonytail, ponytailRef, gitPrefix, err });
       if (!ref) arm.label = basename(armDir);
       const jsonPath = join(armDir, 'eval-result.json');
+      const git = join(armDir, '_extra', 'git');
+      const env = existsSync(join(git, 'bin', 'git'))
+        ? { ...process.env, PATH: `${join(git, 'bin')}${delimiter}${process.env.PATH ?? ''}`, GIT_EXEC_PATH: join(git, 'libexec', 'git-core') }
+        : process.env;
       out(`${arm.label}: claude plugin eval ${caseGlob}\n`);
       const code = await runClaude(
         claude,
         evalArgs({ armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath, ablation: opts.ablation, evalDir: suite }),
+        env,
       );
       if (!existsSync(jsonPath)) throw new Error(`arm ${arm.label}: claude plugin eval exited ${code} without writing ${jsonPath}`);
       const s = summarize(JSON.parse(readFileSync(jsonPath, 'utf8')), caseNames);
@@ -363,7 +398,13 @@ async function compare(opts, armNames, { root, claude, out }) {
 
 export async function runCli(
   argv,
-  { root = ROOT, claude = 'claude', out = (s) => process.stdout.write(s), err = (s) => process.stderr.write(s) } = {},
+  {
+    root = ROOT,
+    claude = 'claude',
+    gitPrefix = process.platform === 'darwin' ? xcrunGitPrefix : null,
+    out = (s) => process.stdout.write(s),
+    err = (s) => process.stderr.write(s),
+  } = {},
 ) {
   let opts;
   let arms;
@@ -376,7 +417,7 @@ export async function runCli(
     return 2;
   }
   try {
-    return await compare(opts, arms, { root, claude, out });
+    return await compare(opts, arms, { root, claude, gitPrefix, out, err });
   } catch (e) {
     err(`${e.message}\n`);
     return 1;

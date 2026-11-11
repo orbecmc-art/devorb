@@ -1,7 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import {
+  chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync, statSync, symlinkSync, writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -229,12 +231,39 @@ test('a source url starting with "-" is never read as a git option', async () =>
   assert.ok(!existsSync(marker), 'the url ran as a command');
 });
 
-function io(root, claude) {
+// A fake git install prefix, laid out like CommandLineTools/usr.
+function fakeGitPrefix() {
+  const prefix = tmp('git');
+  writeTree(prefix, { 'bin/git': '#!/bin/sh\n', 'share/git-core/templates/description': 'd' });
+  chmodSync(join(prefix, 'bin', 'git'), 0o755);
+  mkdirSync(join(prefix, 'libexec', 'git-core'), { recursive: true });
+  symlinkSync('../../bin/git', join(prefix, 'libexec', 'git-core', 'git-add'));
+  return prefix;
+}
+
+test('prepareArm bundles git from the prefix into the arm, or skips with a note when a piece is missing', async () => {
+  const { root } = makeRoot();
+  const prefix = fakeGitPrefix();
+  const dir = await prepareArm({ name: 'none' }, { root, gitPrefix: async () => prefix });
+  const git = join(dir, '_extra', 'git');
+  assert.ok(statSync(join(git, 'bin', 'git')).mode & 0o100, 'git stays executable');
+  assert.equal(readlinkSync(join(git, 'libexec', 'git-core', 'git-add')), '../../bin/git', 'relative links kept, so they resolve inside the arm');
+  assert.equal(read(join(git, 'share', 'git-core', 'templates', 'description')), 'd');
+
+  rmSync(join(prefix, 'libexec'), { recursive: true });
+  let note = '';
+  const again = await prepareArm({ name: 'none' }, { root, gitPrefix: async () => prefix, err: (s) => { note += s; } });
+  assert.ok(!existsSync(join(again, '_extra')));
+  assert.match(note, /git-core/);
+});
+
+function io(root, claude, gitPrefix = null) {
   let out = '';
   let err = '';
   return {
     root,
     claude,
+    gitPrefix,
     out: (s) => { out += s; },
     err: (s) => { err += s; },
     get stdout() { return out; },
@@ -271,6 +300,7 @@ const arm = basename(a[2]);
 const modeFile = new URL('./mode.json', import.meta.url);
 const mode = existsSync(modeFile) ? JSON.parse(readFileSync(modeFile, 'utf8')) : {};
 appendFileSync(new URL('./log', import.meta.url), arm + ' ' + at('--runs') + ' ' + at('--case') + '\\n');
+appendFileSync(new URL('./env', import.meta.url), arm + ' ' + process.env.PATH.split(':')[0] + ' ' + (process.env.GIT_EXEC_PATH ?? '-') + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
 const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
 writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
@@ -282,9 +312,25 @@ process.exitCode = mode.partial ? 2 : 0;
   return {
     bin,
     log: () => read(join(dir, 'log')).trim().split('\n'),
+    env: () => read(join(dir, 'env')).trim().split('\n'),
     mode: (m) => writeFileSync(join(dir, 'mode.json'), JSON.stringify(m)),
   };
 }
+
+test('CLI runs claude with the bundled git first on PATH, and with the plain env when bundling fails', async () => {
+  const { root } = makeRoot();
+  const fake = fakeClaude();
+  const git = join(root, '.arms', 'none', '_extra', 'git');
+  const run = io(root, fake.bin, async () => fakeGitPrefix());
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'none'], run), 0, run.stderr);
+  assert.deepEqual(fake.env(), [`none ${join(git, 'bin')} ${join(git, 'libexec', 'git-core')}`]);
+
+  const skip = io(root, fake.bin, async () => { throw new Error('xcrun: error: unable to find git'); });
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'none'], skip), 0, skip.stderr);
+  assert.match(skip.stderr, /unable to find git/);
+  assert.ok(!existsSync(git));
+  assert.equal(fake.env()[1], `none ${process.env.PATH.split(':')[0]} -`);
+});
 
 test('CLI runs each arm, caches source baselines per case and writes the report', async () => {
   const { root, superpowers } = makeRoot();
