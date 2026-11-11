@@ -61,7 +61,8 @@ export function decide({ cases, runs }) {
 }
 
 // One `claude plugin eval --json` output: score and pass rate of arm `with`, cost of every arm
-// (so per-case costs add up to the total under with-without). Cases that failed to load are absent.
+// (so per-case costs add up to the total under with-without), and runs the tool itself failed
+// (`error`), which say nothing about the skill. Cases that failed to load are absent.
 export function summarize(json, expectedCases = []) {
   const cases = {};
   for (const c of json.cases) {
@@ -71,6 +72,7 @@ export function summarize(json, expectedCases = []) {
       passRate: c.aggregates.passRate,
       costUsd: allRuns.reduce((sum, r) => sum + (r.costUsd ?? 0) + (r.judgeCostUsd ?? 0), 0),
       runs: c.arms?.with?.length ?? 0,
+      errors: allRuns.filter((r) => r.error != null).length,
     };
   }
   return { cases, costUsd: json.costUsd, partial: json.partial === true, missing: expectedCases.filter((n) => !(n in cases)) };
@@ -98,7 +100,7 @@ async function git(args, { cwd, what }) {
 
 export async function resolveRef(source) {
   if (!LATEST.has(source.name)) return source.lastAbsorbed;
-  const sha = (await git(['ls-remote', source.url, 'HEAD'], { what: `source ${source.name}` })).split('\t')[0].trim();
+  const sha = (await git(['ls-remote', '--', source.url, 'HEAD'], { what: `source ${source.name}` })).split('\t')[0].trim();
   if (!FULL_SHA.test(sha)) throw new Error(`source ${source.name}: git ls-remote returned no HEAD commit`);
   return sha;
 }
@@ -127,7 +129,7 @@ async function fetchAt(source, sha, dest) {
   fresh(dest);
   const what = `source ${source.name}`;
   await git(['init', '--quiet'], { cwd: dest, what });
-  await git(['fetch', '--quiet', '--depth', '1', '--no-tags', source.url, sha], { cwd: dest, what });
+  await git(['fetch', '--quiet', '--depth', '1', '--no-tags', '--', source.url, sha], { cwd: dest, what });
   await git(['checkout', '--quiet', 'FETCH_HEAD'], { cwd: dest, what });
   rmSync(join(dest, '.git'), { recursive: true, force: true });
 }
@@ -261,6 +263,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
     }
   }
   const missing = arms.filter((a) => a.missing.length).map((a) => `${a.label}: ${a.missing.join(', ')}`);
+  const errors = arms.flatMap((a) => caseNames.filter((c) => a.cases[c]?.errors).map((c) => `${a.label}: ${c} (${a.cases[c].errors})`));
   const verdict = !hasDevorb ? 'não se aplica (só linhas de base)' : accepted ? 'sim' : outcome.accepted ? 'não (casos do devorb ausentes)' : 'não';
   lines.push(
     '',
@@ -268,6 +271,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
     '',
     `- Casos ausentes (não carregaram ou não rodaram): ${list(missing, 'nenhum')}`,
     `- Rodadas parciais (teto de custo atingido): ${list(arms.filter((a) => a.partial).map((a) => a.label), 'nenhuma')}`,
+    `- Rodadas com erro da ferramenta: ${list(errors, 'nenhuma')}`,
     '',
     '## Decisão',
     '',
@@ -301,7 +305,10 @@ async function compare(opts, armNames, { root, claude, out }) {
     const cacheDir = ref && join(root, 'fusion', 'results', 'baselines', `${name}@${ref}`, suite);
     for (const c of cacheDir ? expected : []) {
       const file = join(cacheDir, `${c.name}.json`);
-      const hit = existsSync(file) && JSON.parse(readFileSync(file, 'utf8'));
+      let hit = null;
+      try {
+        hit = JSON.parse(readFileSync(file, 'utf8'));
+      } catch {} // absent or unreadable: a miss
       if (hit && hit.caseHash === c.hash && Object.entries(key).every(([k, v]) => hit[k] === v)) {
         arm.cases[c.name] = { ...hit.summary, cached: true };
       }
@@ -322,7 +329,7 @@ async function compare(opts, armNames, { root, claude, out }) {
       Object.assign(arm.cases, s.cases);
       if (cacheDir && !arm.partial) {
         mkdirSync(cacheDir, { recursive: true });
-        for (const c of expected.filter((x) => s.cases[x.name])) {
+        for (const c of expected.filter((x) => s.cases[x.name] && s.cases[x.name].errors === 0)) {
           writeFileSync(join(cacheDir, `${c.name}.json`), `${JSON.stringify({ caseHash: c.hash, ...key, summary: s.cases[c.name] }, null, 2)}\n`);
         }
       }
@@ -337,7 +344,8 @@ async function compare(opts, armNames, { root, claude, out }) {
   const devorb = arms.find((a) => a.name === 'devorb');
   const accepted = outcome.accepted && devorb?.missing.length === 0;
   const date = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD in local time
-  const reportPath = join(root, 'fusion', 'results', `${date}-${opts.skill}${opts.reserved ? '-reserved' : ''}.md`);
+  // A baseline-only report never overwrites the day's devorb verdict.
+  const reportPath = join(root, 'fusion', 'results', `${date}-${opts.skill}${opts.reserved ? '-reserved' : ''}${devorb ? '' : '-baseline'}.md`);
   mkdirSync(dirname(reportPath), { recursive: true });
   writeFileSync(
     reportPath,

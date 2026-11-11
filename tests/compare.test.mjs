@@ -136,16 +136,24 @@ test('summarize reads a real eval result', () => {
   const s = summarize(json, ['probe', 'ponytail-probe', 'debugging-gone']);
   const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} vs ${b}`);
   const { costUsd: probeCost, ...probe } = s.cases.probe;
-  assert.deepEqual(probe, { score: 1, passRate: 1, runs: 1 });
+  assert.deepEqual(probe, { score: 1, passRate: 1, runs: 1, errors: 0 });
   near(probeCost, 0.0539035 + 0.0444267); // with and without arms
   const { costUsd: onlyCost, ...only } = s.cases['ponytail-only-probe'];
-  assert.deepEqual(only, { score: 0.75, passRate: 0, runs: 1 });
+  assert.deepEqual(only, { score: 0.75, passRate: 0, runs: 1, errors: 0 });
   near(onlyCost, 0.0623431 + 0.0412562);
   assert.equal(s.costUsd, 0.31493);
   near(Object.values(s.cases).reduce((sum, c) => sum + c.costUsd, 0), s.costUsd);
   assert.equal(s.partial, false);
   assert.deepEqual(s.missing, ['debugging-gone']);
   assert.deepEqual(summarize(json).missing, []);
+});
+
+test('summarize counts runs that failed for infrastructure reasons', () => {
+  const json = JSON.parse(read(new URL('./fixtures/eval-result.json', import.meta.url)));
+  json.cases.find((c) => c.name === 'probe').arms.with[0].error = 'sandbox failed to start';
+  const s = summarize(json);
+  assert.equal(s.cases.probe.errors, 1);
+  assert.equal(s.cases['ponytail-probe'].errors, 0);
 });
 
 test('prepareArm none: empty plugin plus only the active suite', async () => {
@@ -211,6 +219,16 @@ test('resolveRef: superpowers and ponytail follow the remote HEAD, others their 
   assert.equal(await resolveRef(by('mattpocock-skills')), superpowers.pin, 'its pin, not the remote HEAD');
 });
 
+test('a source url starting with "-" is never read as a git option', async () => {
+  const { root } = makeRoot();
+  const marker = join(tmp('marker'), 'ran');
+  const url = `--upload-pack=touch ${marker} #`;
+  await assert.rejects(resolveRef({ name: 'superpowers', url }), /superpowers/);
+  writeFileSync(join(root, 'fusion', 'sources.json'), JSON.stringify({ sources: [{ name: 'superpowers', url, lastAbsorbed: 'a'.repeat(40), paths: ['skills/'] }] }));
+  await assert.rejects(prepareArm({ name: 'superpowers', ref: 'a'.repeat(40) }, { root }), /superpowers/);
+  assert.ok(!existsSync(marker), 'the url ran as a command');
+});
+
 function io(root, claude) {
   let out = '';
   let err = '';
@@ -238,24 +256,34 @@ test('CLI rejects a null model and an unknown arm before running anything', asyn
 });
 
 // Fake `claude`: logs "<arm dir name> <runs> <case glob>" and writes a result where
-// devorb passes every run, superpowers half and none nothing.
+// devorb passes every run, superpowers half and none nothing. `mode(...)` switches it:
+// `partial` exits 2 with partial: true, `error` marks every run as failed, `cases` lists
+// the cases it reports, and `omit: { arm, case }` drops one case for arms starting with `arm`.
 function fakeClaude() {
   const dir = tmp('bin');
   const bin = join(dir, 'claude.mjs');
   writeFileSync(bin, `#!/usr/bin/env node
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
 const a = process.argv.slice(2);
 const at = (f) => a[a.indexOf(f) + 1];
 const arm = basename(a[2]);
+const modeFile = new URL('./mode.json', import.meta.url);
+const mode = existsSync(modeFile) ? JSON.parse(readFileSync(modeFile, 'utf8')) : {};
 appendFileSync(new URL('./log', import.meta.url), arm + ' ' + at('--runs') + ' ' + at('--case') + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
-writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25, partial: false, cases: [
-  { name: 'demo-one', aggregates: { score: rate, passRate: rate }, arms: { with: [{ costUsd: 0.2, judgeCostUsd: 0.05 }] } },
-] }));
+const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
+writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
+  { name, aggregates: { score: rate, passRate: rate }, arms: { with: [{ costUsd: 0.2, judgeCostUsd: 0.05, error: mode.error ? 'boom' : null }] } }
+)) }));
+process.exitCode = mode.partial ? 2 : 0;
 `);
   chmodSync(bin, 0o755);
-  return { bin, log: () => read(join(dir, 'log')).trim().split('\n') };
+  return {
+    bin,
+    log: () => read(join(dir, 'log')).trim().split('\n'),
+    mode: (m) => writeFileSync(join(dir, 'mode.json'), JSON.stringify(m)),
+  };
 }
 
 test('CLI runs each arm, caches source baselines per case and writes the report', async () => {
@@ -281,7 +309,7 @@ test('CLI runs each arm, caches source baselines per case and writes the report'
   assert.equal(cached.withPonytail, false);
   assert.equal(cached.ablation, 'none');
   assert.match(cached.caseHash, /^[0-9a-f]{64}$/);
-  assert.deepEqual(cached.summary, { score: 0.5, passRate: 0.5, costUsd: 0.25, runs: 1 });
+  assert.deepEqual(cached.summary, { score: 0.5, passRate: 0.5, costUsd: 0.25, runs: 1, errors: 0 });
 
   const second = io(root, fake.bin);
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,superpowers,none'], second), 0, second.stderr);
@@ -289,8 +317,51 @@ test('CLI runs each arm, caches source baselines per case and writes the report'
   assert.match(read(reportPath), /\| superpowers@[0-9a-f]{7} \| 50% \| 0\.50 \| US\$ 0\.2500 \(cache\) \|/);
 
   writeFileSync(join(root, 'evals', 'demo-one', 'graders', 'g.md'), '---\ntype: regex\npattern: changed\n---\n');
-  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers', '--runs', '3'], io(root, fake.bin)), 0);
-  assert.deepEqual(fake.log().slice(5), [`superpowers@${superpowers.sha} 3 demo-*`], 'a changed case runs again');
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], io(root, fake.bin)), 0);
+  assert.deepEqual(fake.log().slice(5), [`superpowers@${superpowers.sha} 2 demo-*`], 'a changed case runs again');
+
+  writeFileSync(cacheFile, '{ not json');
+  const corrupt = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], corrupt), 0, corrupt.stderr);
+  assert.equal(fake.log().length, 7, 'an unreadable cache file is a miss');
+  assert.equal(JSON.parse(read(cacheFile)).summary.passRate, 0.5);
+});
+
+test('CLI never caches partial runs or runs with errors, and names the baseline-only report apart', async () => {
+  const { root, superpowers } = makeRoot();
+  const fake = fakeClaude();
+  const cacheFile = join(root, 'fusion', 'results', 'baselines', `superpowers@${superpowers.sha}`, 'evals', 'demo-one.json');
+  const reportOf = (run) => run.stdout.trim().split('\n').at(-1);
+
+  fake.mode({ partial: true });
+  const partial = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], partial), 0, partial.stderr);
+  assert.ok(reportOf(partial).endsWith('-demo-baseline.md'), reportOf(partial));
+  assert.match(read(reportOf(partial)), /Rodadas parciais \(teto de custo atingido\): `superpowers@[0-9a-f]{7}`/);
+  assert.ok(!existsSync(cacheFile), 'partial run cached');
+
+  fake.mode({ error: true });
+  const failed = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], failed), 0, failed.stderr);
+  assert.match(read(reportOf(failed)), /Rodadas com erro da ferramenta: `superpowers@[0-9a-f]{7}: demo-one \(1\)`/);
+  assert.ok(!existsSync(cacheFile), 'run with errors cached');
+
+  fake.mode({});
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], io(root, fake.bin)), 0);
+  assert.ok(existsSync(cacheFile));
+});
+
+test('CLI does not accept when a devorb case is missing', async () => {
+  const { root } = makeRoot();
+  writeTree(root, { 'evals/demo-two/case.yaml': CASE('demo-two') });
+  const fake = fakeClaude();
+  fake.mode({ cases: ['demo-one', 'demo-two'], omit: { arm: 'devorb', case: 'demo-two' } });
+  const run = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'devorb,none'], run), 0, run.stderr);
+  assert.match(run.stdout, /accepted: false/);
+  const report = read(run.stdout.split('\n').find((l) => l.endsWith('-demo.md')));
+  assert.match(report, /Aprovado: não \(casos do devorb ausentes\)/);
+  assert.match(report, /Casos ausentes \(não carregaram ou não rodaram\): `devorb@[0-9a-f]{7}: demo-two`/);
 });
 
 test('CLI --baseline-only defaults to the source arms and none, with mattpocock-skills at its pin', async () => {
@@ -299,6 +370,7 @@ test('CLI --baseline-only defaults to the source arms and none, with mattpocock-
   const run = io(root, fake.bin);
   assert.equal(await runCli(['--skill', 'demo', '--baseline-only'], run), 0, run.stderr);
   assert.deepEqual(fake.log(), [`superpowers@${superpowers.sha} 2 demo-*`, `mattpocock-skills@${superpowers.pin} 2 demo-*`, 'none 2 demo-*']);
+  assert.ok(run.stdout.trim().endsWith('-demo-baseline.md'), run.stdout);
   assert.match(read(run.stdout.trim().split('\n').at(-1)), /só linhas de base/);
 
   const empty = io(root, fake.bin);
