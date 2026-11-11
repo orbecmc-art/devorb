@@ -50,6 +50,36 @@ test('both scans walk every file in the skill folder', () =>
   ]));
 test('automatic skill must not set disable-model-invocation', () =>
   assert.deepEqual(errs('auto-flag'), ['a: automatic skill must not set disable-model-invocation']));
+const SKILL = (name, body = '') => `---\nname: ${name}\ndescription: Use when testing the checker.\n---\n\n# ${name}\n\n${body}\n\n## Connects to\n\nNothing yet.\n`;
+const ENTRY = { invocation: 'auto', level: 'full', ceilingTokens: 2500, status: 'done' };
+
+function checkTree(registry, skills) {
+  const root = mkdtempSync(join(tmpdir(), 'devorb-'));
+  try {
+    for (const [name, text] of Object.entries(skills)) {
+      mkdirSync(join(root, 'skills', name), { recursive: true });
+      writeFileSync(join(root, 'skills', name, 'SKILL.md'), text);
+    }
+    return checkSkills(root, registry).sort();
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+test('names inherited from Object are not in the registry', () =>
+  assert.deepEqual(
+    checkTree({ a: ENTRY }, { a: SKILL('a', 'See devorb:constructor.'), constructor: SKILL('constructor'), toString: SKILL('toString'), ['__proto__']: SKILL('__proto__') }),
+    ['__proto__: folder not in registry', 'a: devorb:constructor not in registry', 'constructor: folder not in registry', 'toString: folder not in registry'],
+  ));
+
+test('a registry entry without a numeric ceilingTokens is an error, not a skipped ceiling', () => {
+  const { ceilingTokens, ...noCeiling } = ENTRY;
+  assert.deepEqual(
+    checkTree({ a: noCeiling, b: { ...ENTRY, ceilingTokens: '2500' }, p: { ...noCeiling, status: 'planned' } }, { a: SKILL('a'), b: SKILL('b') }),
+    ['a: missing ceilingTokens in registry', 'b: missing ceilingTokens in registry', 'p: missing ceilingTokens in registry'],
+  );
+});
+
 test('a stray file in skills/ is not a folder', () => {
   const root = mkdtempSync(join(tmpdir(), 'devorb-'));
   try {
