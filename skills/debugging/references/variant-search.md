@@ -1,38 +1,24 @@
-# Searching for variants
+# Finding every place the rule breaks
 
-Use this when the broken rule could be violated in more places than a quick grep of callers shows: a large codebase, copied code, or a misused API.
+Open this when a grep of the direct callers is not enough: a large repository, code copied between modules, or an API that many places call the same wrong way.
 
-## Name the rule first
+Work from the one-sentence rule of phase 5. If you cannot check a single line of code against it, sharpen it before you search. Then note where else the same slip could live here, such as sibling functions or the same check written another way, and confirm each lead exists.
 
-Write the rule as a sentence a search can check: what must always hold, and what reaches the code without it. "Only the owner of a record may edit it." "Every handle opened on this path is closed on the error path too." A vague rule gives a vague search.
+## Grow the search from the known case
 
-Before searching, list where variants tend to hide, and grep to confirm each lead exists in this codebase:
+Search from the repository root. The first query finds the bug you reproduced and little else. If it misses that line, your picture of the bug is wrong: go back before you widen.
 
-- Identifiers with the same job: sibling methods, other stores, other flags.
-- The same mistake written differently: a negated check, a default that succeeds when no branch matched, the wrong boolean operator.
-- Boundary values: a comparison where both sides can be missing, an empty string against null, zero, an empty list.
-- Functions whose name or doc promises one thing while the return value means another.
+Then loosen one thing per query, for example a name turned into a wildcard, or the code around the call relaxed, or the bad value traced from its entry point to the line it breaks. Read every new hit, and keep a count per query of real hits against noise. When noise passes half, undo that last loosening and loosen something else. grep is enough in most repositories.
 
-## Widen one step at a time
+## Clear a candidate before you count it
 
-Search from the repository root, not only the module where the bug showed up.
+For each hit, look for what keeps the bad value out: a guard or a validation earlier on the path, a type that cannot hold it, callers that never pass it. Read the whole function and its callers. A candidate counts only when you fail to clear it. Code that nothing calls today still counts, below the live paths.
 
-1. **Exact:** a search that matches only the known case. If it matches nothing, your picture of the bug is wrong; fix that before going on.
-2. **Names:** replace the specific identifiers with wildcards.
-3. **Structure:** loosen the surrounding code shape.
-4. **Data flow:** follow the value from where it enters to where it does harm.
+## Write it down
 
-Change one element per step, then read every new hit. Write down per step how many hits were real and how many were noise. When more than half are noise, undo that step and try a different one instead of widening further.
+| Place | What you did | Why |
+|---|---|---|
+| `src/a.js:42`, the reported bug | fixed in the shared layer | both callers go through it |
+| `vendor/c.js:10` | left as is | vendored copy, told the user |
 
-## Decide each candidate
-
-Before counting a candidate, try to prove it safe: read the whole function and its callers for a guard that runs first, a validation on the way in, a type that cannot hold the bad value, or callers that never pass it. It is a variant only when that proof fails. Code with no caller today still counts, at lower priority.
-
-## Record
-
-| Variant | Location | Status | Reason |
-|---|---|---|---|
-| The reported bug | `src/x.js:42` | fixed | Fixed in the shared layer |
-| Same rule, other caller | `src/y.js:10` | not fixed | Out of scope, reported to the user |
-
-Also note the candidates you ruled out, grouped by what made them safe, so a later search can skip them.
+Under the table, list the candidates you cleared, grouped by what cleared them, so a later search can skip them.
