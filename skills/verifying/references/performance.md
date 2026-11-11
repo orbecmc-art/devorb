@@ -5,24 +5,24 @@ Use this before saying a change is faster, slower, lighter or "no slowdown", and
 ## Before you measure
 
 - **Baseline first.** Measure the current code before changing it. Without a baseline there is nothing to compare.
-- **Decide the claim up front:** metric, unit and the change you expect. Then open the benchmark and see what its timer covers and what sits outside it.
-- **Same conditions on both sides:** input, data size, build mode and flags, dependency versions, cache state. If one side runs a debug build or a cold cache, the number measures that difference instead of your change.
+- **Write the claim down first:** what you measure, in which unit, and which way you expect it to move. Read the benchmark code to see where the clock starts and stops, so setup or teardown does not slip into the number.
+- **Match both sides.** Old and new get the same input and data volume, the same compiler or bundler settings, the same library versions, and a cache in the same state (both warm or both cold). A release build against a dev build compares the builds, not your change.
 - **One idea per variant.** A variant that changes three things at once can't tell you which one helped.
 - **Tests first.** Every variant runs the test suite before it is timed. A red variant is out, whatever its number.
 
 ## While you measure
 
-- **Interleave.** Run old, new, old, new, at least 5 times each, so whatever drifts during the session (warm-up, caching, other load) lands on both sides.
+- **Alternate.** Do 5 alternating runs per side (old, new, old, new...). Noise that grows during a session, such as a JIT warming up, a disk cache filling or a background job, then hits both sides alike.
 - **Count bad runs.** Any run that errored or returned a wrong answer is reported, not dropped. An error page comes back quickly and can pass for a speed-up.
-- **Make sure the timed code ran.** A promise nobody awaits or a result nobody reads can be skipped or optimized away, and skipped work is very fast. Log or assert something the work produces.
-- **Sanity-check the size of the gain.** Removing a step that took a fifth of the time can shorten the run by a fifth at most. A bigger gain usually means you timed a cache hit or skipped work.
+- **Prove the measured work happened.** A fire-and-forget call returns before its work finishes, and a compiler may drop a computed value that nothing uses. Either one makes the new side look fast. Check an output of the work on every run, such as a row count or a checksum.
+- **Check the gain against its ceiling.** Removing a step saves at most the time that step took: a step taking 200 ms of a 1 s run saves at most 200 ms. A gain above the ceiling points elsewhere, for example to a warm cache on one side or to work that never ran.
 
 ## Report
 
-Start with one word for the verdict: **faster**, **slower**, **no difference** or **inconclusive**.
+Open the report with the verdict: **faster**, **slower**, **no difference** or **inconclusive**.
 
 - Give the median for each side, the spread (lowest to highest), the number of runs, the bad-run count and the exact commands.
 - If the gap between medians is inside the spread, the verdict is "no difference", even when one median is lower.
-- The verdict is inconclusive if any check above failed: different conditions, uncounted bad runs, or no sign the work ran. Name the one that failed.
+- Call it **inconclusive** when a check from the lists above did not hold (sides not matched, bad runs not counted, no proof the work happened), and name that check.
 - Don't call the winner optimal; it is the best of the ones you tried.
-- For a micro-benchmark, also say how much of the user's wait that code accounts for.
+- When you timed one function on its own, give its share of the whole wait: 5 ms saved in a 2 s page load is 0.25% of it.

@@ -25,23 +25,25 @@ O caso que justifica a regra própria é o caso realista da Task 8, como o plano
 | Contar o que rodou: exit 0 sozinho não prova nada, zero testes ou padrão sem arquivo é falha | gstack (`gate-integrity.md`), só ideia, com o texto da decisão da Task 8 |
 | Verde só vale com o portão intacto, conferido em um item no próprio diff | ECC (`loop-design-check`, critério de pronto sempre com o que não pode acontecer) e gstack (`gate-integrity.md` e `verify`), só ideias. Tamanho de um item pela spec, "Teste afrouxado" |
 | "Já estava falhando" exige vermelho antes da primeira edição ou na branch base | gstack (`verify`), só ideia, mais a branch base da decisão da Task 8 |
-| Branch base em worktree separada (`git worktree add`) | DevOrb: o stash é compartilhado entre worktrees e sessões, então a skill não manda usar `git stash` |
+| Branch base em worktree separada e descartável (`git worktree add --detach`, instalar o que os testes pedem, rodar o mesmo teste, `git worktree remove`), sem trocar nem resetar a cópia atual | DevOrb: o stash é compartilhado entre worktrees e sessões, então a skill não manda usar `git stash`. Comandos completos desde a revisão de 2026-11-11 |
 | Peça faltando bloqueia e não é falsificada | gstack (`verify`, ambiente ausente é relatado, não contornado), só ideia |
 | Tabela de falhas comuns: sete linhas | Superpowers, com "N ran" e "exit 0 with nothing run" (gstack, só ideia) e "or a note" (regra própria 1) |
 | Tabela: linha de interface | DevOrb: spec, "Como as skills se conectam" (`verifying` usa `browser-testing`) |
 | Tabela: linha de ambiente implantado | ECC (`verification-loop`), só ideia |
 | Tabela: linha de desempenho | gstack (`vet-the-number`) e ECC (`benchmark-optimization-loop`), só ideias |
 | Teste de regressão: reverter só o conserto e ver falhar | Superpowers ("padrões-chave") |
-| Relatos de agentes: ler o diff, conferir, rodar e relatar o que viu | Superpowers |
+| Teste de regressão: tirar o conserto editando ou com `git diff -- <arquivos> > fix.patch` e `git apply -R`, nunca `git checkout --`, `git stash` ou `git reset` | DevOrb, revisão de 2026-11-11 |
+| Relatos de agentes: ler o diff, conferir, rodar e relatar o que viu | Superpowers. Desde a revisão de 2026-11-11, o diff é `git diff <base>...HEAD` mais `git status`, no lugar de `git log` |
 | Relatos de agentes: sessão anterior, mensagem de commit e nota no repositório também são alegação; a execução vence, citar o teste que falha e as contagens, nunca repetir o sucesso do relato | Regra própria 1 |
 | Requisitos: checklist linha a linha | Superpowers |
 | Requisitos: o pedido ou plano como estava antes do trabalho, não uma versão editada para casar com o resultado | gstack (`gate-integrity.md`, aceite reescrito como progresso), só ideia |
 | Ambiente implantado: linha própria, quatro estados, ambiente, versão e evidência, teste local, revisão e merge não provam o alvo, dizer o acesso ou passo que falta | ECC (`verification-loop`), só ideia, com o texto da decisão da Task 8 |
 | Ambiente implantado: produção só leitura, fluxo que altera dados em staging ou preview com permissão explícita | Spec, conflito "Enviar formulário no navegador" |
+| Ambiente implantado: checagem que altera dados exige também credencial de teste; afirmação sobre produção que só uma alteração de dados provaria fica como **not done**, com o motivo; segredos e dados pessoais ocultados nos logs citados | DevOrb, revisão de 2026-11-11 |
 | Exemplo do bloco `Local` / `Deployed` | DevOrb, exemplo próprio (caso de falha no alvo) |
 | Desempenho: mesma entrada, 5 rodadas intercaladas por lado, mediana e faixa, contar erros, diferença dentro da faixa é "sem diferença", variante que quebra teste é rejeitada | gstack (`vet-the-number`) e ECC (`benchmark-optimization-loop`), só ideias, com o texto da decisão da Task 8 |
 | `references/performance.md`: medir a base antes, uma ideia por variante, testes antes de cronometrar, "melhor das testadas" e não "ótima" | ECC (`benchmark-optimization-loop`), só ideias, texto próprio |
-| `references/performance.md`: decidir a afirmação antes, ver o que o cronômetro cobre, mesmas condições, intercalar, contar rodadas ruins, confirmar que o trabalho rodou, teto aritmético do ganho, veredito em quatro palavras, inconclusivo quando uma checagem falhou, parcela da espera do usuário | gstack (`vet-the-number`), só ideias, texto próprio, em ordem e agrupamento próprios (antes, durante, relatório) e sem as sete perguntas |
+| `references/performance.md`: escrever a afirmação antes e ler onde o cronômetro começa e para, mesmas condições nos dois lados, 5 rodadas alternadas por lado, contar rodadas ruins, provar que o trabalho medido aconteceu, teto do ganho, veredito entre quatro opções (`faster`, `slower`, `no difference`, `inconclusive`), inconclusivo quando uma checagem falhou, parcela da espera total para micro-benchmark | gstack (`vet-the-number`), só ideias. As frases e os exemplos foram reescritos na revisão de 2026-11-11, sem a fonte aberta, a partir desta lista: chamada disparada sem esperar o fim, valor que o compilador descarta, passo de 200 ms numa execução de 1 s, 5 ms numa página de 2 s. Ordem e agrupamento próprios (antes, durante, relatório), sem as sete perguntas |
 | Sinais de parada | Superpowers (sinais vermelhos e racionalizações), condensados em uma tabela, mais três linhas: "já estava vermelho" (decisão da Task 8), "pular o teste instável" (ECC e gstack, só ideia) e "o mock devolve o certo" (gstack, só ideia) |
 | Entrega: cada afirmação com comando e resultado, o que ficou sem verificar e a linha do ambiente | Superpowers ("afirmar com evidência") e ECC (`verification-loop`, relatório à parte do alvo), só ideia |
 | `Connects to` | DevOrb: plano, Task 8 |
@@ -74,6 +76,15 @@ Regras próprias só saem com decisão explícita do dono.
 - **Do gstack (`vet-the-number`):** nomear o recurso que limita o tempo, o teste de soma de postos, conferir `uptime` e `nproc`, rodar o profiler fora das rodadas medidas, o relatório em arquivo e o número único no corpo do pull request. Achar o limitante é investigação, e o ramo de desempenho de `debugging` cobre isso. O resto é do fluxo `/ship` deles.
 - **Lacuna:** nenhuma fonte diz como verificar quando o comando de teste do projeto não existe ou não é conhecido. A skill só manda identificar o comando que prova a afirmação. Só entra regra se um caso real pedir.
 
+## Revisões
+
+- **2026-11-11, depois da revisão e antes das rodadas pagas de comparação.** `SKILL.md` foi de 6.339 para 7.146 bytes (cerca de 1.585 para 1.787 tokens).
+  - **Risco de cópia em `references/performance.md`:** a revisão achou frases parafraseadas do gstack (`vet-the-number`, `textReuse: false`). As linhas sobre decidir a afirmação, mesmas condições, intercalar, confirmar que o trabalho rodou, teto do ganho, veredito, inconclusivo e micro-benchmark foram reescritas sem a fonte aberta, com exemplos próprios (chamada disparada sem esperar o fim, passo de 200 ms numa execução de 1 s, 5 ms numa página de 2 s). O número de rodadas virou "5 rodadas alternadas por lado" na referência e no corpo, no lugar de "pelo menos 5". "Uma palavra para o veredito" saiu, porque "no difference" tem duas.
+  - **Git seguro:** reverter o conserto para ver o vermelho e restaurar um teste afrouxado agora se faz editando ou com `fix.patch` e `git apply -R`, nunca com `git checkout --`, `git stash` ou `git reset`, que podem apagar trabalho não comitado. A branch base roda numa worktree destacada e descartável (`git worktree add --detach`, depois `git worktree remove`), sem trocar nem resetar a cópia atual.
+  - **Relatos de agentes:** o diff a ler é `git diff <base>...HEAD` mais `git status`; `git log` mostra mensagens, que são alegação, não mudança.
+  - **Ambiente implantado:** checagem que altera dados exige permissão explícita e credencial de teste; afirmação sobre produção que só uma alteração de dados provaria fica como **not done**, com o motivo; logs citados ocultam segredos e dados pessoais. O parágrafo foi reordenado em lista própria (alcance, segurança, linha do relatório, logs), para não seguir a ordem das frases do ECC.
+  - **Menores:** "tests pass" exige a suíte inteira, e a lista de peças faltando ("database, key or binary") virou exemplos próprios (contêiner, conta, ferramenta de linha de comando).
+
 ## Resultados
 
 A preencher.
@@ -92,5 +103,5 @@ A preencher.
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/gate-integrity.md` | recusado | o restante do catálogo, os níveis de leitura e a ferramenta deles; a lista completa fica para `reviewing`
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:verify/SKILL.md.tmpl` | adotado | só ideias: vermelho anterior só se visto antes da primeira edição, subconjunto ao consertar e execução completa antes de afirmar, peça de ambiente ausente é relatada e não contornada, verde amarrado à árvore exata
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:verify/SKILL.md.tmpl` | recusado | binário `gstack-checks`, estados e arquivo de configuração próprios, limite de cinco execuções
-- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:benchmark/sections/vet-the-number.md.tmpl` | adotado | só ideias: pelo menos 5 rodadas intercaladas por lado, mediana e faixa, contar erros e respostas erradas, diferença dentro da variação é "sem diferença", mesmas condições nos dois lados, confirmar que o trabalho rodou, teto aritmético do ganho, veredito em quatro palavras, parcela do total (em `references/performance.md`)
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:benchmark/sections/vet-the-number.md.tmpl` | adotado | só ideias: 5 rodadas alternadas por lado, mediana e faixa, contar erros e respostas erradas, diferença dentro da variação é "sem diferença", mesmas condições nos dois lados, confirmar que o trabalho rodou, teto do ganho, veredito entre quatro opções, parcela do total (em `references/performance.md`, texto e exemplos próprios desde a revisão de 2026-11-11)
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:benchmark/sections/vet-the-number.md.tmpl` | recusado | nomear o limitante, teste de soma de postos, `uptime` e `nproc`, profiler fora das rodadas, relatório em arquivo e número único no pull request
