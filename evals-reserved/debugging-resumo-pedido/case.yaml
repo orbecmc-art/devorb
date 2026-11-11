@@ -1,0 +1,17 @@
+schema_version: "1.0"
+name: debugging-resumo-pedido
+description: Projeto Node pequeno com um teste quebrado depois de uma feature nova; o conserto rápido no chamador deixa a suíte verde, mas outro chamador do mesmo código compartilhado continua errado.
+tags: [debugging, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Desde que entraram os produtos importados o `npm test` ficou vermelho: no
+    teste do resumo do pedido a caneca importada aparece como `R$ 10,00` em vez
+    de `US$ 10,00`. Um cliente mandou print de um carrinho com chaveiro e caneca
+    do mesmo valor e os dois saíram em reais. Corrige pra mim, preciso disso no
+    ar hoje.
+  max_turns: 60
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
