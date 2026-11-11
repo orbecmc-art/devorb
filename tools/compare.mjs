@@ -23,7 +23,8 @@ const EPSILON = 1e-9;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const USAGE =
   'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>]\n' +
-  '  --baseline-only skips devorb; without --arms it runs superpowers,mattpocock-skills,none\n';
+  '  --baseline-only skips devorb; without --arms it runs superpowers,mattpocock-skills,none\n' +
+  '  evolving-* cases need tools/source-diff.mjs in the arm, so compare them only with --arms devorb --ablation with-without\n';
 
 export function parseArms(text) {
   const arms = text.split(',').map((a) => a.trim());
@@ -167,7 +168,7 @@ async function xcrunGitPrefix() {
 
 // Inside the eval sandbox on macOS the /usr/bin/git shim fails: the sandbox denies reading
 // CommandLineTools, but the arm dir is readable, so each arm carries its own git.
-async function bundleGit(dir, gitPrefix, err) {
+async function bundleGit(dir, gitPrefix, onGitSkip) {
   const dest = join(dir, '_extra', 'git');
   rmSync(dest, { recursive: true, force: true }); // never trust a git the source itself ships
   if (!gitPrefix) return;
@@ -181,13 +182,22 @@ async function bundleGit(dir, gitPrefix, err) {
     }
   } catch (e) {
     rmSync(dest, { recursive: true, force: true });
-    err(`${basename(dir)}: git not bundled, runs use the system git: ${e.message.trim()}\n`);
+    onGitSkip(e.message.trim().split(/\s*\n\s*/).join(' | '));
   }
 }
 
+const gitSkipNote = (arm, reason) => `git não empacotado no braço ${arm}: ${reason}`;
+
 export async function prepareArm(
   { name, ref },
-  { root, suite = 'evals', withPonytail = false, ponytailRef, gitPrefix = null, err = (s) => process.stderr.write(s) },
+  {
+    root,
+    suite = 'evals',
+    withPonytail = false,
+    ponytailRef,
+    gitPrefix = null,
+    onGitSkip = (reason) => process.stderr.write(`${gitSkipNote(name, reason)}\n`),
+  },
 ) {
   if (!ARMS.includes(name)) throw new Error(`unknown arm ${JSON.stringify(name)}`);
   const files = await listFiles(root);
@@ -223,7 +233,7 @@ export async function prepareArm(
       writeFileSync(file, `${text}${text.endsWith('\n') ? '' : '\n'}plugins: ${JSON.stringify(plugins)}\n`);
     }
   }
-  await bundleGit(dir, gitPrefix, err);
+  await bundleGit(dir, gitPrefix, onGitSkip);
   return dir;
 }
 
@@ -302,6 +312,7 @@ function report({ date, skill, suite, caseGlob, runs, model, ablation, ponytailR
     `- Casos ausentes (não carregaram ou não rodaram): ${list(missing, 'nenhum')}`,
     `- Rodadas parciais (teto de custo atingido): ${list(arms.filter((a) => a.partial).map((a) => a.label), 'nenhuma')}`,
     `- Rodadas com erro da ferramenta: ${list(errors, 'nenhuma')}`,
+    ...arms.filter((a) => a.gitSkip).map((a) => `- ${gitSkipNote(`\`${a.label}\``, a.gitSkip)}`),
     '',
     '## Decisão',
     '',
@@ -345,8 +356,10 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
     }
     // shortcut: one uncached case reruns the whole glob; split per case if baselines get expensive.
     if (expected.some((c) => !arm.cases[c.name])) {
-      const armDir = await prepareArm({ name, ref }, { root, suite, withPonytail: opts.withPonytail, ponytailRef, gitPrefix, err });
+      const onGitSkip = (reason) => { arm.gitSkip = reason; }; // reported, never blocks the run
+      const armDir = await prepareArm({ name, ref }, { root, suite, withPonytail: opts.withPonytail, ponytailRef, gitPrefix, onGitSkip });
       if (!ref) arm.label = basename(armDir);
+      if (arm.gitSkip) err(`${gitSkipNote(arm.label, arm.gitSkip)}\n`);
       const jsonPath = join(armDir, 'eval-result.json');
       const git = join(armDir, '_extra', 'git');
       const env = existsSync(join(git, 'bin', 'git'))

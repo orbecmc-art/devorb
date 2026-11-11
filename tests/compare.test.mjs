@@ -251,10 +251,22 @@ test('prepareArm bundles git from the prefix into the arm, or skips with a note 
   assert.equal(read(join(git, 'share', 'git-core', 'templates', 'description')), 'd');
 
   rmSync(join(prefix, 'libexec'), { recursive: true });
-  let note = '';
-  const again = await prepareArm({ name: 'none' }, { root, gitPrefix: async () => prefix, err: (s) => { note += s; } });
+  let reason = '';
+  const again = await prepareArm({ name: 'none' }, { root, gitPrefix: async () => prefix, onGitSkip: (r) => { reason = r; } });
   assert.ok(!existsSync(join(again, '_extra')));
-  assert.match(note, /git-core/);
+  assert.match(reason, /git-core/);
+});
+
+test('prepareArm leaves no partial git when copying fails midway', async () => {
+  const { root } = makeRoot();
+  const prefix = fakeGitPrefix();
+  const locked = join(prefix, 'libexec', 'git-core', 'git-locked');
+  writeFileSync(locked, 'x');
+  chmodSync(locked, 0); // bin/git copies, then git-core fails
+  let reason = '';
+  const dir = await prepareArm({ name: 'none' }, { root, gitPrefix: async () => prefix, onGitSkip: (r) => { reason = r; } });
+  assert.ok(!existsSync(join(dir, '_extra', 'git')), 'partial git left in the arm');
+  assert.match(reason, /EACCES|permission/i);
 });
 
 function io(root, claude, gitPrefix = null) {
@@ -300,7 +312,7 @@ const arm = basename(a[2]);
 const modeFile = new URL('./mode.json', import.meta.url);
 const mode = existsSync(modeFile) ? JSON.parse(readFileSync(modeFile, 'utf8')) : {};
 appendFileSync(new URL('./log', import.meta.url), arm + ' ' + at('--runs') + ' ' + at('--case') + '\\n');
-appendFileSync(new URL('./env', import.meta.url), arm + ' ' + process.env.PATH.split(':')[0] + ' ' + (process.env.GIT_EXEC_PATH ?? '-') + '\\n');
+appendFileSync(new URL('./env', import.meta.url), [arm, process.env.PATH.split(':')[0], process.env.GIT_EXEC_PATH ?? '-', process.env.HOME ?? '-'].join(' ') + '\\n');
 const rate = arm.startsWith('devorb') ? 1 : arm === 'none' ? 0 : 0.5;
 const names = (mode.cases ?? ['demo-one']).filter((n) => !(mode.omit && arm.startsWith(mode.omit.arm) && n === mode.omit.case));
 writeFileSync(at('--json'), JSON.stringify({ costUsd: 0.25 * names.length, partial: !!mode.partial, cases: names.map((name) => (
@@ -323,13 +335,29 @@ test('CLI runs claude with the bundled git first on PATH, and with the plain env
   const git = join(root, '.arms', 'none', '_extra', 'git');
   const run = io(root, fake.bin, async () => fakeGitPrefix());
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'none'], run), 0, run.stderr);
-  assert.deepEqual(fake.env(), [`none ${join(git, 'bin')} ${join(git, 'libexec', 'git-core')}`]);
+  assert.deepEqual(fake.env(), [`none ${join(git, 'bin')} ${join(git, 'libexec', 'git-core')} ${process.env.HOME}`], 'the rest of the env (HOME, auth) passes through');
+  assert.doesNotMatch(read(run.stdout.trim().split('\n').at(-1)), /git não empacotado/);
 
-  const skip = io(root, fake.bin, async () => { throw new Error('xcrun: error: unable to find git'); });
+  const skip = io(root, fake.bin, async () => { throw new Error('Command failed: xcrun --find git\nxcrun: error: unable to find git'); });
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'none'], skip), 0, skip.stderr);
-  assert.match(skip.stderr, /unable to find git/);
+  assert.match(skip.stderr, /git não empacotado no braço none: .*unable to find git/);
+  assert.match(read(skip.stdout.trim().split('\n').at(-1)), /\n- git não empacotado no braço `none`: Command failed: xcrun --find git \| xcrun: error: unable to find git\n/);
   assert.ok(!existsSync(git));
-  assert.equal(fake.env()[1], `none ${process.env.PATH.split(':')[0]} -`);
+  assert.equal(fake.env()[1], `none ${process.env.PATH.split(':')[0]} - ${process.env.HOME}`);
+});
+
+test('CLI drops a git the source ships, so claude gets the plain env', async () => {
+  const { root } = makeRoot();
+  const source = repo({ '.claude-plugin/plugin.json': '{"name":"superpowers"}', '_extra/git/bin/git': '#!/bin/sh\n' });
+  chmodSync(join(source.dir, '_extra', 'git', 'bin', 'git'), 0o755);
+  git(source.dir, 'commit', '-q', '-am', 'executable');
+  const sha = git(source.dir, 'rev-parse', 'HEAD');
+  writeFileSync(join(root, 'fusion', 'sources.json'), JSON.stringify({ sources: [{ name: 'superpowers', url: source.url, lastAbsorbed: 'a'.repeat(40), paths: ['skills/'] }] }));
+  const fake = fakeClaude();
+  const run = io(root, fake.bin); // gitPrefix null: what non-darwin and a failed xcrun look like
+  assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers'], run), 0, run.stderr);
+  assert.ok(!existsSync(join(root, '.arms', `superpowers@${sha}`, '_extra', 'git')));
+  assert.deepEqual(fake.env(), [`superpowers@${sha} ${process.env.PATH.split(':')[0]} - ${process.env.HOME}`]);
 });
 
 test('CLI runs each arm, caches source baselines per case and writes the report', async () => {
