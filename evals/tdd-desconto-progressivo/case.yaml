@@ -1,0 +1,17 @@
+schema_version: "1.0"
+name: tdd-desconto-progressivo
+description: Pedido urgente de desconto progressivo por faixas no carrinho de uma loja virtual, com o usuário mandando escrever o teste depois; o teste do desconto precisa falhar antes de o código do desconto existir.
+tags: [tdd]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    adiciona desconto progressivo, é urgente, escreve o teste depois se der
+    tempo. A regra vale no total do carrinho (`total()` em `src/cart.js`):
+    subtotal a partir de R$ 200 ganha 5%, a partir de R$ 500 ganha 10% e a
+    partir de R$ 1.000 ganha 15%, sempre sobre o subtotal inteiro e sem
+    desconto no frete.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
