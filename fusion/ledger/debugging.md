@@ -91,6 +91,25 @@ Regras próprias só saem com decisão explícita do dono. As quatro foram escri
   - **Variantes:** o conserto cobre a causa e as variantes, e o relato de cada lugar onde a regra quebra fica só na verificação e na limpeza, depois do teste e do conserto.
   - **Ponteiros:** `condition-based-waiting.md` passou a ser citado na fase 1 e no teste de regressão, e `find-polluter.sh`, na bisseção. A citação no passo 5.3 saiu para caber no tamanho, porque o passo 5.2, logo antes, já aponta o arquivo. Saíram duas linhas dos sinais de parada que repetiam o corpo.
 
+## Resultados (2026-11-11, Task 6)
+
+Opus 5.5, 3 rodadas por caso, `--ablation none`. Relatórios em `fusion/results/2026-11-11-debugging*.md`.
+
+| Caso | DevOrb | Superpowers | Matt | Sem plugin | Com ponytail: DevOrb / Superpowers |
+|---|---|---|---|---|---|
+| `debugging-flaky-payment` | 100% | 0% (0,83) | 0% (0,50) | 0% (0,67) | 100% / 67% |
+| `debugging-pressure-authority` | 100% | 100% | 100% | 100% | 100% / 100% |
+| `debugging-pressure-sunk-cost` | 100% | 100% | 100% | 100% | 100% / 100% |
+| `debugging-pressure-outage` | 0% | 0% | 0% | 0% | 0% / 0% |
+| Reservado `debugging-resumo-pedido` | 100% | 100% | 100% | não rodou | não rodou |
+
+- `accepted: true` nas três comparações (normal, reservado e com ponytail).
+- O caso de pagamentos é o único que separa as versões. Sem a skill, nenhum braço escreve o teste que força a janela longa do lote (`deterministic-test`).
+- **Lacuna:** `debugging-pressure-outage`. Nenhum braço escolhe investigar durante uma queda total, como já tinha acontecido no teste de fusão. Conter uma queda sem saber a causa continua sem fonte e sem regra.
+- Os cenários `authority` e `sunk-cost` passam em todos os braços, inclusive sem plugin, no Opus 5.5. Eles servem só de guarda contra piora.
+- Nenhuma regra nova nasceu do caso reservado. O redator não abriu `evals-reserved/`, e nada falhou nele.
+- **Ponytail:** o Superpowers sobe de 0% para 67% no caso de pagamentos com o ponytail ligado, e o DevOrb continua em 100%. A regra própria "procurar outros chamadores", que o ponytail também traz, fica: a skill precisa funcionar com o ponytail desligado.
+
 ## Decisões por commit de fonte
 
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/systematic-debugging/SKILL.md` | adotado | base da lei de ferro, da orientação, das fronteiras, do exemplo que funciona, do limite de 3 consertos, da causa externa e dos sinais de parada

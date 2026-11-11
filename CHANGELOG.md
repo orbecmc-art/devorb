@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Primeira skill pelo processo de fusão: `debugging`, a partir da skill do teste de fusão (Superpowers e Matt Pocock), com ideias da Trail of Bits, do Spartan e do ECC escritas com palavras próprias. A skill compara segredos pelo nome, pela presença ou por hash, nunca pelo valor; permite conter uma queda sem dispensar a causa; e corrige a causa e as variantes sem misturar outras mudanças. Tem 2.248 dos 2.500 tokens.
+- Ledgers de `debugging` e `using-devorb` em `fusion/ledger/`, com origem por parte, regras próprias, o que ficou fora, decisões por commit de fonte e resultados.
+- Comparação no Opus 5.5, 3 rodadas por caso: `debugging` passa em 100% no caso de pagamentos, contra 0% no Superpowers e no Matt (67% no Superpowers com o ponytail ligado). `using-devorb` dispara a skill certa em todas as rodadas, inclusive com nome antigo. Os reservados também passam. `accepted: true` em todas as comparações; o cenário de queda total segue como lacuna em todos os braços.
+- Casos de `using-devorb` (gatilho de trabalho novo, gatilho de bug e nome antigo) e um reservado de cada skill, escritos por agentes que não viram a skill.
+- `compare.mjs`: `--concurrency` passa `-j` ao eval, e uma rodada que atinge o limite de turnos do caso conta como comportamento do agente, não como erro da ferramenta. `check-skills` não aceita mais `constructor` como skill do registro e exige `ceilingTokens` em toda entrada.
+- Custo medido na Task 6 e estimativa do restante em `fusion/results/estimativa.md`.
+
 ## 0.1.9
 
 - `tools/compare.mjs`, o comparador de versões: monta um braço por versão em `.arms/` (`devorb` com a árvore de trabalho, inclusive o que ainda não foi commitado, `superpowers` e `mattpocock-skills` baixados no commit, sem `.git`, e `none`, um plugin vazio), roda `claude plugin eval` em cada um e decide se o DevOrb passa: sem regressão contra a melhor linha de base, com tolerância de uma rodada, e pelo menos 2/3 de aprovação. Caso em que nenhum braço passa é lacuna, não reprovação. O relatório em português vai para `fusion/results/<data>-<skill>.md` (com `-reserved`, `-ponytail`, a ablação e `-baseline` no nome quando for o caso, para uma rodada não apagar a outra), com aprovação, pontuação e custo por caso e por braço, casos que não carregaram, rodadas parciais e rodadas com erro da ferramenta.

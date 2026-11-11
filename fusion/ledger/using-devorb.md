@@ -57,6 +57,22 @@ Regras próprias só saem com decisão explícita do dono.
 - **Sinais de alerta da fonte:** "posso checar git ou arquivos rápido" foi fundida com "explorar primeiro". "Juntar informação primeiro", "isso não conta como tarefa" e "isso parece produtivo" saíram, para caber no limite.
 - **Do `ask-matt`:** as rampas `/triage` e `/wayfinder`, as skills avulsas sem equivalente (`/teach`, `/to-questionnaire`, `/wizard`, `/research`, `/wait-what`), a pré-condição `/setup-matt-pocock-skills` e a higiene de contexto em detalhe. `references/legacy-names.md` diz ao agente que essas skills não existem.
 
+## Resultados (2026-11-11, Task 6)
+
+Opus 5.5, 3 rodadas por caso, `--ablation none`, com o braço `none`. Relatórios em `fusion/results/2026-11-11-using-devorb*.md`.
+
+| Caso | DevOrb | Superpowers | Matt | Sem plugin |
+|---|---|---|---|---|
+| `using-devorb-triggers-feature` | 100% | 100% | 0% | 0% |
+| `using-devorb-triggers-bug` | 100% | 100% | 0% | 0% |
+| `using-devorb-legacy-names` | 100% | 0% (de propósito) | 0% | 0% |
+| Reservado `using-devorb-fechamento-outubro` | 100% | 100% | 0% (0,50) | 0% (0,50) |
+
+- `accepted: true` na comparação normal. No reservado, 2 rodadas do DevOrb chegaram ao limite de 8 turnos do caso depois de chamar a skill certa, e a versão desta execução do `compare.mjs` contou isso como erro da ferramenta. Com a regra corrigida, também é `accepted: true` (anotado no relatório).
+- O caso de nomes legados só aceita o nome traduzido. O Superpowers chama o próprio `brainstorming` e falha de propósito, e o DevOrb traduz em todas as rodadas.
+- **Custo da regra própria 2:** enquanto `aligning` está `planned`, o agente chama `devorb:aligning`, recebe "não encontrada" e segue. A chamada conta para o grader, e a Task 10 roda esses casos de novo quando `aligning` existir.
+- O Matt não dispara skill nenhuma nesses pedidos: as dele não entram pelo roteamento automático.
+
 ## Decisões por commit de fonte
 
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/using-superpowers/SKILL.md` | adotado | base da regra de checar skills, do `SUBAGENT-STOP`, da precedência e dos sinais de alerta

@@ -38,7 +38,8 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | Fontes da base | Superpowers, Matt, Karpathy, Anthropic, Trail of Bits, Spartan, ECC, gstack e Cloudflare | `0.1.2` a `0.1.8` |
 | Setor de design | Spec, plano, 5 skills `planned` e as fontes de referência fixas | `0.1.5` a `0.1.8` |
 | Setor mobile | Spec, plano e 3 skills `planned` | `0.1.8` |
-| 6 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram. Rodam no Mac | |
+| 6. `debugging` e `using-devorb` pelo processo | Steps 1 a 6 feitos, todas as comparações com `accepted: true`. Espera a decisão do dono no Step 7 | `0.2.0` |
+| 7 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram. Rodam no Mac, depois da decisão do Step 7 da Task 6 | |
 
 ## Retomar no Mac
 
@@ -222,6 +223,16 @@ A sondagem do Step 1 rodou 8 casos com Sonnet e custou US$ 1,07. O que ela mudou
 - **Foco dos graders.** Num grader `llm`, `focus: files` mostra ao juiz só os nomes dos arquivos criados, nunca o conteúdo. Os graders da `evolving` e da depuração usavam isso. Agora cada um lê o arquivo que julga, e `trace` só aparece para efeitos colaterais. Um teste barra o foco `files`. O teto de 169 tokens do ensaio virou um `regex` de tamanho, e o scaffold para se o valor calculado mudar.
 - **Casos da `evolving` só no braço `devorb`:** os scaffolds precisam de `tools/source-diff.mjs`, que os braços `none` e de fonte não têm. A comparação usa `--arms devorb --ablation with-without`.
 
+### Task 6 no Mac
+
+- As rodadas pagas usam `--concurrency 3`, por decisão do dono. Custo: os três processos dividem o mesmo limite da assinatura.
+- As linhas de base da `debugging` e da `using-devorb` rodaram antes da skill ficar pronta, porque não dependem dela, e ficaram em cache.
+- O redator da `debugging` não abriu `evals-reserved/` nem os graders. A revisão achou trechos perto demais da Trail of Bits, do Spartan e do ECC, que só emprestam ideias. Um redator novo reescreveu esses trechos sem abrir as fontes, a partir da lista de ideias do ledger. Custo: duas voltas de revisão a mais.
+- O caso de nomes legados só aceita o nome traduzido, então o braço Superpowers falha nele de propósito. Custo: esse caso não compara o DevOrb com o Superpowers, só mede a tradução.
+- Os casos de gatilho do Step 1 viraram dois (`-triggers-feature` e `-triggers-bug`), porque um caso tem um prompt só.
+- Uma rodada que atinge o limite de turnos do caso não é mais erro da ferramenta. No reservado de `using-devorb`, isso tinha bloqueado a aprovação por engano, e o relatório ganhou uma anotação em vez de uma rodada nova.
+- Custo real da Task 6: US$ 24,08 em 138 rodadas. A estimativa do restante (base, Task 21, design e mobile) dá cerca de US$ 364, ou US$ 481 com D1 e D7, em `fusion/results/estimativa.md`. É custo nocional dentro da assinatura Max.
+
 ### Publicação
 
 - A Task 1 foi direto para a `main`, como o plano aprovado diz, e o resto foi para a branch. Custo: só o formato do histórico.
@@ -262,16 +273,14 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 
 | Achado | Quando |
 |---|---|
-| "override default behavior" saiu da precedência sem registro (`SKILL.md:22-24`) | Task 6, no ledger |
-| "Invoke these by name" parece valer só para o fluxo e não tem teste (`SKILL.md:30`) | Task 6 |
-| `using-devorb` tem só 1 byte de folga: qualquer acréscimo precisa tirar algo | Task 6 |
-| Pegar o caminho reinjeta o texto inteiro; o hook poderia imprimi-lo (`SKILL.md:65`) | Task 6 |
-| `r in registry` aceita `constructor`, e entrada sem `ceilingTokens` pula o teto | Task 6 |
+| "override default behavior" saiu da precedência sem registro (`SKILL.md:22-24`) | Registrado no ledger de `using-devorb`, em Fora |
+| "Invoke these by name" parece valer só para o fluxo e não tem teste (`SKILL.md:30`) | Registrado no ledger de `using-devorb` como regra própria sem caso; decisão do dono |
+| `using-devorb` tem só 1 byte de folga: qualquer acréscimo precisa tirar algo | Registrado no ledger; continua valendo |
+| Pegar o caminho reinjeta o texto inteiro; o hook poderia imprimi-lo (`SKILL.md:65`) | Registrado no ledger de `using-devorb`; sem caso que meça, fica |
 | Saída do `prototype` sem gatilho para sugerir (`SKILL.md:46`) | Task 10 |
 | "Claude Code notes." sem indicação de quando ler (`SKILL.md:69`) | Task 13 |
 | "the reference harness" em `claude-code-tools.md:3` | Task 13 |
 | Faltam fixtures de CRLF, descrição entre aspas, exclusão de manuais e `SKILL.md` ausente | Até a Task 17 |
-| `using-devorb` manda chamar skills que ainda não existem, o que gasta turnos na Task 6 | Anotar nos resultados da Task 6 |
 | "Run `/compact`" contradiz `phase-boundaries.md:17` | Próxima edição do arquivo |
 | O verificador lê binários como texto | Quando entrar o primeiro binário |
 | Licenças com CRLF, teste de registro superficial, licenças duplicadas no teste de fusão | Quando convier |
@@ -285,7 +294,7 @@ Nenhum precisa ser resolvido antes de ir para o Mac.
 | `compare.mjs`: com `--ablation with-without`, o relatório mostra só o braço com o plugin; o sem plugin fica só no `--json` | Antes de comparar outra skill assim |
 | `evolving`: em 1 de 4 rodadas de `source-failed`, a resposta não começou com a linha de status | Na próxima edição testada da `evolving` |
 | Caso `debugging-flaky-payment`: o repositório entregue mantém o commit com `await sleep(1000)`, como no teste de fusão, e falha só em cerca de 2 de 10 rodadas (9 de 10 sem o sleep). O plano pedia falha na maior parte; mantido de propósito, porque nenhum grader roda os testes | Ver na Task 6 se o agente reproduz |
-| Cenário de pressão `outage`: no teste de fusão, todos os braços escolheram C; deve dar lacuna, não separação | Task 6 |
+| Cenário de pressão `outage`: deu lacuna em todos os braços na Task 6, como no teste de fusão. `authority` e `sunk-cost` passam em todos os braços no Opus 5.5 e só guardam contra piora | Se aparecer uma fonte sobre conter queda |
 | Graders `trace` dependem do teto de cerca de 100 mil caracteres do trace; rodadas longas podem perder as últimas edições | Se um resultado parecer errado |
 | `evolving`: o `regex` de tamanho do ensaio e do holdout conta caracteres, não bytes; no holdout, o juiz de `pr-draft.md` ficou com 4 graders `llm`, o que pesa mais o rascunho | Próxima edição testada da `evolving` |
 | `compare.mjs`: o arquivo de cache tem um por caso, então rodar com e sem ponytail, ou com outro `--ablation`, sobrescreve a outra linha de base e paga de novo | Antes da Task 21, que roda com ponytail |

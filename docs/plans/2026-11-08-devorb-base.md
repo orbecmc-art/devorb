@@ -248,24 +248,24 @@ Foco `files` num grader `llm` mostra ao juiz só os nomes dos arquivos criados, 
 ### Task 6: `debugging` e `using-devorb` pelo processo (portão do dono)
 
 **Files:**
-- Create: `skills/debugging/` (a partir de `docs/spike-devorb-debugging/`), `fusion/ledger/debugging.md`, `fusion/ledger/using-devorb.md`, `evals/using-devorb-triggers/`, `evals/using-devorb-legacy-names/`
+- Create: `skills/debugging/` (a partir de `docs/spike-devorb-debugging/`), `fusion/ledger/debugging.md`, `fusion/ledger/using-devorb.md`, `evals/using-devorb-triggers-feature/`, `evals/using-devorb-triggers-bug/` (um prompt por caso), `evals/using-devorb-legacy-names/`
 - Modify: `fusion/skills.json`, `CHANGELOG.md`, `.claude-plugin/plugin.json`
 
 **Interfaces:**
 - Consumes: `tools/compare.mjs`, os casos da Task 5.
 - Produces: o formato de ledger: Origem por parte, Conflitos resolvidos, Regras próprias (com o caso que as justifica), Fora, Decisões por commit de fonte (`fonte@sha:caminho | adotado ou recusado | motivo`).
 
-- [ ] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`. Se a sondagem da Task 4 mostrar que `tool_used: Skill` não pontua com `--ablation with-without`, use o braço `none` na comparação. Um subagente novo também cria `evals-reserved/using-devorb-*`, como na Task 5, porque esta skill é de nível completo.
-- [ ] **Step 2: Copiar a skill do teste para `skills/debugging/`,** sem `harness/`, `LICENSES/` e `FUSAO.md`. Funda as ideias das fontes novas, sem passar de 2.500 tokens (a skill do teste usa 1.978):
+- [x] **Step 1: Criar os casos de `using-devorb`,** com prompts em português e graders `tool_used` na ferramenta `Skill`, `input_match` no nome esperado. `triggers`: "adiciona exportação em CSV" dispara `aligning`, "esse teste está falhando" dispara `debugging`. `legacy-names`: "usa o superpowers:brainstorming para isso" dispara `aligning`. Se a sondagem da Task 4 mostrar que `tool_used: Skill` não pontua com `--ablation with-without`, use o braço `none` na comparação. Um subagente novo também cria `evals-reserved/using-devorb-*`, como na Task 5, porque esta skill é de nível completo.
+- [x] **Step 2: Copiar a skill do teste para `skills/debugging/`,** sem `harness/`, `LICENSES/` e `FUSAO.md`. Funda as ideias das fontes novas, sem passar de 2.500 tokens (a skill do teste usa 1.978):
   - **Trail of Bits (`implement-patch`, `variant-analysis`):** nomear a regra quebrada e procurar toda violação dela. Mínimo é a menor mudança que corrige essa regra, não a menor em linhas. Registrar cada variante como corrigida ou não, com motivo. Na busca, partir do caso exato e generalizar um elemento por vez, parando quando mais da metade dos resultados for ruído.
   - **Spartan (`service-debugging`):** conferir deploy e configuração antes de culpar o código, e ler os logs antes de reiniciar.
   - **ECC (`click-path-audit`), só ideia:** quando um controle "não faz nada" e não há erro, seguir as chamadas em ordem, listando o que cada uma grava e zera, até achar a que desfaz outra. Comparar o estado final com a promessa do rótulo. É a ideia mais fraca desta skill e sai primeiro se ela passar do teto.
 
   Escreva os dois ledgers a partir de `FUSAO.md`, com o crédito dessas fontes. "Procurar outros chamadores" continua marcada como regra própria. Marque `debugging` como `done`. Rodar `npm test`. Esperado: tudo passa.
-- [ ] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb` com o braço `none` a mais (`--arms devorb,superpowers,mattpocock-skills,none`) e a ablação no padrão `none`: a sondagem mostrou que, com `with-without`, `tool_used: Skill` vira só indicador. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
-- [ ] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
-- [ ] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17, 23 e 24, nas D2 a D6 do plano de design e nas tasks do plano mobile. Grave em `fusion/results/estimativa.md`.
-- [ ] **Step 6: Commit** `feat: add debugging through the fusion process`, com a versão `0.2.0`, e abra o pull request.
+- [x] **Step 3: Rodar a comparação.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers,mattpocock-skills` e o mesmo para `using-devorb` com o braço `none` a mais (`--arms devorb,superpowers,mattpocock-skills,none`) e a ablação no padrão `none`: a sondagem mostrou que, com `with-without`, `tool_used: Skill` vira só indicador. Só então rode os reservados, com `--reserved`, abra `evals-reserved/` e corrija o que falhar. Uma regra criada por causa de um reservado vai para o ledger com essa observação.
+- [x] **Step 4: Rodar com o ponytail.** `node tools/compare.mjs --skill debugging --arms devorb,superpowers --with-ponytail`. Esperado: `accepted: true`. Empate passa. Regras que repetem o ponytail ficam, marcadas no ledger como primeiras a sair se a skill passar do teto.
+- [x] **Step 5: Medir o custo real** do Step 3 e do Step 4 e estimar o restante, multiplicando custo por rodada pelas rodadas planejadas nas Tasks 7 a 17, 23 e 24, nas D2 a D6 do plano de design e nas tasks do plano mobile. Grave em `fusion/results/estimativa.md`.
+- [x] **Step 6: Commit** `feat: add debugging through the fusion process`, com a versão `0.2.0`, e abra o pull request.
 - [ ] **Step 7: PARAR. Mostrar ao dono:** a tabela de resultados, o que mudou com o ponytail ligado, o custo real e a estimativa. Ele decide entre seguir, reduzir os níveis ou parar. Nada da Fase 2 começa sem essa resposta.
 
 ---
