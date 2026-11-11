@@ -10,7 +10,7 @@ O caso que justifica a regra própria é o caso realista da Task 7, hoje `evals/
 
 | Parte | Origem |
 |---|---|
-| `description` | Superpowers, com "behavior change" da lista "Always" dela |
+| `description` | Superpowers, com "behavior change" da lista "Always" dela. "Including urgent requests and ones that say tests can wait" é da revisão de roteamento de 2026-11-11 |
 | Abertura: teste primeiro, ver falhar, menor código; "se não viu falhar, não sabe se testa a coisa certa"; letra e espírito | Superpowers |
 | Lei de Ferro e apagar o código escrito nesta mudança antes do teste, sem guardar como referência | Superpowers, por decisão da Task 7. O "nesta mudança" é da revisão de 2026-11-11 |
 | Sempre e exceções só com permissão do usuário | Superpowers. "Parceiro humano" virou "usuário" |
@@ -94,6 +94,8 @@ Regras próprias só saem com decisão explícita do dono. A regra abaixo foi es
   - **Perguntas no meio do ciclo:** em `property-based.md`, com o usuário ausente ou rodando como subagente, a skill segue com testes de exemplo e registra a pergunta no relato, em vez de parar.
   - **Peso:** o gatilho de `references/writing-good-tests.md` ficou restrito a mock, dublê, helper ou limpeza, ou quando não se sabe nomear a quebra. Saíram da referência a seção "testes vão com a implementação" e seis sinais de alerta que repetiam o corpo.
   - **Ledger:** "sem lista espelhada" e "rearranjado" exageravam a distância da fonte e foram corrigidos; estatísticas e ramo inalcançável passaram a ser creditados a `libraries.md`; o exemplo de `paymentService.process` do Matt entrou em Fora.
+
+- **2026-11-11, roteamento, depois da comparação paga.** No caso `evals/tdd-desconto-progressivo`, com o DevOrb carregado, o agente não chamou skill nenhuma em 3 de 3 rodadas: leu o código, editou `src/cart.js`, depois o teste, e rodou `npm test`. A `devorb:tdd` nunca carregou, e a regra própria 1 nunca foi lida. O Superpowers chamou a skill de TDD dele em 1 de 3. A urgência e o "testa depois" fazem o agente pular a checagem de skills. Enquanto `aligning`, `planning` e `implementing` estão `planned`, só a `description` da `tdd` e o texto do hook levam até ela. A `description` ganhou "including urgent requests and ones that say tests can wait" (de 25 para 40 tokens na conta do teto sempre ligado, que soma 131 de 706), e `SKILL.md` foi de 8.147 para 8.207 bytes. O `using-devorb` ganhou o sinal de alerta correspondente (regra própria 5 do ledger dele).
 
 ## Resultados
 

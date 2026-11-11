@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Use when implementing any feature, bugfix or behavior change, before writing implementation code
+description: Use when implementing any feature, bugfix or behavior change, before writing implementation code, including urgent requests and ones that say tests can wait
 ---
 
 # Test-Driven Development
