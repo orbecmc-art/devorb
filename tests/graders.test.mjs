@@ -8,6 +8,12 @@ import { fileURLToPath } from 'node:url';
 // during the run, never contents, and leaves out pre-existing files.
 const onlyNames = /\b(só|apenas) (os )?nomes dos arquivos\b|\bonly (the )?file names\b/i;
 
+function judgesContentsByFileList(text) {
+  const [, fm = '', body = ''] = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/) ?? [];
+  if (!/^type:\s*['"]?llm['"]?\s*(#.*)?$/m.test(fm)) return false;
+  return /^(focus|target):\s*['"]?files['"]?\s*(#.*)?$/m.test(fm) && !onlyNames.test(body);
+}
+
 function graders() {
   const out = [];
   const walk = (dir) => {
@@ -24,16 +30,28 @@ function graders() {
   return out;
 }
 
+test('the file-list check catches every spelling of focus or target files', () => {
+  const caught = [
+    '---\ntype: llm\nfocus: files\n---\nrubric',
+    '---\ntype: llm\nfocus: files # x\n---\nrubric',
+    '---\ntype: llm # judge\ntarget: "files"\n---\nrubric',
+    "---\ntype: 'llm'\ntarget: 'files'   # y\n---\nrubric",
+  ];
+  const allowed = [
+    '---\ntype: llm\nfocus: trace\n---\nrubric',
+    '---\ntype: llm\nfocus:\n  source: file\n  path: a.js\n---\nrubric',
+    '---\ntype: regex\ntarget: files\n---\n',
+    '---\ntype: llm\nfocus: files\n---\nConfere só os nomes dos arquivos criados.',
+  ];
+  for (const s of caught) assert.equal(judgesContentsByFileList(s), true, s);
+  for (const s of allowed) assert.equal(judgesContentsByFileList(s), false, s);
+});
+
 test('graders exist in the suites', () => {
   assert.ok(graders().length > 0);
 });
 
 test('no llm grader judges contents through focus: files or target: files', () => {
-  const bad = [];
-  for (const p of graders()) {
-    const [, fm = '', body = ''] = readFileSync(p, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/) ?? [];
-    if (!/^type:\s*['"]?llm['"]?\s*$/m.test(fm)) continue;
-    if (/^(focus|target):\s*['"]?files['"]?\s*$/m.test(fm) && !onlyNames.test(body)) bad.push(p);
-  }
+  const bad = graders().filter((p) => judgesContentsByFileList(readFileSync(p, 'utf8')));
   assert.deepEqual(bad, []);
 });
