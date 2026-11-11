@@ -52,7 +52,7 @@ Skipping a step is lying, not verifying.
 
 Write, run (pass), take out only the fix, run (**must fail**), put it back, run (pass). A test you never saw fail may not test the bug.
 
-Take the fix out by editing it out, or save it with `git diff -- <fix files> > fix.patch`, undo it with `git apply -R fix.patch` and reapply with `git apply fix.patch`. Never `git checkout --`, `git stash` or `git reset`: they can throw away uncommitted work.
+Take the fix out by editing it out, or save it outside the tree with `git diff HEAD -- <fix files> > /tmp/fix.patch` (or `git diff <base> -- <fix files>` when the fix is committed), undo it with `git apply -R /tmp/fix.patch` and reapply with `git apply /tmp/fix.patch`. Never `git checkout --`, `git stash` or `git reset`: they can throw away uncommitted work.
 
 ## Reports from agents and notes
 
