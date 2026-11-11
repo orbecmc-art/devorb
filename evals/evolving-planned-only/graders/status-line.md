@@ -1,5 +1,5 @@
 ---
 type: regex
 target: last_message
-pattern: ^STATUS: OK sem mudança
+pattern: '^STATUS: OK sem mudança'
 ---
