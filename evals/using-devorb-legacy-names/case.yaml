@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: using-devorb-legacy-names
+description: Pedido que cita o nome antigo superpowers:brainstorming junto de uma mudança pequena num projeto de tarefas; o agente precisa usar a skill de trabalho novo do braço.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    usa o superpowers:brainstorming para isso: quero que cada tarefa tenha uma
+    prioridade (alta, média ou baixa) e que a lista de pendentes mostre primeiro
+    as de prioridade alta.
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]
