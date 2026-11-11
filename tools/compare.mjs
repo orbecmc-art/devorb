@@ -14,15 +14,16 @@ const SOURCE_ARMS = new Set(['superpowers', 'mattpocock-skills']);
 const LATEST = new Set(['superpowers', 'ponytail']);
 const SUITES = ['evals', 'evals-reserved'];
 // Answers the agent under test must not read: docs/ holds the bugs and fixes the cases test,
-// fusion/results/ earlier reports, .superpowers/ the coordinator ledger.
-const NOT_IN_DEVORB_ARM = [...SUITES.map((s) => `${s}/`), 'docs/', 'fusion/results/', '.superpowers/'];
+// fusion/results/ earlier reports, fusion/ledger/ rules made for reserved cases, .superpowers/ the coordinator ledger.
+const NOT_IN_DEVORB_ARM = [...SUITES.map((s) => `${s}/`), 'docs/', 'fusion/results/', 'fusion/ledger/', '.superpowers/'];
 const FULL_SHA = /^[0-9a-f]{40}$/;
 const NETWORK_TIMEOUT_MS = 120_000;
 const LOCAL_TIMEOUT_MS = 30_000;
 const EPSILON = 1e-9;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const USAGE =
-  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>]\n';
+  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>]\n' +
+  '  --baseline-only skips devorb; without --arms it runs superpowers,mattpocock-skills,none\n';
 
 export function parseArms(text) {
   const arms = text.split(',').map((a) => a.trim());
@@ -50,24 +51,26 @@ export function decide({ cases, runs }) {
   for (const [name, arms] of Object.entries(cases)) {
     if (typeof arms.devorb !== 'number') continue;
     judged++;
-    const best = Math.max(0, ...Object.entries(arms).filter(([a]) => a !== 'devorb').map(([, v]) => v));
+    const baselines = Object.entries(arms).filter(([a]) => a !== 'devorb').map(([, v]) => v);
+    const best = Math.max(0, ...baselines);
     if (best - arms.devorb > 1 / runs + EPSILON) regressions.push(name);
-    if (arms.devorb === 0 && best === 0) gaps.push(name);
+    if (arms.devorb === 0 && baselines.length > 0 && best === 0) gaps.push(name);
     else if (arms.devorb < 2 / 3 - EPSILON) belowBar.push(name);
   }
   return { accepted: judged > 0 && regressions.length === 0 && belowBar.length === 0, regressions, belowBar, gaps };
 }
 
-// One `claude plugin eval --json` output, arm `with`. Cases that failed to load are absent from it.
+// One `claude plugin eval --json` output: score and pass rate of arm `with`, cost of every arm
+// (so per-case costs add up to the total under with-without). Cases that failed to load are absent.
 export function summarize(json, expectedCases = []) {
   const cases = {};
   for (const c of json.cases) {
-    const runs = c.arms?.with ?? [];
+    const allRuns = Object.values(c.arms ?? {}).flat();
     cases[c.name] = {
       score: c.aggregates.score,
       passRate: c.aggregates.passRate,
-      costUsd: runs.reduce((sum, r) => sum + (r.costUsd ?? 0) + (r.judgeCostUsd ?? 0), 0),
-      runs: runs.length,
+      costUsd: allRuns.reduce((sum, r) => sum + (r.costUsd ?? 0) + (r.judgeCostUsd ?? 0), 0),
+      runs: c.arms?.with?.length ?? 0,
     };
   }
   return { cases, costUsd: json.costUsd, partial: json.partial === true, missing: expectedCases.filter((n) => !(n in cases)) };
@@ -218,6 +221,7 @@ function parseArgs(argv) {
     else if (values[argv[i]] && i + 1 < argv.length) opts[values[argv[i]]] = argv[++i];
     else throw new Error(`unknown or incomplete option ${JSON.stringify(argv[i])}`);
   }
+  if (opts.baselineOnly) opts.arms ??= 'superpowers,mattpocock-skills,none';
   if (!opts.skill || !opts.arms) throw new Error('--skill and --arms are required');
   if (!/^(all|[a-z0-9][a-z0-9-]*)$/.test(opts.skill)) throw new Error(`bad skill name ${JSON.stringify(opts.skill)}`);
   if (opts.runs !== undefined && !/^[1-9]\d*$/.test(opts.runs)) throw new Error(`--runs must be a positive integer, got ${JSON.stringify(opts.runs)}`);
@@ -353,6 +357,7 @@ export async function runCli(
   try {
     opts = parseArgs(argv);
     arms = parseArms(opts.arms).filter((a) => !(opts.baselineOnly && a === 'devorb'));
+    if (arms.length === 0) throw new Error('no arm left to run: --baseline-only skips devorb');
   } catch (e) {
     err(`${e.message}\n${USAGE}`);
     return 2;

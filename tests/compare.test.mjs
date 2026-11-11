@@ -52,6 +52,12 @@ function makeRoot() {
     'evals/theirs/case.yaml': CASE('theirs'),
     'evals-reserved/theirs/case.yaml': CASE('theirs'),
   });
+  // mattpocock-skills reuses this repo, pinned one commit behind its HEAD.
+  superpowers.pin = superpowers.sha;
+  writeTree(superpowers.dir, { 'skills/s/NEW.md': 'newer' });
+  git(superpowers.dir, 'add', '-A');
+  git(superpowers.dir, 'commit', '-q', '-m', 'newer');
+  superpowers.sha = git(superpowers.dir, 'rev-parse', 'HEAD');
   const root = repo({
     '.gitignore': '.arms/\nevals/**/results/\n',
     '.claude-plugin/plugin.json': '{"name":"devorb"}',
@@ -62,12 +68,13 @@ function makeRoot() {
     'evals-reserved/demo-hold/case.yaml': CASE('demo-hold'),
     'docs/x.md': 'the bug and its fix',
     'fusion/results/r.md': 'an earlier report',
+    'fusion/ledger/debugging.md': 'a rule made for a reserved case',
     'fusion/eval-config.json': '{ "model": "m", "maxCostUsd": 1 }',
     'fusion/skills.json': '{ "demo": { "level": "light" } }',
     'fusion/sources.json': JSON.stringify({
       sources: [
         { name: 'superpowers', url: superpowers.url, lastAbsorbed: 'a'.repeat(40), paths: ['skills/'] },
-        { name: 'mattpocock-skills', url: superpowers.url, lastAbsorbed: superpowers.sha, paths: ['skills/'] },
+        { name: 'mattpocock-skills', url: superpowers.url, lastAbsorbed: superpowers.pin, paths: ['skills/'] },
         { name: 'ponytail', url: ponytail.url, lastAbsorbed: 'b'.repeat(40), paths: ['skills/'], trackedForFusion: false },
       ],
     }),
@@ -96,6 +103,7 @@ test('decide: exact thirds stay within one run, and a gap is not below the bar',
   assert.deepEqual(d({ c: { devorb: 0.5, sp: 1 } }, 2).regressions, []);
   assert.deepEqual(d({ c: { devorb: 0, sp: 0, none: 0 } }), { accepted: true, regressions: [], belowBar: [], gaps: ['c'] });
   assert.deepEqual(d({ c: { devorb: 0, none: 1 / 3 } }).belowBar, ['c']);
+  assert.deepEqual(d({ c: { devorb: 0 } }), { accepted: false, regressions: [], belowBar: ['c'], gaps: [] }, 'a gap needs a baseline');
 });
 
 test('decide ignores cases without devorb (baseline-only runs)', () => {
@@ -126,9 +134,15 @@ test('evalArgs adds --eval-dir for the reserved suite only', () => {
 test('summarize reads a real eval result', () => {
   const json = JSON.parse(read(new URL('./fixtures/eval-result.json', import.meta.url)));
   const s = summarize(json, ['probe', 'ponytail-probe', 'debugging-gone']);
-  assert.deepEqual(s.cases.probe, { score: 1, passRate: 1, costUsd: 0.0539035, runs: 1 });
-  assert.deepEqual(s.cases['ponytail-only-probe'], { score: 0.75, passRate: 0, costUsd: 0.0623431, runs: 1 });
+  const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} vs ${b}`);
+  const { costUsd: probeCost, ...probe } = s.cases.probe;
+  assert.deepEqual(probe, { score: 1, passRate: 1, runs: 1 });
+  near(probeCost, 0.0539035 + 0.0444267); // with and without arms
+  const { costUsd: onlyCost, ...only } = s.cases['ponytail-only-probe'];
+  assert.deepEqual(only, { score: 0.75, passRate: 0, runs: 1 });
+  near(onlyCost, 0.0623431 + 0.0412562);
   assert.equal(s.costUsd, 0.31493);
+  near(Object.values(s.cases).reduce((sum, c) => sum + c.costUsd, 0), s.costUsd);
   assert.equal(s.partial, false);
   assert.deepEqual(s.missing, ['debugging-gone']);
   assert.deepEqual(summarize(json).missing, []);
@@ -154,7 +168,9 @@ test('prepareArm devorb: working tree with uncommitted files, one suite, no .git
   assert.equal(read(join(dir, 'skills', 'x', 'NEW.md')), 'uncommitted');
   assert.ok(existsSync(join(dir, 'evals', 'demo-one', 'case.yaml')));
   assert.ok(existsSync(join(dir, 'fusion', 'sources.json')));
-  for (const gone of ['evals-reserved', '.git', '.arms', 'docs', 'fusion/results', '.superpowers']) assert.ok(!existsSync(join(dir, gone)), gone);
+  for (const gone of ['evals-reserved', '.git', '.arms', 'docs', 'fusion/results', 'fusion/ledger', '.superpowers']) {
+    assert.ok(!existsSync(join(dir, gone)), gone);
+  }
 
   writeFileSync(join(root, 'skills', 'x', 'NEW.md'), 'edited');
   await prepareArm({ name: 'devorb' }, { root });
@@ -191,7 +207,8 @@ test('resolveRef: superpowers and ponytail follow the remote HEAD, others their 
   const by = (n) => sources.find((s) => s.name === n);
   assert.equal(await resolveRef(by('superpowers')), superpowers.sha);
   assert.equal(await resolveRef(by('ponytail')), ponytail.sha);
-  assert.equal(await resolveRef(by('mattpocock-skills')), superpowers.sha);
+  assert.notEqual(superpowers.pin, superpowers.sha);
+  assert.equal(await resolveRef(by('mattpocock-skills')), superpowers.pin, 'its pin, not the remote HEAD');
 });
 
 function io(root, claude) {
@@ -274,6 +291,21 @@ test('CLI runs each arm, caches source baselines per case and writes the report'
   writeFileSync(join(root, 'evals', 'demo-one', 'graders', 'g.md'), '---\ntype: regex\npattern: changed\n---\n');
   assert.equal(await runCli(['--skill', 'demo', '--arms', 'superpowers', '--runs', '3'], io(root, fake.bin)), 0);
   assert.deepEqual(fake.log().slice(5), [`superpowers@${superpowers.sha} 3 demo-*`], 'a changed case runs again');
+});
+
+test('CLI --baseline-only defaults to the source arms and none, with mattpocock-skills at its pin', async () => {
+  const { root, superpowers } = makeRoot();
+  const fake = fakeClaude();
+  const run = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--baseline-only'], run), 0, run.stderr);
+  assert.deepEqual(fake.log(), [`superpowers@${superpowers.sha} 2 demo-*`, `mattpocock-skills@${superpowers.pin} 2 demo-*`, 'none 2 demo-*']);
+  assert.match(read(run.stdout.trim().split('\n').at(-1)), /só linhas de base/);
+
+  const empty = io(root, fake.bin);
+  assert.equal(await runCli(['--skill', 'demo', '--baseline-only', '--arms', 'devorb'], empty), 2);
+  assert.match(empty.stderr, /no arm/);
+  assert.equal(empty.stdout, '');
+  assert.equal(fake.log().length, 3);
 });
 
 // The eval loader rejects a plain YAML scalar holding ": " (the 5 evolving cases failed to load).
