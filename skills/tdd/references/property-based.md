@@ -2,7 +2,7 @@
 
 **Read this when:** the code under test follows a general rule that should hold for every valid input, not just for the cases you can list by hand.
 
-First decide whether such a rule exists. Most code has none, and for that code example tests stay the right tool: "no rule here" is a valid finding, so write the examples and say so in one line. When the rule does exist, you state it once and a library supplies the inputs, hundreds per run. On a failure, the library shrinks the input to the smallest one that still breaks the rule. An example test covers only the input you chose.
+First decide whether such a rule exists. Most code has none; then write example tests and say in one line that no general rule applies. When the rule does exist, you state it once and a library supplies the inputs, hundreds per run. On a failure, the library shrinks the input to the smallest one that still breaks the rule. An example test covers only the input you chose.
 
 ## Does the code have the shape?
 
@@ -31,15 +31,15 @@ Start at the top and take the first rule the code supports. If only "it runs" is
 
 ## Green, yet empty
 
-**Tautological:** the expected value is computed the way the code computes it (`expect(add(a, b)).toBe(a + b)`, the same builder on both sides). It passes by construction and can never disagree with the code. Assert a rule that bounds the output without recomputing it: a law, a round trip, a reference written another way. One exception: calling the function twice on one input and comparing is a real check when the code can vary between runs, because it reads the clock or walks an unordered map.
+**Tautological:** the expected value is computed the way the code computes it (`expect(add(a, b)).toBe(a + b)`, the same builder on both sides). It passes by construction and can never disagree with the code. Assert a law, a round trip or an independently written reference instead. One exception: running the code twice on one input and comparing the results is a real check when its output may vary, as with a generated ID or work split across threads.
 
-**Vacuous:** the run is green because almost nothing was checked. Generated inputs filtered by a precondition few of them meet leave a handful of cases; two preconditions that contradict each other leave none, and the run still passes. The same holds for a rule inside an `if` the generated data seldom enters. Make the generator build valid inputs instead of rejecting invalid ones, and read the run's statistics: cases tried, cases discarded.
+**Vacuous:** the run is green because almost nothing was checked. Read its statistics first: how many cases ran and how many were thrown away. A rule guarded by an `if` that the data seldom enters, or a filter that rejects most inputs (or all of them, when two conditions clash), checks next to nothing. Build valid inputs in the generator rather than filtering afterwards.
 
 ## In the TDD cycle
 
 A property is a test like any other: write it, run it, watch it fail, then write the code. The generator usually finds a failing input before the behavior exists; read it and confirm it fails because the behavior is missing.
 
-A random generator may never hit the inputs you already know are dangerous. Pin them as fixed examples next to the property (empty, zero, the type's limits), so every run checks them.
+Inputs that broke similar code before (empty, zero, the type's limits) go in as fixed examples next to the property; a random generator may never reach them.
 
 A failing input is not yet a bug. Look up what the code promises for it: types, docs, spec, existing tests. The promise excludes it? Narrow the generator. The promise covers it? Fix the code. The promise is silent? Supporting that input is the user's choice, so ask. If the user is away or this runs as a subagent, keep example tests for the promised inputs and name the open input in your report.
 

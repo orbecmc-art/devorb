@@ -25,7 +25,7 @@ Wrote code in this change before its test? Delete it and start over from the tes
 
 Name tests in the project's domain language: read `GLOSSARY.md` and the ADRs in the area if they exist.
 
-Does the code have an undo, a trusted version to agree with, a total it must conserve, or a cleanup that settles on a second pass? Read `references/property-based.md`. Adding a property-testing library is the user's call; use example tests meanwhile.
+Does the code have an undo, a trusted version to agree with, a total it must conserve, a cleanup that settles on a second pass, or any rule that holds for every valid input? Read `references/property-based.md`. Adding a property-testing library is the user's call; use example tests meanwhile.
 
 ## The cycle
 
