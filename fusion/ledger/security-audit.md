@@ -89,7 +89,13 @@ Regras próprias só saem com decisão explícita do dono.
 
 ## Resultados
 
-A preencher depois das rodadas de comparação (R6).
+Opus 5.5, nível leve, 2 rodadas, comparado com o braço sem plugin (nenhum braço comparado tem skill equivalente). `fusion/results/2026-11-12-security-audit.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `security-audit-pedidos` | 100% (1,00) | 0% (0,67) |
+
+- `accepted: true`.
 
 ## Decisões por commit de fonte
 

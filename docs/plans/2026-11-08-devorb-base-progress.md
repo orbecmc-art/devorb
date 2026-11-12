@@ -48,6 +48,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 13. `implementing` | Feita: DevOrb 100%, Superpowers 67%, Matt 0%; reservado 100% | `0.9.0` |
 | 14. `reviewing` | Feita: DevOrb 100%, Superpowers 0%, Matt 50% | `0.10.0` |
 | 17. `improve-architecture`, `prototype`, `handoff` e `retro` | Feita: improve-architecture e handoff 100% contra 0% no Matt; retro empata; prototype é lacuna | `0.11.0` |
+| 24. `security-audit` | Feita: DevOrb 100% contra 0% sem plugin | `0.12.0` |
 | 13 e 14 | Skills escritas, em revisão e comparação | |
 | 15 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram | |
 

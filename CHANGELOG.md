@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.0
+
+- `security-audit`, manual, com ideias da Trail of Bits, do gstack e da Cloudflare escritas com palavras próprias: só leitura por padrão, checagem local apenas com o comando exato aprovado pelo usuário, segredo confirmado sem olhar o valor, alertas do GitHub só lidos, escala de quatro níveis. `using-devorb` lista a skill entre as manuais. Comparação: 100% contra 0% sem plugin.
+
 ## 0.11.0
 
 - Quatro skills manuais do Matt Pocock: `improve-architecture` (pontos quentes contados pelo git log, levantamento sem refactor), `prototype` (pergunta no topo, arquivo descartável, comando para rodar, protótipo não vira código real pela skill), `handoff` (afirmação de terceiro é presumida, segredo vira endereço, linha pronta para a próxima sessão) e `retro` (evidência do log em cada candidato, sem citar segredo). Comparação contra o Matt: `improve-architecture` e `handoff` 100% contra 0%; `retro` empata; `prototype` é lacuna em todos os braços.
