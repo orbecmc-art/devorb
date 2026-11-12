@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Use when a request uses a vague or overloaded domain term, or a hard-to-reverse decision is settled; records them in GLOSSARY.md and docs/adr/
+description: Use when a domain term in a request is ambiguous or used differently from GLOSSARY.md, or a hard-to-reverse decision is settled
 ---
 
 # Domain Modeling
@@ -9,7 +9,7 @@ Build and sharpen the project's domain model while the work is designed: challen
 
 ## Where the files live
 
-One context, as in most repos: `GLOSSARY.md` at the root and decisions in `docs/adr/`. A `GLOSSARY-MAP.md` at the root means several contexts, each with its own `GLOSSARY.md` and its own `docs/adr/` for decisions local to it; the root `docs/adr/` keeps system-wide decisions. Work in the context the topic belongs to. Unclear which one? Ask.
+One context, as in most repos: `GLOSSARY.md` at the root and decisions in `docs/adr/`. A `GLOSSARY-MAP.md` at the root means several contexts, each with its own `GLOSSARY.md` and its own `docs/adr/` for decisions local to it; the root `docs/adr/` keeps system-wide decisions. Work in the context the topic belongs to. Unclear which one? Ask, or, working alone, name it in the report.
 
 Create files only when you have something to write in them: `GLOSSARY.md` when the first term is resolved, `docs/adr/` when the first ADR is needed. Missing files are not a problem to report, and empty ones are never created up front.
 
@@ -22,9 +22,9 @@ Create files only when you have something to write in them: `GLOSSARY.md` when t
 
 ## Resolving a term
 
-A term is resolved when the user picks its meaning, or when the request, the code and the glossary all point to the same one. Otherwise ask the user, one question at a time, with the meaning you recommend. Working without the user (as a subagent, or told to go ahead without questions)? Take the meaning the code supports, write it, and name it in your report as a choice for the user to confirm.
+A term is resolved when the user picks its meaning, or when the request, the code and the glossary (if any) all point to the same one. Otherwise ask the user, one question at a time, with the meaning you recommend. Working without the user (as a subagent, or told to go ahead without questions)? Only if the code clearly supports one meaning: write it, and in your report name the term, the meaning chosen, the code that supports it and the alternative, as a choice for the user to confirm. A business rule read from the code (eligibility, price, deadlines, retention) is an assumption: report it, don't define it. If the code does not settle it, write nothing and report the open question.
 
-Write each resolved term to `GLOSSARY.md` right then, in the format of `references/GLOSSARY-FORMAT.md`. Don't save terms up for later. From then on, use the term in code, tests and messages, and list the words it replaces under _Avoid_.
+Write each resolved term to `GLOSSARY.md` right then, in the format of `references/GLOSSARY-FORMAT.md`. Don't save terms up for later. From then on, use the term in what you write, and list the words it replaces under _Avoid_.
 
 The glossary holds definitions and nothing else. No implementation detail (tables, classes, endpoints, libraries), no requirements, no to-dos: it is not a spec or a scratch pad. Requirements go in the spec `devorb:aligning` writes, and implementation choices in the plan or an ADR.
 
@@ -36,7 +36,7 @@ Offer an ADR only when all three are true:
 2. **Surprising without context:** a future reader will wonder why it was done this way.
 3. **A real trade-off:** there were genuine alternatives, and one was picked for specific reasons.
 
-Any one missing: no ADR. When the user accepts, write it in the format of `references/ADR-FORMAT.md`. A decision that contradicts an existing ADR: say so instead of overriding it silently. If the user reopens it, a new ADR supersedes the old one.
+Any one missing: no ADR. When the user accepts (working alone: name it in the report instead), write it in the format of `references/ADR-FORMAT.md`. A decision that contradicts an existing ADR: say so instead of overriding it silently. If the user reopens it, a new ADR supersedes the old one.
 
 ## Connects to
 
