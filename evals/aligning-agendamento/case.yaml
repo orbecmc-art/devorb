@@ -1,0 +1,12 @@
+schema_version: "1.0"
+name: aligning-agendamento
+description: Pedido vago de um app de agendamento numa pasta quase vazia; a primeira resposta deve abrir a conversa com uma só pergunta aberta, sem escrever código nem criar arquivos de código.
+tags: [aligning]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: "quero um app de agendamento"
+  max_turns: 15
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
