@@ -1,7 +1,11 @@
 ---
 type: llm
-focus: trace
+focus:
+  source: file
+  path: test/vencimento.test.js
 ---
+
+Julgue os testes como ficaram no fim em `test/vencimento.test.js`.
 
 Em `src/feriados.js` há a lista de feriados bancários de 2026, e vários ficam colados num fim de semana. Nesses casos, um ajuste de um passo só (pular o fim de semana uma vez e depois o feriado uma vez, ou o contrário) erra. Mapa correto da data bruta (emissão mais prazo) para o vencimento ajustado, nos casos em que algum ajuste de um passo só erra:
 
