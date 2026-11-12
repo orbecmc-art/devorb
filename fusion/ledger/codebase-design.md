@@ -63,3 +63,7 @@ A preencher.
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/codebase-design/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/tdd/SKILL.md` | adotado | só a ideia: a skill é referência a consultar, não sessão a rodar
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/improve-codebase-architecture/SKILL.md` | adotado | só duas ideias: domínio pelo `GLOSSARY.md` e arquitetura por esta skill; `DESIGN-IT-TWICE.md` quando se quer explorar interfaces alternativas
+
+## Revisões
+
+- 2026-11-12, revisão antes das rodadas: com o usuário presente, a recomendação espera o sim dele; sozinho, o seam que o plano nomeia fica, e o resto é decidido e relatado; testes antigos apagados ao aprofundar um módulo são listados no relato com o teste que os substitui.

@@ -7,7 +7,7 @@ description: Use when you have an approved design doc, spec or requirements for 
 
 Write the plan for an engineer who has seen neither this codebase nor the spec. Assume they write idiomatic code in the project's language once they know the exact interface and the exact test, and that they choose well wherever the plan leaves a choice open. What they can't know is what you decided: which files, which names and signatures, which values from the spec, which tests prove each task. Write those down, as small tasks. DRY. YAGNI. TDD. Frequent commits.
 
-**The spec** is the design doc `devorb:aligning` wrote in `docs/devorb/specs/`. Don't write a second one. Requirements handed to you directly (a message, a ticket) serve as the spec when nothing that changes the build is open; when something is, that is `devorb:aligning`'s work, not a guess in the plan.
+**The spec** is the design doc `devorb:aligning` wrote in `docs/devorb/specs/`. Don't write a second one. Requirements handed to you directly (a message, a ticket) serve as the spec when nothing that changes the build is open; when something is, stop and invoke `devorb:aligning` for those points. The same holds for an approved spec with open items.
 
 **Save to** `docs/devorb/plans/YYYY-MM-DD-<topic>.md`, unless the user or the project says otherwise.
 
@@ -15,7 +15,7 @@ Write the plan for an engineer who has seen neither this codebase nor the spec. 
 
 - **Scope.** A spec covering several independent subsystems gets one plan per subsystem, each producing working, testable software on its own.
 - **The project's words.** Read `GLOSSARY.md` and the ADRs in `docs/adr/` for the area when they exist. Name things the way the glossary does, and don't plan against a recorded decision.
-- **Is it already on the base branch?** Fetch the base branch and read its `git log`, from the spec's date on, for the files the plan will touch, and search the commit messages for its main symbols. If part of the work already landed, tell the user before writing tasks, and plan only what's left.
+- **Is it already on the base branch?** Fetch the base branch and read its `git log`, from the spec's date (or the request's) on, for the files the plan will touch, and search the commit messages for its main symbols. If part of the work already landed, tell the user before writing tasks, and plan only what's left.
 - **Does everything you cite exist?** Each command, flag, script, route or endpoint the plan tells someone to run or call: confirm it in its `--help`, the package scripts, the route table or the registry it comes from. If it isn't there, the plan is wrong until shown otherwise: fix it or tell the user. Never cite it unchecked.
 
 ## Files and seams
@@ -23,7 +23,7 @@ Write the plan for an engineer who has seen neither this codebase nor the spec. 
 Map which files get created or changed, and what each one is responsible for, before defining tasks. Decomposition gets locked in here.
 
 - One clear responsibility per file, with clear boundaries and well-defined interfaces. Prefer small focused files. Files that change together live together: split by responsibility, not by technical layer.
-- In existing code, follow its patterns. Don't restructure on your own; splitting a file you modify that has grown unwieldy is fair.
+- In existing code, follow its patterns. Don't restructure on your own; splitting a file you modify that has grown unwieldy is fair, as a task in the plan.
 - **Name the seams.** For each task, name the seam its tests go through: the public interface a caller uses. Prefer existing seams to new ones and the highest seam that reaches the behavior. The fewer seams across the codebase, the better; one is ideal. `devorb:tdd` tests at the seam the plan names without stopping to ask, so the user approves seams when approving the plan. When the shape of an interface is itself in question, use `devorb:codebase-design`.
 
 ## Tasks
@@ -46,7 +46,7 @@ A plan longer than the code it describes has written the code instead. Lines tha
 
 ## Changes that are hard to take back
 
-A plan that migrates data, changes a public interface (anything outside this code calls or reads), touches authentication or ships a release carries a `## Rollout` section with four items: the order in which the pieces go out, how long old and new must keep working side by side, how to get back to a good state (code and data), and what stays changed even after that. Each comes from the spec, the code or the user, never from a guess. An item you can't fill means the plan isn't finished: ask the user, and don't hand it off with the gap.
+A plan that migrates data, changes a public interface (anything outside this code calls or reads), touches authentication or ships a production release carries a `## Rollout` section with four items: the order in which the pieces go out, how long old and new must keep working side by side, how to get back to a good state (code and data), and what stays changed even after that. Each comes from the spec, the code or the user, never from a guess. An item you can't fill means the plan isn't finished: ask the user, and don't hand it off with the gap.
 
 ## The plan document
 

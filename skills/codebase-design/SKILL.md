@@ -54,7 +54,7 @@ When shaping an interface, ask: can I reduce the number of methods, simplify the
 
 Give one recommendation, not a menu: where the seam goes, what the interface exposes, and the evidence (the deletion test, how many adapters are real, which callers and tests cross it). Name each rejected option in one line.
 
-A seam the plan from `devorb:planning` already names stands. Moving it is a plan change: say so, never move it silently. Working without the user (as a subagent, or told to go ahead without questions)? Decide, and report the choice as one for the user to confirm.
+A seam the plan from `devorb:planning` already names stands. Moving it is a plan change: say so, never move it silently. With the user present, the recommendation waits for their yes. Working without the user (as a subagent, or told to go ahead without questions)? Keep any seam the plan names; decide the rest, and report each choice as one for the user to confirm.
 
 ## Going deeper
 
@@ -63,6 +63,6 @@ A seam the plan from `devorb:planning` already names stands. Moving it is a plan
 
 ## Connects to
 
-- **Receives:** an interface or seam in question from `devorb:tdd`, while `devorb:planning` names the seams of each task, and a chosen deepening candidate from `devorb:improve-architecture`.
+- **Receives:** an interface or seam in question from `devorb:tdd` or `devorb:planning` (which names the seams of each task), and a chosen deepening candidate from `devorb:improve-architecture`.
 - **Uses:** `GLOSSARY.md` from `devorb:domain-modeling` for domain names; the code, to count callers and adapters.
 - **Hands off to:** the caller, with the seam, the interface and the reason in this vocabulary, ready to go into the plan or the test.

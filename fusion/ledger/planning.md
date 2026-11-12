@@ -58,7 +58,7 @@ O Superpowers não tem cenários de pressão para `writing-plans` no caminho lid
 
 ## Regras próprias
 
-Nenhuma. As mudanças além das fontes vêm das decisões da Task 11, da decisão da Task 7 sobre seams ou da ligação com as outras skills do DevOrb (ver conflitos).
+Nenhuma. Duas partes existem só no DevOrb e não são regras próprias, e sim ligação com o fluxo: a linha `**Seam:**` em cada task do modelo e a exigência de que os itens de `## Rollout` venham da spec ou do usuário, nunca de palpite. As mudanças além das fontes vêm das decisões da Task 11, da decisão da Task 7 sobre seams ou da ligação com as outras skills do DevOrb (ver conflitos).
 
 ## Fora
 
@@ -90,3 +90,4 @@ A preencher.
 ## Revisões
 
 - **2026-11-11, antes do `npm test`, risco de cópia (`textReuse: false`):** a frase "One you can't find is a finding" repetia a forma da regra do gstack e virou "If it isn't there, the plan is wrong until shown otherwise". A lista de exemplos de interface pública "(API, message, file format, CLI)" espelhava a pergunta de interfaces do ECC e virou "(anything outside this code calls or reads)". `SKILL.md` foi de 8.478 para 8.510 bytes.
+- 2026-11-12, revisão antes das rodadas: item em aberto na spec manda voltar a `devorb:aligning`; o histórico da base usa a data da spec ou do pedido; dividir um arquivo grande é uma task do plano, não edição durante o planejamento; `## Rollout` só para release de produção.

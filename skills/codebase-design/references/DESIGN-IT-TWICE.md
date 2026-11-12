@@ -7,7 +7,7 @@ When the user wants to explore alternative interfaces for a chosen deepening can
 Before spawning subagents, write a user-facing explanation of the problem space for the chosen candidate:
 
 - The constraints any new interface would need to satisfy
-- The dependencies it would rely on, and which category they fall into (`references/DEEPENING.md`)
+- The dependencies it would rely on, and which category they fall into (`DEEPENING.md`)
 - A rough illustrative code sketch to ground the constraints, not a proposal, just a way to make the constraints concrete
 
 Show this to the user, then go straight to step 2. The user reads and thinks while the subagents work in parallel.

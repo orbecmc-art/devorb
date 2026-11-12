@@ -18,7 +18,7 @@ When assessing a candidate for deepening, classify its dependencies. The categor
 
 ## Testing strategy: replace, don't layer
 
-- Old unit tests on shallow modules become waste once tests at the deepened module's interface exist; delete them.
+- Old unit tests on shallow modules become waste once tests at the deepened module's interface exist; delete them, and name each deleted test and the interface test that replaces it in your report.
 - Write new tests at the deepened module's interface. The **interface is the test surface**.
 - Tests assert on observable outcomes through the interface, not internal state.
 - Tests should survive internal refactors, since they describe behaviour, not implementation. If a test has to change when the implementation changes, it's testing past the interface.
