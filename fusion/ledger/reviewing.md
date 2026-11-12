@@ -1,0 +1,137 @@
+# Ledger: `reviewing`
+
+Junta `requesting-code-review` (com `code-reviewer.md`) e `receiving-code-review` do Superpowers e `engineering/code-review` do Matt Pocock, as três MIT, e soma ideias de quatro fontes com `textReuse: false`: Trail of Bits (`spec-to-code-compliance`, `differential-review`, `fp-check`), Spartan (`js-security-audit`), Cloudflare (`security-audit`) e gstack (`review/gate-integrity.md`, `review/checklist.md`, `review/specialists/targeted.md`). O texto dessas partes é próprio: cada fonte foi lida uma vez, as ideias anotadas com palavras próprias numa nota fora do repositório, e a escrita foi feita com as fontes fechadas. Uma segunda passada, ainda sem reabrir as fontes, reescreveu as frases que tinham ficado perto demais delas (lista de falha aberta, gasto sem teto, guarda nunca alcançada, linhas apagadas, zero achados, "o que teria de ser verdade", veredito "além da spec" e "indecidível", reafirmar a acusação, diff do lockfile e a pergunta do teste afrouxado).
+
+O zip do dono (`Security audit-0.1.0-v1.zip`) não estava disponível nesta fusão e não foi lido. As duas ideias que a Task 14 atribui a ele e à Cloudflare juntos (pista não resolvida sem severidade e nome de sanitizador não prova nada) entraram a partir da Cloudflare e do texto da Task. Se o zip trouxer algo além disso para revisão de diff, fica para a Task 24 ou para uma refusão.
+
+Pinos lidos: Superpowers é comparado no commit mais recente, por regra do dono, e em 2026-11-11 a `HEAD` dele (`git ls-remote`) estava em `22f0b463e7a5e579904dd6211a520321035526f7`, igual ao `lastAbsorbed`. Matt segue o pino `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`. Trail of Bits em `e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff`, só em `plugins/<skill>/skills/` (as pastas `agents/`, `workflows/`, `evals/` e `hooks/` dos plugins ficam fora dos caminhos acompanhados e não foram lidas). Spartan em `96b2c9d099f8507a95b9e43916f144594720a3c9`, pasta `toolkit/skills/js-security-audit/`. Cloudflare em `c1c8a8c1471069fb0e188eeaff69b8e8db6564a8`, `SKILL.md`, `VALIDATION-AND-REPORTING.md`, `WEB-PROTOCOL-AND-AUTH.md` e `SUPPLY-CHAIN-AND-RELEASE.md` lidos, `CLIENT-SIDE.md` e `AI-AND-LLM.md` só por busca. gstack em `1b96d9f8538ae0f3b66dd52b75793a3767e514d4`, só os três arquivos de `review/` citados acima.
+
+Origem de terceiros dentro das fontes: o gstack diz que `gate-integrity.md` adapta um catálogo de outra skill (`just-say-no-to-process-porn-and-ceremony`). A lista de smells do Matt vem dos nomes de Fowler (_Refactoring_, cap. 3). Como do gstack só entram ideias, nenhum aviso de licença precisa ser mantido, mas o crédito fica registrado aqui.
+
+O caso que justificaria as regras próprias é o caso realista da Task 14, como o plano o descreve: um diff com um bug plantado, um comportamento não pedido e uma validação removida, e o grader lê o `last_message` para ver se os três aparecem, os dois primeiros em eixos separados, e se a validação dispara a revisão de risco. A skill foi escrita sem abrir `evals/reviewing-*` nem `evals-reserved/`.
+
+## Origem por parte
+
+| Parte | Origem |
+|---|---|
+| `description`: pedir revisão de trabalho terminado e receber revisão, antes de agir | Superpowers (as duas descrições), fundidas, pela decisão da Task 14 de cobrir os dois lados |
+| Abertura: dois trabalhos; revisor com contexto preciso e sem o histórico da sessão | Superpowers (`requesting-code-review`), preservado pela Task 14 |
+| Ponto fixo: merge-base com a branch base, sem perguntar; ponto dado pelo usuário vence | Decisão da Task 14. O Matt pede o ponto e o Superpowers usa `HEAD~1` ou o merge-base. Ver conflitos |
+| Comandos do intervalo e parar se o `BASE` não resolve ou o diff está vazio | Matt (falhar antes de despachar os subagentes) |
+| `git diff $BASE` com edições não comitadas e `git status` para arquivos novos | Regra própria 2 |
+| Fonte da spec: plano e spec em `docs/devorb/`, issue citada no commit, caminho do usuário; sem spec, eixo Spec pulado | Matt, com os caminhos do DevOrb no lugar de `docs/`, `specs/` e da pasta temporária dele |
+| Fontes de padrões: arquivos do repositório que dizem como escrever código, mais `docs/adr/` e `GLOSSARY.md` | Matt, mais os artefatos de `devorb:domain-modeling` |
+| Padrões do repositório vencem a lista de smells; pular o que ferramenta já cobra | Matt, decisão da Task 14 |
+| Evidência de `devorb:verifying` entregue aos revisores | DevOrb: interface da Task 14 (recebe de `verifying`) |
+| Gatilhos da revisão de risco: login, sessão, permissão, token, criptografia, segredo; chamada que sai do processo; validação, checagem, limite ou ocultação removidos ou afrouxados | Trail of Bits (`differential-review`, gatilhos de risco alto), só ideia, com a lista da Task 14 |
+| Gatilhos: checagem cujo erro deixa passar; chamada paga; operação que pode rodar duas vezes | gstack (`targeted.md`, blocos de gasto e de portão), só ideia, com a Task 14 |
+| Gatilho: dependência ou lockfile alterados | Spartan (`js-security-audit`), só ideia |
+| Gatilho: teste, CI ou configuração que pode esconder falha | gstack (`gate-integrity.md`), só ideia; spec, "Teste afrouxado" (a lista completa fica em `reviewing`) |
+| Revisores novos em paralelo, numa só mensagem, sem nada da sessão | Matt (subagentes paralelos com contexto novo) e Superpowers (contexto preciso) |
+| Revisores só leem e não despacham ninguém; revisão grande em passadas | Superpowers (`code-reviewer.md`) |
+| Sem subagentes: cada eixo numa passada separada a partir só do diff, dito no relatório | Regra própria 3 |
+| Eixo Standards: correção primeiro, depois padrões documentados, depois smells | Superpowers (qualidade de código e bugs) e Matt (padrões e smells), com a ordem própria |
+| Eixo Spec: veredito por requisito entre seis (implementado, parcial, contradito, além da spec, ausente, indecidível), ausente com o que foi buscado | Trail of Bits (`spec-to-code-compliance`), só ideia, com os nomes da Task 14 |
+| Eixo Spec: o que faltou e o que sobrou | Matt (requisitos faltando e escopo a mais), decisão da Task 14 |
+| Revisão de risco como terceiro revisor novo, no mesmo lote, com cabeçalho próprio | Regra própria 1 |
+| Relatório: um cabeçalho por eixo, sem fundir nem ordenar entre eixos, e o motivo | Matt ("Why two axes"), decisão da Task 14 |
+| Critical, Important e Minor dentro de cada eixo, com `file:line`, o que, por quê e correção | Superpowers (`code-reviewer.md`), decisão da Task 14 |
+| "Needs checking": pista não resolvida, sem severidade, com o fato que falta e a checagem que a resolveria | Cloudflare (`security-audit`), só ideia, com o texto da Task 14 |
+| Linha final por eixo e veredito pronto, pronto com correções, não pronto | Matt (resumo por eixo, sem vencedor entre eixos) e Superpowers ("Ready to merge?") |
+| Critical e Important para o laço de correção de `implementing`; Minor só listados | Superpowers (corrigir Critical já, Important antes de seguir, anotar Minor), com a interface da Task 14 |
+| Teste, portão ou critério de aceite afrouxado é decisão do usuário, fora do laço | gstack (`gate-integrity.md`, o humano decide), só ideia, com a Task 14 |
+| Encaminhar a `devorb:ui-review` quando o diff toca interface | Spec, "Fronteiras" do setor de design |
+| `devorb:security-audit` só sugerida, nunca iniciada | Spec e Task 24 (manual) |
+| Receber: ler tudo, perguntar sobre o que não ficou claro antes de mudar qualquer coisa | Superpowers (`receiving-code-review`) |
+| Receber: reafirmar a acusação com as próprias palavras antes de aceitar | Trail of Bits (`fp-check`), só ideia, e Superpowers ("restate requirement") |
+| Receber: conferir no código, com as duas armadilhas (creditar guarda não lida, descartar bug por parecer improvável) | Superpowers (verificar antes de implementar) e Trail of Bits (`fp-check`, perguntas a favor e contra), só ideia |
+| Receber: corrigir, contestar com evidência, dizer o que falta, parar se contradiz decisão do usuário, propor remover o que ninguém chama | Superpowers |
+| Receber: ordem das correções, uma por vez, cada uma testada | Superpowers, com `devorb:tdd` e `devorb:verifying` |
+| Receber: nada de concordância performática nem agradecimento; corrigir a contestação errada em uma linha | Superpowers, preservado pela Task 14 |
+| `references/code-reviewer.md`: cabeçalho comum (papel, intervalo, evidência, regras de leitura, saída) | Superpowers (`code-reviewer.md`), adaptado |
+| `references/code-reviewer.md`: ler o diff inteiro, inclusive o que ele apaga; lista vazia é resultado válido; levantar só o que se bloquearia numa revisão de verdade | gstack (`checklist.md` e `targeted.md`), só ideias, texto próprio |
+| `references/code-reviewer.md`: cada achado é um padrão; buscar as cópias e classificar pela pior | gstack (`checklist.md`, varredura lateral), só ideia, com a Task 14 |
+| `references/code-reviewer.md`: valor novo ou entrada mais larga, abrir cada consumidor, inclusive fora do diff | gstack (`checklist.md`, completude de enum e valor), só ideia, com a Task 14 |
+| `references/code-reviewer.md`: lista de smells de Fowler como julgamento, com a correção de cada um | Matt, encurtada |
+| `references/code-reviewer.md`: onde a spec cala, vale a expectativa razoável do usuário; listar o que foi deixado de lado | Superpowers (`code-reviewer.md`) |
+| `references/code-reviewer.md`: severidade pela consequência e não pela força da frase; dizer qual lado está errado; mostrar o dano ou a condição; nunca inventar ataque nem número | Trail of Bits (`spec-to-code-compliance`, rubrica), só ideias, texto próprio |
+| `references/risk-review.md`: contar e ler os chamadores | Trail of Bits (`differential-review`), só ideia |
+| `references/risk-review.md`: histórico do código removido (`git log -S`, `git blame`), checagem vinda de conserto é Critical até prova em contrário, código removido por segurança e devolvido é regressão, checagem movida ou redundante | Trail of Bits (`differential-review`), só ideias |
+| `references/risk-review.md`: nome de guarda não prova nada; todo caminho passa por ela e ela recusa quando não decide; guarda fora do caminho não protege | Cloudflare e gstack (`targeted.md`), só ideias, com a Task 14 |
+| `references/risk-review.md`: uma camada que bloqueia de fato torna a falta da outra endurecimento (Minor) | Cloudflare (conselho de defesa em profundidade sem violação alcançável não é achado) e Trail of Bits (`fp-check`), só ideias |
+| `references/risk-review.md`: falha aberta, gasto sem teto, rodar duas vezes supondo que a anterior morreu depois de qualquer linha | gstack (`targeted.md` e `checklist.md`), só ideias, com a Task 14 |
+| `references/risk-review.md`: pacote novo existe de verdade no registro; diff do lockfile | Spartan (`js-security-audit`), só ideias, com comandos de registro no lugar do site |
+| `references/risk-review.md`: lista de afrouxamentos e a pergunta "o que a mudança compra"; mensagem de commit não é medição; uma causa, um achado; o usuário decide | gstack (`gate-integrity.md`), só ideias, na ordem e com os itens da Task 14 |
+| `references/risk-review.md`: contar o abuso como história (entrada, passos, resultado, o que o autor precisa antes); sem história, vai para "Needs checking"; não sondar sistemas vivos | Trail of Bits (`differential-review`) e Cloudflare, só ideias, texto e ordem próprios |
+| `references/receiving.md`: tratamento por origem, YAGNI, quando contestar, exemplos, reconhecer, ordem, tabela de erros, resposta no fio do GitHub | Superpowers (`receiving-code-review`), adaptado e encurtado |
+| `references/receiving.md`: reafirmar a acusação (defeito, linha, gatilho e quem o controla, dano), seguir o dado da entrada à linha, olhar a guarda de novo antes de decidir | Trail of Bits (`fp-check`), só ideias, texto próprio |
+| `references/receiving.md`: responder no GitHub só quando o usuário pediu | DevOrb: responder é enviar mensagem em nome do usuário |
+| `Connects to` | DevOrb: Task 14 e spec ("Como as skills se conectam") |
+
+## Conflitos resolvidos
+
+- **Ponto fixo:** o Matt pergunta quando o usuário não diz, e o Superpowers sugere `HEAD~1` ou o merge-base. A Task 14 decidiu: merge-base com a branch base, sem perguntar. A branch base é a que o usuário ou o plano nomeou, senão a de `origin/HEAD`, senão `main` ou `master`.
+- **Um revisor ou dois eixos:** o Superpowers manda um revisor que mistura aderência ao plano e qualidade. O Matt separa Padrões e Spec em subagentes paralelos e não funde. Vence o Matt, pela Task 14, com a correção de bugs dentro de Standards, porque a lista do Matt só cobre padrões e smells e o bug plantado precisa de um eixo.
+- **Severidade:** o Matt só separa violação dura de julgamento; o Superpowers usa Critical, Important e Minor; a Trail of Bits usa quatro níveis; a Cloudflare, cinco; o gstack, dois. A Task 14 decidiu Critical, Important e Minor dentro de cada eixo, porque o laço de correção precisa da severidade. Os critérios das outras fontes (consequência, não força da frase) entram como regra de classificação.
+- **Veredito final:** o Matt proíbe escolher um vencedor entre eixos, e o Superpowers pede "pronto para merge?". Ficam os dois: a linha final dá a contagem e o pior achado de cada eixo, sem ordenar eixos, e o veredito de prontidão é um portão, não uma ordenação.
+- **Corrigir sozinho ou perguntar:** o gstack corrige sozinho o que é mecânico e pergunta o resto. No DevOrb, o revisor só lê, e as correções passam pelo laço de `implementing` com `tdd` e `verifying`. Afrouxamento de portão nunca entra no laço: o usuário decide, como no gstack e na Task 14.
+- **Relatório em arquivo:** a Trail of Bits (`differential-review`) exige um relatório em arquivo. O relatório fica na conversa, porque quem o consome é o laço de correção.
+- **Ler a versão base:** a Trail of Bits manda fazer checkout da base. A skill usa `git show` ou uma worktree temporária e nunca troca a cópia atual, como o `code-reviewer.md` do Superpowers e as regras de git seguro do DevOrb.
+- **Pacote inventado:** o Spartan manda conferir no site do registro. A skill usa o comando do registro (`npm view`, `pip index versions`), que não precisa de navegador.
+- **Elogio:** o Superpowers pede reconhecer o que ficou bom antes dos problemas. Ficou de fora: quem lê é o laço de correção, e o teto pede corte.
+- **Escopo de segurança:** a Cloudflare é uma auditoria inteira. Em `reviewing`, entram só as ideias que servem a um diff (pista sem severidade, nome de guarda, camada redundante, não sondar sistemas vivos). O resto fica em `devorb:security-audit` (Task 24), manual.
+
+## Regras próprias
+
+Regras próprias só saem com decisão explícita do dono.
+
+1. **A revisão de risco roda como um terceiro revisor novo, no mesmo lote dos dois eixos, só quando um gatilho dispara, com cabeçalho próprio, e o relatório nomeia o gatilho.** A Task 14 pede uma revisão de risco extra sem dizer quem a faz. Pôr no eixo Standards misturaria a lista longa de risco com bugs e padrões; um revisor à parte mantém os dois eixos limpos e deixa visível que o gatilho disparou, que é o que o grader do caso realista olha. Ainda não há resultado que mostre se a regra muda o comportamento.
+2. **O intervalo inclui edições não comitadas (`git diff $BASE`) e a lista de arquivos novos (`git status`).** O Matt usa `git diff <ponto>...HEAD`, que ignora a árvore de trabalho. Quem pede revisão no meio do trabalho costuma ter mudanças não comitadas, e uma revisão que não as vê aprova o que não leu. Sem caso próprio ainda.
+3. **Sem subagentes, cada eixo roda numa passada separada que começa só do diff, e o relatório diz isso.** Nenhuma fonte cobre o ambiente sem a ferramenta de subagente. Sem caso próprio ainda.
+
+## Fora
+
+- **Do Superpowers (`requesting-code-review`):** a lista de quando pedir revisão (o fluxo do DevOrb já a chama depois de `verifying`), o exemplo longo de uso, a tabela de racionalizações sobre revisar o diff sozinho e os placeholders `BASE_SHA`/`HEAD_SHA` (viraram o intervalo pelo merge-base).
+- **Do Superpowers (`code-reviewer.md`):** a persona de "Senior Code Reviewer", as perguntas de arquitetura e de prontidão para produção em lista (cobertas por correção e risco), a seção de recomendações, o elogio e o exemplo de saída.
+- **Do Superpowers (`receiving-code-review`):** as citações à "regra do parceiro humano" (viraram regra direta) e parte dos exemplos.
+- **Do Matt:** a pasta temporária dele e o comando de configuração dele como fonte de spec (nomes antigos).
+- **Da Trail of Bits (`spec-to-code-compliance`):** o workflow em script, os agentes por requisito, o formato em disco por requisito, as notas por domínio (contratos, C, firmware) e os quatro níveis de severidade.
+- **Da Trail of Bits (`differential-review`):** estratégia por tamanho do código, faixas numéricas de chamadores, matriz de prioridade, os "cinco porquês", o relatório em arquivo com tabelas e emojis, os padrões de Solidity (reentrância, timestamp, front-running) e a integração com outras skills deles.
+- **Da Trail of Bits (`fp-check`):** os seis portões, a verificação profunda com tarefas, a prova algébrica, os PoCs e o veredito TRUE/FALSE POSITIVE. Só entrou a ideia de reafirmar a acusação e de checar os dois lados.
+- **Do Spartan:** endurecimento de `.npmrc`, CI com `npm ci --ignore-scripts`, Dependabot, SBOM, ESLint de segurança, playbook de incidente e a lista de permissões. São auditoria de projeto, não de diff; o que servir vai para `security-audit`.
+- **Da Cloudflare:** as seis fases da auditoria, o registro de cobertura, perfis e orçamento, a promoção de artefatos, os validadores `.cjs`, o esquema JSON, a escala de cinco severidades e as classes de ataque por domínio. Tudo isso é de `devorb:security-audit` (Task 24).
+- **Do gstack:** os binários (`gstack-gate-diff`, `gstack-review-log` e outros), as quatro opções de disposição, os tipos de PR, as categorias específicas de Rails e Python, AUTO-FIX, o glossário blocker/should/nit, as supressões longas e a categoria de completude, que segue a regra "Boil the Lake", recusada na spec.
+- **Lacuna:** nenhuma fonte diz o que fazer quando o laço de correção não converge (os mesmos achados voltam a cada rodada). A skill devolve os achados a `implementing`; o limite de rodadas, se precisar, fica lá.
+
+## Resultados
+
+A preencher depois das rodadas de comparação (R6).
+
+## Decisões por commit de fonte
+
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/requesting-code-review/SKILL.md` | adotado | revisor com contexto preciso e sem histórico, severidade Critical/Important/Minor e o que fazer com cada uma, contestar com evidência
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/requesting-code-review/SKILL.md` | recusado | lista de quando pedir revisão, exemplo longo, tabela de racionalizações, `HEAD~1` como ponto fixo
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/requesting-code-review/code-reviewer.md` | adotado | base do cabeçalho comum: só leitura, não despachar outros agentes, spec como visão e expectativa razoável, lista do que foi deixado de lado, saída por severidade com `file:line`
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/requesting-code-review/code-reviewer.md` | recusado | persona, listas de arquitetura e prontidão, recomendações, elogio, exemplo de saída
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/receiving-code-review/SKILL.md` | adotado | padrão de resposta, itens pouco claros antes de tudo, origem da revisão, YAGNI, ordem das correções, quando contestar, nada de concordância performática nem agradecimento, resposta no fio do GitHub
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/receiving-code-review/SKILL.md` | recusado | citações à regra do parceiro humano e parte dos exemplos
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/code-review/SKILL.md` | adotado | dois eixos em subagentes paralelos com contexto novo, falhar cedo com intervalo ruim, fontes de spec e de padrões, lista de smells, padrões do repositório vencem, faltou e sobrou, não fundir nem ordenar entre eixos
+- `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/code-review/SKILL.md` | recusado | perguntar o ponto fixo, pasta temporária e comando de configuração dele
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/spec-to-code-compliance/skills/` | adotado | só ideias: seis vereditos, ausente com o que foi buscado, indecidível como achado contra a spec, severidade pela consequência, dizer qual lado está errado, nunca inventar ataque nem número
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/spec-to-code-compliance/skills/` | recusado | workflow, agentes por requisito, formato em disco, notas por domínio, quatro níveis de severidade
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/differential-review/skills/` | adotado | só ideias: gatilhos de risco, contar chamadores, histórico do código removido, regressão de segurança, descrever o abuso, diff pequeno pode ser o perigoso
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/differential-review/skills/` | recusado | estratégia por tamanho, faixas numéricas, matriz de prioridade, checkout da base, relatório em arquivo, padrões de Solidity
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/fp-check/skills/` | adotado | só ideias: reafirmar a acusação antes de aceitar, seguir o dado até a linha, checar os dois lados (guarda inventada e descarte por improbabilidade)
+- `trailofbits-skills@e4dd0bb5b15535f7c5a0834187dffba6ac37e4ff:plugins/fp-check/skills/` | recusado | portões, verificação profunda, prova algébrica, PoCs, veredito TRUE/FALSE POSITIVE
+- `spartan-toolkit@96b2c9d099f8507a95b9e43916f144594720a3c9:toolkit/skills/js-security-audit/` | adotado | só ideias: conferir que o pacote novo existe no registro e ler o diff do lockfile
+- `spartan-toolkit@96b2c9d099f8507a95b9e43916f144594720a3c9:toolkit/skills/js-security-audit/` | recusado | endurecimento de projeto, CI, Dependabot, SBOM, ESLint, playbook de incidente, lista de permissões
+- `cloudflare-security-audit@c1c8a8c1471069fb0e188eeaff69b8e8db6564a8:skills/security-audit/SKILL.md` | adotado | só ideias: pista não resolvida sem severidade com o fato que falta, defesa em profundidade sem violação alcançável não é achado, não sondar sistemas vivos
+- `cloudflare-security-audit@c1c8a8c1471069fb0e188eeaff69b8e8db6564a8:skills/security-audit/SKILL.md` | recusado | fases, cobertura, perfis, orçamento, isolamento de escrita, cinco severidades (ficam para `security-audit`)
+- `cloudflare-security-audit@c1c8a8c1471069fb0e188eeaff69b8e8db6564a8:skills/security-audit/VALIDATION-AND-REPORTING.md` | adotado | só ideia: pista que segue aberta diz a checagem que a resolveria
+- `cloudflare-security-audit@c1c8a8c1471069fb0e188eeaff69b8e8db6564a8:skills/security-audit/VALIDATION-AND-REPORTING.md` | recusado | verificadores por candidato, promoção de artefatos, `findings.json` e relatórios em arquivo (ficam para `security-audit`)
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/gate-integrity.md` | adotado | só ideias: lista completa de afrouxamentos em teste, CI e configuração, a pergunta sobre o que a mudança compra, mensagem de commit não é medição, uma causa é um achado, o humano decide
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/gate-integrity.md` | recusado | ids RH e PL, ferramenta de diff, níveis listado/lido/achado, quatro opções de disposição
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/checklist.md` | adotado | só ideias: valor novo ou entrada mais larga lida em cada consumidor, achado é um padrão com cópias classificadas pela pior, ler o diff inteiro, lista vazia é válida, só o que se bloquearia de fato
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/checklist.md` | recusado | tipos de PR, categorias de Rails e Python, AUTO-FIX, glossário de severidade, supressões, completude ("Boil the Lake")
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/specialists/targeted.md` | adotado | só ideias: linhas apagadas pesam como as novas, guarda que nunca é alcançada não protege, checagem que falha aberta, gasto pago sem teto, operação externa repetível
+- `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:review/specialists/targeted.md` | recusado | formato JSON de saída, categorias e escala CRITICAL/INFORMATIONAL
