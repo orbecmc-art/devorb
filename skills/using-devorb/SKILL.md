@@ -44,7 +44,7 @@ New work enters through `devorb:aligning`. A bug enters through `devorb:debuggin
 | Shape of a module or interface | `devorb:codebase-design` |
 | Creating or editing a skill | `devorb:writing-skills` |
 
-Manual skills run only when the user calls them; suggest, never start: `devorb:evolving`, `devorb:improve-architecture`, `devorb:prototype`, `devorb:handoff`, `devorb:retro`.
+Manual skills run only when the user calls them; suggest, never start: `devorb:evolving`, `devorb:improve-architecture`, `devorb:prototype`, `devorb:handoff`, `devorb:retro`, `devorb:security-audit`.
 
 ## Red Flags
 
@@ -52,13 +52,13 @@ These thoughts mean STOP, you're rationalizing:
 
 | Thought | Reality |
 |---|---|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | The skill check comes BEFORE clarifying questions. |
-| "Let me explore or check files first" | Skills tell you HOW to explore. Check first. |
+| "This is just a simple question" | Questions are tasks. Check skills. |
+| "I need more context first" | Check skills BEFORE clarifying questions. |
+| "Let me explore or check files first" | Skills say HOW to explore. Check first. |
 | "This doesn't need a formal skill" | If a skill exists, use it. |
 | "I remember this skill" | Skills evolve. Read the current one. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "It's urgent" or "tests later" | That's when the flow helps most. Code change: check `devorb:tdd` first. |
+| "The skill is overkill" | Simple things grow complex. Use it. |
+| "It's urgent" or "tests later" | Then the flow helps most. Code change: check `devorb:tdd` first. |
 | "I'll just do this one thing first" | Check BEFORE doing anything. |
 | "I know what that means" | Knowing the concept is not using the skill. |
 

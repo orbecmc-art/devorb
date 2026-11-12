@@ -111,7 +111,7 @@
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "bootstrap": "when-done"
   },
   "visual-direction": {

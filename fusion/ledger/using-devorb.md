@@ -2,7 +2,7 @@
 
 Skill de entrada, injetada pelo hook de início de sessão. Foi escrita na Task 3, sem passar pelo processo de fusão, fundindo `using-superpowers` (Superpowers) com `ask-matt` (Matt Pocock), e este ledger a registra na Task 6. Pinos lidos: Superpowers em `22f0b463e7a5e579904dd6211a520321035526f7`, igual à `main` dele em 2026-11-11, e Matt em `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`.
 
-`SKILL.md` tem 3.498 bytes (eram 3.499 antes da regra própria 5), contra o limite de 3.500 do teste de bootstrap (teto de 875 tokens). Qualquer acréscimo precisa tirar algo. São 307 bytes acima da fonte, cerca de 77 tokens a mais por sessão, e a Task 6 mede se isso se paga.
+`SKILL.md` tem 3.496 bytes (eram 3.499 antes da regra própria 5 e 3.498 antes da Task 24), contra o limite de 3.500 do teste de bootstrap (teto de 875 tokens). Qualquer acréscimo precisa tirar algo. São 305 bytes acima da fonte, cerca de 76 tokens a mais por sessão, e a Task 6 mede se isso se paga.
 
 Os casos da skill são `evals/using-devorb-triggers-feature` ("adiciona exportação em CSV" dispara `devorb:aligning`), `evals/using-devorb-triggers-bug` ("esse teste está falhando" dispara `devorb:debugging`) e `evals/using-devorb-legacy-names` ("usa o superpowers:brainstorming para isso" dispara `devorb:aligning`).
 
@@ -23,7 +23,7 @@ Os casos da skill são `evals/using-devorb-triggers-feature` ("adiciona exporta�
 | Ler a skill antes de descrevê-la ou de pulá-la | Matt (`ask-matt`) |
 | Invocar pelo nome mesmo fora da lista de skills | Regra própria 2 |
 | Linha `devorb:browser-testing` | Plano, Task 23 (commits `742a020` e `7af9f5e`) |
-| Skills manuais: sugerir, nunca começar | Spec e decisão da Task 3 |
+| Skills manuais: sugerir, nunca começar | Spec e decisão da Task 3. `devorb:security-audit` entrou na lista na Task 24, quando ficou `done` |
 | Sinais de alerta | Superpowers (12 linhas viraram 8) |
 | Sinal de alerta "It's urgent" ou "tests later", com `devorb:tdd` primeiro em mudança de código | Regra própria 5 |
 | Pegar o caminho das referências invocando a skill | Regra própria 3 |
@@ -58,6 +58,10 @@ Regras próprias só saem com decisão explícita do dono.
 - **Notas de outros harnesses:** Codex, Gemini, Pi, Antigravity, Hermes e Muse, o `hooks-cursor.json` e os ramos de Cursor, Copilot e Muse do `session-start`. O DevOrb é só para o Claude Code.
 - **Sinais de alerta da fonte:** "posso checar git ou arquivos rápido" foi fundida com "explorar primeiro". "Juntar informação primeiro", "isso não conta como tarefa" e "isso parece produtivo" saíram, para caber no limite.
 - **Do `ask-matt`:** as rampas `/triage` e `/wayfinder`, as skills avulsas sem equivalente (`/teach`, `/to-questionnaire`, `/wizard`, `/research`, `/wait-what`), a pré-condição `/setup-matt-pocock-skills` e a higiene de contexto em detalhe. `references/legacy-names.md` diz ao agente que essas skills não existem.
+
+## Revisões
+
+- **2026-11-12, Task 24.** `devorb:security-audit` entrou no fim da lista de skills manuais (26 bytes), porque `tests/bootstrap.test.mjs` passa a exigi-la quando a skill está `done`. Para caber em 3.500 bytes, a redação de cinco linhas dos sinais de alerta encolheu 28 bytes, sem tirar regra nem linha: "Check for skills" virou "Check skills"; "The skill check comes BEFORE clarifying questions" virou "Check skills BEFORE clarifying questions"; "Skills tell you HOW to explore" virou "Skills say HOW to explore"; "Simple things become complex" virou "Simple things grow complex"; e "That's when the flow helps most" virou "Then the flow helps most". Os testes não exigem nenhuma dessas frases. `SKILL.md` foi de 3.498 para 3.496 bytes. Sem comparação paga nesta mudança.
 
 ## Resultados (2026-11-11, Task 6)
 
