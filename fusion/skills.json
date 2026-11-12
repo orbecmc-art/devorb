@@ -21,7 +21,7 @@
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 5000,
-    "status": "planned"
+    "status": "done"
   },
   "tdd": {
     "invocation": "auto",
@@ -51,7 +51,7 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "finishing": {
     "invocation": "auto",
