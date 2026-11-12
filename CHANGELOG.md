@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.0
+
+- `writing-skills`, do Superpowers: linha de base sem a skill antes de escrever, com subagentes novos, e teste depois. Instrução direta para pular o teste vale e a skill sai como não testada. Caso realista mudado para `skills/`, porque o sandbox do eval nega escrita em `.claude/skills/`. Comparação: 100% contra 50% no Superpowers.
+
 ## 0.13.0
 
 - `finishing`, do Superpowers (suíte verde antes do menu, detecção de ambiente, menu de opções, descarte só com `discard` digitado, limpeza por procedência, nunca `--force`) e do Matt Pocock (corpo de pull request com Resumo, Evidência e Perigo de merge). Pull request abre como rascunho por padrão; rebase só a pedido. Comparação: empate com o Superpowers (100%), Matt 0%.

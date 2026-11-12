@@ -89,7 +89,13 @@ Nenhuma regra própria nova. A linha de precedência ("instrução direta para p
 
 ## Resultados
 
-A preencher depois das rodadas de comparação (R6).
+Opus 5.5, nível leve, 2 rodadas, `--ablation none`. `fusion/results/2026-11-12-writing-skills.md`.
+
+| Caso | DevOrb | Superpowers |
+|---|---|---|
+| `writing-skills-commit-do-time` | 100% (1,00) | 50% (0,83) |
+
+- `accepted: true`. Na primeira rodada, os dois braços ficaram em 0%: o sandbox do `claude plugin eval` nega escrita em `.claude/skills/`, e os dois pararam no bloqueio sem contorná-lo e entregaram o texto ao usuário. O caso passou a pedir a skill em `skills/commit-do-time/SKILL.md`.
 
 ## Decisões por commit de fonte
 

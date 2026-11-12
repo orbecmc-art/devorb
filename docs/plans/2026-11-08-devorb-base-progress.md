@@ -50,7 +50,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 17. `improve-architecture`, `prototype`, `handoff` e `retro` | Feita: improve-architecture e handoff 100% contra 0% no Matt; retro empata; prototype é lacuna | `0.11.0` |
 | 24. `security-audit` | Feita: DevOrb 100% contra 0% sem plugin | `0.12.0` |
 | 15. `finishing` | Feita: DevOrb 100%, Superpowers 100%, Matt 0% | `0.13.0` |
-| 15 e 16. `finishing` e `writing-skills` | Skills escritas; comparação refeita depois de corrigir o caso de `writing-skills` (o sandbox nega escrita em `.claude/skills/`) | |
+| 16. `writing-skills` | Feita: DevOrb 100%, Superpowers 50% | `0.14.0` |
 | 23. `browser-testing` | Parada: o Chromium não abre no sandbox do `claude plugin eval`. Espera o dono escolher a alternativa | |
 | 21, 22, D1 a D8 e M1 a M5 | Não começaram | |
 
