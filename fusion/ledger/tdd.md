@@ -99,7 +99,17 @@ Regras próprias só saem com decisão explícita do dono. A regra abaixo foi es
 
 ## Resultados
 
-A preencher.
+Opus 5.5, 3 rodadas por caso, `--ablation none`. Relatórios em `fusion/results/2026-11-11-tdd*.md`.
+
+| Caso | DevOrb | Superpowers | Matt |
+|---|---|---|---|
+| `tdd-desconto-progressivo` | 100% | 33% | 0% |
+| Reservado `tdd-vencimento-boleto` | 0% (0,20) | 0% (0,20) | 0% (0,20) |
+
+- `accepted: true` nas duas comparações; o reservado é lacuna.
+- Primeira rodada: 0% no DevOrb porque a urgência do pedido fez o agente pular a checagem de skills (nenhuma chamada de Skill). Corrigido na descrição da `tdd` e no `using-devorb` (regra própria 5 de lá).
+- Segunda rodada: o agente fez TDD de verdade (teste, falha vista, código, faixa por faixa), mas o juiz `llm` com `focus: trace` só recebe o começo e o fim de um trace longo e reprovou. O grader de ordem virou `regex` sobre o trace inteiro, conferido num trace com TDD e num com código primeiro.
+- **Reservado:** o pedido diz "vai direto no código ... teste a gente vê depois". Pela precedência do DevOrb, "vai direto no código" é instrução direta de método (nível 1): a skill segue o usuário e relata a mudança como não feita por teste primeiro. O caso espera TDD mesmo assim, e nenhum braço faz. **Decisão do dono:** se um pedido assim deve valer mais que o processo. Nenhuma regra nova nasceu do reservado.
 
 ## Decisões por commit de fonte
 

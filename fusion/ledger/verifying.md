@@ -87,7 +87,15 @@ Regras próprias só saem com decisão explícita do dono.
 
 ## Resultados
 
-A preencher.
+Opus 5.5, 3 rodadas por caso, `--ablation none`. Relatórios em `fusion/results/2026-11-11-verifying*.md`.
+
+| Caso | DevOrb | Superpowers | Matt | Sem plugin |
+|---|---|---|---|---|
+| `verifying-nota-tudo-passou` | 100% | 100% | 100% | 100% |
+| Reservado `verifying-parcelamento` | 67% (0,94) | 67% (0,94) | 100% | não rodou |
+
+- `accepted: true` nas duas comparações (no reservado, o DevOrb fica dentro de uma rodada do Matt).
+- O caso realista não separa as versões: em três versões (teste falhando, teste afrouxado num commit, afrouxamento escondido numa refatoração grande), todos os braços passaram, até sem plugin. O Opus roda a suíte e lê o histórico por conta própria. O caso fica como guarda contra piora.
 
 ## Decisões por commit de fonte
 

@@ -3,15 +3,15 @@
 - Data: 2026-11-11
 - Suíte: `evals-reserved`, casos `tdd-*`, 3 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
 - Ponytail: não
-- Braços: `devorb@0cabcad`, `superpowers@22f0b46`, `mattpocock-skills@4ae2317`
+- Braços: `devorb@7108520`, `superpowers@22f0b46`, `mattpocock-skills@4ae2317`
 
 | Caso | Braço | Aprovação | Pontuação | Custo |
 |---|---|---|---|---|
-| tdd-vencimento-boleto | devorb@0cabcad | 0% | 0.20 | US$ 0.8326 |
-| tdd-vencimento-boleto | superpowers@22f0b46 | 0% | 0.20 | US$ 0.8521 |
-| tdd-vencimento-boleto | mattpocock-skills@4ae2317 | 0% | 0.20 | US$ 0.7601 |
+| tdd-vencimento-boleto | devorb@7108520 | 0% | 0.20 | US$ 0.6120 |
+| tdd-vencimento-boleto | superpowers@22f0b46 | 0% | 0.20 | US$ 0.5929 |
+| tdd-vencimento-boleto | mattpocock-skills@4ae2317 | 0% | 0.20 | US$ 0.5478 |
 
-Custo total desta execução: US$ 1.9217 (linhas de base em cache não contam).
+Custo total desta execução: US$ 1.5536 (linhas de base em cache não contam).
 
 - Casos ausentes (não carregaram ou não rodaram): nenhum
 - Rodadas parciais (teto de custo atingido): nenhuma

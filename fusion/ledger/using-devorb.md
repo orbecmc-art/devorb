@@ -73,6 +73,7 @@ Opus 5.5, 3 rodadas por caso, `--ablation none`, com o braço `none`. Relatório
 - `accepted: true` na comparação normal. No reservado, 2 rodadas do DevOrb chegaram ao limite de 8 turnos do caso depois de chamar a skill certa, e a versão desta execução do `compare.mjs` contou isso como erro da ferramenta. Com a regra corrigida, também é `accepted: true` (anotado no relatório).
 - O caso de nomes legados só aceita o nome traduzido. O Superpowers chama o próprio `brainstorming` e falha de propósito, e o DevOrb traduz em todas as rodadas.
 - **Custo da regra própria 2:** enquanto `aligning` está `planned`, o agente chama `devorb:aligning`, recebe "não encontrada" e segue. A chamada conta para o grader, e a Task 10 roda esses casos de novo quando `aligning` existir.
+- Depois da regra própria 5 (urgência), a comparação rodou de novo: `accepted: true` nos casos visíveis e no reservado, 100% no DevOrb. Em `using-devorb-triggers-feature` as 3 rodadas chegaram ao limite de 8 turnos depois de chamar a skill certa, o que não bloqueia.
 - O Matt não dispara skill nenhuma nesses pedidos: as dele não entram pelo roteamento automático.
 
 ## Decisões por commit de fonte

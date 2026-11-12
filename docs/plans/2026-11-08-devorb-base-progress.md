@@ -39,7 +39,9 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | Setor de design | Spec, plano, 5 skills `planned` e as fontes de referência fixas | `0.1.5` a `0.1.8` |
 | Setor mobile | Spec, plano e 3 skills `planned` | `0.1.8` |
 | 6. `debugging` e `using-devorb` pelo processo | Steps 1 a 6 feitos, todas as comparações com `accepted: true`. Espera a decisão do dono no Step 7 | `0.2.0` |
-| 7 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram. Rodam no Mac, depois da decisão do Step 7 da Task 6 | |
+| 7. `tdd` | Feita: `accepted: true` (DevOrb 100%, Superpowers 33%, Matt 0%); reservado é lacuna | `0.3.0` |
+| 8. `verifying` | Feita: `accepted: true`; o caso realista não separa as versões no Opus | `0.4.0` |
+| 9 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram | |
 
 ## Retomar no Mac
 
@@ -222,6 +224,16 @@ A sondagem do Step 1 rodou 8 casos com Sonnet e custou US$ 1,07. O que ela mudou
 - **Cache bare no `source-diff`.** O sandbox também proíbe gravar `.git/config`, então um `git clone` normal falha dentro da rodada. O cache do `source-diff` virou um repositório bare, numa pasta com nome novo, e lê as mesmas refs. Custo: um cache antigo fica esquecido na pasta temporária.
 - **Foco dos graders.** Num grader `llm`, `focus: files` mostra ao juiz só os nomes dos arquivos criados, nunca o conteúdo. Os graders da `evolving` e da depuração usavam isso. Agora cada um lê o arquivo que julga, e `trace` só aparece para efeitos colaterais. Um teste barra o foco `files`. O teto de 169 tokens do ensaio virou um `regex` de tamanho, e o scaffold para se o valor calculado mudar.
 - **Casos da `evolving` só no braço `devorb`:** os scaffolds precisam de `tools/source-diff.mjs`, que os braços `none` e de fonte não têm. A comparação usa `--arms devorb --ablation with-without`.
+
+### Tasks 7 e 8 no Mac
+
+- O dono decidiu seguir com os níveis atuais depois do portão da Task 6.
+- Casos realistas e reservados foram escritos em paralelo com a skill, por agentes separados, e as linhas de base rodaram antes de a skill ficar pronta.
+- **Cópia de fontes "só ideias":** nas duas skills, a primeira versão parafraseava Trail of Bits, ECC ou gstack frase por frase. A correção virou rotina: um redator novo reescreve sem abrir a fonte, e o revisor confere de novo. Custo: duas voltas de revisão por skill.
+- **`tdd` e urgência:** com "é urgente, escreve o teste depois", o agente do DevOrb não chamava skill nenhuma. A descrição da `tdd` e uma linha nova do `using-devorb` resolveram. O `using-devorb` ficou com 2 bytes de folga.
+- **Grader de ordem:** um juiz `llm` com `focus: trace` só recebe o começo e o fim de um trace longo e reprovou um TDD correto. A ordem passou a ser conferida com `regex` sobre o trace inteiro.
+- **`verifying`:** o caso realista passou em todos os braços em três versões, até sem plugin. Ficou como guarda contra piora, sem uma quarta tentativa. Custo: a comparação da `verifying` não mostra ganho do DevOrb sobre as fontes.
+- **Decisões do dono pendentes:** (1) o reservado da `tdd` manda "vai direto no código"; pela precedência, o DevOrb segue o usuário, e o caso espera TDD. (2) As regras próprias novas: "urgência não é permissão" (`tdd`), "nota ou relato anterior é afirmação; a execução vale" (`verifying`) e a linha de urgência do `using-devorb`.
 
 ### Task 6 no Mac
 

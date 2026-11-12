@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+- `verifying`: adaptada do Superpowers (a função-portão, a tabela de falhas comuns, reverter para ver o vermelho e conferir relatos de agentes pelo diff), com ideias do ECC e do gstack escritas com palavras próprias: ambiente implantado relatado à parte, verde só vale se nenhum teste foi apagado, pulado ou afrouxado, zero testes é falha, "já estava vermelho" exige vermelho antes da primeira edição, e afirmação de desempenho com rodadas alternadas, mediana e faixa (detalhe em `references/performance.md`). Reverter e voltar à branch base sem `stash`, `reset` nem `checkout` sobre o trabalho do usuário. 1.787 de 2.500 tokens.
+- Comparação: `accepted: true`. O caso realista, em três versões, passa em todos os braços até sem plugin e fica como guarda contra piora.
+
+## 0.3.0
+
+- `tdd`: do Superpowers (Lei de Ferro, apagar código escrito antes do teste, RED e GREEN verificados) e do Matt Pocock (seams, fatias verticais, teste tautológico), com uma referência que funde as três de testes e outra de testes por propriedade, com ideias da Trail of Bits em palavras próprias. Regra própria: urgência não é permissão; instrução direta de método do usuário vale e é relatada.
+- Comparação: `accepted: true`, 100% no DevOrb contra 33% no Superpowers e 0% no Matt. O reservado é lacuna em todos os braços, porque o pedido manda ir direto ao código (decisão do dono).
+- `using-devorb`: uma linha a mais nas bandeiras vermelhas, para a urgência não pular a checagem de skills (no caso da `tdd`, o DevOrb não chamava skill nenhuma).
+- Graders de ordem viram `regex` sobre o trace inteiro: o juiz `llm` com `focus: trace` só vê o começo e o fim de um trace longo.
+
 ## 0.2.0
 
 - Primeira skill pelo processo de fusão: `debugging`, a partir da skill do teste de fusão (Superpowers e Matt Pocock), com ideias da Trail of Bits, do Spartan e do ECC escritas com palavras próprias. A skill compara segredos pelo nome, pela presença ou por hash, nunca pelo valor; permite conter uma queda sem dispensar a causa; e corrige a causa e as variantes sem misturar outras mudanças. Tem 2.248 dos 2.500 tokens.
