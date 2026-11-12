@@ -52,7 +52,13 @@ Regras próprias só saem com decisão explícita do dono. A regra abaixo foi es
 
 ## Resultados
 
-A preencher.
+Opus 5.5, nível leve, comparado com o Matt. `fusion/results/2026-11-11-codebase-design.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `codebase-design-baixa-estoque` | 100% | 100% |
+
+- `accepted: true` por empate. O caso não separa as versões no Opus e fica como guarda contra piora.
 
 ## Decisões por commit de fonte
 

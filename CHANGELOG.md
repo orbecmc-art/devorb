@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.8.0
+
+- `codebase-design`, do Matt Pocock (fonte única): vocabulário exato, teste de exclusão, um adaptador é hipótese e dois são reais, enquadramentos rejeitados. Comparação: empate com o Matt, aceito.
+
+## 0.7.0
+
+- `planning`, do Superpowers e do Matt: o documento da `aligning` é a spec, tasks em fatias verticais com `### Task N:`, interfaces, restrições globais e seams; plano de migração, interface pública, autenticação ou release de produção traz `## Rollout`; antes das tasks, conferir o histórico da base e cada comando citado. Comparação: empate com o Superpowers, aceito.
+
+## 0.6.0
+
+- `aligning`, do Superpowers e do Matt: uma pergunta aberta por vez, sem construir antes da aprovação, fatos por subagente e decisões do usuário, revisor independente, companheiro visual com os scripts do Superpowers (telemetria sempre desligada na cópia). Regra de negócio achada no código é suposição a confirmar. Comparação: aceita; no reservado, 67% contra 0% no Superpowers e no Matt.
+
+## 0.5.0
+
+- `domain-modeling`, do Matt Pocock (fonte única): glossário atualizado na hora, ADR só com o teste das três perguntas, arquivos só quando precisa. Escolha delegada pelo usuário conta como escolha dele. Comparação: 67% contra 0% no Matt.
+
 ## 0.4.0
 
 - `verifying`: adaptada do Superpowers (a função-portão, a tabela de falhas comuns, reverter para ver o vermelho e conferir relatos de agentes pelo diff), com ideias do ECC e do gstack escritas com palavras próprias: ambiente implantado relatado à parte, verde só vale se nenhum teste foi apagado, pulado ou afrouxado, zero testes é falha, "já estava vermelho" exige vermelho antes da primeira edição, e afirmação de desempenho com rodadas alternadas, mediana e faixa (detalhe em `references/performance.md`). Reverter e voltar à branch base sem `stash`, `reset` nem `checkout` sobre o trabalho do usuário. 1.787 de 2.500 tokens.

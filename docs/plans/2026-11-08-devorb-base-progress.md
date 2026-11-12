@@ -41,7 +41,12 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 6. `debugging` e `using-devorb` pelo processo | Steps 1 a 6 feitos, todas as comparações com `accepted: true`. Espera a decisão do dono no Step 7 | `0.2.0` |
 | 7. `tdd` | Feita: `accepted: true` (DevOrb 100%, Superpowers 33%, Matt 0%); reservado é lacuna | `0.3.0` |
 | 8. `verifying` | Feita: `accepted: true`; o caso realista não separa as versões no Opus | `0.4.0` |
-| 9 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram | |
+| 9. `domain-modeling` | Feita: 67% contra 0% no Matt | `0.5.0` |
+| 10. `aligning` | Feita: reservado 67% contra 0%; realista é lacuna | `0.6.0` |
+| 11. `planning` | Feita: empate com o Superpowers | `0.7.0` |
+| 12. `codebase-design` | Feita: empate com o Matt | `0.8.0` |
+| 13 e 14 | Skills escritas, em revisão e comparação | |
+| 15 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram | |
 
 ## Retomar no Mac
 

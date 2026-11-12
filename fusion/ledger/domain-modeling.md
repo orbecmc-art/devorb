@@ -53,7 +53,13 @@ Regras próprias só saem com decisão explícita do dono. A regra abaixo foi es
 
 ## Resultados
 
-A preencher.
+Opus 5.5, nível leve, comparado com o Matt. `fusion/results/2026-11-11-domain-modeling.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `domain-modeling-aluno-ativo` | 67% (0,83) | 0% (0,25) |
+
+- `accepted: true`. Na primeira rodada o DevOrb também falhou (0%): a regra de trabalhar sozinho, estreitada na revisão, impedia escrever quando o usuário delega a escolha. Com a escolha delegada valendo como escolha do usuário, passou a criar o glossário com a leitura certa.
 
 ## Decisões por commit de fonte
 

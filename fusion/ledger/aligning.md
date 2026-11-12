@@ -70,7 +70,16 @@ Nenhuma. As mudanças além das fontes vêm de decisões da Task 10 ou da spec (
 
 ## Resultados
 
-A preencher.
+Opus 5.5, 3 rodadas, `--ablation none`. `fusion/results/2026-11-11-aligning*.md`.
+
+| Caso | DevOrb | Superpowers | Matt |
+|---|---|---|---|
+| `aligning-agendamento` | 0% (0,60) | 0% (0,60) | 0% (0,47) |
+| Reservado `aligning-reembolso-pedido` | 67% (0,89) | 0% (0,52) | 0% (0,67) |
+
+- `accepted: true` nos dois. O caso realista é lacuna: nenhum braço passa no juiz de "exatamente uma pergunta aberta", que conta como duas qualquer pergunta com mais de uma incógnita.
+- Três rodadas de ajuste: pergunta com uma só incógnita, sem anúncio de skill nem nome de processo na primeira mensagem, sem menu numerado nem pedido extra, e regra de negócio do código como suposição. No reservado o DevOrb foi de 0% para 33% e depois 67%.
+- O grader `one-open-question` deixou de contar a oferta curta de seguir direto, que a Task 10 manda preservar.
 
 ## Decisões por commit de fonte
 

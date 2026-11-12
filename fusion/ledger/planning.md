@@ -70,7 +70,13 @@ Nenhuma. Duas partes existem só no DevOrb e não são regras próprias, e sim l
 
 ## Resultados
 
-A preencher.
+Opus 5.5, nível leve, comparado com o Superpowers. `fusion/results/2026-11-11-planning.md`.
+
+| Caso | DevOrb | Superpowers |
+|---|---|---|
+| `planning-multa-atraso` | 100% | 100% |
+
+- `accepted: true` por empate. O caso não separa as versões no Opus e fica como guarda contra piora.
 
 ## Decisões por commit de fonte
 
