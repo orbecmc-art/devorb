@@ -2,7 +2,7 @@
 # Builds, in the current directory, the small back office of an online store
 # (orders, stock, payments) whose CONTRIBUTING.md defines the team's own
 # commit message convention, and whose history follows it. One example skill
-# lives in .claude/skills/rodar-testes/; .claude/skills/commit-do-time/ does
+# lives in skills/rodar-testes/; skills/commit-do-time/ does
 # not exist. Tests pass. Self-contained, no network.
 # Reproducible: fixed author, dates and git config.
 set -eu
@@ -17,7 +17,7 @@ commit_at() { # date, message
 }
 
 git init --quiet -b main
-mkdir -p src test .claude/skills/rodar-testes
+mkdir -p src test skills/rodar-testes
 
 cat > package.json <<'__EOF__'
 { "name": "loja-backoffice", "private": true, "type": "module", "scripts": { "test": "node --test" } }
@@ -28,7 +28,7 @@ cat > README.md <<'__EOF__'
 Pedidos, estoque e pagamentos da loja. Sem dependências: `npm test` roda os
 testes.
 __EOF__
-cat > .claude/skills/rodar-testes/SKILL.md <<'__EOF__'
+cat > skills/rodar-testes/SKILL.md <<'__EOF__'
 ---
 name: rodar-testes
 description: Use when about to say a change in this repo works, or when asked to run the tests.

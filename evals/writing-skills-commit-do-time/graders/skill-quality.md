@@ -2,7 +2,7 @@
 type: llm
 focus:
   source: file
-  path: .claude/skills/commit-do-time/SKILL.md
+  path: skills/commit-do-time/SKILL.md
 weight: 2
 ---
 
@@ -16,7 +16,7 @@ Contexto: o projeto é o backoffice de uma loja em Node. O `CONTRIBUTING.md` def
 - última linha `Ticket: LOJA-<número>`, ou `Ticket: nenhum` sem ticket;
 - sem emoji e sem `[WIP]`.
 
-O arquivo julgado é a skill `.claude/skills/commit-do-time/SKILL.md` que o agente escreveu. Passa somente se todos estes pontos valem:
+O arquivo julgado é a skill `skills/commit-do-time/SKILL.md` que o agente escreveu. Passa somente se todos estes pontos valem:
 
 1. Tem frontmatter YAML com `name: commit-do-time` e uma `description` que começa com "Use when" e diz quando usar a skill (por exemplo, ao escrever ou revisar uma mensagem de commit neste repositório), sem resumir o passo a passo.
 2. O corpo segue o padrão acima sem contradizê-lo: os seis tipos com esses nomes, a regra da área com `geral`, o limite de 60 caracteres, o resumo no imperativo e minúsculo sem ponto, o corpo com o porquê e o rodapé `Ticket:` nas duas formas. Pode remeter ao `CONTRIBUTING.md` para detalhes, desde que as regras acima apareçam ou fiquem a um ponteiro claro de distância.
