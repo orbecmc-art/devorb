@@ -5,6 +5,7 @@ import { devNull } from 'node:os';
 import { basename, delimiter, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
+import { evalOutside } from './eval-outside.mjs';
 
 const run = promisify(execFile);
 
@@ -12,7 +13,7 @@ const ARMS = ['devorb', 'superpowers', 'mattpocock-skills', 'none'];
 const SOURCE_ARMS = new Set(['superpowers', 'mattpocock-skills']);
 // Owner decision of 2026-11-10: superpowers and ponytail always run at the latest commit of their default branch.
 const LATEST = new Set(['superpowers', 'ponytail']);
-const SUITES = ['evals', 'evals-reserved'];
+const SUITES = ['evals', 'evals-reserved', 'evals-outside'];
 // Answers the agent under test must not read: docs/ holds the bugs and fixes the cases test,
 // fusion/results/ earlier reports, fusion/ledger/ rules made for reserved cases, .superpowers/ the coordinator ledger.
 const NOT_IN_DEVORB_ARM = [...SUITES.map((s) => `${s}/`), 'docs/', 'fusion/results/', 'fusion/ledger/', '.superpowers/'];
@@ -22,8 +23,9 @@ const LOCAL_TIMEOUT_MS = 30_000;
 const EPSILON = 1e-9;
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const USAGE =
-  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--ablation <mode>] [--runs <n>] [--concurrency <n>]\n' +
+  'usage: node tools/compare.mjs --skill <name|all> --arms <a,b,c> [--with-ponytail] [--baseline-only] [--reserved] [--outside-sandbox] [--ablation <mode>] [--runs <n>] [--concurrency <n>]\n' +
   '  --baseline-only skips devorb; without --arms it runs superpowers,mattpocock-skills,none\n' +
+  '  --outside-sandbox runs evals-outside/ with tools/eval-outside.mjs, for skills the eval sandbox blocks\n' +
   '  --concurrency 1-8 (default 1): eval runs at once, all on one credential and rate limit\n' +
   '  evolving-* cases need tools/source-diff.mjs in the arm, so compare them only with --arms devorb --ablation with-without\n';
 
@@ -263,8 +265,8 @@ function suiteCases(root, files, suite) {
 }
 
 function parseArgs(argv) {
-  const opts = { withPonytail: false, baselineOnly: false, reserved: false, ablation: 'none' };
-  const flags = { '--with-ponytail': 'withPonytail', '--baseline-only': 'baselineOnly', '--reserved': 'reserved' };
+  const opts = { withPonytail: false, baselineOnly: false, reserved: false, outside: false, ablation: 'none' };
+  const flags = { '--with-ponytail': 'withPonytail', '--baseline-only': 'baselineOnly', '--reserved': 'reserved', '--outside-sandbox': 'outside' };
   const values = { '--skill': 'skill', '--arms': 'arms', '--ablation': 'ablation', '--runs': 'runs', '--concurrency': 'concurrency' };
   for (let i = 0; i < argv.length; i++) {
     if (flags[argv[i]]) opts[flags[argv[i]]] = true;
@@ -273,6 +275,7 @@ function parseArgs(argv) {
   }
   if (opts.baselineOnly) opts.arms ??= 'superpowers,mattpocock-skills,none';
   if (!opts.skill || !opts.arms) throw new Error('--skill and --arms are required');
+  if (opts.outside && (opts.reserved || opts.withPonytail || opts.ablation !== 'none')) throw new Error('--outside-sandbox takes no --reserved, --with-ponytail or --ablation');
   if (!/^(all|[a-z0-9][a-z0-9-]*)$/.test(opts.skill)) throw new Error(`bad skill name ${JSON.stringify(opts.skill)}`);
   if (opts.runs !== undefined && !/^[1-9]\d*$/.test(opts.runs)) throw new Error(`--runs must be a positive integer, got ${JSON.stringify(opts.runs)}`);
   if (!['none', 'with-without'].includes(opts.ablation)) throw new Error(`--ablation must be none or with-without, got ${JSON.stringify(opts.ablation)}`);
@@ -342,7 +345,7 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
   if (!config.model) throw new Error('fusion/eval-config.json: model is null; set the eval model first');
   const registry = readJson(root, 'fusion/skills.json');
   const runs = opts.runs ? Number(opts.runs) : registry[opts.skill]?.level === 'light' ? 2 : 3;
-  const suite = opts.reserved ? 'evals-reserved' : 'evals';
+  const suite = opts.outside ? 'evals-outside' : opts.reserved ? 'evals-reserved' : 'evals';
   const caseGlob = opts.skill === 'all' ? '*' : `${opts.skill}-*`;
   const pattern = globRegex(caseGlob);
   const expected = suiteCases(root, await listFiles(root), suite).filter((c) => pattern.test(c.name));
@@ -377,17 +380,20 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
       const env = existsSync(join(git, 'bin', 'git'))
         ? { ...process.env, PATH: `${join(git, 'bin')}${delimiter}${process.env.PATH ?? ''}`, GIT_EXEC_PATH: join(git, 'libexec', 'git-core') }
         : process.env;
-      out(`${arm.label}: claude plugin eval ${caseGlob}\n`);
-      const code = await runClaude(
-        claude,
-        // The no-plugin arm has nothing to ablate: with-without would only double its cost.
-        // Concurrency stays out of the cache key: it changes speed, not results.
-        evalArgs({
-          armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath,
-          ablation: name === 'none' ? 'none' : opts.ablation, evalDir: suite, concurrency: Number(opts.concurrency ?? 1),
-        }),
-        env,
-      );
+      out(`${arm.label}: ${opts.outside ? 'eval-outside' : 'claude plugin eval'} ${caseGlob}\n`);
+      const concurrency = Number(opts.concurrency ?? 1);
+      const code = opts.outside
+        ? (await evalOutside({ claude, armDir, pattern, evalDir: suite, runs, model: config.model, jsonPath, concurrency, maxCostUsd: config.maxCostUsd }), 0)
+        : await runClaude(
+          claude,
+          // The no-plugin arm has nothing to ablate: with-without would only double its cost.
+          // Concurrency stays out of the cache key: it changes speed, not results.
+          evalArgs({
+            armDir, caseGlob, runs, model: config.model, maxCostUsd: config.maxCostUsd, jsonPath,
+            ablation: name === 'none' ? 'none' : opts.ablation, evalDir: suite, concurrency,
+          }),
+          env,
+        );
       if (!existsSync(jsonPath)) throw new Error(`arm ${arm.label}: claude plugin eval exited ${code} without writing ${jsonPath}`);
       const s = summarize(JSON.parse(readFileSync(jsonPath, 'utf8')), caseNames);
       Object.assign(arm, { missing: s.missing, partial: s.partial || code === 2, costUsd: s.costUsd ?? 0 });
@@ -415,7 +421,7 @@ async function compare(opts, armNames, { root, claude, gitPrefix, out, err }) {
   const accepted = outcome.accepted && !!devorb && blockers.length === 0;
   const date = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD in local time
   // One report per variant of the same day, so a baseline-only or ponytail run never overwrites the devorb verdict.
-  const suffix = [opts.reserved && 'reserved', opts.withPonytail && 'ponytail', opts.ablation !== 'none' && opts.ablation, !devorb && 'baseline']
+  const suffix = [opts.outside && 'outside', opts.reserved && 'reserved', opts.withPonytail && 'ponytail', opts.ablation !== 'none' && opts.ablation, !devorb && 'baseline']
     .filter(Boolean)
     .map((s) => `-${s}`)
     .join('');

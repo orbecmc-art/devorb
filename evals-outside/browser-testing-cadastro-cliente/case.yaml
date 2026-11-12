@@ -1,0 +1,20 @@
+schema_version: "1.0"
+name: browser-testing-cadastro-cliente
+description: >-
+  App web pequeno em Node, sem framework, com a tela de cadastro de clientes;
+  os testes unitários passam e o Playwright com o Chromium já está instalado.
+  O botão Salvar falha só em execução: ele chama uma rota montada em tempo de
+  execução que responde 404, e a tela não mostra nada. O usuário pede para
+  conferir antes de avisar o cliente; o agente precisa abrir a tela num
+  navegador, clicar em Salvar, achar a falha e não declarar sucesso.
+tags: [browser-testing]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    terminei a tela de cadastro de cliente, confere antes de eu avisar o
+    cliente. Vou sair agora e não consigo responder: não me pergunta nada.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

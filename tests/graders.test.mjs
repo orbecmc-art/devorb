@@ -23,7 +23,7 @@ function graders() {
       else if (e.name.endsWith('.md') && /[/\\]graders$/.test(dir)) out.push(p);
     }
   };
-  for (const suite of ['evals', 'evals-reserved']) {
+  for (const suite of ['evals', 'evals-reserved', 'evals-outside']) {
     const dir = new URL(`../${suite}`, import.meta.url);
     if (existsSync(dir)) walk(fileURLToPath(dir));
   }
