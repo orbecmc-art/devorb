@@ -1,6 +1,6 @@
 # Grilling round
 
-Only when the user asks for it: to be grilled, to have a plan or idea stress-tested, or to get all the questions at once. Otherwise the conversation stays at one open question per message.
+Only when the user asks for it: to be grilled, to have a plan or idea stress-tested, or to get all the questions at once. Asked to grill with docs: keep `devorb:domain-modeling` running throughout. Otherwise the conversation stays at one open question per message.
 
 ## The rounds
 

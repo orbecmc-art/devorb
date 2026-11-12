@@ -2,7 +2,7 @@
 
 Browser-based companion for showing mockups, diagrams, and options while you align with the user.
 
-The scripts are third-party code, copied from Superpowers with only the session folder renamed. Paths below are relative to this skill's folder. Start the server only after the user accepts the companion.
+The scripts are third-party code, copied from Superpowers with the session folder renamed and the external logo turned off (one marked line in `server.cjs`). Paths below are relative to this skill's folder. Start the server only after the user accepts the companion.
 
 ## When to Use
 
@@ -37,17 +37,13 @@ The server watches a directory for HTML files and serves the newest one to the b
 ```bash
 # Start AFTER the user approves the companion. --open auto-opens their browser on
 # the first screen; --project-dir persists mockups and enables same-port restart.
-# DISABLE_TELEMETRY=1 stops the page from loading the source's logo from its
-# website, which would send the plugin version to a third party on every view.
-DISABLE_TELEMETRY=1 bash scripts/start-server.sh --project-dir /path/to/project --open
+bash scripts/start-server.sh --project-dir /path/to/project --open
 
 # Returns: {"type":"server-started","port":52341,
 #           "url":"http://localhost:52341/?key=ab12…",
 #           "screen_dir":"/path/to/project/.devorb/brainstorm/12345-1706000000/content",
 #           "state_dir":"/path/to/project/.devorb/brainstorm/12345-1706000000/state"}
 ```
-
-Always start it with `DISABLE_TELEMETRY=1`, including restarts.
 
 Save `screen_dir` and `state_dir` from the response. With `--open`, the browser opens itself when you push the first screen — you don't need to ask the user to open it, but still share the URL as a fallback (headless/remote setups won't auto-open).
 
@@ -61,14 +57,14 @@ without repeating it.
 
 **Finding connection info:** The server writes its startup JSON to `$STATE_DIR/server-info`. If you launched the server in the background and didn't capture stdout, read that file to get the URL and port. When using `--project-dir`, check `<project>/.devorb/brainstorm/` for the session directory.
 
-**Note:** Pass the project root as `--project-dir` so mockups persist in `.devorb/brainstorm/` and survive server restarts. Without it, files go to `/tmp` and get cleaned up. Remind the user to add `.devorb/` to `.gitignore` if it's not already there.
+**Note:** Pass the project root as `--project-dir` so mockups persist in `.devorb/brainstorm/` and survive server restarts. Without it, files go to `/tmp` and get cleaned up. The folder holds the session key: if `.devorb/` is not in the project's `.gitignore`, add it yourself and tell the user you did.
 
 **Launching the server in Claude Code:** the default mode works, because the script backgrounds the server itself. On Windows, the script auto-detects and switches to foreground mode (which blocks the tool call). Use `run_in_background: true` on the Bash tool call so the server survives across conversation turns, then read `$STATE_DIR/server-info` on the next turn to get the URL and port.
 
 If the URL is unreachable from your browser (common in remote/containerized setups), bind a non-loopback host:
 
 ```bash
-DISABLE_TELEMETRY=1 bash scripts/start-server.sh \
+bash scripts/start-server.sh \
   --project-dir /path/to/project \
   --host 0.0.0.0 \
   --url-host localhost

@@ -6,7 +6,9 @@ Pinos lidos: Superpowers é comparado no commit mais recente, por regra do dono,
 
 A skill foi escrita sem abrir `evals/aligning-*`, nenhum grader nem `evals-reserved/`. O caso realista da Task 10 é "quero um app de agendamento".
 
-`SKILL.md` tem 8.794 bytes (cerca de 2.199 tokens, teto 2.500). O `brainstorming` da fonte tem 15.190 bytes.
+`SKILL.md` tem 8.946 bytes (cerca de 2.237 tokens, teto 2.500), depois da revisão de 2026-11-11.
+
+O Superpowers não tem cenários de pressão em `tests/brainstorming`, então não houve cenário de fonte para portar. O `brainstorming` da fonte tem 15.190 bytes.
 
 ## Origem por parte
 
@@ -38,10 +40,10 @@ A skill foi escrita sem abrir `evals/aligning-*`, nenhum grader nem `evals-reser
 | 4. Revisor independente com `references/builder-check-prompt.md` e as três pilhas | Superpowers. Preservado por decisão da Task 10 |
 | `<HARD-GATE>` | Superpowers, enxugado. Preservado por decisão da Task 10 |
 | Companheiro visual: oferta no momento certo, mensagem só com a oferta, recusa vale, decisão por pergunta | Superpowers |
-| `references/visual-companion.md` | Superpowers, adaptado: caminho `.devorb/brainstorm/`, só Claude Code, `DISABLE_TELEMETRY=1` em toda partida. Ver conflitos |
-| `references/grilling-round.md` | Matt (`grilling`), adaptado: formato sem emoji, "frontier" virou "open set", fatos e decisões como no corpo, saída para as abordagens, e o caso em que o usuário só queria questionar uma ideia |
+| `references/visual-companion.md` | Superpowers, adaptado: caminho `.devorb/brainstorm/`, só Claude Code, e o agente põe `.devorb/` no `.gitignore` e avisa, porque a pasta guarda a chave da sessão. Ver conflitos |
+| `references/grilling-round.md` | Matt (`grilling`), adaptado: formato sem emoji, "frontier" virou "open set", fatos e decisões como no corpo, saída para as abordagens, o caso em que o usuário só queria questionar uma ideia, e `devorb:domain-modeling` durante toda a rodada quando ele pede sabatina com documentos (`grill-with-docs`) |
 | `references/size-and-red-flags.md` | Superpowers ("Size the Work" e "Red Flags"), mais três sinais de alerta novos: perguntar ao usuário onde algo está no código (Matt), número achado no código tomado por regra (ECC, só a ideia) e várias perguntas de uma vez (Task 10) |
-| `scripts/` (`start-server.sh`, `stop-server.sh`, `server.cjs`, `helper.js`, `frame-template.html`) | Superpowers, cópia levada como unidade por decisão da Task 10. `helper.js`, `server.cjs` e `frame-template.html` são idênticos byte a byte. Em `start-server.sh` (4 linhas) e `stop-server.sh` (1 comentário), só `.superpowers/` virou `.devorb/`, porque `tools/check-skills.mjs` recusa o nome antigo em qualquer arquivo da pasta. Nenhum script foi executado |
+| `scripts/` (`start-server.sh`, `stop-server.sh`, `server.cjs`, `helper.js`, `frame-template.html`) | Superpowers, cópia levada como unidade por decisão da Task 10. `helper.js` e `frame-template.html` são idênticos byte a byte. Em `server.cjs`, uma linha marcada com comentário `DevOrb:` deixa a telemetria sempre desligada (`SUPERPOWERS_TELEMETRY_DISABLED = true || ...`). Em `start-server.sh` (4 linhas) e `stop-server.sh` (1 comentário), `.superpowers/` virou `.devorb/`, porque `tools/check-skills.mjs` recusa o nome antigo em qualquer arquivo da pasta. Nenhum script foi executado |
 
 ## Conflitos resolvidos
 
@@ -51,7 +53,7 @@ A skill foi escrita sem abrir `evals/aligning-*`, nenhum grader nem `evals-reser
 - **Quando o entendimento termina:** o Superpowers passa às abordagens "quando entende o que eles querem", e o Matt exige fronteira vazia e confirmação do usuário. Ficou a condição do Matt, como porta para as abordagens.
 - **Sabatina de uma ideia que não vira construção:** o `grilling` do Matt serve também para questionar um plano ou ideia, sem documento. Se o usuário só queria isso, a rodada para no entendimento comum e oferece o documento, sem escrevê-lo sem pedido. É ajuste de encaixe, não regra própria.
 - **Tamanho e sinais de alerta:** saíram do corpo para `references/size-and-red-flags.md`, pela Task 10, para caber no teto. O corpo guarda uma linha (mudança pequena tem documento curto; projeto tem o completo e o revisor), porque a trava e o revisor dependem dela.
-- **Telemetria no companheiro visual:** `server.cjs` monta na página uma imagem de `primeradiant.com` com a versão do plugin na URL, a menos que `SUPERPOWERS_DISABLE_TELEMETRY`, `DISABLE_TELEMETRY` ou `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` estejam ligadas. Para não mexer no código de terceiro além do nome antigo, a referência manda iniciar sempre com `DISABLE_TELEMETRY=1`, que `start-server.sh` repassa ao servidor pelo `env`. Se um agente esquecer a variável, a imagem volta a carregar. Tirar a imagem de `server.cjs` é decisão do dono, na revisão do pull request.
+- **Telemetria no companheiro visual:** `server.cjs` monta na página uma imagem de `primeradiant.com` com a versão do plugin na URL, a menos que `SUPERPOWERS_DISABLE_TELEMETRY`, `DISABLE_TELEMETRY` ou `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` estejam ligadas. Na cópia do DevOrb, uma linha de `server.cjs`, marcada com comentário, deixa a telemetria sempre desligada, sem depender de variável de ambiente. É a única alteração de lógica no código de terceiro e fica apontada para o dono no pull request.
 - **Outras ferramentas:** a referência do companheiro trazia instruções para Codex, Gemini CLI e Copilot CLI. A spec limita o DevOrb ao Claude Code, então ficou só a parte do Claude Code, com a nota do Windows.
 
 ## Regras próprias
@@ -62,7 +64,7 @@ Nenhuma. As mudanças além das fontes vêm de decisões da Task 10 ou da spec (
 
 - **Do Superpowers (`SKILL.md`):** "parceiro humano", que virou "usuário"; "Specs are often incomplete, so confirm before you build on one", coberto pelo eco da primeira mensagem; o parágrafo "Do recon", coberto pelo subagente de fatos; "Agentic work is waterfall, but very, very fast"; a lista detalhada de quando mostrar em vez de contar, resumida na oferta do companheiro; "segurar a parte da devolução até a oferta do companheiro", que pesava no teto; "brainstorm them one at a time", que virou "align on them one at a time" na referência; o exemplo "talk, business, renovation" da `description`, porque o DevOrb é de desenvolvimento.
 - **Do Superpowers (`visual-companion.md`):** as seções de Codex, Gemini CLI, Copilot CLI e "Other environments".
-- **Dos scripts:** nada foi cortado. Ficam com a marca do Superpowers (título "Superpowers Brainstorming", texto "Superpowers v" e link para o repositório deles) e com `readSuperpowersVersion`, que lê o `package.json` três pastas acima, ou seja, a versão do DevOrb, mostrada com o nome do Superpowers.
+- **Dos scripts:** nada foi cortado. Ficam com a marca do Superpowers (título "Superpowers Brainstorming", texto "Superpowers v" e link para o repositório deles) e com `readSuperpowersVersion`, que lê o `package.json` três pastas acima. O da raiz do DevOrb não tem `version`, então a página mostra "vunknown".
 - **Do Matt:** `grill-me` e `grill-with-docs` só chamam outras skills, então viraram o gatilho da rodada e a linha de `devorb:domain-modeling`; o formato com emoji da rodada; `agents/openai.yaml` dos três, metadado de outra ferramenta.
 - **Do ECC:** os critérios de aceite numerados, os dois níveis de profundidade, o modelo de documento, a tabela de categorias de risco, a revisão de spec existente, os exemplos de passa e falha, a regra de não escrever no repositório nem bloquear a implementação (o DevOrb tem trava e documento próprios), e as regras sobre segredos e testes destrutivos, que pertencem a `planning`, `verifying` e `reviewing`. A ideia de critério observável pode servir a `devorb:planning` (Task 11), mas não entrou aqui.
 
@@ -75,9 +77,9 @@ A preencher.
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/SKILL.md` | adotado | base da primeira mensagem, da conversa, da devolução em partes, das abordagens, do documento de design, do revisor, da trava e da oferta do companheiro visual
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/SKILL.md` | recusado | "Do recon", "Agentic work is waterfall", a lista longa de quando mostrar e o adiamento da devolução até a oferta, que pesariam no teto sem regra nova
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/builder-check-prompt.md` | adotado | cópia do prompt em `references/builder-check-prompt.md`, com uma linha de abertura própria
-- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/visual-companion.md` | adotado | `references/visual-companion.md`, com `.devorb/`, só Claude Code e `DISABLE_TELEMETRY=1`
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/visual-companion.md` | adotado | `references/visual-companion.md`, com `.devorb/`, só Claude Code e `.devorb/` no `.gitignore` pelo agente
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/visual-companion.md` | recusado | instruções de Codex, Gemini CLI e Copilot CLI
-- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/scripts/server.cjs` | adotado | cópia sem alteração; código de terceiro, revisar antes do merge
+- `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/scripts/server.cjs` | adotado | cópia com uma linha marcada que deixa a telemetria sempre desligada; código de terceiro, revisar antes do merge
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/scripts/helper.js` | adotado | cópia sem alteração; código de terceiro
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/scripts/frame-template.html` | adotado | cópia sem alteração
 - `superpowers@22f0b463e7a5e579904dd6211a520321035526f7:skills/brainstorming/scripts/start-server.sh` | adotado | cópia com `.superpowers/` trocado por `.devorb/` em 4 linhas; código de terceiro
@@ -94,4 +96,14 @@ A preencher.
 
 ## Revisões
 
-- 2026-11-11: `scripts/server.cjs` do Superpowers carregava um logo de `primeradiant.com` com a versão do plugin na URL a cada página, a menos que uma variável de ambiente desligasse. Na cópia do DevOrb a telemetria fica sempre desligada (uma linha, marcada no código). Fica registrado para o dono no pull request. A página ainda mostra a marca "Superpowers" com a versão do DevOrb: inofensivo, mas enganoso.
+- 2026-11-11: `scripts/server.cjs` do Superpowers carregava um logo de `primeradiant.com` com a versão do plugin na URL a cada página, a menos que uma variável de ambiente desligasse. Na cópia do DevOrb a telemetria fica sempre desligada (uma linha, marcada no código). Fica registrado para o dono no pull request. A página ainda mostra a marca "Superpowers" com "vunknown", porque o `package.json` da raiz não tem `version`: inofensivo.
+- 2026-11-11, revisão do coordenador do commit `6bf3b29`. `SKILL.md` foi de 8.794 para 8.946 bytes (cerca de 2.199 para 2.237 tokens).
+  - **Descrição do código de terceiro:** o ledger e `references/visual-companion.md` diziam que `server.cjs` era cópia sem alteração e que a telemetria dependia de `DISABLE_TELEMETRY=1`. Agora dizem que uma linha marcada a desliga sempre. `DISABLE_TELEMETRY=1` saiu da referência. A página mostra "vunknown", não a versão do DevOrb.
+  - **Pedido completo e a trava:** "Before building, in order" virou "Otherwise, before building, in order", para o pedido que já diz tudo ("make the icon cornflower blue") não contradizer a trava.
+  - **Aprovação na primeira mensagem:** depois de aprovado o design curto, escrever o documento curto como aprovado e chamar `devorb:planning`, como no Superpowers.
+  - **Quem já disse "só faça":** a oferta de pular a conversa vale também para quem já pediu para construir direto.
+  - **Fatos depois da primeira mensagem:** a frase virou "Dispatch one for later facts too; don't wait on it, only questions that depend on the fact do".
+  - **Revisor:** "one round only" na volta com as perguntas do usuário, como no Superpowers.
+  - **Sem jargão:** a oferta de spike usa "a quick throwaway version", e o território a cobrir não diz "anti-goals" ao usuário.
+  - **Sabatina com documentos:** `references/grilling-round.md` mantém `devorb:domain-modeling` durante toda a rodada quando o usuário pede.
+  - **`.gitignore`:** o agente põe `.devorb/` no `.gitignore` e avisa, porque a pasta guarda a chave da sessão. Antes, só lembrava o usuário.
