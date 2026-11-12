@@ -21,3 +21,15 @@ the skill's frontmatter links
 https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md).
 DevOrb carries a
 condensed version of that menu, so the credit carries over here.
+
+## `skills/browser-testing/`
+
+Adapted from the `webapp-testing` skill of Anthropic's skills
+(https://github.com/anthropics/skills, `skills/webapp-testing/`, commit
+`2c5958ecac7cee2b583967a2c4981d0f4a75c579`), Apache-2.0, see
+`anthropic-webapp-testing-Apache-2.0.txt`. Changed by DevOrb: rewritten for
+Node and the project's own browser tests, the Python helper `with_server.py`
+replaced by a shell loop that waits on the port, `networkidle` limited to apps
+without websockets or polling, and console, network, viewport and
+production-safety checks added. Ideas from the `browser-qa` skills of the
+Spartan toolkit and ECC are rewritten in DevOrb's own words.

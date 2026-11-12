@@ -166,7 +166,9 @@ async function runOnce({ claude, armDir, withPlugin, kase, model, traceOut }) {
       } else throw new Error(`grader ${g.name}: unsupported type ${g.type}`);
       graders.push({ name: g.name, weight: g.weight, passed: v.passed, explanation: v.explanation });
     }
-    return { ...score(graders), turns: result.num_turns, costUsd: result.total_cost_usd ?? 0, judgeCostUsd, startedAt, error, graders };
+    // A background subagent can end the session in a second result: turns add up, cost is cumulative.
+    const turns = events.filter((e) => e.type === 'result').reduce((s, e) => s + (e.num_turns ?? 0), 0);
+    return { ...score(graders), turns, costUsd: result.total_cost_usd ?? 0, judgeCostUsd, startedAt, error, graders };
   } finally {
     rmSync(base, { recursive: true, force: true });
   }

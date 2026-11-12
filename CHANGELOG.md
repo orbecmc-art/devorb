@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.0
+
+- `browser-testing`, da Anthropic (`webapp-testing`, Apache-2.0), com ideias do Spartan e do ECC escritas com palavras próprias: usa primeiro os testes de navegador do projeto e, sem eles, um script Playwright headless; sobe o servidor em segundo plano, espera a porta e encerra no fim; olha a página antes de agir; registra erros de console e de rede; testa em 1280 px e em 375 px com toque; em produção, só leitura. `references/playwright.md` traz um script que foi rodado contra o caso realista.
+- `tools/eval-outside.mjs` e `compare.mjs --outside-sandbox`: o Chromium não abre no sandbox do `claude plugin eval`, então os casos de `evals-outside/` rodam com `claude -p --restricted` numa pasta temporária, com o login do dono e sem as configurações, plugins e MCP dele. Comparação: 100% contra 0% sem plugin.
+
 ## 0.14.0
 
 - `writing-skills`, do Superpowers: linha de base sem a skill antes de escrever, com subagentes novos, e teste depois. Instrução direta para pular o teste vale e a skill sai como não testada. Caso realista mudado para `skills/`, porque o sandbox do eval nega escrita em `.claude/skills/`. Comparação: 100% contra 50% no Superpowers.

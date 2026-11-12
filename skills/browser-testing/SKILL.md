@@ -43,9 +43,9 @@ Then, for the screen in question:
 - **Links:** each one lands on a page that loads.
 - **Viewports:** 1280 px wide, then 375 px with touch on (`hasTouch: true`, `isMobile: true`): no horizontal scroll, nothing clipped, controls reachable.
 
-Before clicking, check the element is visible: a click on a hidden element can pass without doing anything. Screenshot the page when a check fails, and keep the file path.
+Before clicking, check the element is visible: Playwright can report success for a click that reached nothing a user could see. Screenshot the page when a check fails, and keep the file path.
 
-Console errors and failed requests are bugs. Warnings and deprecation notices are not. Visual comparison with no committed baseline image is inconclusive, never a pass.
+Console errors and failed requests are bugs; console warnings are noise. With no stored reference image, a visual comparison proves nothing: report it as inconclusive.
 
 `references/playwright.md` has a script that does all of this.
 
