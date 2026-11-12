@@ -15,7 +15,7 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "implementing": {
     "invocation": "auto",
@@ -81,7 +81,7 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "improve-architecture": {
     "invocation": "manual",
