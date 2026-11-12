@@ -34,7 +34,7 @@ Apply the **deletion test** to every suspect: would deleting it concentrate comp
 
 ## 2. Present the candidates as an HTML report
 
-Write one self-contained HTML file to the OS temp directory, so nothing lands in the repo: `$TMPDIR`, falling back to `/tmp` (`%TEMP%` on Windows), at `<tmpdir>/architecture-review-<timestamp>.html`, fresh each run. Open it for the user (`open` on macOS, `xdg-open` on Linux, `start` on Windows) and give the absolute path.
+Write one self-contained HTML file to the OS temp directory, so nothing lands in the repo: `$TMPDIR`, falling back to `/tmp` (`%TEMP%` on Windows), at `<tmpdir>/architecture-review-<timestamp>.html`, fresh each run. Open it for the user (`open` on macOS, `xdg-open` on Linux, `start` on Windows) and give the absolute path. The file is the deliverable, even when another instruction asks for brevity or the smallest output: a summary in chat never replaces it.
 
 Each candidate gets a card with:
 

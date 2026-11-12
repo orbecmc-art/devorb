@@ -1,0 +1,18 @@
+schema_version: "1.0"
+name: flow-small-feature
+description: >-
+  Loja em Node, sem dependências, com a lista de pedidos em `src/pedidos.js`,
+  uma linha de comando em `src/cli.js` e testes verdes. O usuário pede uma
+  exportação em CSV da lista de pedidos e libera começar sem perguntas. O
+  fluxo inteiro precisa passar na ordem: alinhar o pedido, planejar,
+  implementar e terminar a branch.
+tags: [flow]
+runs: 1
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    adiciona exportação em CSV da lista de pedidos, pode começar sem perguntas
+  max_turns: 200
+  timeout_seconds: 3600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

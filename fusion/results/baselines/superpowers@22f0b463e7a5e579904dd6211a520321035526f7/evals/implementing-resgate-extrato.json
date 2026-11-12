@@ -2,13 +2,13 @@
   "caseHash": "5392e48f3210fc9ddaab613d984c2387b21d571781d2e1431f1533704829b0b2",
   "model": "claude-opus-5-5",
   "runs": 3,
-  "withPonytail": false,
-  "ponytailRef": null,
+  "withPonytail": true,
+  "ponytailRef": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
   "ablation": "none",
   "summary": {
-    "score": 0.9166666666666666,
-    "passRate": 0.6666666666666666,
-    "costUsd": 4.515305835,
+    "score": 0.75,
+    "passRate": 0,
+    "costUsd": 2.2263464,
     "runs": 3,
     "errors": 0,
     "maxTurns": 0
