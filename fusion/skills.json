@@ -87,25 +87,25 @@
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "prototype": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "handoff": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "retro": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "security-audit": {
     "invocation": "manual",
