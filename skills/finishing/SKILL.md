@@ -7,11 +7,13 @@ description: Use when implementation is done and the branch needs integrating (m
 
 Prove the branch green, show the user everything they are about to decide, offer the options, and carry out only the one they pick. Integration is the user's decision: never push, merge, open a pull request or mark one ready unless they chose it in this session.
 
+Only writing a PR body? Use the repo template or `references/pr-body.md`, with a fresh suite run as evidence.
+
 ## 1. Green suite first
 
 Run the project's full test suite on the tree you are about to integrate, fresh, as `devorb:verifying` requires. "It passed earlier" proves only the tree it ran on.
 
-Red: report the failing tests by name and the count, and stop. No menu, no merge offered. The failures go through `devorb:debugging`; finishing starts again from this step once the suite is green.
+Red: report the failing tests by name and the count, and stop. No menu, no merge offered. Offer `devorb:debugging`; don't start it unasked. Finishing starts again from this step once the suite is green.
 
 ## 2. Where you are
 
@@ -38,14 +40,16 @@ The base is the branch this work forked from: named in the plan, the conversatio
 A merge without conflicts only shows that the edited lines don't overlap. Whether the branch is still right on the new base is a separate question.
 
 ```bash
-git fetch origin <base>            # skip without a remote; use the local base
+git fetch origin <base>
 MB=$(git merge-base origin/<base> HEAD)
 git log --oneline $MB..origin/<base>
 ```
 
+Without a remote, skip the fetch and use `<base>` wherever this skill says `origin/<base>`.
+
 If the base gained commits, list what the branch takes for granted: the signatures of what it calls, the behavior its tests pin down, the problem it solves. Then read each new base commit, message first, and its diff wherever it reaches one of those. The dependency can sit in a file the branch never edited. A base that already solved the same problem its own way counts too. Report each such commit with what it breaks, or say "the base moved N commits; none touch what the branch depends on."
 
-**Rebase**, only when the user asks or the project requires it. If `git log --merges --oneline $MB..HEAD` prints anything, don't: a rebase flattens those merges, and the range-diff can't show what they resolved. Say so and offer a merge instead. Otherwise record `OLD=$(git rev-parse HEAD)` first, then after the rebase run `git range-diff $MB..$OLD origin/<base>..HEAD`. For each patch it marks as changed, write one line naming what made it differ. A change whose cause you can't name means the rebase may have lost work: stop and show the user. Run the suite again on the result.
+**Rebase**, only when the user asks or the project requires it. If `git log --merges --oneline $MB..HEAD` prints anything, don't: a rebase flattens those merges, and the range-diff can't show what they resolved. Say so and offer a merge instead. Otherwise record `OLD=$(git rev-parse HEAD)`, run `git rebase origin/<base>`, then `git range-diff $MB..$OLD origin/<base>..HEAD`. For each changed hunk, write one line naming what made it differ. Stop at the first hunk you can't explain and show it to the user before going on. Run the suite again on the result. Red: stop as in step 1.
 
 ## 5. Find the docs that aged
 
@@ -58,7 +62,7 @@ Before the menu, one short summary:
 - the suite command and its counts;
 - the base, and what step 4 found;
 - the aged docs from step 5;
-- every **USER DECIDES** item `devorb:reviewing` reported (a loosened test, gate or acceptance line; `devorb:implementing` passes them as "User decides"), with the reviewer's evidence. Ask restore or keep for each, and record the reason given for a keep. A restore is a fix: make it with `devorb:tdd`, then start again at step 1;
+- every **USER DECIDES** item `devorb:reviewing` reported (a loosened test, gate or acceptance line; `devorb:implementing` passes them as "User decides"), with the reviewer's evidence. Ask restore or keep for each. Settle these before showing the menu. Keep reasons go in the PR body or the merge commit message. A restore is a fix: make it with `devorb:tdd`, then start again at step 1;
 - the "Rulings I made" and "Deferred minors" from `devorb:implementing`, unchanged.
 
 ## 7. The menu
@@ -66,7 +70,7 @@ Before the menu, one short summary:
 Normal repo or named-branch worktree, exactly these:
 
 ```
-1. Merge into <base> locally
+1. Merge into <base> locally (removes the branch and its worktree)
 2. Push and open a pull request
 3. Keep the branch as it is
 ```
@@ -82,12 +86,15 @@ Discarding is not on the menu. It happens only when the user asks for it in so m
 ```bash
 MAIN_ROOT=$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)
 cd "$MAIN_ROOT"
+git branch --show-current          # the main checkout's branch before
 git checkout <base> && git pull && git merge <branch>
 ```
 
-Run the suite on the merged result. Red: stop, leave the branch and worktree in place, investigate with `devorb:debugging`; nothing was pushed, so it is recoverable. Green: Cleanup, then `git branch -d <branch>`. Pushing the base is a separate request.
+Without a remote, skip `git pull`.
 
-**Pull request.** `git push -u origin <branch>` (detached: `git push origin HEAD:refs/heads/<new-branch>`). Open it against `<base>` with the forge's CLI, as a draft where the forge has drafts, unless the user asked for a ready one: marking it ready is their call. The body follows the repo's template when one exists (`.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE/`, `docs/`); otherwise `references/pr-body.md`. Report the URL. Keep the worktree: review feedback gets fixed there.
+Run the suite on the merged result. Red: stop, leave the branch and worktree in place, and offer `devorb:debugging`; nothing was pushed, so it is recoverable. Green: Cleanup, then `git branch -d <branch>`. Report the main checkout's branch before and after: it is now on `<base>`. Pushing the base is a separate request.
+
+**Pull request.** `git push -u origin <branch>` (detached: `git push origin HEAD:refs/heads/<new-branch>`). Open it against `<base>` with the forge's CLI; without one, use the creation URL the forge prints on push. Make it a draft where the forge has drafts, unless the user or project instructions ask for a ready one: marking it ready is their call. The body follows the repo's template when one exists (`.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE/`, `docs/`); otherwise `references/pr-body.md`. Report the URL. Keep the worktree: review feedback gets fixed there.
 
 **Keep.** Report "Keeping `<branch>`, worktree at `<path>`."
 
@@ -116,6 +123,6 @@ Removal refused because of modified or untracked files: those files exist nowher
 
 ## Connects to
 
-- **Receives:** from `devorb:implementing`, the branch and its three lists: "Rulings I made", "Deferred minors" and "User decides" (the USER DECIDES items of `devorb:reviewing`); or a finished branch from the user directly.
-- **Uses:** `devorb:verifying` for the suite; `devorb:debugging` when it is red; `devorb:tdd` for a restore; `references/pr-body.md`.
+- **Receives:** from `devorb:implementing`, the branch and its three lists: "Rulings I made", "Deferred minors" and "User decides" (the USER DECIDES items of `devorb:reviewing`); or from `devorb:reviewing` when it is run on its own, with its USER DECIDES items; or a finished branch from the user directly.
+- **Uses:** `devorb:verifying` for the suite; `devorb:debugging`, offered when it is red; `devorb:tdd` for a restore; `references/pr-body.md`.
 - **Hands off to:** nobody. This is the end of the flow.
