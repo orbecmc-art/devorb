@@ -18,11 +18,13 @@ A skill foi escrita sem abrir `evals/prototype-*` nem `evals-reserved/`. Nenhuma
 | Regras 1 a 5: descartável e marcado, fácil de rodar, sem persistência, sem acabamento, mostrar o estado | Matt. "`prototype` no nome" vem de `UI.md`; "dê ao usuário o comando ou o caminho" e "nunca o banco real do projeto" são DevOrb |
 | Chamar a skill é a permissão para `devorb:tdd` pular testes, só no protótipo | DevOrb: `devorb:tdd` lista protótipos descartáveis como exceção que exige permissão do usuário |
 | Regra 6: o protótipo como fonte primária num branch `prototype/<name>` nunca mesclado | Matt (`SKILL.md`; o nome `prototype/<name>` vem da página de docs) |
+| Começar no branch `prototype/<name>` (worktree se houver mudanças não commitadas), commitar lá, voltar ao branch original e nunca limpar com `git checkout`, `git restore` ou `git stash` sobre os arquivos do usuário | DevOrb |
+| Dizer na entrega que o protótipo não tem testes | DevOrb, pelo relato "untested" de `devorb:tdd` |
 | A resposta (pergunta, veredito e branch) vai para a spec em `docs/devorb/specs/` | Matt, com "implementation issue" trocado pelo arquivo de spec, por decisão da Task 17 |
 | Sem spec ainda, a resposta vai ao usuário e `devorb:aligning` a põe na spec | DevOrb |
 | "Depois da resposta": manter algo é pedido novo; o código real passa por `devorb:planning`, com testes | DevOrb, alinhado ao portão de `devorb:aligning` ("keeping it is a new request"). O Matt manda dobrar a decisão no código real na própria skill (ver conflitos) |
 | `Connects to` | DevOrb, pela interface da Task 17 |
-| `references/LOGIC.md` | Matt, quase inteiro. "Lifts into the real module" virou "ponto de partida para o módulo real", que entra por `devorb:planning`; "usar os nomes do `GLOSSARY.md`" é DevOrb |
+| `references/LOGIC.md` | Matt, quase inteiro. "Lifts into the real module" virou: o módulo entra por `devorb:planning` como código existente de `devorb:tdd`, com testes do comportamento primeiro, semeados pelos passeios guiados, e o código depois; "usar os nomes do `GLOSSARY.md`" é DevOrb |
 | `references/UI.md` | Matt, quase inteiro. As duas subformas viraram parágrafos; o passo 6 junta as duas limpezas numa só e manda o vencedor por `devorb:planning`; "dê também o comando que sobe o app" é DevOrb |
 
 ## Conflitos resolvidos
@@ -58,3 +60,7 @@ A preencher depois de R6 (nível leve, comparado com o Matt).
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/prototype/UI.md` | adotado | base de `references/UI.md`: subformas A e B, variantes estruturalmente diferentes, `?variant=`, barra flutuante oculta em produção, anti-padrões
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/prototype/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:docs/engineering/prototype.md` | adotado | só ideias, fora dos caminhos acompanhados: o nome `prototype/<name>` do branch e a skill errada quando o que construir já está decidido
+
+## Revisões
+
+- 2026-11-12, revisão antes das rodadas: o módulo de lógica validado entra no código real como código existente de `devorb:tdd`, com testes do comportamento primeiro, semeados pelos passeios guiados, e o código depois; "lifts into the real module" contrariava a regra de `tdd` de apagar código escrito antes do teste. O branch `prototype/<name>` passa a ser criado antes de escrever qualquer coisa (worktree se a árvore tem mudanças não commitadas), o trabalho é commitado nele e a limpeza é voltar ao branch original, nunca `checkout`, `restore` ou `stash` sobre os arquivos do usuário; `UI.md` diz que a subforma A edita a página real só nesse branch. A entrega diz que o protótipo não tem testes.

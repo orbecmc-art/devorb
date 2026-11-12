@@ -10,9 +10,9 @@ The architecture review is one self-contained HTML file in the OS temp directory
   <head>
     <meta charset="utf-8" />
     <title>Architecture review for {{repo name}}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
       mermaid.initialize({ startOnLoad: true, theme: "neutral" });
     </script>
     <style>
@@ -33,7 +33,7 @@ The architecture review is one self-contained HTML file in the OS temp directory
 </html>
 ```
 
-Names from the code (files, functions) go into the page as text: escape `<`, `>` and `&`.
+Names from the code (files, functions) go into the page as text: escape `<`, `>`, `&` and `"`. In Mermaid, quote every label: `A["OrderHandler"]`.
 
 ## Header
 
@@ -66,9 +66,9 @@ Pick the pattern that fits the candidate, and mix them: variety is part of the p
 <div class="rounded-lg border border-slate-200 bg-white p-4">
   <pre class="mermaid">
     flowchart LR
-      A[OrderHandler] --> B[OrderValidator]
-      B --> C[OrderRepo]
-      C -.leak.-> D[PricingClient]
+      A["OrderHandler"] --> B["OrderValidator"]
+      B --> C["OrderRepo"]
+      C -.leak.-> D["PricingClient"]
       classDef leak stroke:#dc2626,stroke-width:2px;
       class C,D leak
   </pre>

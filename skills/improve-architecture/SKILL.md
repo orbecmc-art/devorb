@@ -18,7 +18,7 @@ Two sources shape every suggestion:
 **Scope before you scan.** A deepening pays off by making future changes easier, so weight the parts that change. Decide where to look before you look:
 
 - The user named a direction (a module, a subsystem, a pain point, or a spec with "how can we make this change easy?"): take it and skip the rest of this list.
-- Otherwise find the hot spots in the commit history: the files and areas that keep coming up. For example, `git log --since="6 months ago" --name-only --format= | grep . | sort | uniq -c | sort -rn | head -30`, plus `git log --oneline` over the same stretch to see what the changes were about. Let those paths pull your attention first. No clear hot spot (changes scattered, or little history): widen the net, and say so in the report.
+- Otherwise find the hot spots in the commit history: the files and areas that keep coming up. For example, `git log --since="6 months ago" --name-only --format= -- . ':!*.lock' ':!package-lock.json' ':!pnpm-lock.yaml' | grep . | sort | uniq -c | sort -rn | head -30`, leaving out lockfiles and generated files (builds, snapshots, migrations output), plus `git log --oneline` over the same stretch to see what the changes were about. Let those paths pull your attention first. No clear hot spot (changes scattered, or little history): widen the net, and say so in the report.
 
 Read `GLOSSARY.md` and the ADRs for the area first, if they exist.
 

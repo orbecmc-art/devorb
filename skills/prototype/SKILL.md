@@ -21,16 +21,16 @@ Write the question at the top of the prototype, where the user will see it, befo
 
 ## Rules for both
 
-1. **Throwaway from day one, and marked as such.** Put the prototype close to where it would be used (next to the module or page it explores), so the context is obvious, and name it so a casual reader sees a prototype, not production: `prototype` in the file or route name. Follow the project's routing convention for a throwaway route; don't invent a new top-level structure.
+1. **Throwaway from day one, and marked as such.** Start on a new `prototype/<name>` branch before writing anything, and build and commit there. Uncommitted changes in the tree? Use a git worktree on that branch instead, so the user's files are never touched. When done, return to the original branch. Never clean up with `git checkout`, `git restore` or `git stash` over the user's files. Put the prototype close to where it would be used (next to the module or page it explores), so the context is obvious, and name it so a casual reader sees a prototype, not production: `prototype` in the file or route name. Follow the project's routing convention for a throwaway route; don't invent a new top-level structure.
 2. **Trivial to run.** A UI prototype starts with one command from the project's task runner (`pnpm <name>`, `python <path>`, `bun <path>`). A logic demo is one HTML file the user double-clicks. Give the user that command or path; no thinking required to start it.
 3. **No persistence by default.** State lives in memory. Persistence is what a prototype might check, never something it depends on. If the question is about a database, use a scratch DB or a local file named so it reads "PROTOTYPE, wipe me", never the project's real database.
-4. **Skip the polish.** No tests, no error handling beyond what keeps it running, no abstractions. Calling this skill is the user's permission for `devorb:tdd` to skip tests, and it covers only the prototype.
+4. **Skip the polish.** No tests, no error handling beyond what keeps it running, no abstractions. Calling this skill is the user's permission for `devorb:tdd` to skip tests, and it covers only the prototype. At hand-over, say that it is untested.
 5. **Show the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user sees what changed.
-6. **Capture it when done.** The prototype is a primary source: commit it to a throwaway `prototype/<name>` branch, never merged, and keep it out of the main branch. Write the answer (the question, the verdict and the branch name) in the spec for this work in `docs/devorb/specs/`. No spec yet? Give the user the answer and the branch name; `devorb:aligning` puts them in the spec when it writes it.
+6. **Capture it when done.** The prototype is a primary source: it stays on its `prototype/<name>` branch, committed and never merged, out of the main branch. Write the answer (the question, the verdict and the branch name) in the spec for this work in `docs/devorb/specs/`. No spec yet? Give the user the answer and the branch name; `devorb:aligning` puts them in the spec when it writes it.
 
 ## After the answer
 
-Keeping anything is a new request. The verdict goes into the spec, and the real code is built through `devorb:planning`, with tests: the validated logic module lifts into the real module, and the winning variant is rewritten properly, never promoted as it is. The main branch keeps only the decision.
+Keeping anything is a new request. The verdict goes into the spec, and the real code is built through `devorb:planning`, with tests. The validated logic module enters as existing code under `devorb:tdd`: first tests for its behavior, seeded by the walkthrough scenarios, then the code moves in. The winning variant is rewritten test-first, never promoted as it is. The main branch keeps only the decision.
 
 ## Connects to
 

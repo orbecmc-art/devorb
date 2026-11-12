@@ -15,7 +15,7 @@ If the question is about logic or state rather than looks, use `LOGIC.md`.
 
 A variant is much easier to judge when it sits against the rest of the app: real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum where every variant looks fine.
 
-**A: adjustment to an existing page (default).** The route exists. Variants render **on the same route**, gated by a `?variant=` search param. Data fetching, params and auth stay; only the rendering swaps. Something with no page yet that would naturally live inside one (a new dashboard section, a new card on the settings screen, a new step in a flow) is still A: mount the variants inside the host page.
+**A: adjustment to an existing page (default).** The route exists. Variants render **on the same route**, gated by a `?variant=` search param. Data fetching, params and auth stay; only the rendering swaps. Something with no page yet that would naturally live inside one (a new dashboard section, a new card on the settings screen, a new step in a flow) is still A: mount the variants inside the host page. These edits touch a real page, so make them only on the `prototype/<name>` branch (or its worktree) that `SKILL.md` starts with, never on the user's branch.
 
 **B: a new page (last resort).** Only when the thing has no existing page to live in (a new top-level surface, a flow that can't be embedded anywhere sensible). Create a **throwaway route** following the project's routing convention, with `prototype` in the path or file name, and the same `?variant=` pattern. Before choosing B, check again: is there really no page to embed it in? An empty route hides design problems a populated one would expose.
 
@@ -81,7 +81,7 @@ Give the URL and the `?variant=` keys, plus the one command that starts the app.
 
 ## 6. Capture and clean up
 
-Once a variant wins, capture as `SKILL.md` describes: the answer (which variant, and why) goes into the spec, and the full set of variants plus the switcher goes to the `prototype/<name>` branch. Then take them all out of the main working tree: variants and a switcher left in the main branch rot fast and confuse the next reader. The winner reaches the real page or route only through `devorb:planning`, rewritten properly.
+Once a variant wins, capture as `SKILL.md` describes: the answer (which variant, and why) goes into the spec, and the full set of variants plus the switcher stays committed on the `prototype/<name>` branch. Then return to the original branch (or remove the worktree), which never had them: variants and a switcher in the main branch rot fast and confuse the next reader. Never clean up with `git checkout`, `git restore` or `git stash` over the user's files. The winner reaches the real page or route only through `devorb:planning`, rewritten test-first.
 
 ## Anti-patterns
 

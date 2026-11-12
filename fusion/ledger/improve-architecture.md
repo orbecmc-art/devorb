@@ -29,7 +29,7 @@ A skill foi escrita sem abrir `evals/improve-architecture-*` nem `evals-reserved
 | Comparar interfaces alternativas por `devorb:codebase-design` (design-it-twice) | Matt |
 | `Connects to` | DevOrb, pela interface da Task 17 e pelo `Connects to` de `codebase-design`, que já recebe "um candidato escolhido de `devorb:improve-architecture`" |
 | `references/HTML-REPORT.md` | Matt, quase inteiro. As cinco seções de padrões de diagrama viraram parágrafos; "/codebase-design" virou `devorb:codebase-design`; a tag de categoria de dependência aponta para `codebase-design` |
-| Escapar `<`, `>` e `&` de nomes vindos do código | DevOrb |
+| Escapar `<`, `>`, `&` e `"` de nomes vindos do código, rótulos do Mermaid entre aspas e versões exatas de Tailwind e Mermaid nos CDNs | DevOrb |
 | Mermaid sem `securityLevel: "loose"` | DevOrb (ver conflitos) |
 
 ## Conflitos resolvidos
@@ -41,7 +41,7 @@ A skill foi escrita sem abrir `evals/improve-architecture-*` nem `evals-reserved
 
 Regras próprias só saem com decisão explícita do dono. As regras abaixo foram escritas antes de qualquer rodada de comparação, a partir das decisões da Task 17, e ainda não há resultado que mostre se elas mudam o comportamento.
 
-1. **Pontos quentes contados, não lidos a olho.** O exemplo `git log --since=... --name-only --format= | grep . | sort | uniq -c | sort -rn | head -30` dá a frequência por arquivo, e o `git log --oneline` do mesmo trecho diz do que tratavam as mudanças. O escopo usado (direção do usuário ou pontos quentes e o trecho de histórico lido) aparece no cabeçalho do relatório. Motivo: a Task 17 manda preservar os pontos quentes pelo git log; "ande um bom trecho do `git log --oneline`" deixa o agente julgar frequência lendo mensagens, e o relatório não mostrava de onde veio o escopo.
+1. **Pontos quentes contados, não lidos a olho.** O exemplo `git log --since=... --name-only --format= -- . ':!*.lock' ':!package-lock.json' ':!pnpm-lock.yaml' | grep . | sort | uniq -c | sort -rn | head -30` dá a frequência por arquivo, sem lockfiles nem arquivos gerados, e o `git log --oneline` do mesmo trecho diz do que tratavam as mudanças. O escopo usado (direção do usuário ou pontos quentes e o trecho de histórico lido) aparece no cabeçalho do relatório. Motivo: a Task 17 manda preservar os pontos quentes pelo git log; "ande um bom trecho do `git log --oneline`" deixa o agente julgar frequência lendo mensagens, e o relatório não mostrava de onde veio o escopo.
 2. **Levantamento, não refactor.** A skill não muda código, e o candidato escolhido segue pelo fluxo normal (`devorb:aligning`, spec, `devorb:planning`). Motivo: a página de docs do Matt diz isso, mas o `SKILL.md` não; no DevOrb, sem a frase, o "explore" depois da escolha pode virar edição direta, pulando o portão de `aligning`.
 
 ## Fora
@@ -63,3 +63,7 @@ A preencher depois de R6 (nível leve, comparado com o Matt).
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/improve-codebase-architecture/HTML-REPORT.md` | recusado | `securityLevel: "loose"` do Mermaid
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/improve-codebase-architecture/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:docs/engineering/improve-codebase-architecture.md` | adotado | só ideias, fora dos caminhos acompanhados: a skill não muda código, e apontá-la para uma spec
+
+## Revisões
+
+- 2026-11-12, revisão antes das rodadas: a contagem de pontos quentes exclui lockfiles (`':!*.lock' ':!package-lock.json' ':!pnpm-lock.yaml'`) e arquivos gerados, que inflam a frequência sem ser arquitetura; o relatório escapa também `"` e põe os rótulos do Mermaid entre aspas (`A["nome"]`), porque nomes do código podem quebrar a sintaxe; os CDNs ficam fixados em versões exatas (Tailwind `3.4.16`, Mermaid `11.4.1`), em vez de `mermaid@11` e da última do Tailwind.

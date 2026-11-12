@@ -28,7 +28,7 @@ The shape depends on the question:
 - **A small set of pure functions** over a plain data type: no implicit current state, just transformations.
 - **A class or module with a clear method surface**: the logic genuinely owns ongoing internal state.
 
-Pick the shape that fits the question, not the one easiest to wire to a page. Keep it pure: no DOM, no `document`, no button handlers reaching inside. The page calls into it; nothing flows the other way. That is what makes it useful past its own lifetime: once the question is answered, the validated reducer, machine or function set is the starting point for the real module.
+Pick the shape that fits the question, not the one easiest to wire to a page. Keep it pure: no DOM, no `document`, no button handlers reaching inside. The page calls into it; nothing flows the other way. That is what makes it useful past its own lifetime: once the question is answered, the validated reducer, machine or function set can move into the real module, as existing code under `devorb:tdd`: tests for its behavior first, seeded by the walkthrough scenarios, then the code.
 
 Use the names of `GLOSSARY.md` for states and actions, where it has them.
 
@@ -55,7 +55,7 @@ Give the user the file's absolute path, or open it for them. The interesting mom
 
 ## 5. Capture
 
-Once the question is answered, capture as `SKILL.md` describes: the answer goes into the spec, and the whole file (shell and module) goes to the `prototype/<name>` branch, where it stays trivially re-runnable. The validated module reaches the real code only through `devorb:planning`, with tests.
+Once the question is answered, capture as `SKILL.md` describes: the answer goes into the spec, and the whole file (shell and module) goes to the `prototype/<name>` branch, where it stays trivially re-runnable. The validated module reaches the real code only through `devorb:planning`, entering as existing code under `devorb:tdd`: tests for its behavior first, seeded by the walkthrough scenarios, then the module moves in.
 
 ## Anti-patterns
 
@@ -64,4 +64,4 @@ Once the question is answered, capture as `SKILL.md` describes: the answer goes 
 - **Generalising.** No "what if we wanted to support X later." It answers one question.
 - **Blurring the logic and the page.** If the module references the DOM, `document` or button handlers, it is no longer liftable. Keep the page a thin shell over a pure module.
 - **A framework, bundler or server.** A React app or a dev server defeats "shareable".
-- **Shipping the HTML shell.** The page is built to be clicked through by hand; the module behind it is the part worth keeping.
+- **Shipping the HTML shell.** The page is built to be clicked through by hand; the module behind it is the part worth keeping, and it moves in only behind its tests.
