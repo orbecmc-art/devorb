@@ -84,7 +84,14 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher.
+Opus 5.5, 3 rodadas, `--ablation none`. `fusion/results/2026-11-12-implementing*.md`.
+
+| Caso | DevOrb | Superpowers | Matt |
+|---|---|---|---|
+| `implementing-resgate-extrato` | 100% (1,00) | 67% (0,92) | 0% (0,75) |
+| Reservado `implementing-cashback` | 100% (1,00) | 0% (0,25) | 100% (1,00) |
+
+- `accepted: true` nos dois. O DevOrb é o único braço que passa nos dois casos.
 
 ## Decisões por commit de fonte
 

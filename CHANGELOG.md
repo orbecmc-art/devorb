@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0
+
+- `implementing`, do Superpowers (subagente novo por task, revisão por task, quatro paradas, ledger), com a regra do Karpathy no prompt de quem implementa e no do revisor. Plano contra spec no que se constrói é parada; paralelo só com a marca do plano e merge verificado. Os seis scripts do Superpowers vêm com só caminhos e nomes trocados (SHA-256 no ledger). Comparação: 100% contra 67% no Superpowers e 0% no Matt; reservado 100% (Superpowers 0%, Matt 100%).
+
 ## 0.8.0
 
 - `codebase-design`, do Matt Pocock (fonte única): vocabulário exato, teste de exclusão, um adaptador é hipótese e dois são reais, enquadramentos rejeitados. Comparação: empate com o Matt, aceito.
