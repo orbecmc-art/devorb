@@ -14,7 +14,7 @@
 
 ## 0.11.0
 
-- Quatro skills manuais do Matt Pocock: `improve-architecture` (pontos quentes contados pelo git log, levantamento sem refactor), `prototype` (pergunta no topo, arquivo descartável, comando para rodar, protótipo não vira código real pela skill), `handoff` (afirmação de terceiro é presumida, segredo vira endereço, linha pronta para a próxima sessão) e `retro` (evidência do log em cada candidato, sem citar segredo). Comparação contra o Matt: `improve-architecture` e `handoff` 100% contra 0%; `retro` empata; `prototype` é lacuna em todos os braços.
+- Quatro skills manuais do Matt Pocock: `improve-architecture` (pontos quentes contados pelo git log, levantamento sem refactor), `prototype` (pergunta no topo, arquivo descartável, comando para rodar, protótipo não vira código real pela skill), `handoff` (afirmação de terceiro é presumida, segredo vira endereço, linha pronta para a próxima sessão) e `retro` (evidência do log em cada candidato, sem citar segredo). Comparação contra o Matt: `improve-architecture` e `handoff` 100% contra 0%; `retro` e `prototype` empatam (o caso do `prototype` foi alinhado com o HTML único que a skill manda fazer).
 
 ## 0.10.0
 

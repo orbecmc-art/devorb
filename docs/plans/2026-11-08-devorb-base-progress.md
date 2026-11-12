@@ -47,7 +47,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 12. `codebase-design` | Feita: empate com o Matt | `0.8.0` |
 | 13. `implementing` | Feita: DevOrb 100%, Superpowers 67%, Matt 0%; reservado 100% | `0.9.0` |
 | 14. `reviewing` | Feita: DevOrb 100%, Superpowers 0%, Matt 50% | `0.10.0` |
-| 17. `improve-architecture`, `prototype`, `handoff` e `retro` | Feita: improve-architecture e handoff 100% contra 0% no Matt; retro empata; prototype é lacuna | `0.11.0` |
+| 17. `improve-architecture`, `prototype`, `handoff` e `retro` | Feita: improve-architecture e handoff 100% contra 0% no Matt; retro e prototype empatam | `0.11.0` |
 | 24. `security-audit` | Feita: DevOrb 100% contra 0% sem plugin | `0.12.0` |
 | 15. `finishing` | Feita: DevOrb 100%, Superpowers 100%, Matt 0% | `0.13.0` |
 | 16. `writing-skills` | Feita: DevOrb 100%, Superpowers 50% | `0.14.0` |

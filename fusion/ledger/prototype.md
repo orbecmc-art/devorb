@@ -50,7 +50,13 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher depois de R6 (nível leve, comparado com o Matt).
+Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-12-prototype.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `prototype-tarifa-estacionamento` | 100% | 100% |
+
+- `accepted: true` por empate. Na primeira rodada os dois braços tiraram 0%: o caso reprovava o HTML único que a referência de lógica manda fazer e o arquivo novo ao lado do módulo, na branch `prototype/`. O caso foi alinhado com a skill (HTML ou script de terminal; só conta edição no código real e nos testes) e fica como guarda contra piora.
 
 ## Decisões por commit de fonte
 
