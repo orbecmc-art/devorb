@@ -14,7 +14,7 @@ Questions to ask at each boundary from the map. A suspicious answer is only a le
 ## What they may touch
 
 - Every id that arrives in a request (path, query, body, header): is the record fetched with the caller's ownership or tenant inside the query, or checked right after loading? Picture the same request carrying another user's id.
-- The same operation through every door: REST route, server action, GraphQL, export, batch job, admin screen, old API version. The weakest door is the real rule.
+- The same operation through every door: REST route, server action, GraphQL, export, batch job, admin screen, old API version. Check each one; the least guarded decides what is really allowed.
 - Fields the client shouldn't set: `role`, `isAdmin`, `ownerId`, `price`, `tenantId` accepted from the body, or a whole body passed to an update.
 - Tenant scoping on every query, cache key, file path and background job, not only on the main list screen.
 

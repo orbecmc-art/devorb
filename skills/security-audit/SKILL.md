@@ -11,18 +11,19 @@ Find the holes that an outsider or a less privileged user could really use, prov
 
 ## Ground rules
 
-- **No live targets.** Never send traffic to a deployed site, API, database or third-party service, and never touch production data or accounts. Read the code. A local check runs only against a process you start here, with made-up users, data and environment (never the project's `.env`), and stops at the first sign of the effect. Install nothing; spend no paid quota.
+- **No live targets.** Never send traffic to a deployed site, API, database or third-party service, except read-only package registry lookups, and never touch production data or accounts. Install nothing; spend no paid quota.
+- **Run nothing by default.** Read the code; run nothing from the project by default. A local check runs only after the user approves the exact command, from a temporary copy with every `.env*` file removed, under `env -i` with made-up values, against a process started there, stopping at the first sign of the effect. Never for a pull request's code. Without approval, the check goes under Needs checking.
 - **Secrets stay unseen.** Never print, echo, copy or try out a value that may be a secret: not in a command, not in tool output, not in the report. Search so that only file names, line numbers, counts or variable names come back (step 2). Never call a service with a found key to see whether it still works. The report gives file, line and variable name, then `[redacted]`.
 - **Facts outside the repo stay open.** Proxy, firewall, cloud, host and provider settings decide real outcomes. When a verdict hangs on one the repo doesn't show, don't assume it either way: the lead goes under Needs checking.
-- **GitHub stays as it is.** If `gh` is already signed in, open Dependabot, code scanning and secret scanning alerts may be read as leads, with GET requests only. If the token can't see them, that is a coverage gap; never ask for or switch to a wider token. Never dismiss, close or reopen an alert unless the user asks for exactly that.
+- **GitHub stays as it is.** If `gh` is already signed in, open Dependabot, code scanning and secret scanning alerts may be read as leads, only with `gh api --method GET`. For secret scanning, the value must never reach the output: always add `--jq '.[] | {number, secret_type, state}'`. If the token can't see them, that is a coverage gap; never ask for or switch to a wider token. Never dismiss, close or reopen an alert unless the user asks for exactly that.
 
 ## 1. Pin the scope
 
 The argument names it. With none, ask once: the whole project, a commit range or a pull request.
 
 - **Project:** everything tracked at `HEAD`. Note the commit and whether the tree has uncommitted changes.
-- **Commit range** `A..B`: `git diff --stat A..B`, then the hunks, plus every route, function and check the changed lines call or are called from.
-- **Pull request:** `gh pr view <n> --json baseRefName,headRefOid` and `gh pr diff <n>`, read the same way.
+- **Commit range** `A..B`: list the changed files first with `git diff --name-only A..B` and run step 2's secret-name check on that list. A flagged file gets only step 2's commands. Read the hunks of the others one file at a time, `git diff A..B -- <file>`, plus every route, function and check the changed lines call or are called from.
+- **Pull request:** `gh pr view <n> --json baseRefName,headRefOid` and `gh pr diff <n> --name-only`, then the same check. Fetch the head without running it (`git fetch origin pull/<n>/head`) and read unflagged files with `git diff origin/<base>...FETCH_HEAD -- <file>`.
 
 What lies outside the scope is reported as out of scope, never as covered. A range or a pull request is a partial audit and the report says so.
 
@@ -41,7 +42,7 @@ Before hunting, list:
   grep -oE '^[A-Za-z_][A-Za-z0-9_]*=' <file>           # variable names only
   grep -nE '<pattern>' <file> | cut -d: -f1            # line numbers only
   ```
-  With the Grep tool, search secret patterns in `files_with_matches` or `count` mode, never `content`. Never open such a file with Read, `cat`, `git show`, `git diff` or `git log -p`.
+  With the Grep tool, search secret patterns in `files_with_matches` or `count` mode, never `content`. Never open such a file with Read, `cat`, `git show`, `git diff` or `git log -p`. In a source file that matches, read only the lines around the matched line numbers, never the matched lines themselves.
 - **Supply chain:** manifests, lockfiles, CI workflows, Dockerfiles, deploy scripts.
 
 The questions for each boundary are in `references/checklist.md`; patterns for JS/TS, shell, CI and Docker in `references/ecosystems.md`.
@@ -69,6 +70,8 @@ Reread every cited line yourself. Look for anything on the path that stops it:
 validation, auth middleware, ownership check, parameterized query, framework
 escaping, configuration. A guard counts only if every path runs through it and
 it refuses when unsure. Confirm the actor really lacks the access they gain.
+Never print or open a file that may hold a secret; check one only with
+`git ls-files`, `git log --oneline` and variable names.
 Answer with one of:
 - CONFIRMED: the path and the result hold; proposed severity and the damage shown.
 - NEEDS CHECKING: the fact outside the repo that decides it, and how to check it.
@@ -84,7 +87,9 @@ Only a confirmed finding gets a severity, set by the damage the evidence shows, 
 - **Medium:** a real crossing with narrow reach or unusual conditions.
 - **Low:** a minor leak of non-secret detail, or an effect that costs great effort for little gain.
 
-A secret in a tracked file or in history is confirmed by `git ls-files` or `git log` alone. Rate it by what the code does with it, read at its call sites.
+Every finding here is Critical in `devorb:reviewing` terms: a security hole, whatever its level on this scale.
+
+A secret in a tracked file or in history goes to a verifier like any candidate, and it confirms with only `git ls-files`, `git log --oneline` and variable names. Rate it by what the code does with it, read at its call sites.
 
 ## 5. Report, then stop
 
