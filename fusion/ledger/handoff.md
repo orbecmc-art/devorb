@@ -1,6 +1,6 @@
 # Ledger: `handoff`
 
-Skill de uma fonte principal: `productivity/handoff` do Matt Pocock (MIT), adaptada ao fluxo do DevOrb, com uma ideia de `context-save` do gstack. Texto do Matt reaproveitado e adaptado, com a licença em `LICENSES/mattpocock-skills-MIT.txt`. O gstack tem `textReuse: false`: dele entram só ideias, escritas com a fonte fechada, sem lista nem frase de abertura espelhadas.
+Skill de uma fonte principal: `productivity/handoff` do Matt Pocock (MIT), adaptada ao fluxo do DevOrb, com uma ideia de `context-save` do gstack. Texto do Matt reaproveitado e adaptado, com a licença em `LICENSES/mattpocock-skills-MIT.txt`. O gstack tem `textReuse: false`: dele entram só ideias, escritas com a fonte fechada, sem lista nem frase de abertura espelhadas. Os rótulos `ran`, `read` e `assumed` seguem a redação do plano (executado, lido, presumido) e por acaso coincidem com palavras do gstack.
 
 Pinos lidos: `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d` e `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4`, iguais aos `lastAbsorbed` de `fusion/sources.json`, buscados rasos em pasta temporária, com hooks desligados e sem rodar nada. Do Matt, a pasta inteira da skill (`SKILL.md` e `agents/openai.yaml`). Do gstack, só o caminho acompanhado, `context-save/SKILL.md.tmpl`; o `SKILL.md` gerado e `sections/preamble.md` ficaram fechados, porque o preâmbulo comum está fora pela spec. Para saber quem chama a skill no DevOrb, foram lidos `skills/using-devorb/references/phase-boundaries.md`, `legacy-names.md` e o trecho de `skills/verifying/SKILL.md` sobre handoff anterior.
 
@@ -21,9 +21,9 @@ O caso que justifica as regras próprias é o caso realista da Task 17, como o p
 | Escrever só o que não vive em outro lugar: decisões com motivo, pendências, becos sem saída | DevOrb, lado positivo da regra do Matt |
 | Ocultar segredos: chaves, tokens, senhas, strings de conexão com credencial, dados pessoais | Matt ("API keys, passwords, PII"), ampliado com tokens e strings de conexão |
 | Escrever onde o segredo vive, nunca o valor | Regra própria 3 |
-| Cada pendência diz como se sabe: `ran`, `read` ou `assumed` | Ideia do gstack, por decisão da Task 17. Rótulos e definições próprios |
+| Cada pendência diz como se sabe: `ran`, `read` ou `assumed`, numa tabela de rótulo, o que a sessão fez e o que escrever depois | Ideia do gstack, por decisão da Task 17. Rótulos e definições seguem a redação do plano (executado nesta sessão, com comando e resultado; lido, sem rodar nada; presumido, nenhum dos dois) e por acaso coincidem com palavras do gstack. A tabela é estrutura própria |
 | Relato de subagente, handoff anterior e mensagem de commit contam como `assumed` | Regra própria 1 |
-| Quem retoma confere primeiro os `assumed`, e relê os `read` cujos arquivos mudaram depois do commit nomeado | `assumed` primeiro: ideia do gstack, por decisão da Task 17. Reler pelo commit: ideia do gstack (o arquivo grava o commit que descreve, para notar trabalho posterior), com palavras próprias |
+| Quem retoma confere primeiro os `assumed`, e reconfere os `ran` e `read` cujos arquivos mudaram depois do commit nomeado | `assumed` primeiro: ideia do gstack, por decisão da Task 17. Reler pelo commit: ideia do gstack (o arquivo grava o commit que descreve, para notar trabalho posterior), com palavras próprias |
 | A regra de retomada vai dentro do arquivo | DevOrb: não há skill de retomada, e o próximo agente pode estar em outro harness, sem o DevOrb |
 | Modelo do arquivo: cabeçalho com repo, branch, sha, data e não commitados; Next session; Read first; Decisions not written elsewhere; Open items; Dead ends; Suggested skills | DevOrb. Branch e arquivos modificados no cabeçalho são ideia do gstack; "Suggested skills" é do Matt; o resto é próprio. Ordem e nomes das seções diferem dos do gstack |
 | Em Suggested skills, skill manual vem com aviso de que o usuário precisa iniciá-la | DevOrb, pela regra de `using-devorb` (skill manual só roda quando o usuário chama) |
@@ -40,7 +40,7 @@ O caso que justifica as regras próprias é o caso realista da Task 17, como o p
 
 Regras próprias só saem com decisão explícita do dono. As regras abaixo foram escritas antes de qualquer rodada de comparação, a partir do caso realista como o plano o descreve, e ainda não há resultado que mostre se elas mudam o comportamento.
 
-1. **Afirmação de terceiro é presumida.** O que veio de relato de subagente, handoff anterior ou mensagem de commit é `assumed`, por mais seguro que pareça. Caso: o caso realista da Task 17. Liga a skill a `devorb:verifying`, que já trata essas fontes como afirmação e não evidência; sem a regra, o handoff transforma um "todos os testes passam" alheio em `ran`.
+1. **Afirmação de terceiro é presumida.** O que veio de relato de subagente, handoff anterior ou mensagem de commit fica `assumed` até esta sessão rodar ou ler o que ela afirma. Caso: o caso realista da Task 17. Liga a skill a `devorb:verifying`, que já trata essas fontes como afirmação e não evidência; sem a regra, o handoff transforma um "todos os testes passam" alheio em `ran`.
 2. **Fechar com a linha de partida.** A resposta final dá o caminho do arquivo e uma linha pronta para colar na nova sessão. Caso: o caso realista da Task 17, grader no `last_message`. O Matt não diz o que responder; sem a regra, o usuário precisa montar o pedido de retomada sozinho.
 3. **Segredo vira endereço.** No lugar do valor, o arquivo diz onde o segredo vive (`STRIPE_KEY` em `.env`). Caso: o caso realista da Task 17. O Matt manda redigir, mas um `***` solto deixa o próximo agente sem saber de onde tirar a credencial.
 
@@ -60,3 +60,7 @@ A preencher.
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/productivity/handoff/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:context-save/SKILL.md.tmpl` | adotado | só ideias, com palavras próprias: cada pendência diz como se sabe, e os presumidos são conferidos primeiro; só registrar estado; não sobrescrever arquivo anterior; gravar o commit descrito
 - `gstack@1b96d9f8538ae0f3b66dd52b75793a3767e514d4:context-save/SKILL.md.tmpl` | recusado | preâmbulo, scripts, binários, modo de listar, marcadores para passos que gravam dados, prova de afirmações sobre arquivos, persona
+
+## Revisões
+
+- 2026-11-12, revisão do coordenador: as definições de `ran`, `read` e `assumed` parafraseavam o `context-save` frase a frase. Foram reescritas a partir da redação do plano, com a fonte fechada, numa tabela própria, e saiu a cláusula "por mais seguro que esteja". Quem retoma passa a reconferir também os itens `ran`, não só os `read`, quando os arquivos mudaram depois do commit nomeado.

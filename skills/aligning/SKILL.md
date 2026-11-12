@@ -63,6 +63,6 @@ A browser tab for mockups, diagrams and clickable throwaway prototypes. Offer it
 
 ## Connects to
 
-- **Receives:** new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard.
+- **Receives:** new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard; a chosen deepening candidate from `devorb:improve-architecture`; a prototype's verdict from `devorb:prototype` when no spec exists yet.
 - **Uses:** fresh subagents for facts and for the reviewer; `devorb:domain-modeling` for terms and hard-to-reverse decisions; `references/` for the grilling round, sizing and red flags, the reviewer prompt and the companion.
 - **Hands off to:** `devorb:planning`, with the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md`.

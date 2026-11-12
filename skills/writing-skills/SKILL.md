@@ -118,6 +118,6 @@ Agents skip RED for documents more readily than for code. These thoughts mean: g
 
 ## Connects to
 
-- **Receives:** a request to create or change a skill or agent instructions; ideas to merge into a skill from `devorb:evolving`; a judgment rule to turn into a pattern from `devorb:retro`.
+- **Receives:** a request to create or change a skill or agent instructions; ideas to merge into a skill from `devorb:evolving`; a skill or a steering-file line to write or fix from `devorb:retro`.
 - **Uses:** `devorb:tdd` for the cycle this skill adapts; fresh subagents for baseline and green runs.
 - **Hands off to:** `devorb:verifying` before claiming the skill works; the caller, with the baseline failure, the passing runs and anything left untested.

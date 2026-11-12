@@ -23,13 +23,17 @@ The file leaves the repo and may reach a colleague. Before writing, check the dr
 
 ## Open items say how they are known
 
-Every open item ends with how this session knows it:
+Tag each open item with one word, by what this session did with it:
 
-- **ran:** executed this session and the result seen. Write the command and the result (`npm test`: 3 failing in `cart.test.ts`).
-- **read:** the code or file was read but nothing was run. Write the path, with the line when it helps.
-- **assumed:** neither. However sure you are, an inference is assumed. So is anything taken from a subagent's report, an earlier handoff or a commit message.
+| Tag | This session | Add after the tag |
+|---|---|---|
+| `ran` | executed it | the command and its result (`npm test`: 3 failing in `cart.test.ts`) |
+| `read` | looked at it, ran nothing | the path, and the line when it helps |
+| `assumed` | neither | nothing |
 
-The file tells whoever resumes to check the **assumed** items first, before building on any of them, and to re-read the **read** items whose files changed after the commit the handoff names.
+What a subagent's report, an earlier handoff or a commit message claims stays `assumed` until this session runs or reads it.
+
+The file tells whoever resumes to check the `assumed` items first, before building on any of them, then to re-check the `ran` and `read` items whose files changed after the commit the handoff names.
 
 ## The file
 
