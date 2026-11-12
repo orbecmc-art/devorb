@@ -51,7 +51,13 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher.
+Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-12-handoff.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `handoff-exportar-csv` | 100% (1,00) | 0% (0,17) |
+
+- `accepted: true`.
 
 ## Decisões por commit de fonte
 

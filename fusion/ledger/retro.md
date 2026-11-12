@@ -49,7 +49,13 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher.
+Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-12-retro.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `retro-erros-repetidos` | 100% | 100% |
+
+- `accepted: true` por empate. O caso não separa as versões no Opus e fica como guarda contra piora.
 
 ## Decisões por commit de fonte
 

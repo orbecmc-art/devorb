@@ -53,7 +53,13 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher depois de R6 (nível leve, comparado com o Matt).
+Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-12-improve-architecture.md`.
+
+| Caso | DevOrb | Matt |
+|---|---|---|
+| `improve-architecture-calculo-preco` | 100% (1,00) | 0% (0,33) |
+
+- `accepted: true`.
 
 ## Decisões por commit de fonte
 
