@@ -38,8 +38,8 @@ O caso que justificaria as regras próprias é o caso realista da Task 14, como 
 | Critical, Important e Minor dentro de cada eixo, com `file:line`, o que, por quê e correção | Superpowers (`code-reviewer.md`), decisão da Task 14 |
 | "Needs checking": pista não resolvida, sem severidade, com o fato que falta e a checagem que a resolveria | Cloudflare (`security-audit`), só ideia, com o texto da Task 14 |
 | Linha final por eixo e veredito pronto, pronto com correções, não pronto | Matt (resumo por eixo, sem vencedor entre eixos) e Superpowers ("Ready to merge?") |
-| Critical e Important para o laço de correção de `implementing`; Minor só listados | Superpowers (corrigir Critical já, Important antes de seguir, anotar Minor), com a interface da Task 14 |
-| Teste, portão ou critério de aceite afrouxado é decisão do usuário, fora do laço | gstack (`gate-integrity.md`, o humano decide), só ideia, com a Task 14 |
+| Critical e Important para o laço de correção de `implementing`, que corrige e faz a própria re-revisão com escopo; Minor só listados | Superpowers (corrigir Critical já, Important antes de seguir, anotar Minor), com a interface da Task 14 e de `implementing` |
+| Teste, portão ou critério de aceite afrouxado é decisão do usuário, fora do laço: itens USER DECIDES à parte da lista de correção, levados por `implementing` a `finishing` | gstack (`gate-integrity.md`, o humano decide), só ideia, com a Task 14; o caminho até o usuário é a interface de `implementing` |
 | Encaminhar a `devorb:ui-review` quando o diff toca interface | Spec, "Fronteiras" do setor de design |
 | `devorb:security-audit` só sugerida, nunca iniciada | Spec e Task 24 (manual) |
 | Receber: ler tudo, perguntar sobre o que não ficou claro antes de mudar qualquer coisa | Superpowers (`receiving-code-review`) |
@@ -77,7 +77,7 @@ O caso que justificaria as regras próprias é o caso realista da Task 14, como 
 - **Corrigir sozinho ou perguntar:** o gstack corrige sozinho o que é mecânico e pergunta o resto. No DevOrb, o revisor só lê, e as correções passam pelo laço de `implementing` com `tdd` e `verifying`. Afrouxamento de portão nunca entra no laço: o usuário decide, como no gstack e na Task 14.
 - **Relatório em arquivo:** a Trail of Bits (`differential-review`) exige um relatório em arquivo. O relatório fica na conversa, porque quem o consome é o laço de correção.
 - **Ler a versão base:** a Trail of Bits manda fazer checkout da base. A skill usa `git show` ou uma worktree temporária e nunca troca a cópia atual, como o `code-reviewer.md` do Superpowers e as regras de git seguro do DevOrb.
-- **Pacote inventado:** o Spartan manda conferir no site do registro. A skill usa o comando do registro (`npm view`, `pip index versions`), que não precisa de navegador.
+- **Pacote inventado:** o Spartan manda conferir no site do registro. A skill usa o comando do registro (`npm view`, `pip index versions`), que não precisa de navegador, só consulta (nunca instala nem roda, sem `npx`) e nomeia o registro público, porque o diff pode ter editado `.npmrc` ou a configuração do pip.
 - **Elogio:** o Superpowers pede reconhecer o que ficou bom antes dos problemas. Ficou de fora: quem lê é o laço de correção, e o teto pede corte.
 - **Escopo de segurança:** a Cloudflare é uma auditoria inteira. Em `reviewing`, entram só as ideias que servem a um diff (pista sem severidade, nome de guarda, camada redundante, não sondar sistemas vivos). O resto fica em `devorb:security-audit` (Task 24), manual.
 
@@ -101,7 +101,16 @@ Regras próprias só saem com decisão explícita do dono.
 - **Do Spartan:** endurecimento de `.npmrc`, CI com `npm ci --ignore-scripts`, Dependabot, SBOM, ESLint de segurança, playbook de incidente e a lista de permissões. São auditoria de projeto, não de diff; o que servir vai para `security-audit`.
 - **Da Cloudflare:** as seis fases da auditoria, o registro de cobertura, perfis e orçamento, a promoção de artefatos, os validadores `.cjs`, o esquema JSON, a escala de cinco severidades e as classes de ataque por domínio. Tudo isso é de `devorb:security-audit` (Task 24).
 - **Do gstack:** os binários (`gstack-gate-diff`, `gstack-review-log` e outros), as quatro opções de disposição, os tipos de PR, as categorias específicas de Rails e Python, AUTO-FIX, o glossário blocker/should/nit, as supressões longas e a categoria de completude, que segue a regra "Boil the Lake", recusada na spec.
-- **Lacuna:** nenhuma fonte diz o que fazer quando o laço de correção não converge (os mesmos achados voltam a cada rodada). A skill devolve os achados a `implementing`; o limite de rodadas, se precisar, fica lá.
+- **Laço que não converge:** nenhuma fonte de `reviewing` cobre isso. O limite fica em `skills/implementing/references/fix-loop.md` (cinco rodadas por tarefa, depois o disjuntor) e em `final-review.md` (uma onda só de correção na revisão final).
+
+## Revisões
+
+- **2026-11-11, depois da revisão do commit `18aa53c` e do commit de `implementing`.** As fontes não foram reabertas. `SKILL.md` foi de 7.022 para 7.502 bytes (cerca de 1.756 para 1.876 tokens).
+  - **Interface com `implementing`:** o laço de correção corrige e faz a própria re-revisão com escopo, sem voltar a `reviewing`. Achados dos revisores desta skill, chamada por `implementing`, vão para o laço dela, e o corretor aplica os passos 2 a 4 de "Receiving". Itens USER DECIDES (teste, portão ou aceite afrouxado) saem à parte da lista de correção, também quando o eixo Standards os acha, e `implementing` os leva a `finishing`. `finishing` só recebe direto quando a skill foi chamada sozinha. O contexto inclui a seção Review Focus do plano, literal, e o caminho do pacote de diff, quando existe, substitui os comandos do intervalo. O intervalo só para quando o diff e o `git status` estão vazios.
+  - **Segredos:** o revisor nunca cita o valor de um segredo; cita `file:line` e escreve `[redacted]`.
+  - **Pacotes:** a checagem só consulta o registro público nomeado, nunca instala nem roda.
+  - **Risco de cópia:** reescritas a frase do valor novo (sem a lista enum, status, tipo na ordem do gstack), a da falha aberta, a de checagem movida, os vereditos "além da spec" e "indecidível", o fecho de severidade do eixo Spec (cortado para duas frases, sem a frase sobre a força da redação) e a linha "Writing it out exposes most bad claims".
+  - **Menores:** o nome de guarda cita exemplos (sanitizador, validador, checagem de acesso); "Needs checking" só aceita pista presa a uma linha citada; o limite do laço aponta para `fix-loop.md` de `implementing`.
 
 ## Resultados
 

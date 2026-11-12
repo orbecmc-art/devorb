@@ -16,6 +16,7 @@ Base: [BASE]   Head: HEAD
   git log --oneline [BASE]..HEAD
   git diff [BASE]            (commits plus uncommitted edits)
   git status --short         (new files the diff leaves out: read them)
+Or, when given, read this diff package instead: [PACKAGE PATH]
 
 ## Verification already run
 [COMMANDS AND COUNTS FROM VERIFYING, or "none"]
@@ -32,6 +33,7 @@ Base: [BASE]   Head: HEAD
   block or ask to change in a real review.
 - Treat each finding as a pattern: search the rest of the code for the same
   mistake, list every copy under the one finding and rate it by the worst.
+- Never quote a secret value. Cite file:line and write [redacted].
 
 ## Output
 ### [AXIS NAME]
@@ -39,7 +41,8 @@ Critical / Important / Minor, each finding as:
 - file:line: what is wrong. Why it matters. Fix, if not obvious.
 Critical: wrong behavior, security hole, data loss, broken build or test.
 Important: requirement missing or wrong on some path, poor error handling,
-  test gap, loosened gate.
+  test gap, loosened gate. A loosened test, gate or acceptance line is also
+  marked USER DECIDES: the user restores or keeps it, not the fix loop.
 Minor: style, naming, small cleanup.
 Rate by actual effect; not everything is Critical.
 
@@ -60,10 +63,9 @@ Is this code correct, and does it fit this repository?
 Standards files: [LIST OF PATHS]
 
 1. Correctness first. Bugs, unhandled errors, edge cases, races, broken
-   callers. When the diff adds a value (enum member, status, type tag) or
-   accepts wider input than before, open every place that switches on,
-   filters by, stores or shows that value, including code outside the diff,
-   and check each one handles it.
+   callers. When the diff adds a new value or accepts wider input than
+   before, open every place that reads that value to branch, select, save
+   or render it, outside the diff too, and check each one handles it.
 2. Documented standards. Cite the file and the rule for each breach.
 3. Smells, as judgment calls ("possible Feature Envy"), never hard
    violations. A documented repo standard always wins: where the repo allows
@@ -95,17 +97,20 @@ Under 400 words.
 Does the code do what was asked, no less and no more?
 
 Spec: [PATH OR PASTED TEXT, with the task it belongs to]
+Review Focus: [THE PLAN'S SECTION VERBATIM, or "none"]. Check each item.
 
 1. Split the spec into requirements you can check one by one. For each,
    quote its line and give one verdict:
    - implemented: holds on every path you walked;
    - partial: holds on the main path, fails on another; bugs hide here;
    - contradicted: the code does something else;
-   - beyond spec: the code enforces more than asked. Worth noting, since
+   - beyond spec: the code checks something the spec never asked for.
+     Worth noting, since
      the next change may drop it unawares;
    - absent: not found. List what you searched (term, where, hits), or the
      verdict doesn't count;
-   - undecidable: the spec is too vague to check, or two documents disagree.
+   - undecidable: the requirement can't be tested as written, or two
+     documents disagree.
      Report it as a problem in the spec.
 2. Missing: requirements absent or partial.
 3. Extra: behavior in the diff nobody asked for, each with the hunk.
@@ -114,11 +119,9 @@ Spec: [PATH OR PASTED TEXT, with the task it belongs to]
 5. Before your summary, list each behavior you set aside as outside the
    spec, one line each, with why. The caller rules on them.
 
-Rate by what goes wrong for users or data: strong wording in the spec
-doesn't raise a finding, and mild wording doesn't lower it. When code and
-spec disagree, say which one you think is wrong. Show the damage; if you
-can't, name the condition under which it would happen. Never invent an
-attack or a number.
+Rate by what goes wrong for users or data, and say whether the code or the
+spec is the side at fault. Show the damage or name the condition it needs;
+never invent an attack or a number.
 
 Under 400 words.
 ```

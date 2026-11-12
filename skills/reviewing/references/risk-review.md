@@ -15,16 +15,17 @@ A small diff can still be the dangerous one. For each triggered change:
      git blame [BASE] -- <file>
    A check that came in with a fix or security commit and now leaves is
    Critical until shown otherwise. Code a past commit removed for safety and
-   this diff brings back is a regression. Was the check moved elsewhere, or
-   made redundant by another layer? Show where.
-3. Guards. A guard's name proves nothing. Find every path from the entry
-   point to the sensitive call, confirm each one goes through the guard,
-   and confirm the guard refuses when it can't decide. A guard on a path
+   this diff brings back is a regression. If another place or layer now
+   does the check, cite that line.
+3. Guards. A guard's (sanitizer, validator, auth check) name proves
+   nothing. Find every path from the entry point to the sensitive call,
+   confirm each one goes through the guard, and confirm the guard refuses
+   when it can't decide. A guard on a path
    the request never takes protects nothing. If one layer really blocks
    the attack, a missing second layer is hardening (Minor), not a hole.
-4. Fails open. Look at the failure branches of each new or changed check.
-   If an exception, a missing value or an empty answer lets the request
-   through, that is a finding.
+4. Fails open. If the new check lets a request pass whenever it can't
+   reach a decision (it throws, finds nothing, or gets no input), that is
+   a finding.
 5. Spend. Anything billed per use (a model call, a cloud machine, a
    metered API) must stop at a limit checked before the money goes out,
    also when it sits inside a loop or a retry. No limit: Critical.
@@ -32,10 +33,13 @@ A small diff can still be the dangerous one. For each triggered change:
    write to another system): suppose the last run died right after any one
    line, then run again. Does it end in the same state, without a second
    email, charge or row?
-7. Dependencies. For each package the diff adds: confirm it exists on its
-   registry (npm view <name>, pip index versions <name>, or the ecosystem's
-   equivalent), since models invent plausible names and attackers register
-   them. Read the lockfile diff for packages no manifest change explains,
+7. Dependencies. For each package the diff adds, look it up on its public
+   registry; never install or run it (no npx, no install scripts). Name the
+   registry, since the diff may edit .npmrc or pip config:
+     npm view <name> --registry https://registry.npmjs.org
+     pip index versions <name> --index-url https://pypi.org/simple
+   Models invent plausible names, and attackers register them. Read the
+   lockfile diff for packages no manifest change explains,
    and for any package now downloaded from a different host.
 8. Loosened gates in tests, CI or config. Read each one: a deleted, skipped
    or focused test; an exact assertion turned into a range; a longer
@@ -53,8 +57,8 @@ A small diff can still be the dangerous one. For each triggered change:
 For each finding, tell the abuse as a short story: the entry point, the
 steps, the result, and what the actor needs beforehand. If you can't build
 that story, name the condition under which it would happen and put it under
-Needs checking. Never invent an attack, a figure or a deployment
-fact. Don't probe live systems.
+Needs checking; only leads tied to a cited line go there. Never invent an
+attack, a figure or a deployment fact. Don't probe live systems.
 
 Fix advice: the smallest change that closes the hole, and a test that
 fails before it.
