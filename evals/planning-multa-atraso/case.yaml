@@ -1,0 +1,18 @@
+schema_version: "1.0"
+name: planning-multa-atraso
+description: Biblioteca comunitária em Node com uma spec aprovada de multa por atraso na devolução, que mexe em sócios, empréstimos e linha de comando; o agente escreve o plano de implementação num caminho dado, com tasks em fatias verticais, interfaces, caminhos e comandos exatos e seams de teste nomeados, sem tocar no código.
+tags: [planning]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    A spec da multa por atraso foi aprovada:
+    `docs/devorb/specs/2026-11-10-multa-atraso-design.md`. Escreve o plano de
+    implementação dela em `docs/devorb/plans/2026-11-11-multa-atraso.md`.
+    Por agora é só o plano: a implementação fica para outra sessão, que vai
+    seguir esse arquivo. Hoje não consigo responder perguntas; o que a spec
+    não decidir, decide pelo código e registra no plano.
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
