@@ -59,13 +59,15 @@ When round 5's re-review still leaves findings open, stop dispatching and
 adjudicate each one yourself; you hold the plan and the cross-task context:
 
 - **The reviewer is wrong, or the point is contestable:** park it,
-  `Task <N>: parked — <finding> — Ruling: <why the code stands>`. The final
+  `Task <N>: parked — <finding> — Ruling: <why the code stands> — <cost if wrong>`.
+  The final
   review sees both sides.
 - **Real, but nothing downstream builds on it:** park it the same way, with a
   ruling that says it is real and deferred.
 - **Real and load-bearing** (a later task builds on it, or it shows a plan
   defect): rule on the smallest change that unblocks the dependent work,
-  `Task <N>: Ruling: <finding> — <what you decided and why>`, and carry it
+  `Task <N>: Ruling: <finding> — <what you decided and why> — <cost if wrong>`,
+  and carry it
   into the next task's dispatch. Parking a structural failure silently lets
   every dependent task build on it. Stop only if the defect leaves every path
   forward a guess.

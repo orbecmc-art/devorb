@@ -36,7 +36,7 @@ ledger line in the same call as the commit, never in a call of its own.
 
 ### 1. Take the task
 
-Run this skill's `scripts/task-start PLAN_FILE N` by its absolute path, from
+Run this skill's `bash scripts/task-start PLAN_FILE N` by its absolute path, from
 your working tree. It prints the brief path and BASE in one call. Read the
 brief for every task, including ones you remember: what you remember is a
 summary; the brief has the exact values, signatures and tests. Mark the todo
@@ -57,7 +57,8 @@ compare:
 - **The plan is wrong** (a step that contradicts itself, an interface from an
   earlier task that doesn't match, a command that can't work): rule on the
   smallest change that satisfies the spec,
-  `Task <N>: Ruling: <finding> — <what you decided and why>`, and continue.
+  `Task <N>: Ruling: <finding> — <what you decided and why> — <cost if wrong>`,
+  and continue.
   Later tasks read the ruling from the ledger. A step that contradicts the
   spec on what gets built is the fourth stop.
 
@@ -78,7 +79,7 @@ session, not inferred from the diff looking right:
 
 ### 4. Complete the task
 
-Run this skill's `scripts/task-done PLAN_FILE N BASE -- <test command>` by its
+Run this skill's `bash scripts/task-done PLAN_FILE N BASE -- <test command>` by its
 absolute path, from your working tree, with the test command the brief names
 for the whole task. It runs the tests, keeps the full output in the workspace,
 prints the tail and, only if they pass, appends
@@ -88,12 +89,15 @@ the next task.
 
 ## Final review
 
-Run `scripts/review-package PLAN_FILE MERGE_BASE HEAD` by its absolute path
-(MERGE_BASE: the commit the branch started from, e.g. `git merge-base main HEAD`).
+First run the full suite fresh through `devorb:verifying` and keep the command
+and the counts. Then run `bash scripts/review-package PLAN_FILE MERGE_BASE HEAD`
+by its absolute path (MERGE_BASE: the commit the branch started from, e.g.
+`git merge-base main HEAD`).
 
 - **With a subagent tool:** invoke `devorb:reviewing` for the branch on the
   most capable model, with what `references/final-review.md` lists: package,
-  plan and spec paths, Review Focus verbatim, and the ledger's `Ruling:` lines.
+  plan and spec paths, Review Focus verbatim, the ledger's `Ruling:`,
+  `parked` and `minor (deferred)` lines, and the suite command and counts.
   This is the one fresh context the run buys; never skip it or replace it with
   your own read.
 - **Without one:** do the `devorb:reviewing` review yourself against the
@@ -102,7 +106,10 @@ Run `scripts/review-package PLAN_FILE MERGE_BASE HEAD` by its absolute path
   your final message: an author's self-review is weaker, and the user decides
   whether it is enough before merge.
 
-Sort the findings before acting; the labels are advice and the gate is yours.
+Set the USER DECIDES items apart first, as `Final: user decides: <item,
+verbatim>`: a loosened test, gate or acceptance line is the user's call, never
+fixed or ruled on here. Sort the rest before acting; the labels are advice and
+the gate is yours.
 Re-grade by effect first: what a reasonable person using this software gets if
 it ships. A reviewer who marked something Minor because the spec was silent
 graded the spec. Every item the reviewer declined to judge is a ruling you make
@@ -119,8 +126,8 @@ and write down.
   each one is a test, a fix and a suite run nobody asked for.
 
 There is no second pass. Then finish as in `references/final-review.md`: fresh
-evidence through `devorb:verifying`, the "Rulings I made" and "Deferred minors"
-lists, the workspace deleted, `devorb:finishing`.
+evidence through `devorb:verifying`, the "Rulings I made", "Deferred minors"
+and "User decides" lists, the workspace deleted, `devorb:finishing`.
 
 ## Rationalizations
 

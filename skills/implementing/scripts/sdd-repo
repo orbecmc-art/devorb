@@ -6,7 +6,7 @@
 #
 # The plan file's location never picks the repository. An executor working
 # in a linked worktree commonly holds an absolute path to the plan in the
-# main checkout (devorb:planning leaves the plan uncommitted there), and its
+# main checkout (where the plan may not be committed yet), and its
 # workspace and commits belong to the worktree it is working in. And a
 # caller standing outside any repository, such as the skill's own directory
 # in an installed plugin, is in the wrong place: guessing a repository from

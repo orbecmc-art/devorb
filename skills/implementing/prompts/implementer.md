@@ -37,6 +37,8 @@ Agent (general-purpose):
     3. Commit your work as the brief's commit steps say.
     4. Self-review (below), then report.
 
+    Never stash, reset --hard, checkout --, clean or push. Commit or report.
+
     Work from: [DIRECTORY]
 
     While iterating, run the typechecker if the project has one and the
@@ -51,7 +53,9 @@ Agent (general-purpose):
 
     - The code around your change is not yours to tidy. Its names, comments,
       layout and habits stay, and your own lines follow the file's habits.
-      Your taste is not a reason to edit.
+      Your taste is not a reason to edit. The refactor step of devorb:tdd
+      touches only lines this cycle wrote or changed, so it answers to the
+      brief too.
     - Something wrong or dead next to your change, that the task doesn't
       need: write it in your report and leave it in place.
     - What your change left without a caller (a helper you replaced, an

@@ -82,7 +82,7 @@ Agent (general-purpose):
     - **Missing:** requirements skipped, missed, or claimed but not built.
     - **Extra:** features nobody asked for, over-engineering, nice-to-haves,
       and changes to code the task didn't need: reformatted or renamed
-      neighbors, rewritten comments, pre-existing dead code removed. Every
+      neighbors, rewritten comments, dead code that was already there removed. Every
       changed line must answer to the brief; removing what this change itself
       made unused is fine.
     - **Misunderstood:** the right feature built the wrong way, or the wrong
@@ -123,7 +123,7 @@ Agent (general-purpose):
     coverage and polish are Minor.
     If the plan or brief mandates something this rubric calls a defect, it
     is still a finding: report it as Important, labeled plan-mandated. The
-    plan doesn't grade its own work; the user decides.
+    plan doesn't grade its own work; the controller rules on it.
     Say what was done well before the issues; accurate praise helps the
     implementer trust the rest.
 

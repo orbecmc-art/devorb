@@ -18,8 +18,9 @@ other. Before relying on the mark, check it in the pre-flight table: two
 "independent" tasks that touch the same file get a ruling to run them in
 sequence.
 
-Parallel tasks need a worktree each, which needs the user's consent: ask once,
-naming the tasks that would run together. Declined: run them in sequence.
+Parallel tasks need a worktree each, which needs the user's consent. Ask at
+setup, in the same question as the worktree for the run, naming the tasks that
+would run together. Declined: run them in sequence.
 
 ## The integration branch
 
@@ -43,8 +44,10 @@ these additions:
 
 - Its own worktree on its own branch, cut from the integration tip T. Record
   `Task <N>: dispatched (base <T7>, branch <name>, worktree <path>)`.
-- "First confirm your worktree's HEAD is <T>. If it isn't, and you have
-  changed nothing, reset onto <T>. Don't merge or rebase anything else."
+- "First confirm your worktree's HEAD is <T>. If it isn't, run
+  `git reset --hard <T>` only when `git status --porcelain` and
+  `git log <T>..HEAD` both print nothing; otherwise report NEEDS_CONTEXT.
+  Don't merge or rebase anything else."
 - Work from the task's worktree; the brief and report paths are absolute, in
   your workspace.
 

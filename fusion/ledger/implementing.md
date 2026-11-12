@@ -6,7 +6,7 @@ Pinos lidos: Superpowers é comparado no commit mais recente, por regra do dono,
 
 O caso realista da Task 13 é um plano de duas tasks em repositório pequeno, com código vizinho bagunçado, e o reservado é um plano que contradiz a spec, em que o certo é parar. A skill foi escrita a partir do texto da Task 13 no plano, sem abrir `evals/implementing-*`, `evals-reserved/` nem nenhum grader.
 
-`SKILL.md` tem 12.857 bytes, cerca de 3.215 tokens, contra o teto de 5.000. O resto fica em `prompts/` e `references/`, lido quando o caminho chega lá.
+`SKILL.md` tem 13.350 bytes, cerca de 3.338 tokens, contra o teto de 5.000. O resto fica em `prompts/` e `references/`, lido quando o caminho chega lá.
 
 ## Origem por parte
 
@@ -17,7 +17,7 @@ O caso realista da Task 13 é um plano de duas tasks em repositório pequeno, co
 | Os três modos: padrão sequencial, `references/inline.md`, `references/parallel.md` | Decisão da Task 13. "Nunca fingir um dispatch" é do `executing-plans` |
 | Narração, seguir sem pausas | Superpowers |
 | Decisões em vez de paradas, linha `Ruling:` com custo se errado | Superpowers, preservado por decisão da Task 13. "A spec é a autoridade" ficou restrito a onde o plano é omisso, ambíguo ou incoerente consigo mesmo. Ver conflitos |
-| As quatro condições de parada | Superpowers, por decisão da Task 13. A quarta ganhou o caso do plano que contradiz a spec no que se constrói: regra própria 1 |
+| As quatro condições de parada | Superpowers, por decisão da Task 13. A terceira foi reescrita: no Superpowers, "a merge, a push to a shared branch, a publish"; no DevOrb, "a merge into a shared branch, a push, a publish", porque o merge na branch de integração do modo paralelo faz parte da execução e qualquer push pede consentimento. A quarta ganhou o caso do plano que contradiz a spec no que se constrói: regra própria 1 |
 | Onde trabalhar: nunca na branch principal sem consentimento, worktree pede consentimento | Superpowers (`subagent-driven-development` e `using-git-worktrees`), por decisão da Task 13 |
 | Workspace e ledger: `sdd-workspace`, `progress.md`, primeira linha com o plano, retomada, confiar no ledger e no `git log`, `git clean -fdx` | Superpowers (`subagent-driven-development` e `references/resuming.md`), preservado por decisão da Task 13. A pasta virou `.devorb/sdd` |
 | Ler o plano e a spec uma vez, nota de spec ausente | Superpowers. Ler também o Review Focus é do DevOrb, porque o plano de `devorb:planning` tem essa seção |
@@ -30,7 +30,8 @@ O caso realista da Task 13 é um plano de duas tasks em repositório pequeno, co
 | 3. Revisão da task: `review-package`, nunca `HEAD~1`, restrições globais copiadas, não pré-julgar, itens "não dá para verificar pelo diff" | Superpowers (corpo e `references/cannot-verify.md`) |
 | 4. Laço de correção, lido antes de cada rodada | Superpowers |
 | 5. Linhas de conclusão no ledger | Superpowers |
-| Revisão final, lista "Rulings I made" e "Deferred minors" | Superpowers (`references/final-review.md` e `executing-plans`), preservado por decisão da Task 13, porque `claude-code-tools.md` cita a lista |
+| Revisão final, listas "Rulings I made" e "Deferred minors" | Superpowers (`references/final-review.md` e `executing-plans`), preservado por decisão da Task 13, porque `claude-code-tools.md` cita a lista |
+| Terceira lista, "User decides": os itens USER DECIDES de `devorb:reviewing` (teste, portão ou critério de aceite afrouxado), copiados sem mudança, nunca corrigidos nem decididos por `Ruling:`, passados a `devorb:finishing` | DevOrb, pela saída de `devorb:reviewing` (Task 14), na revisão de 2026-11-12. `claude-code-tools.md` manda o orquestrador repassá-la junto com "Rulings I made" |
 | Entrega em `devorb:finishing`, sem merge, push nem pull request marcado como pronto | Decisão da Task 13. Ver conflitos (Matt) |
 | Tabela de racionalizações | Superpowers (`subagent-driven-development`), condensada, mais duas linhas do DevOrb: arrumar o vizinho (Karpathy) e plano contra spec (regra própria 1) |
 | `Connects to` | DevOrb: recebe o plano de `devorb:planning`, usa `devorb:tdd`, `devorb:debugging`, `devorb:verifying` e `devorb:reviewing`, entrega para `devorb:finishing`, como manda a Task 13 |
@@ -40,7 +41,7 @@ O caso realista da Task 13 é um plano de duas tasks em repositório pequeno, co
 | `prompts/re-reviewer.md` | Superpowers (`re-review-prompt.md`), condensado, com "mudanças que os achados não pediam" entre as quebras novas |
 | `references/preflight.md` | Superpowers (`references/preflight.md` e a varredura do `executing-plans`), mais a linha do plano contra a spec (regra própria 1) e a de comandos inexistentes, que repete a checagem de `devorb:planning` |
 | `references/fix-loop.md` | Superpowers, com o caso do plano contra a spec mandando para a quarta parada |
-| `references/final-review.md` | Superpowers (`references/final-review.md` e `executing-plans`): pacote, um revisor no modelo mais capaz, uma onda de correção com um implementador só, re-revisão com escopo, sem segunda onda, reclassificar pelo efeito, apagar o workspace. O revisor é `devorb:reviewing`, no lugar do `code-reviewer.md` do Superpowers. A suíte inteira fresca por `devorb:verifying` antes da entrega é do DevOrb, pela interface da Task 13 |
+| `references/final-review.md` | Superpowers (`references/final-review.md` e `executing-plans`): pacote, um revisor no modelo mais capaz, uma onda de correção com um implementador só, re-revisão com escopo, sem segunda onda, reclassificar pelo efeito, apagar o workspace. O revisor é `devorb:reviewing`, no lugar do `code-reviewer.md` do Superpowers. A suíte inteira fresca por `devorb:verifying` antes da revisão (comando e contagens vão para `devorb:reviewing`) e de novo depois da onda de correção é do DevOrb, pela interface da Task 13 |
 | `references/inline.md` | Superpowers (`executing-plans`): por que inline, quando sugerir subagentes, `task-start`, passos com `Expected:`, contrato de conclusão, `task-done`, revisão final com e sem subagente, um passe de correção com TDD, racionalizações condensadas. Os nomes viraram `devorb:tdd`, `devorb:debugging`, `devorb:verifying` e `devorb:reviewing`. A regra do Karpathy vale também para quem executa inline: DevOrb |
 | `references/parallel.md`: quando, consentimento, branch de integração | Decisão da Task 13 sobre o Matt (`implement-spec`). "Marcado pelo plano em palavras, e não pela leitura do controlador" e "conferir a marca no pre-flight" são regra própria 2 |
 | `references/parallel.md`: fronteira, dispatch no mesmo turno, worktree por task cortado da ponta da integração, conferir a base e resetar | Matt (`implement-spec`: fronteira, worktree e branch por ticket, confirmar a base e resetar) e Superpowers (`dispatching-parallel-agents`: vários dispatches na mesma mensagem rodam juntos) |
@@ -61,7 +62,7 @@ O caso realista da Task 13 é um plano de duas tasks em repositório pequeno, co
 - **Revisor final:** o Superpowers usa o `code-reviewer.md` de `requesting-code-review`, e o Matt chama `code-review`. No DevOrb, os dois viram `devorb:reviewing`, que a Task 14 define como quem recebe de `implementing` e devolve achados com severidade.
 - **Base da linha de testes falhando:** o `using-git-worktrees` manda perguntar se a linha de base falha, e o "decisões em vez de paradas" proíbe perguntas no meio da execução. A pergunta fica, porque acontece antes de a execução começar.
 - **Ferramenta nativa de worktree:** o Superpowers prefere a ferramenta do harness para o worktree da sessão. No modo paralelo, a mesma preferência vale para a opção de dispatch que dá um worktree a cada subagente, e o implementador confere a base porque essa opção pode cortar o worktree de outro commit.
-- **Quantas referências:** o Superpowers tem sete arquivos em `references/`. `batching.md`, `cannot-verify.md`, `handling-reports.md` e `resuming.md` tinham de 500 a 1.100 bytes e viraram parágrafos do corpo, que ainda fica em 3.215 tokens. `preflight.md`, `fix-loop.md` e `final-review.md` continuam arquivos, porque só alguns caminhos os usam.
+- **Quantas referências:** o Superpowers tem sete arquivos em `references/`. `batching.md`, `cannot-verify.md`, `handling-reports.md` e `resuming.md` tinham de 500 a 1.100 bytes e viraram parágrafos do corpo, que ainda fica em 3.338 tokens. `preflight.md`, `fix-loop.md` e `final-review.md` continuam arquivos, porque só alguns caminhos os usam.
 
 ## Regras próprias
 
@@ -126,7 +127,7 @@ Os seis scripts vêm do Superpowers no commit `22f0b463e7a5e579904dd6211a5203210
 
 | Script | Caminho na fonte | Blob da fonte | SHA-256 da fonte | SHA-256 no DevOrb |
 |---|---|---|---|---|
-| `sdd-repo` | `skills/subagent-driven-development/scripts/sdd-repo` | `b1756b975cf7df470bd4f8b8a0ed9e24f3d64c5f` | `6f8256a776968d394bae679572e41ce572fd45c72074b98f9a8eb8b4f160e06f` | `3b4b0dffcc5e8705488ed5f0eea0893a41ec7a1094cb20a58c71b40055fa9029` |
+| `sdd-repo` | `skills/subagent-driven-development/scripts/sdd-repo` | `b1756b975cf7df470bd4f8b8a0ed9e24f3d64c5f` | `6f8256a776968d394bae679572e41ce572fd45c72074b98f9a8eb8b4f160e06f` | `a39d2f1f34cd5b6cdb2bdae8c29efaf55eae67900152002369f07d7cc23b8e0a` |
 | `sdd-workspace` | `skills/subagent-driven-development/scripts/sdd-workspace` | `ca3ac3b087fed24e460a249b6686910ea4ef5a95` | `de3af5252fa595fc2000ba05cf69e06187d5c8aae9d283cced4c167ad1813061` | `59f990efbcd0205eb8755ad7177a8df55e3e163480ddc39dc9c75d7eef6ebcf1` |
 | `task-brief` | `skills/subagent-driven-development/scripts/task-brief` | `a490211ad85b3236de038df27261395ac107befc` | `0f244a12e146393c552ba62069d3eedcc85cb3f76de67b01f4e11219e5ebbcd8` | `15b18e39ce9ef4eb6e39d5fecf18c3f9685295ad57a2c790079c8da104341754` |
 | `review-package` | `skills/subagent-driven-development/scripts/review-package` | `04c2b918c6289b49e716fe1faa0afc98a4e465f9` | `aed7c6e09fc660417d28898ed975e84651cb9f18f4675141cd475edfb7037f3d` | `ab4e8908ffdee871dde84dd8fbaaf92529b0a3955075827190e53c7a2a0fa8ee` |
@@ -136,7 +137,7 @@ Os seis scripts vêm do Superpowers no commit `22f0b463e7a5e579904dd6211a5203210
 **Mudanças, linha a linha:**
 
 - `sdd-repo`
-  - Linha 9 (comentário): `writing-plans leaves the plan uncommitted there` virou `devorb:planning leaves the plan uncommitted there`. Nome da skill.
+  - Linha 9 (comentário): `(writing-plans leaves the plan uncommitted there)` virou `(where the plan may not be committed yet)`. A fonte nomeava a skill de planos dela e afirmava que ela não faz commit; `devorb:planning` não diz se faz, então o comentário ficou neutro (revisão de 2026-11-12; a versão anterior dizia `devorb:planning leaves the plan uncommitted there`).
   - Linha 21 (comentário): `the SDD and executing-plans` virou `the SDD and inline-execution`. Nome, porque os dois scripts da execução inline agora moram na mesma pasta.
 - `sdd-workspace`
   - Linha 6 (comentário): `(.superpowers/sdd/<plan-basename>/)` virou `(.devorb/sdd/<plan-basename>/)`.
@@ -159,10 +160,17 @@ Os seis scripts vêm do Superpowers no commit `22f0b463e7a5e579904dd6211a5203210
 - `task-brief` apaga só o próprio arquivo de saída quando o `awk` falha (`rm -f "$out"`).
 - `sdd-workspace` cria `.devorb/sdd/<plano>/`, grava `plan-path` com o caminho do plano e cria `.devorb/sdd/.gitignore` com `*` só se ele não existir. O `.gitignore` da raiz do DevOrb ignora `.superpowers/`, mas não `.devorb/`; o workspace se ignora sozinho.
 - `review-package` só lê o git (`log`, `diff`, `rev-list`, `merge-base`) e escreve um arquivo no workspace. Recusa intervalo vazio ou HEAD que não descende de BASE (saída 3).
-- Nenhum script acessa a rede nem lê fora do repositório e do arquivo de plano.
+- Nenhum script acessa a rede nem lê fora do repositório e do arquivo de plano por conta própria. A exceção é o comando de teste que `task-done` executa: ele é do chamador e pode fazer qualquer coisa, inclusive acessar a rede.
 - Os comentários citam issues do Superpowers (`#2040`, `#1799`, `#2459`, `#2496`, `#2436`), que ficaram como estavam.
-- O comentário de `sdd-repo` agora diz que `devorb:planning` deixa o plano sem commit no checkout principal. A frase vinha do `writing-plans`; a `devorb:planning` não diz se faz commit do plano.
 
 ## Revisões
 
 - **2026-11-11, antes do `npm test`.** O primeiro rascunho da regra em `prompts/implementer.md` ficou perto do Karpathy em três frases: o título "every changed line traces to this task", "even when you would write them differently" e a lista "import, variable, function" do que a mudança deixou sem uso. As três foram reescritas sem a fonte aberta ("Your diff answers to the brief", "Your taste is not a reason to edit", "a helper you replaced, an import only the old code used"), e as menções em `SKILL.md`, `references/inline.md` e `prompts/task-reviewer.md` seguiram a nova redação.
+- **2026-11-12, depois da revisão do commit `8a8d389`.** `SKILL.md` foi de 12.857 para 13.350 bytes (cerca de 3.215 para 3.338 tokens).
+  - **USER DECIDES:** `devorb:reviewing` entrega à parte os itens que só o usuário decide (teste, portão ou critério de aceite afrouxado). Entrou uma terceira lista, "User decides", com os itens copiados sem mudança e nunca corrigidos nem decididos por `Ruling:`: `SKILL.md` (lista final e `Connects to`), `references/final-review.md` (separados antes da triagem, linha `Final: user decides:` no ledger, coletados no fim), `references/inline.md` (o mesmo na revisão final inline) e `skills/using-devorb/references/claude-code-tools.md` (o orquestrador repassa as duas listas).
+  - **Ordem da evidência:** `references/final-review.md` e `references/inline.md` rodam a suíte inteira fresca por `devorb:verifying` antes da revisão e entregam comando e contagens a `devorb:reviewing`. A rodada depois da onda de correção continua.
+  - **Segurança do trabalho do usuário:** o prompt de quem implementa proíbe `stash`, `reset --hard`, `checkout --`, `clean` e `push` ("commit ou relato"). No modo paralelo, o reset para a ponta da integração é `git reset --hard <T>` e só vale com `git status --porcelain` e `git log <T>..HEAD` vazios; fora isso, NEEDS_CONTEXT. Sem worktree, o setup roda `git status --porcelain` e pergunta se a árvore tem trabalho não commitado.
+  - **Consentimento do paralelo:** a pergunta sobre rodar tasks em paralelo, um worktree cada, sai junto com a do worktree no setup, em vez de no meio da execução.
+  - **Ajustes menores:** "by default" na abertura; "never merge outside the integration branch" na entrega; no revisor da task, item mandado pelo plano é decidido pelo controlador (como em `fix-loop.md`), não pelo usuário; "— <cost if wrong>" nos formatos de `Ruling:` de `fix-loop.md` e `inline.md`; `inline.md` passa ao revisor as linhas `Ruling:`, `parked` e `minor (deferred)`, como `final-review.md`; o workspace é apagado depois da onda de correção, com as listas coletadas; o refactor de `devorb:tdd` só nas linhas que o ciclo escreveu ou mudou também responde à brief; `inline.md` chama os scripts com `bash`; "dead code that was already there" no revisor.
+  - **Script:** o comentário da linha 9 de `sdd-repo` ficou neutro sobre o commit do plano. Tabela e lista de mudanças acima atualizadas, com o novo SHA-256.
+  - **Ledger:** registrada a reescrita da terceira parada e qualificada a frase sobre rede (o comando de `task-done` é do chamador).

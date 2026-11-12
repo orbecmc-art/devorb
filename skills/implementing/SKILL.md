@@ -5,7 +5,7 @@ description: Use when you have a written implementation plan to execute task by 
 
 # Implementing
 
-Execute the plan by dispatching a fresh implementer subagent per task, a task review (spec compliance and code quality) after each, and one review of the whole branch at the end. Tasks run one at a time, in plan order.
+Execute the plan by dispatching a fresh implementer subagent per task, a task review (spec compliance and code quality) after each, and one review of the whole branch at the end. By default, tasks run one at a time, in plan order.
 
 **Why subagents:** each one gets exactly the context you build for it, never your session's history, so it stays on its task and your own context stays free for coordination.
 
@@ -30,7 +30,7 @@ Execute the plan by dispatching a fresh implementer subagent per task, a task re
 
 ## Setup
 
-**Where you work.** Never start on the main or master branch without the user's explicit consent. If you are not already in a linked worktree, ask once before creating one ("Set up an isolated worktree? It protects your current branch."), unless the user or the project already said what they prefer. Read `references/worktree.md` for detection, creation and the baseline test run. Declined: work in place, on a branch that isn't main without consent.
+**Where you work.** Never start on the main or master branch without the user's explicit consent. If you are not already in a linked worktree, ask once before creating one ("Set up an isolated worktree? It protects your current branch."), unless the user or the project already said what they prefer. If the plan marks tasks as independent, ask in the same question whether they may run in parallel, a worktree each (`references/parallel.md`). Read `references/worktree.md` for detection, creation and the baseline test run. Declined: work in place, on a branch that isn't main without consent, and run `git status --porcelain` first: if it prints anything, the tree holds the user's uncommitted work, so ask before starting.
 
 **Workspace and ledger.** Conversation memory does not survive compaction. Controllers that lost their place have re-dispatched entire completed task sequences, the most expensive failure seen. Track progress in a ledger file, not only in todos.
 
@@ -112,9 +112,9 @@ Mark the todo complete and take the next task. Never move on with an open Critic
 
 When every task is complete, read `references/final-review.md` and follow it: one whole-branch review through `devorb:reviewing`, one fix wave, fresh evidence through `devorb:verifying`, then the hand-off.
 
-Your final message lists, under **"Rulings I made"**, every ledger line containing `Ruling:`, in the order you made them, each with what it costs if wrong, and under **"Deferred minors"** every deferred minor. Both lists are exhaustive. They are the only place the decisions you took on the user's behalf reach them.
+Your final message has three lists, each exhaustive. **"Rulings I made":** every ledger line containing `Ruling:`, in the order you made them, each with what it costs if wrong. **"Deferred minors":** every deferred minor. **"User decides":** every USER DECIDES item from `devorb:reviewing` (a loosened test, gate or acceptance line), verbatim, never fixed and never ruled on. They are the only place the decisions you took, and the ones left for the user, reach them.
 
-Delivery ends at `devorb:finishing`, which presents the options. Never merge, push, open a pull request or mark one ready on your own.
+Delivery ends at `devorb:finishing`, which presents the options. Never merge outside the integration branch, push, open a pull request or mark one ready on your own.
 
 ## Rationalizations
 
@@ -134,4 +134,4 @@ Delivery ends at `devorb:finishing`, which presents the options. Never merge, pu
 
 - **Receives:** the reviewed `docs/devorb/plans/YYYY-MM-DD-<topic>.md` from `devorb:planning`, and the spec it names.
 - **Uses:** `devorb:tdd` in every task, at the seam the plan names; `devorb:debugging` when something fails or surprises; `devorb:verifying` before any completion claim; `devorb:reviewing` for the whole-branch review; `scripts/`, `prompts/` and `references/` in this folder.
-- **Hands off to:** `devorb:finishing`, with the branch, the "Rulings I made" list and the deferred minors.
+- **Hands off to:** `devorb:finishing`, with the branch and the three lists: "Rulings I made", "Deferred minors" and "User decides".
