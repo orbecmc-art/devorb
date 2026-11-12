@@ -107,3 +107,4 @@ A preencher.
   - **Sem jargão:** a oferta de spike usa "a quick throwaway version", e o território a cobrir não diz "anti-goals" ao usuário.
   - **Sabatina com documentos:** `references/grilling-round.md` mantém `devorb:domain-modeling` durante toda a rodada quando o usuário pede.
   - **`.gitignore`:** o agente põe `.devorb/` no `.gitignore` e avisa, porque a pasta guarda a chave da sessão. Antes, só lembrava o usuário.
+- 2026-11-12, depois da primeira comparação (lacuna em todos os braços): as respostas do DevOrb tinham uma pergunta principal, mas composta ("quem vai usar e o que precisa") ou com um segundo pedido, e abriam com "Usando o fluxo de alinhamento". A primeira pergunta passou a ter uma só incógnita, e a primeira mensagem não tem linha de anúncio nem nome de skill. O grader `one-open-question` deixou de contar a oferta curta de seguir direto, que a Task 10 manda preservar.

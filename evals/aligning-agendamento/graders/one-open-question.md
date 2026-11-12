@@ -6,7 +6,7 @@ weight: 2
 
 O usuário pediu só "quero um app de agendamento", sem mais nenhum detalhe. Julgue a resposta do agente.
 
-Conte as perguntas dirigidas ao usuário. Conta como pergunta toda frase que pede uma resposta dele, com ou sem ponto de interrogação ("Me conta para quem é o app." conta). Duas perguntas na mesma frase ("para quem é e quais funções precisa?") contam como duas. Pedido de permissão para seguir ("posso começar?") também conta. Pergunta retórica que o próprio agente responde em seguida não conta.
+Conte as perguntas dirigidas ao usuário. Conta como pergunta toda frase que pede uma resposta dele, com ou sem ponto de interrogação ("Me conta para quem é o app." conta). Duas perguntas na mesma frase ("para quem é e quais funções precisa?") contam como duas. Pedido de permissão para seguir ("posso começar?") também conta. Pergunta retórica que o próprio agente responde em seguida não conta. A oferta curta de seguir sem conversar, como "se preferir que eu comece direto, é só dizer", não conta: ela faz parte da primeira mensagem do processo.
 
 Passa somente se:
 

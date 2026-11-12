@@ -69,3 +69,4 @@ A preencher.
 ## Revisões
 
 - 2026-11-11, revisão antes das rodadas: a regra própria de trabalhar sozinho ficou mais estreita. Só se escreve no glossário um significado que o código sustenta claramente, com termo, significado, código e alternativa no relato; regra de negócio lida no código é suposição relatada, nunca definição; sem decisão no código, nada é escrito e a pergunta vai no relato. A descrição passou a disparar só com termo ambíguo ou diferente do glossário. "Usar o termo" vale para o que o agente escreve, sem renomear código existente.
+- 2026-11-12, depois da primeira comparação: a regra de trabalhar sozinho, estreitada na revisão, impedia escrever o glossário quando o usuário delega a escolha ("decide pelo que faz sentido e me conta"). Escolha delegada passa a contar como escolha do usuário: o significado que serve ao propósito do pedido vai para o glossário, com a outra leitura anotada, e o relato diz o que foi decidido.
