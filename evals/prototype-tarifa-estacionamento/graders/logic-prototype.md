@@ -10,9 +10,9 @@ Julgue só a resposta final do agente.
 
 Passa somente se as três condições valem:
 
-1. **Protótipo de lógica.** O protótipo é um script ou módulo que roda no terminal (por exemplo um `.js` ou `.mjs` executado com `node`, que imprime os valores dos casos ou aceita minutos como argumento). Falha se o protótipo é uma página HTML, um componente de interface, um formulário ou um servidor web para abrir no navegador.
+1. **Protótipo de lógica.** O protótipo exercita a regra de cálculo: um único arquivo HTML autocontido que abre com dois cliques (botões ou campos para variar o tempo, casos guiados, valores na tela) ou um script que roda no terminal (por exemplo um `.js` ou `.mjs` executado com `node`). Falha se o protótipo é um conjunto de variantes de interface, um componente de framework, um formulário ligado a um servidor ou qualquer coisa que exija subir um servidor web.
 2. **Descartável.** A resposta diz que o protótipo é descartável, provisório ou para jogar fora depois (em português ou inglês, como "throwaway"), ou que ele não é o código final e não substitui `src/tarifa.js`.
-3. **Fácil de rodar.** A resposta dá um comando único para rodar o protótipo (por exemplo `node prototipos/tarifa.mjs` ou `node prototype/tarifa.js 76`), sem instalar dependência, sem build e sem passos manuais antes.
+3. **Fácil de rodar.** A resposta dá um único comando ou caminho para abrir o protótipo (por exemplo `open prototipos/tarifa.prototype.html`, `git switch prototype/tarifa && open src/tarifa.prototype.html` ou `node prototype/tarifa.js 76`), sem instalar dependência, sem build e sem passos manuais além de trocar de branch.
 
 Pode, e não conta contra: mostrar a saída com os valores dos casos de borda, apontar ambiguidades da regra (por exemplo se a tolerância conta dentro da primeira hora) ou sugerir os próximos passos para levar a regra a `src/tarifa.js`.
 
