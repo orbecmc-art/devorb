@@ -57,13 +57,13 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "writing-skills": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 5000,
-    "status": "planned"
+    "status": "done"
   },
   "evolving": {
     "invocation": "manual",
