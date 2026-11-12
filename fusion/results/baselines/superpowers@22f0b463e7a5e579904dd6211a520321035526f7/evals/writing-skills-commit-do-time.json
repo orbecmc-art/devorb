@@ -1,14 +1,14 @@
 {
-  "caseHash": "faa0036f41384b28dfa97fd7aeb21b378f70eee261c5f27bb3595e247c842502",
+  "caseHash": "6df5ba5309436cb8444b245394ffb3857e24668f6fdb357fb3b3dbfd1a3cb6c5",
   "model": "claude-opus-5-5",
   "runs": 2,
   "withPonytail": false,
   "ponytailRef": null,
   "ablation": "none",
   "summary": {
-    "score": 0.5,
-    "passRate": 0,
-    "costUsd": 2.2531651999999998,
+    "score": 0.8333333333333333,
+    "passRate": 0.5,
+    "costUsd": 2.4169856000000003,
     "runs": 2,
     "errors": 0,
     "maxTurns": 0

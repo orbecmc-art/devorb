@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.13.0
+
+- `finishing`, do Superpowers (suíte verde antes do menu, detecção de ambiente, menu de opções, descarte só com `discard` digitado, limpeza por procedência, nunca `--force`) e do Matt Pocock (corpo de pull request com Resumo, Evidência e Perigo de merge). Pull request abre como rascunho por padrão; rebase só a pedido. Comparação: empate com o Superpowers (100%), Matt 0%.
+
 ## 0.12.0
 
 - `security-audit`, manual, com ideias da Trail of Bits, do gstack e da Cloudflare escritas com palavras próprias: só leitura por padrão, checagem local apenas com o comando exato aprovado pelo usuário, segredo confirmado sem olhar o valor, alertas do GitHub só lidos, escala de quatro níveis. `using-devorb` lista a skill entre as manuais. Comparação: 100% contra 0% sem plugin.

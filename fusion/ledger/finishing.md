@@ -83,7 +83,13 @@ Regras próprias só saem com decisão explícita do dono. Nenhuma tem resultado
 
 ## Resultados
 
-A preencher depois das rodadas de comparação (R6).
+Opus 5.5, nível leve, 2 rodadas, `--ablation none`. `fusion/results/2026-11-12-finishing.md`.
+
+| Caso | DevOrb | Superpowers | Matt |
+|---|---|---|---|
+| `finishing-frete-gratis` | 100% (1,00) | 100% (1,00) | 0% (0,30) |
+
+- `accepted: true`. Na primeira rodada o DevOrb ficou em 50% contra 100% no Superpowers. As rodadas de diagnóstico, com os traces guardados, passaram em todos os graders; a falha era um voto instável do juiz de "sem oferta de merge". Na nova rodada empata com o Superpowers.
 
 ## Decisões por commit de fonte
 
