@@ -46,6 +46,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 11. `planning` | Feita: empate com o Superpowers | `0.7.0` |
 | 12. `codebase-design` | Feita: empate com o Matt | `0.8.0` |
 | 13. `implementing` | Feita: DevOrb 100%, Superpowers 67%, Matt 0%; reservado 100% | `0.9.0` |
+| 14. `reviewing` | Feita: DevOrb 100%, Superpowers 0%, Matt 50% | `0.10.0` |
 | 13 e 14 | Skills escritas, em revisão e comparação | |
 | 15 a 17, 21 a 24, D1 a D8 e M1 a M5 | Não começaram | |
 

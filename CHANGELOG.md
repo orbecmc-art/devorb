@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0
+
+- `reviewing`, do Matt Pocock e do Superpowers: dois eixos em revisores novos, revisão de risco como terceiro revisor só quando um gatilho dispara, intervalo com edições não comitadas e arquivos novos, e passadas separadas quando não há subagente. Comparação: 100% contra 0% no Superpowers e 50% no Matt.
+
 ## 0.9.0
 
 - `implementing`, do Superpowers (subagente novo por task, revisão por task, quatro paradas, ledger), com a regra do Karpathy no prompt de quem implementa e no do revisor. Plano contra spec no que se constrói é parada; paralelo só com a marca do plano e merge verificado. Os seis scripts do Superpowers vêm com só caminhos e nomes trocados (SHA-256 no ledger). Comparação: 100% contra 67% no Superpowers e 0% no Matt; reservado 100% (Superpowers 0%, Matt 100%).

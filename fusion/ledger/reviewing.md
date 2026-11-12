@@ -114,7 +114,13 @@ Regras próprias só saem com decisão explícita do dono.
 
 ## Resultados
 
-A preencher depois das rodadas de comparação (R6).
+Opus 5.5, 2 rodadas, `--ablation none`. `fusion/results/2026-11-12-reviewing.md`.
+
+| Caso | DevOrb | Superpowers | Matt |
+|---|---|---|---|
+| `reviewing-cupom-desconto` | 100% (1,00) | 0% (0,25) | 50% (0,63) |
+
+- `accepted: true`.
 
 ## Decisões por commit de fonte
 
