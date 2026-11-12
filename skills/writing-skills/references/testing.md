@@ -61,7 +61,7 @@ Pressure types, best combined three or more at a time:
 | Social | Looking dogmatic or inflexible |
 | Pragmatic | "Being pragmatic, not dogmatic" |
 
-In a project with an eval harness, write the scenario as one of its cases, with a fixture repository and a grader that checks the observed behavior (what the agent ran, in what order, and what it left in the files), not the words of its answer.
+In a project with an eval harness, write the scenario as one of its cases, with a fixture repository and a grader that checks the observed behavior (what the agent ran, in what order, and what it left in the files), not the words of its answer. Know what each grader sees: a judge given a long trace may see only its start and end, so check order with a pattern match over the whole trace, and point a judge at the file it must read.
 
 ## Tests by skill type
 

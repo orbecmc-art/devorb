@@ -17,7 +17,7 @@ Each skill has an entry in `fusion/skills.json`: `invocation` (`auto`, `manual` 
 `npm test` runs `tools/check-skills.mjs`, which enforces:
 
 - `SKILL.md` under 20,000 bytes, and its size in tokens (bytes ÷ 4, rounded up) at or under `ceilingTokens`. Over the ceiling, move detail to `references/` or take something out.
-- A `Connects to` heading, with Receives, Uses and Hands off to.
+- A `Connects to` heading (checked), with Receives, Uses and Hands off to (recipe R4).
 - `auto`: description starts with "Use when" and no `disable-model-invocation`. `manual`: `disable-model-invocation: true`.
 - Name plus description of every non-manual skill sums to at most 706 tokens, the fixed cost per session.
 - No legacy plugin names (the list is in the check), except in `skills/using-devorb/references/legacy-names.md`.
@@ -27,7 +27,11 @@ When the skill is ready, set its `status` to `done` and run `npm test`.
 
 ## RED: the eval case
 
-The test is a case in `evals/<skill>-<slug>/`: a `case.yaml` with a realistic prompt in Portuguese, a `scaffold.sh` that builds the fixture repository, and graders that read the trace, the last message or the final files. Validate `scaffold.sh` in a temporary folder, then run the baseline:
+The test is a case in `evals/<skill>-<slug>/`: a `case.yaml` with a realistic prompt in Portuguese, a `scaffold.sh` that builds the fixture repository, and graders that read the trace, the last message or the final files.
+
+An `llm` grader reads a named file or `last_message`; `focus: files` shows the judge only file names. A trace judge sees only the start and end of a long trace, so check order with a `regex` grader on the trace.
+
+Validate `scaffold.sh` in a temporary folder, then run the baseline:
 
 ```bash
 node tools/compare.mjs --skill <skill> --baseline-only
@@ -43,7 +47,7 @@ Skills at level `full` also get a reserved case in `evals-reserved/`, written by
 node tools/compare.mjs --skill <skill> --arms devorb,<sources>
 ```
 
-`<sources>` are `superpowers` and `mattpocock-skills` where they feed the skill, or `none` when neither does. Level `full` runs again with `--reserved`. The tool drives `claude plugin eval` for each arm. It must report `accepted: true`; `regressions` or `belowBar` send the skill back to writing, and `gaps` go to the ledger. Runs cost money, so the owner sets the budget.
+`<sources>` are `superpowers` and `mattpocock-skills` where they feed the skill, or `none` when neither does. Level `full` runs again with `--reserved`. Flags and limits are in the usage line in `tools/compare.mjs`; `evolving-*` cases compare only with `--arms devorb --ablation with-without`. The tool drives `claude plugin eval` for each arm. It must report `accepted: true`; `regressions` or `belowBar` send the skill back to writing, and `gaps` go to the ledger. Runs cost money, so the owner sets the budget.
 
 Fusing a skill from sources follows the recipe in `docs/plans/2026-11-08-devorb-base.md` (R1 to R8). In the monthly cycle, `devorb:evolving` owns the test step for the skills it edits.
 

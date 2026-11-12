@@ -19,7 +19,7 @@ Every always-loaded line spends **context load**: tokens and attention on every 
 
 Make a skill automatic only when the agent must reach it on its own, or another skill must. A skill that only ever fires by hand is manual.
 
-An automatic skill whose content is all reference can be the single home for reference several skills share. Reference that two manual skills both need lives in neither, since neither can fire the other: put it in a plain file outside the skill system that both point to.
+An automatic skill whose content is all reference can be the single home for reference several skills share. Reference that two manual skills both need lives in neither, since the model cannot invoke them: put it in a plain file outside the skill system that both point to.
 
 ## Writing triggers for an automatic skill
 
@@ -49,7 +49,7 @@ Split only when the cut earns the load it costs.
 
 ## Router skills
 
-When manual skills multiply past what the human can remember, one manual **router skill** can name the others and when to reach for each. The human remembers one skill instead of many. It can only suggest them: manual skills have no description, so nothing but the human can run them.
+When manual skills multiply past what the human can remember, one manual **router skill** can name the others and when to reach for each. The human remembers one skill instead of many. It can only suggest them: the model cannot invoke them, so only the human can run them.
 
 ## Size
 

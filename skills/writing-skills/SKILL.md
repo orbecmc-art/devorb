@@ -1,17 +1,17 @@
 ---
 name: writing-skills
-description: Use when creating, editing or testing a skill, or writing CLAUDE.md, AGENTS.md or any other instructions an agent follows
+description: Use when creating, editing or testing a skill, or editing CLAUDE.md or AGENTS.md
 ---
 
 # Writing Skills
 
-A skill is a document an agent follows. Writing one is test-driven development applied to documents: watch an agent fail without it, write the least text that fixes that failure, watch the agent pass with it, then tighten. The cycle is the one in `devorb:tdd`; this skill adapts it. Everything here also applies to `CLAUDE.md`, `AGENTS.md`, a prompt template, or any file an agent reaches through a pointer.
+A skill is a document an agent follows. Writing one is test-driven development applied to documents: watch an agent fail without it, write the least text that fixes that failure, watch the agent pass with it, then tighten. It adapts the cycle in `devorb:tdd`, and this page is enough to run it: loading `devorb:tdd` is not required. The writing and pruning sections also apply to `CLAUDE.md`, `AGENTS.md` and prompt templates; when a line must change what agents do, test it with the pointer test in `references/testing.md`.
 
 ```
 NO SKILL WITHOUT A FAILING TEST FIRST.
 ```
 
-This covers new skills and edits to existing ones. Text you wrote in this change before its baseline run is a guess about what agents need: delete it and start from RED. An existing skill stays; revert only your untested edit. If the user tells you directly to skip testing, that is their call: follow it, and report the skill as untested.
+This covers new skills and edits to existing ones. Text you wrote in this change before its baseline run is a guess about what agents need: delete it and start from RED. An existing skill stays: remove only the lines you added, by editing them out, never with `git checkout` or `git stash`. If the user tells you directly to skip testing, that is their call: follow it, and report the skill as untested. A deferral ("it's urgent", "test it later") is not an instruction to skip.
 
 Working in this repository's own skills, with `fusion/skills.json` at the root? Read `references/devorb.md` first: it names the eval cases, comparison tool, size limits and ledger that replace the generic steps below.
 
@@ -24,13 +24,15 @@ Write a skill for a technique that was not obvious, that you will reach for agai
 - **A mechanical rule** that a regex, linter, type check or test can enforce: make it that check. Documents carry judgment calls.
 - **Something the model already does well:** nothing. A skill that changes no behavior is pure load.
 
+These routes are for when you choose the form; when the user asks for a skill, write it and note any routing doubt in your report.
+
 ## The cycle
 
 ### 1. RED: watch an agent fail without the skill
 
 Write a scenario that tempts the failure: a realistic task, in a repository with concrete paths and files, phrased the way a user would ask. For a discipline skill, combine three or more pressures (time, sunk cost, authority, exhaustion) and force a concrete choice. Run it with a fresh subagent that has never seen your draft, without the skill. Run a few times; single samples lie.
 
-Record, word for word: what the agent chose, the rationalizations it gave, and which pressure broke it. The step is done when you can quote the failure. If the agent already does the right thing, there is nothing to fix: stop, and write no skill. `references/testing.md` has scenario formats, pressure types, tests by skill type and wording micro-tests.
+Record, word for word: what the agent chose, the rationalizations it gave, and which pressure broke it. The step is done when you can quote the failure. If the agent already does the right thing and nobody asked for the skill, there is nothing to fix: stop, and write no skill. If the user asked for the skill, a passing baseline means the scenario is too easy: add pressure or an edge case until it fails; if none fails, write the least skill and report that no baseline failure was found. `references/testing.md` has scenario formats, pressure types, tests by skill type and wording micro-tests.
 
 ### 2. Match the form to the failure
 
@@ -43,7 +45,7 @@ Classify what you saw before you write a word. The form that fixes one failure t
 | Leaves out an element of something it already produces | A required slot in the template it fills in |
 | Behavior should depend on a condition | A conditional keyed to something observable ("if the spec exists, cite it") |
 
-Write in the positive by default: state the target behavior, so the unwanted one is never spoken. A prohibition drags the forbidden behavior into context; under a competing goal, agents negotiate with "don't X", and in wording tests the prohibition produced more of the unwanted output than no guidance at all. Use a prohibition only for a discipline failure you observed or a hard guardrail you cannot phrase positively, and pair it with the positive target. Whatever the form:
+Write in the positive by default: state the target behavior, so the unwanted one is never spoken. A prohibition drags the forbidden behavior into context; under a competing goal, agents negotiate with "don't X", and in wording tests the prohibition produced more of the unwanted output than a positive recipe, and trended worse than no guidance. Use a prohibition only for a discipline failure you observed or a hard guardrail you cannot phrase positively, and pair it with the positive target. Whatever the form:
 
 - **Express each exception as its own conditional** on an observable predicate. A nuance clause ("unless it matters") reopens the negotiation.
 - **Restructure so a rule cannot reach what must stay exempt.** "This limit doesn't apply to code blocks" still suppresses code blocks.
@@ -64,7 +66,7 @@ Take each skill through its whole cycle before starting the next one.
 
 **Frontmatter.** `name` is letters, digits and hyphens, named for what you do (`condition-based-waiting`, `writing-skills`). An automatic skill has a `description` that starts with "Use when..." and lists only triggering conditions and symptoms, in the third person. It never summarizes the workflow: an agent that reads a workflow summary follows it and skips the body. A manual skill sets `disable-model-invocation: true`, and its description is a one-line summary for the human who types its name. Choosing between them, writing triggers, and splitting a skill: read `references/SKILL-MECHANICS.md`.
 
-**Context pointers.** A description, a line in `AGENTS.md` naming a doc, and "read `references/x.md` when..." are all context pointers: text in context that names material outside it and says when to reach it. The wording of the pointer, not the target, decides whether the agent gets there. A must-have target behind a weak pointer is a variance bug: sharpen the pointer's condition first, and inline the material only if sharpening fails. Point to another skill by its full name (`devorb:tdd`) and say whether it is required. Never `@`-link a file: that force-loads it.
+**Context pointers.** A description, a line in `AGENTS.md` naming a doc, and "read `references/x.md` when..." are all context pointers: text in context that names material outside it and says when to reach it. The wording of the pointer, not the target, decides whether the agent gets there. A must-have target behind a weak pointer is a variance bug: sharpen the pointer's condition first, and inline the material only if sharpening fails. Point to another skill by its full name (`devorb:tdd`) and say whether it is required. Name files as plain paths; an `@`-link force-loads them.
 
 **Information hierarchy.** Place each piece by how soon the agent needs it:
 
