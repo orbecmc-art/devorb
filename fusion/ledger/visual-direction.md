@@ -107,7 +107,16 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`). `fusion/results/2026-11-13-visual-direction*.md`.
+
+| Caso | DevOrb | Sem plugin | UI UX Pro Max |
+|---|---|---|---|
+| `visual-direction-clinica-serena` | 100% (1,00) | 0% (0,67) | 0% (0,75) |
+| `visual-direction-arquitetura-clean` | 0% (0,55) | 0% (0,18) | 0% (0,18) |
+| Reservado `visual-direction-painel-padaria` | 100% (1,00) | 33% (0,82) | 33% (0,82) |
+
+- `accepted: true` nos dois. O caso das fontes fixas é lacuna em todos os braços, mas o DevOrb tem a maior nota.
+- Custo: US$ 8,82 nas linhas de base e US$ 24,33 na comparação. O caso das fontes fixas custa uns US$ 4 por rodada com a skill, porque o agente consulta as fontes na web.
 
 ## Decisões por commit de fonte
 
