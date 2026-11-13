@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: visual-direction-painel-padaria
+description: >-
+  Site estático de uma padaria que já tem identidade visual: `DESIGN.md` na
+  raiz com tokens de cor, tipografia, espaço e raio, `css/base.css` com esses
+  tokens como variáveis CSS e uma página pública (`index.html`, com chamada e
+  vitrine de produtos) que os usa. Uma spec aprovada pede uma tela interna para
+  as atendentes do balcão operarem os pedidos de encomenda. O usuário pede a
+  tela em `painel/pedidos.html` e `painel/pedidos.css` e não pode responder
+  perguntas. O agente estende a identidade existente com os tokens, não mexe no
+  `DESIGN.md`, não faz da tela de sistema uma landing (sem chamada, vitrine de
+  cartões ou texto de venda), usa tabela para a lista e mantém o português com
+  acentos (`lang="pt-BR"`, UTF-8).
+tags: [visual-direction, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    A spec do painel de pedidos foi aprovada, está em
+    `docs/devorb/specs/2026-01-01-painel-pedidos-design.md`. Monta a tela
+    seguindo a spec: o HTML em `painel/pedidos.html` e o estilo em
+    `painel/pedidos.css`. Estou no forno o dia todo e não vou conseguir
+    responder pergunta nenhuma, então decide o que for preciso e segue.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent, WebFetch]
