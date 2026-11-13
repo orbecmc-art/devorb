@@ -1,0 +1,16 @@
+{
+  "ma": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done",
+    "sector": "mobile"
+  },
+  "mb": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done",
+    "sector": "mobile"
+  }
+}

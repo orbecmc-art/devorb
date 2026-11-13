@@ -9,8 +9,8 @@ import { evalOutside } from './eval-outside.mjs';
 
 const run = promisify(execFile);
 
-const ARMS = ['devorb', 'superpowers', 'mattpocock-skills', 'none'];
-const SOURCE_ARMS = new Set(['superpowers', 'mattpocock-skills']);
+const ARMS = ['devorb', 'superpowers', 'mattpocock-skills', 'ui-ux-pro-max', 'none'];
+const SOURCE_ARMS = new Set(['superpowers', 'mattpocock-skills', 'ui-ux-pro-max']);
 // Owner decision of 2026-11-10: superpowers and ponytail always run at the latest commit of their default branch.
 const LATEST = new Set(['superpowers', 'ponytail']);
 const SUITES = ['evals', 'evals-reserved', 'evals-outside'];
@@ -225,6 +225,8 @@ export async function prepareArm(
   } else {
     dir = join(root, '.arms', `${name}@${ref}`);
     await fetchAt(findSource(root, name), ref, dir);
+    // stack/ is a separate starter kit (its own .mcp.json, agents, settings), not the plugin the owner uses.
+    if (name === 'ui-ux-pro-max') rmSync(join(dir, 'stack'), { recursive: true, force: true });
   }
   // A run can read a sibling suite through the plugin root: keep only the active one.
   for (const s of SUITES) rmSync(join(dir, s), { recursive: true, force: true });

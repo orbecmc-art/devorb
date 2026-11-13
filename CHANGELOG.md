@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- Task D1, ferramentas do setor de design: `check-skills` soma à parte o custo fixo das skills automáticas de cada setor, com os tetos `design: 250` e `mobile: 150`, e erra com `always-on <setor>: <n> tokens > <limite>`. Os 706 da base não mudam e não contam as skills de setor. Setor sem teto é erro, para nenhuma skill escapar do limite.
+- `compare.mjs` ganha o braço `ui-ux-pro-max`: o repositório inteiro no pino de `fusion/sources.json` (não segue o último commit, como o Superpowers e o ponytail), com a raiz como plugin (`.claude-plugin/plugin.json`, skills em `.claude/skills/`) e sem a pasta `stack/`, que é um kit à parte com `.mcp.json`, agentes e configurações próprios.
+- Sondagem da leitura de sites no sandbox do `claude plugin eval`: o `WebFetch` lê sites. Uma segunda rodada, com o trace guardado e grader estrito (`TITLE: ` contra `FETCH-FAILED`), mostrou o conteúdo de `https://ui.shadcn.com` ("shadcn/ui - The Foundation for your Design System"). A sondagem não fica no repositório.
+
 ## 1.0.0
 
 - Lançamento: as 19 skills da base comparadas contra o Superpowers, com o ponytail ligado, sem nenhum caso pior (`fusion/results/final.md`).

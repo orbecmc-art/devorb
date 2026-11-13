@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 const MAX_BYTES = 20000;
 const ALWAYS_ON_CAP = 706;
+// Each sector pays its own always-on cost, on top of the base cap.
+const SECTOR_CAPS = { design: 250, mobile: 150 };
 const LEGACY_NAMES = ['superpowers:', '/grill-me', 'setup-matt-pocock', 'docs/agents/', 'ready-for-agent', '.scratch/', '.superpowers/', 'docs/superpowers'];
 
 export const approxTokens = (text) => Math.ceil(Buffer.byteLength(text, 'utf8') / 4);
@@ -51,9 +53,12 @@ export function checkSkills(root, registry) {
       errors.push(`${name}: status done but folder missing`);
     }
     if (!Number.isFinite(registry[name].ceilingTokens)) errors.push(`${name}: missing ceilingTokens in registry`);
+    const { sector } = registry[name];
+    if (sector !== undefined && !Object.hasOwn(SECTOR_CAPS, sector)) errors.push(`${name}: unknown sector ${JSON.stringify(sector)}`);
   }
 
   let alwaysOn = 0;
+  const sectorOn = {};
   for (const name of folders) {
     const entry = registered(name) ? registry[name] : undefined;
     if (!entry) {
@@ -86,7 +91,11 @@ export function checkSkills(root, registry) {
     if (entry.invocation === 'manual' && !fm.noModelInvocation) {
       errors.push(`${name}: manual skill needs disable-model-invocation: true`);
     }
-    if (entry.invocation !== 'manual') alwaysOn += approxTokens((fm.name ?? '') + (fm.description ?? ''));
+    if (entry.invocation !== 'manual') {
+      const cost = approxTokens((fm.name ?? '') + (fm.description ?? ''));
+      if (entry.sector === undefined) alwaysOn += cost;
+      else sectorOn[entry.sector] = (sectorOn[entry.sector] ?? 0) + cost;
+    }
 
     const legacyFound = new Set();
     const refsFound = new Set();
@@ -103,5 +112,8 @@ export function checkSkills(root, registry) {
   }
 
   if (alwaysOn > ALWAYS_ON_CAP) errors.push(`always-on: ${alwaysOn} tokens > ${ALWAYS_ON_CAP}`);
+  for (const [sector, n] of Object.entries(sectorOn)) {
+    if (n > SECTOR_CAPS[sector]) errors.push(`always-on ${sector}: ${n} tokens > ${SECTOR_CAPS[sector]}`);
+  }
   return errors;
 }
