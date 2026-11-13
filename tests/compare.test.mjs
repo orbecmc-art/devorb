@@ -124,7 +124,7 @@ test('parseArms accepts only the known arms', () => {
 test('evalArgs builds the planned command line', () => {
   assert.deepEqual(
     evalArgs({ armDir: 'a', caseGlob: 'debugging-*', runs: 3, model: 'm', maxCostUsd: 20, jsonPath: 'o.json', ablation: 'none' }),
-    ['plugin', 'eval', 'a', '--case', 'debugging-*', '--runs', '3', '--model', 'm', '--scaffold', '--allow-tools', 'Bash', 'Edit', 'Write',
+    ['plugin', 'eval', 'a', '--case', 'debugging-*', '--runs', '3', '--model', 'm', '--scaffold', '--allow-tools', 'Bash', 'Edit', 'Write', 'WebFetch',
       '--ablation', 'none', '--json', 'o.json', '--max-cost-usd', '20', '--threshold', '0', '--trust-plugin', '--no-publish'],
   );
 });

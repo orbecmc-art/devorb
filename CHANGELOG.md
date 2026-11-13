@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- `visual-direction`, Task D2 do setor de design: o modo vem do que o visitante quer fazer (Persuade, Operate, Read, Experience), três níveis de invenção, material antes da forma (o que falta vira lacuna visível, nada inventado), as fontes de referência fixas do dono no corpo da skill, escolha de biblioteca por tarefa, direção tirada do mundo do público com teste do espelho, e um contrato `## Direção visual` gravado na spec. Ideias de Impeccable, Hallmark, taste-skill, frontend-design, Emil, ECC, gstack, genjutsu e Monich, escritas com palavras próprias.
+- Comparação: Clínica Serena 100% contra 0% sem plugin e 0% no UI UX Pro Max; reservado (painel em projeto com identidade) 100% contra 33% e 33%; o caso das fontes fixas é lacuna, com a maior nota no DevOrb.
+- `compare.mjs` libera o `WebFetch` nos casos que o pedem; o sandbox lê sites.
+
 ## 1.1.0
 
 - Task D1, ferramentas do setor de design: `check-skills` soma à parte o custo fixo das skills automáticas de cada setor, com os tetos `design: 250` e `mobile: 150`, e erra com `always-on <setor>: <n> tokens > <limite>`. Os 706 da base não mudam e não contam as skills de setor. Setor sem teto é erro, para nenhuma skill escapar do limite.

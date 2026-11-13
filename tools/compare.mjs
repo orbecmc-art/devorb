@@ -41,7 +41,7 @@ export function evalArgs({ armDir, caseGlob, runs, model, maxCostUsd, jsonPath, 
   return [
     'plugin', 'eval', armDir, '--case', caseGlob,
     ...(evalDir === 'evals' ? [] : ['--eval-dir', evalDir]),
-    '--runs', String(runs), '--model', model, '--scaffold', '--allow-tools', 'Bash', 'Edit', 'Write',
+    '--runs', String(runs), '--model', model, '--scaffold', '--allow-tools', 'Bash', 'Edit', 'Write', 'WebFetch',
     '--ablation', ablation, '--json', jsonPath, '--max-cost-usd', String(maxCostUsd),
     ...(concurrency > 1 ? ['-j', String(concurrency)] : []),
     '--threshold', '0', '--trust-plugin', '--no-publish',

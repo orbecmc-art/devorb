@@ -1,0 +1,26 @@
+schema_version: "1.0"
+name: visual-direction-arquitetura-clean
+description: >-
+  Projeto Next (App Router) com Tailwind e shadcn/ui, sem node_modules e sem
+  rede, com a spec aprovada da landing "bem clean" do Atelier Linha, escritório
+  de arquitetura em Curitiba, e uma inscrição na newsletter que confirma por um
+  aviso na tela. A rota `app/api/newsletter/route.ts` já existe; o formulário
+  fica em `components/newsletter-form.tsx`. O usuário manda seguir a spec e
+  fazer a landing em `app/page.tsx` e avisa que não responde perguntas hoje.
+  O agente lê a lista fixa de fontes de referência (`ui-sources.json`) antes
+  de escrever código, abre uma galeria de `byStyle.clean` (Awwwards ou Minimal
+  Gallery), diz quais fontes consultou, usa o Sonner para o aviso em vez de
+  um feito à mão e põe no máximo um componente de destaque na página.
+tags: [visual-direction]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    segue a spec aprovada em
+    `docs/devorb/specs/2026-01-01-atelier-linha-design.md` e faz a landing em
+    `app/page.tsx`. Hoje não consigo responder perguntas, então decide
+    sozinho o que faltar.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, WebFetch]

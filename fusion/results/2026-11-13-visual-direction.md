@@ -1,0 +1,29 @@
+# Comparação de versões: visual-direction
+
+- Data: 2026-11-13
+- Suíte: `evals`, casos `visual-direction-*`, 3 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
+- Ponytail: não
+- Braços: `devorb@fdde35f`, `none`, `ui-ux-pro-max@4f2dbb6`
+
+| Caso | Braço | Aprovação | Pontuação | Custo |
+|---|---|---|---|---|
+| visual-direction-arquitetura-clean | devorb@fdde35f | 0% | 0.55 | US$ 12.1866 |
+| visual-direction-arquitetura-clean | none | 0% | 0.18 | US$ 1.0867 |
+| visual-direction-arquitetura-clean | ui-ux-pro-max@4f2dbb6 | 0% | 0.18 | US$ 1.3511 (cache) |
+| visual-direction-clinica-serena | devorb@fdde35f | 100% | 1.00 | US$ 4.7159 |
+| visual-direction-clinica-serena | none | 0% | 0.67 | US$ 1.1861 |
+| visual-direction-clinica-serena | ui-ux-pro-max@4f2dbb6 | 0% | 0.75 | US$ 1.2015 (cache) |
+
+Custo total desta execução: US$ 19.1251 (linhas de base em cache não contam).
+
+- Casos ausentes (não carregaram ou não rodaram): nenhum
+- Rodadas parciais (teto de custo atingido): nenhuma
+- Rodadas com erro da ferramenta: nenhuma
+- Rodadas que atingiram o limite de turnos do caso: nenhuma
+
+## Decisão
+
+- Aprovado: sim
+- Regressões (pior que a melhor linha de base por mais de uma rodada): nenhuma
+- Abaixo da barra de 2/3: nenhum
+- Lacunas (nenhum braço passa): `visual-direction-arquitetura-clean`
