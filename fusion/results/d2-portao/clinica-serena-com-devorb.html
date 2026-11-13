@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clínica Serena, dentista em Goiânia: marque pelo WhatsApp</title>
+  <meta name="description" content="Clínica Serena, odontologia em Goiânia (GO). A consulta é marcada pelo WhatsApp (62) 90000-0000: você escreve e combina o dia e o horário.">
+  <style>
+:root {
+  --fundo: #eef2ef;
+  --papel: #f9fbf9;
+  --tinta: #13261e;
+  --tinta-suave: #4a5b53;
+  --linha: #9fb0a7;
+  --ipe: #f2c230;
+  --ipe-forte: #e0ae14;
+
+  --fonte-titulo: "Avenir Next", Futura, "Century Gothic", system-ui, sans-serif;
+  --fonte-texto: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--fonte-texto);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+h1,
+h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  line-height: 1.08;
+  margin: 0;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tinta);
+  outline-offset: 3px;
+  transition: none;
+}
+
+.caixa {
+  width: 100%;
+  max-width: 70rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* Pular para o conteúdo */
+.pular {
+  position: absolute;
+  left: 1rem;
+  top: -10rem;
+  z-index: 1;
+  padding: 0.5rem 0.75rem;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.pular:focus {
+  top: 1rem;
+}
+
+/* Ação principal */
+.acao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.botao {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.375rem;
+  background: var(--ipe);
+  color: var(--tinta);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.botao:hover {
+  background: var(--ipe-forte);
+}
+
+.numero {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cabeçalho */
+.topo {
+  border-bottom: 1px solid var(--linha);
+}
+
+.topo-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-block: 0.875rem;
+}
+
+.marca {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.topo .botao {
+  padding: 0.5rem 1rem;
+}
+
+.topo .numero {
+  font-size: 0.9375rem;
+}
+
+/* Primeira tela */
+.abertura {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: clamp(2rem, 6vh, 4.5rem) 3rem;
+}
+
+.abertura-texto {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  max-width: 14ch;
+}
+
+.frase {
+  max-width: 34rem;
+  font-size: 1.1875rem;
+}
+
+.abertura .acao {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 52rem) {
+  .abertura {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3.5rem;
+  }
+}
+
+/* Cartão de consulta */
+.cartao {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-top: 0.625rem solid var(--ipe);
+  border-radius: 0.25rem;
+  padding: 1.5rem clamp(1rem, 4vw, 1.75rem) 1.75rem;
+  max-width: 28rem;
+  min-width: 0;
+}
+
+.cartao-nome {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.cartao-tipo {
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+}
+
+.cartao-campos {
+  margin: 1.25rem 0 0;
+}
+
+.cartao-campos div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.75rem;
+  padding-block: 0.625rem 0.25rem;
+  border-bottom: 1px dashed var(--linha);
+}
+
+.cartao-campos dt {
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+  min-width: 5.5rem;
+}
+
+.cartao-campos dt::after {
+  content: ":";
+}
+
+.cartao-campos dd {
+  margin: 0;
+  flex: 1 1 10rem;
+}
+
+/* Seções */
+.secao {
+  padding-block: 3rem;
+  border-top: 1px solid var(--linha);
+}
+
+.secao h2 {
+  font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
+  margin-bottom: 1.25rem;
+}
+
+.secao p + p {
+  margin-top: 0.5rem;
+}
+
+.passos {
+  margin: 0;
+  padding-left: 1.5rem;
+  max-width: 36rem;
+}
+
+.passos li + li {
+  margin-top: 0.75rem;
+}
+
+.passos li::marker {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+}
+
+.lacuna {
+  color: var(--tinta-suave);
+  font-style: italic;
+}
+
+/* Fecho */
+.numero-grande {
+  font-size: clamp(1.5rem, 0.5rem + 6vw, 4rem);
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+}
+
+.fecho .acao {
+  margin-top: 1.5rem;
+}
+
+/* Rodapé */
+.rodape {
+  border-top: 1px solid var(--linha);
+  padding-block: 2rem 2.5rem;
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+}
+
+.rodape .marca {
+  color: var(--tinta);
+  font-size: 1.0625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+</style>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="caixa topo-linha">
+      <p class="marca">Clínica Serena</p>
+      <p class="acao">
+        <a class="botao" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Quero%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena.">Marcar consulta</a>
+        <span class="numero">(62) 90000-0000</span>
+      </p>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="caixa abertura">
+      <div class="abertura-texto">
+        <h1>Dentista em Goiânia. Marque pelo WhatsApp.</h1>
+        <p class="frase">Na Clínica Serena a consulta é marcada por mensagem: você escreve no WhatsApp e combina o dia e o horário com a gente.</p>
+        <p class="acao">
+          <a class="botao" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Quero%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena.">Marcar consulta</a>
+          <span class="numero">(62) 90000-0000</span>
+        </p>
+      </div>
+
+      <div class="cartao" role="group" aria-label="Cartão de consulta em branco, para preencher pelo WhatsApp">
+        <p class="cartao-nome">Clínica Serena</p>
+        <p class="cartao-tipo">Cartão de consulta</p>
+        <dl class="cartao-campos">
+          <div><dt>Paciente</dt><dd>você</dd></div>
+          <div><dt>Dia</dt><dd>a combinar no WhatsApp</dd></div>
+          <div><dt>Horário</dt><dd>a combinar no WhatsApp</dd></div>
+          <div><dt>WhatsApp</dt><dd>(62) 90000-0000</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="caixa secao" aria-labelledby="como-marcar">
+      <h2 id="como-marcar">Como marcar a consulta</h2>
+      <ol class="passos">
+        <li>Abra o WhatsApp no número (62) 90000-0000.</li>
+        <li>Diga o dia e o período que ficam melhor para você.</li>
+        <li>Combine o horário com a clínica por lá.</li>
+      </ol>
+    </section>
+
+    <section class="caixa secao" aria-labelledby="onde-quando">
+      <h2 id="onde-quando">Onde e quando</h2>
+      <p class="lacuna">Endereço a confirmar</p>
+      <p class="lacuna">Horário a confirmar</p>
+      <p>Enquanto isso, você pode perguntar o endereço e o horário de atendimento pelo WhatsApp.</p>
+    </section>
+
+    <section class="caixa secao fecho" aria-labelledby="whatsapp-clinica">
+      <h2 id="whatsapp-clinica">O WhatsApp da clínica</h2>
+      <p class="numero-grande">(62) 90000-0000</p>
+      <p class="acao">
+        <a class="botao" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Quero%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena.">Marcar consulta</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="caixa">
+      <p class="marca">Clínica Serena</p>
+      <p>Odontologia em Goiânia (GO)</p>
+      <p>(62) 90000-0000</p>
+    </div>
+  </footer>
+</body>
+</html>

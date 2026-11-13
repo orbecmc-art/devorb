@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clínica Serena · Dentista em Goiânia · Agende pelo WhatsApp</title>
+  <meta name="description" content="Clínica Serena, odontologia em Goiânia (GO). Marque sua consulta pelo WhatsApp (62) 90000-0000.">
+  <meta name="theme-color" content="#1f5f58">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Clínica Serena · Dentista em Goiânia">
+  <meta property="og:description" content="Marque sua consulta pelo WhatsApp (62) 90000-0000.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%231f5f58'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23fff' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+  <style>
+/* Clínica Serena: landing page */
+
+:root {
+  --bg: #f7f4ef;
+  --surface: #ffffff;
+  --sage: #e3ece7;
+  --ink: #1d2b29;
+  --muted: #4c5c59;
+  --primary: #1f5f58;
+  --primary-dark: #174a44;
+  --line: #d9e2dd;
+  --radius: 14px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --mobile-bar-height: 76px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+  padding-bottom: var(--mobile-bar-height);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 0.6em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--primary);
+}
+
+:focus-visible {
+  outline: 3px solid #e0a43a;
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.narrow {
+  max-width: 760px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Botões */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1.2;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-small {
+  min-height: 40px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+}
+
+.btn-large {
+  min-height: 56px;
+  padding: 1rem 1.75rem;
+  font-size: 1.1rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-light {
+  background: #fff;
+  color: var(--primary-dark);
+}
+
+.btn-light:hover {
+  background: var(--sage);
+}
+
+.icon {
+  width: 1.35em;
+  height: 1.35em;
+  flex-shrink: 0;
+}
+
+/* Cabeçalho */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(247, 244, 239, 0.94);
+  border-bottom: 1px solid var(--line);
+}
+
+@supports (backdrop-filter: blur(8px)) {
+  .site-header {
+    background: rgba(247, 244, 239, 0.8);
+    backdrop-filter: blur(8px);
+  }
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 64px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+}
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+}
+
+/* No celular, o botão fixo no rodapé já cumpre o papel do botão do topo. */
+.site-header .btn {
+  display: none;
+}
+
+/* Hero */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 3.5rem 0 4rem;
+  background:
+    radial-gradient(circle at 85% 15%, var(--sage) 0, var(--sage) 18rem, transparent 18.05rem),
+    var(--bg);
+}
+
+.hero-inner {
+  position: relative;
+  max-width: 1080px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hero h1 {
+  max-width: 16ch;
+  font-size: clamp(2.1rem, 7vw, 3.75rem);
+}
+
+.lead {
+  max-width: 34rem;
+  font-size: 1.15rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.hero-actions .btn {
+  width: 100%;
+}
+
+.hero-phone {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.hero-phone a {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Seções */
+
+.section {
+  padding: 4rem 0;
+}
+
+.section h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+
+/* Passos */
+
+.steps {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.step {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.step h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.4rem;
+}
+
+.step p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Dúvidas */
+
+.faq-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+summary {
+  position: relative;
+  padding: 1.1rem 3.25rem 1.1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: "+";
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--primary);
+  line-height: 1;
+}
+
+details[open] summary::after {
+  content: "−";
+}
+
+details p {
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  color: var(--muted);
+}
+
+/* Chamada final */
+
+.cta {
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+}
+
+.cta-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta h2 {
+  margin-bottom: 0.75rem;
+}
+
+.cta p {
+  max-width: 32rem;
+  color: #dcebe7;
+}
+
+.cta .btn {
+  margin-top: 0.75rem;
+}
+
+.cta-phone {
+  margin: 1rem 0 0;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Rodapé */
+
+.site-footer {
+  padding: 2rem 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.footer-inner p {
+  margin: 0.25rem 0;
+}
+
+/* Barra fixa no celular */
+
+.mobile-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 20px rgba(29, 43, 41, 0.08);
+}
+
+/* Tablet e computador */
+
+@media (min-width: 720px) {
+  body {
+    padding-bottom: 0;
+  }
+
+  .mobile-bar {
+    display: none;
+  }
+
+  .site-header .btn {
+    display: inline-flex;
+  }
+
+  .hero {
+    padding: 6rem 0 6.5rem;
+    background:
+      radial-gradient(circle at 88% 40%, var(--sage) 0, var(--sage) 22rem, transparent 22.05rem),
+      var(--bg);
+  }
+
+  .hero-actions {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .hero-actions .btn {
+    width: auto;
+  }
+
+  .section {
+    padding: 5.5rem 0;
+  }
+
+  .step-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#topo" aria-label="Clínica Serena, início">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-name">Clínica Serena</span>
+      </a>
+      <a class="btn btn-small" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Gostaria%20de%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena." target="_blank" rel="noopener">
+        Agendar
+      </a>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="topo">
+      <div class="container hero-inner">
+        <p class="eyebrow">Odontologia em Goiânia (GO)</p>
+        <h1>Sua consulta no dentista, marcada em uma conversa.</h1>
+        <p class="lead">
+          Na Clínica Serena, o agendamento é pelo WhatsApp. Mande uma mensagem,
+          conte o que você precisa e combine o melhor dia para ser atendido.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-large" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Gostaria%20de%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena." target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6A.5.5 0 0 1 5 19.2V16a1 1 0 0 1-1-1V5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Marcar consulta pelo WhatsApp
+          </a>
+          <p class="hero-phone">ou salve o número: <a href="tel:+5562900000000">(62) 90000-0000</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section steps" aria-labelledby="como-funciona">
+      <div class="container">
+        <h2 id="como-funciona">Como marcar sua consulta</h2>
+        <ol class="step-list">
+          <li class="step">
+            <span class="step-number" aria-hidden="true">1</span>
+            <h3>Chame no WhatsApp</h3>
+            <p>Toque no botão e envie a mensagem que já vem escrita. Se preferir, escreva com suas palavras.</p>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">2</span>
+            <h3>Conte o que precisa</h3>
+            <p>Diga o motivo da consulta: uma dor, uma revisão ou só uma dúvida. Não precisa saber o nome do tratamento.</p>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">3</span>
+            <h3>Combine dia e horário</h3>
+            <p>Pela própria conversa, a clínica confirma a data da consulta e envia as informações para você chegar.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section faq" aria-labelledby="duvidas">
+      <div class="container narrow">
+        <h2 id="duvidas">Dúvidas comuns</h2>
+        <div class="faq-list">
+          <details>
+            <summary>Onde fica a clínica?</summary>
+            <p>A Clínica Serena fica em Goiânia (GO). O endereço completo é enviado pelo WhatsApp quando a consulta é marcada.</p>
+          </details>
+          <details>
+            <summary>Quais são os horários de atendimento?</summary>
+            <p>Os horários disponíveis são combinados pelo WhatsApp, de acordo com a agenda da clínica e a sua.</p>
+          </details>
+          <details>
+            <summary>Quanto custa a consulta?</summary>
+            <p>Os valores dependem do que você precisa. Pergunte pelo WhatsApp antes de marcar e tire suas dúvidas sem compromisso.</p>
+          </details>
+          <details>
+            <summary>Posso perguntar sobre um tratamento específico?</summary>
+            <p>Pode, sim. Envie sua pergunta pelo WhatsApp e a clínica responde por lá.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta" aria-labelledby="agende">
+      <div class="container cta-inner">
+        <h2 id="agende">Vamos marcar sua consulta?</h2>
+        <p>É só mandar uma mensagem. O agendamento é feito todo pelo WhatsApp.</p>
+        <a class="btn btn-large btn-light" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Gostaria%20de%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena." target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6A.5.5 0 0 1 5 19.2V16a1 1 0 0 1-1-1V5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <p class="cta-phone">(62) 90000-0000</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p><strong>Clínica Serena</strong> · Odontologia em Goiânia (GO)</p>
+      <p>WhatsApp: <a href="https://wa.me/5562900000000" target="_blank" rel="noopener">(62) 90000-0000</a></p>
+    </div>
+  </footer>
+
+  <div class="mobile-bar">
+    <a class="btn btn-block" href="https://wa.me/5562900000000?text=Ol%C3%A1!%20Gostaria%20de%20marcar%20uma%20consulta%20na%20Cl%C3%ADnica%20Serena." target="_blank" rel="noopener">
+      Marcar consulta pelo WhatsApp
+    </a>
+  </div>
+</body>
+</html>
