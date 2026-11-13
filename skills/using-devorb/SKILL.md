@@ -37,7 +37,7 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 | While building: test first | `devorb:tdd` |
 | Anything fails or surprises you | `devorb:debugging` |
 | Before claiming it works | `devorb:verifying` |
-| Building or changing a UI | `devorb:visual-direction` |
+| Building or changing a UI | `devorb:visual-direction`, `devorb:design-system`, `devorb:motion`, `devorb:ui-review` |
 | Changed a web UI | `devorb:browser-testing` |
 | Asking for or receiving a review | `devorb:reviewing` |
 | Integrating the branch | `devorb:finishing` |
@@ -45,7 +45,7 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 | Shape of a module or interface | `devorb:codebase-design` |
 | Creating or editing a skill | `devorb:writing-skills` |
 
-Manual skills run only when the user calls them; suggest, never start: `devorb:evolving`, `devorb:improve-architecture`, `devorb:prototype`, `devorb:handoff`, `devorb:retro`, `devorb:security-audit`.
+Manual skills run only when the user calls them; suggest, never start: `devorb:evolving`, `devorb:improve-architecture`, `devorb:prototype`, `devorb:handoff`, `devorb:retro`, `devorb:security-audit`, `devorb:diagram`.
 
 ## Red Flags
 
@@ -56,7 +56,6 @@ These thoughts mean STOP, you're rationalizing:
 | "Just a simple question" | Questions are tasks. Check skills. |
 | "Let me explore or check files first" | Skills say HOW to explore. Check first. |
 | "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read the current one. |
 | "It's urgent" or "tests later" | Then the flow helps most. Code change: check `devorb:tdd` first. |
 
 ## References

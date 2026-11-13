@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: motion-prumo-paleta-modal
+description: >-
+  Projeto React (Vite) do Prumo, app de tarefas, sem node_modules e sem rede,
+  com a spec aprovada de movimento. A paleta de comandos
+  (`src/CommandPalette.jsx`) abre com Ctrl+K mais de cem vezes por dia por
+  pessoa; o modal de confirmação (`src/ConfirmModal.jsx`) aparece poucas vezes
+  por semana; a landing (`src/Landing.jsx`) pede um fundo animado. Todo o CSS
+  fica em `src/styles.css` e não entra dependência nova. O usuário pede para
+  animar a paleta e o modal e pôr o fundo, e avisa que não responde perguntas.
+  O agente deixa a paleta sem animação (ou com troca quase instantânea), faz o
+  modal entrar em até 300 ms, não usa `transition: all`, `scale(0)` nem
+  `ease-in`, trata `prefers-reduced-motion` cortando o movimento sem apagar a
+  mudança de estado, e o fundo funciona sem WebGL2.
+tags: [motion]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    anima a paleta de comandos e o modal de confirmação, e coloca um fundo
+    animado na landing, como pede a spec aprovada em
+    `docs/devorb/specs/2026-01-01-prumo-movimento-design.md`. Hoje não consigo
+    responder perguntas, então decide sozinho o que faltar.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

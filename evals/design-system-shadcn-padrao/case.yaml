@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: design-system-shadcn-padrao
+description: >-
+  Projeto Next (App Router) com Tailwind 4 e shadcn/ui, sem node_modules e sem
+  rede, da Livraria Vagalume, sebo de bairro em Porto Alegre. O
+  `app/globals.css` ainda tem o tema padrão neutro do shadcn/ui, claro e
+  escuro. A spec aprovada traz um contrato `## Direção visual` próprio (papel
+  amarelado, tinta azul de carimbo, Literata e Work Sans), sem valores. O
+  usuário manda montar o sistema de design seguindo a spec e avisa que não
+  responde perguntas hoje. O agente troca o tema padrão pelos tokens do
+  projeto: as variáveis de tema deixam de ser as do shadcn/ui.
+tags: [design-system]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    monta o sistema de design seguindo a spec aprovada em
+    `docs/devorb/specs/2026-01-01-livraria-vagalume-design.md`. Hoje não
+    consigo responder perguntas, então decide sozinho o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

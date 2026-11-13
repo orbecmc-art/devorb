@@ -1,0 +1,20 @@
+schema_version: "1.0"
+name: diagram-fluxo-login
+description: >-
+  Site em Node de uma escola de idiomas, com login por e-mail e senha e
+  redefinição de senha por link enviado por e-mail, descritos passo a passo em
+  `src/auth.js`. O usuário chama `/devorb:diagram` e pede o fluxo em
+  `docs/login-flow.svg` para publicar no site. O agente desenha um SVG
+  acessível (`role="img"` e `<title>`), com até 9 nós, que cobre o login e a
+  redefinição de senha.
+tags: [diagram]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:diagram o fluxo de login com e-mail e redefinição de senha, em
+    docs/login-flow.svg, para publicar no site
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

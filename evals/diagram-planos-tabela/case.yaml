@@ -1,0 +1,18 @@
+schema_version: "1.0"
+name: diagram-planos-tabela
+description: >-
+  Site de um app de agendamento para salões de beleza, com os três planos
+  (Essencial, Profissional e Rede) e o que cada um inclui em `PLANOS.md`. O
+  usuário chama `/devorb:diagram` e pede os três planos e o que cada um
+  inclui. É uma comparação de itens por plano, sem fluxo nem relação entre
+  partes: o agente propõe ou entrega uma tabela em vez de desenhar um
+  diagrama.
+tags: [diagram]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: /devorb:diagram os três planos e o que cada um inclui
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
