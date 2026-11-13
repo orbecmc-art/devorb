@@ -1,28 +1,40 @@
 # DevOrb
 
-Plugin pessoal para o Claude Code. Funde o melhor de várias fontes, listadas em `fusion/sources.json`, em um fluxo único: alinhar, planejar, implementar, verificar, revisar e finalizar.
+Plugin para o Claude Code que junta, num fluxo só, o melhor de vários plugins e guias de desenvolvimento (Superpowers, Matt Pocock, Anthropic, Trail of Bits, gstack, Impeccable, Expo, Android e outros, listados em `fusion/sources.json`). Você conversa normalmente: o DevOrb escolhe sozinho a skill certa pelo assunto.
+
+- **Desenvolvimento:** alinhar o pedido, planejar, implementar com TDD, depurar pela causa, verificar com evidência, revisar e terminar a branch.
+- **Interface:** direção visual, sistema de design com contraste calculado, movimento, revisão de UI, teste no navegador e diagramas.
+- **Apps:** telas em Expo e Kotlin, teste de app e publicação na loja.
+- **Extras:** auditoria de segurança (só leitura), protótipo, melhoria de arquitetura, retro, handoff entre sessões e revisão mensal das fontes.
+
+Cada skill foi comparada com os plugins de origem em casos de teste reais. O placar está em `fusion/results/relatorio-comparativo.html`: em 49 casos, o DevOrb não perde nenhum para o Superpowers nem para o Matt Pocock.
 
 ## Instalação
 
-Em cada máquina, rode `gh auth status`. Se não houver login, rode `gh auth login` antes de continuar.
-
 ```
-gh auth setup-git
 claude plugin marketplace add orbecmc-art/devorb
 claude plugin install devorb@devorb
+```
+
+Depois, no Claude Code, abra `/plugin` > Marketplaces, escolha `devorb` e ligue a atualização automática. Abra uma sessão nova para carregar.
+
+Se você usa o Superpowers, desligue-o: os dois fazem o mesmo papel e não devem ficar ligados juntos.
+
+```
 claude plugin disable superpowers@claude-plugins-official
 ```
 
-Depois, no Claude Code, abra `/plugin` > Marketplaces, escolha `devorb` e ligue a atualização automática.
+O DevOrb funciona bem junto com o ponytail.
 
-O Superpowers e o DevOrb nunca ficam ligados ao mesmo tempo. O ponytail continua sendo um plugin separado.
-
-## Voltar ao Superpowers
+## Desinstalar
 
 ```
-claude plugin disable devorb@devorb
-claude plugin enable superpowers@claude-plugins-official
+claude plugin uninstall devorb@devorb
 ```
+
+## Licença e créditos
+
+MIT (`LICENSE`). O material adaptado de terceiros mantém a licença de origem, em `LICENSES/`, e cada skill tem em `fusion/ledger/` a origem de cada parte.
 
 ## Ciclo mensal
 
