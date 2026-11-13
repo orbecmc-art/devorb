@@ -125,28 +125,28 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "design"
   },
   "motion": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "design"
   },
   "ui-review": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "design"
   },
   "diagram": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "design"
   },
   "native-app": {

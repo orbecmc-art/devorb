@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: design-system-padaria-pedidos
+description: >-
+  Projeto Vite com Tailwind 4, sem node_modules e sem rede, da Padaria
+  Fermento, que já tem identidade: `DESIGN.md` na raiz com os tokens em YAML
+  (tema claro e escuro) e os mesmos tokens em `@theme` no `src/app.css`. A
+  spec aprovada pede a página "Meus pedidos", com cinco estados de pedido e
+  uma mensagem de erro, e o contrato de direção manda estender a identidade.
+  O usuário manda montar o sistema de design seguindo a spec e avisa que não
+  responde perguntas hoje. O agente não toca no `DESIGN.md` e acrescenta os
+  tokens dos estados no CSS seguindo os nomes, os pares `on-*` e os dois
+  temas que já existem.
+tags: [design-system]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    monta o sistema de design desse projeto, seguindo a spec aprovada em
+    `docs/devorb/specs/2026-01-01-meus-pedidos-design.md`. O CSS fica em
+    `src/app.css`. Hoje não consigo responder perguntas, então decide sozinho
+    o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
