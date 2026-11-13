@@ -65,7 +65,7 @@ Smoothness needs its own run: a release build, on the weakest phone the app targ
 
 One line per check: how it ran (static, test, device), what happened, pass or fail. Each failure: steps, expected, actual, the log line, `file:line` or screenshot.
 
-Without a device, the report always ends with **Not checked on a device**: the walk in step 4, written for this screen ("the profile header with a 40-character name at font 1.5x"), plus every test that did not run. The verdict is then "static checks pass, not checked on a device", or "does not work" with the failure. Never "ready", "pronto" or "can publish": publishing is the user's decision, made with that list.
+Reading code finds defects but never clears a device check: a keyboard, back, font or long-title check that looks fine in the code still goes on the list. Without a device, the report always ends with **Not checked on a device**: every item of the walk in step 4, written for this screen ("the profile header with a 40-character name at font 1.5x"), plus every test that did not run. The verdict is then "static checks pass, not checked on a device", or "does not work" with the failure. Never "ready", "pronto" or "can publish": publishing is the user's decision, made with that list.
 
 A failure goes to `devorb:debugging` when fixing is part of the task. Otherwise report it and stop.
 
