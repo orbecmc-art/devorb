@@ -52,7 +52,16 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 15. `finishing` | Feita: DevOrb 100%, Superpowers 100%, Matt 0% | `0.13.0` |
 | 16. `writing-skills` | Feita: DevOrb 100%, Superpowers 50% | `0.14.0` |
 | 23. `browser-testing` | Feita fora do sandbox (`--outside-sandbox`), por decisão do dono: DevOrb 100% contra 0% sem plugin | `0.15.0` |
-| 21, 22, D1 a D8 e M1 a M5 | Não começaram | |
+| 21. Comparação final | Steps 1 a 3 feitos; parada no Step 4, esperando o dono. `accepted: false`, sem nenhuma piora. Ver `fusion/results/final.md` | |
+| 22, D1 a D8 e M1 a M5 | Não começaram | |
+
+**Onde parou (2026-11-12, fim do dia):** Task 21, Step 4. Tudo está commitado e enviado na branch `claude/devorb-subagentes-task4-43565b` (PR #9), versão `0.15.0`. O dono decide, com `fusion/results/final.md`:
+
+1. Subir para `1.0.0` e fazer o merge mesmo com `accepted: false`, ou diagnosticar antes `improve-architecture` (33% com o ponytail) e `domain-modeling` (não criou o glossário com o ponytail).
+2. Feature pequena com o ponytail: aceitar que vá direto ao código, ou fazer a `using-devorb` exigir o fluxo inteiro (no caso `flow-small-feature`, os dois braços pularam todas as skills).
+3. Pendências antigas: reservado da `tdd` que manda ir direto ao código; regras próprias em cada ledger; revisão humana dos 6 scripts da `implementing` e da linha de telemetria do `server.cjs` da `aligning`; arquivo de boas práticas da Anthropic fora; `security-audit` só leitura por padrão; pull request como rascunho na `finishing`.
+
+Ferramentas novas desta etapa: `tools/eval-outside.mjs` e `compare.mjs --outside-sandbox` rodam a suíte `evals-outside/` fora do sandbox (só a `browser-testing` usa). A `evolving` se compara sozinha: `node tools/compare.mjs --skill evolving --arms devorb --ablation with-without`, porque com o ponytail o sandbox não lê o git empacotado no braço. O teto de custo em `fusion/eval-config.json` é US$ 20; a Task 21 subiu para US$ 60 só na rodada geral.
 
 ## Retomar no Mac
 
