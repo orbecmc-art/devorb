@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.1
+
+- Task 21, comparação final com o ponytail ligado: `aligning` chama `domain-modeling` mesmo em tarefa pequena ou sob regra de mudança mínima (67% contra 0% no Superpowers), e `improve-architecture` trata o relatório HTML como a entrega mesmo com pedido de brevidade (100% contra 0%). O grader do HTML aceita o caminho numa variável. Caso novo `flow-small-feature`. Detalhes em `fusion/results/final.md`.
+
 ## 0.15.0
 
 - `browser-testing`, da Anthropic (`webapp-testing`, Apache-2.0), com ideias do Spartan e do ECC escritas com palavras próprias: usa primeiro os testes de navegador do projeto e, sem eles, um script Playwright headless; sobe o servidor em segundo plano, espera a porta e encerra no fim; olha a página antes de agir; registra erros de console e de rede; testa em 1280 px e em 375 px com toque; em produção, só leitura. `references/playwright.md` traz um script que foi rodado contra o caso realista.

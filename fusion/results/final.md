@@ -2,7 +2,7 @@
 
 Data: 2026-11-12. Modelo `claude-opus-5-5`. DevOrb `0.15.0` contra Superpowers `22f0b46`, os dois com o ponytail `96608e0` ligado, como no uso real do dono. Teto de custo subido para US$ 60 por braço só nesta rodada, por decisão do dono, e devolvido a US$ 20 depois.
 
-**Veredito do comparador: `accepted: false`.** Nenhum caso piorou em relação ao Superpowers. O que bloqueia são as rodadas da `evolving` no braço do Superpowers, que contam como erro da ferramenta, e a `improve-architecture` abaixo da barra de 2/3 com o ponytail. O dono decide a migração com os pontos abaixo.
+**Veredito do comparador na rodada geral: `accepted: false`.** Depois das correções de 2026-11-13 (seção abaixo), o único bloqueio que sobra é estrutural: a `evolving` não roda no braço do Superpowers. Nenhum caso piorou em relação ao Superpowers. O que bloqueia são as rodadas da `evolving` no braço do Superpowers, que contam como erro da ferramenta, e a `improve-architecture` abaixo da barra de 2/3 com o ponytail. O dono decide a migração com os pontos abaixo.
 
 ## Resultado geral
 
@@ -41,6 +41,12 @@ Lacunas, em que nenhum braço passa:
 
 3. **Caso de fluxo inteiro `flow-small-feature`.** Pedido: "adiciona exportação em CSV da lista de pedidos, pode começar sem perguntas". Foi 1 rodada por braço (`2026-11-12-flow-ponytail.md`, US$ 0,53). Os dois braços tiraram 0%. No trace guardado, o DevOrb com ponytail foi direto ao código: escreveu o teste antes, implementou e conferiu, sem chamar nenhuma skill (`using-devorb`, `aligning`, `planning`, `implementing`, `finishing`). O resultado funciona, mas o fluxo não rodou.
 
+## Correções de 2026-11-13
+
+- **`improve-architecture`:** a falha com o ponytail era do grader. Uma rodada gravou o relatório com `cat > "$F"`, com o caminho `.html` numa variável, e o regex só aceitava `.html` logo depois do `>`. O grader passou a aceitar o caminho em qualquer parte do comando (`56aaefd`). Rodada de novo com o ponytail (`2026-11-13-improve-architecture-ponytail.md`): **100% contra 0%** no Superpowers, `accepted: true`.
+- **`domain-modeling`:** falha real. Com o ponytail, o agente chamou a `aligning`, escolheu o sentido certo de "aluno ativo" e explicou a escolha, mas não chamou a `domain-modeling` e não escreveu o `GLOSSARY.md` (0 de 3, com o trace guardado). A `aligning` passou a chamar a `domain-modeling` antes de construir, mesmo em tarefa pequena ou sob regra de mudança mínima, porque o glossário faz parte da tarefa (`7941db1`). Rodada de novo com o ponytail (`2026-11-13-domain-modeling-ponytail.md`): **67% contra 0%**, `accepted: true`.
+- Custo: uns US$ 3 de diagnóstico e US$ 3,54 nas duas comparações.
+
 ## Custo fixo (Step 3)
 
 `claude plugin details devorb@devorb`, instalado numa configuração temporária: **~655 tokens sempre ligados**, dentro do limite de 706, com as 19 skills cada uma dentro do teto do registro. O hook de início de sessão também injeta o texto da `using-devorb`, uns 850 tokens por sessão. O `details` não conta esse custo, que segue o mesmo modelo do Superpowers.
@@ -51,8 +57,7 @@ US$ 50,01 na rodada geral, US$ 1,57 na `improve-architecture`, US$ 10,95 na `evo
 
 ## Decisões do dono antes da 1.0.0
 
-1. Migrar mesmo com `accepted: false`, sabendo que nenhum caso piorou e que os bloqueios são a `evolving` (comparada à parte) e a `improve-architecture` com o ponytail.
+1. Migrar (subir para `1.0.0` e fazer o merge). Nenhum caso piorou contra o Superpowers, e `improve-architecture` e `domain-modeling` já passam com o ponytail. O que sobra: a `evolving` comparada à parte (`evolving-planned-only` em 33% e `evolving-rehearsal` em 0%, como já era na Task 4) e as lacunas sem braço que passe.
 2. Feature pequena com o ponytail ligado. Duas saídas:
    - aceitar que vá direto ao código;
    - fazer a `using-devorb` exigir o fluxo inteiro, o que vai contra a regra do ponytail.
-3. Seguir ou não com o diagnóstico de `improve-architecture` e `domain-modeling` com o ponytail.

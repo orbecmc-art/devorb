@@ -57,7 +57,7 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 
 **Onde parou (2026-11-12, fim do dia):** Task 21, Step 4. Tudo está commitado e enviado na branch `claude/devorb-subagentes-task4-43565b` (PR #9), versão `0.15.0`. O dono decide, com `fusion/results/final.md`:
 
-1. Subir para `1.0.0` e fazer o merge mesmo com `accepted: false`, ou diagnosticar antes `improve-architecture` (33% com o ponytail) e `domain-modeling` (não criou o glossário com o ponytail).
+1. Subir para `1.0.0` e fazer o merge. Em 2026-11-13, `improve-architecture` (grader corrigido) e `domain-modeling` (correção na `aligning`) passaram com o ponytail; sobra a `evolving` comparada à parte.
 2. Feature pequena com o ponytail: aceitar que vá direto ao código, ou fazer a `using-devorb` exigir o fluxo inteiro (no caso `flow-small-feature`, os dois braços pularam todas as skills).
 3. Pendências antigas: reservado da `tdd` que manda ir direto ao código; regras próprias em cada ledger; revisão humana dos 6 scripts da `implementing` e da linha de telemetria do `server.cjs` da `aligning`; arquivo de boas práticas da Anthropic fora; `security-audit` só leitura por padrão; pull request como rascunho na `finishing`.
 
