@@ -129,4 +129,12 @@ Nenhuma regra do dono nova nesta skill. As decisões acima vêm da spec e da Tas
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível completo, 3 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-native-app*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `native-app-emporio-pedidos` (Expo) | 100% | 67% (0,95) |
+| `native-app-orcamento-compose` (Kotlin) | 100% | 100% |
+| Reservado `native-app-comanda-mesas` | 67% (0,92) | 100% |
+
+- `accepted: true` nos dois. No reservado o DevOrb fica uma rodada atrás do braço sem plugin, dentro da tolerância de uma rodada. O caso Kotlin passa nos dois braços e fica como guarda contra piora.

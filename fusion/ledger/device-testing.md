@@ -80,7 +80,14 @@ Nenhuma. As regras de sem aparelho não declarar pronto e de listar o que ficou 
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve. Braço: sem plugin. `fusion/results/2026-11-13-device-testing*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `device-testing-expo-perfil` | 100% (3 rodadas) | 0% (0,25) |
+| `device-testing-kotlin-perfil` | 100% (3 rodadas) | 0% (0,25) |
+
+- Primeira comparação: caso Expo em 1 de 2, abaixo da barra. Uma rodada de diagnóstico mostrou o agente dando o teclado como conferido só pela leitura do código. A skill passou a dizer que ler o código acha defeitos mas nunca dispensa uma checagem de aparelho (`a5c91c6`). Depois: 100% nos dois casos, com 3 rodadas.
 
 ## Decisões por commit de fonte
 

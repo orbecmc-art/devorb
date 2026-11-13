@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.0
+
+- `mobile-release`, manual, Task M3: sobe a versão no campo certo, anuncia antes de subir SDK, `targetSdk` ou AGP, troca `QUERY_ALL_PACKAGES` por `<queries>` num config plugin e nunca roda EAS. Comparação: 100% contra 0%. `using-devorb` encaminha tela de app para `native-app` e `device-testing` e lista `mobile-release` entre as manuais.
+
+## 1.8.0
+
+- `device-testing`, Task M2: o par de `browser-testing` para apps. Checagens estáticas, testes (Robolectric em `src/test`), a volta no aparelho e, sem aparelho, a lista do que não foi conferido; nunca "pronto". Comparação: 100% contra 0% nos dois casos.
+
+## 1.7.0
+
+- `native-app`, Task M1: identifica Expo, Kotlin ou nenhum; projeto Expo gerado muda o nativo só por config plugin e instala com `npx expo install`; o idioma web não porta; quatro estados; ação principal fora do teclado; nunca `allowFontScaling={false}`; todo controle com rótulo e papel; no Kotlin, edge-to-edge, `rememberSaveable` e navegação por largura. Comparação: Expo 100% contra 67%, Kotlin empata, reservado 67% contra 100% (dentro da tolerância).
+
 ## 1.6.0
 
 - `diagram`, manual, Task D6: tabela quando ela responde; Mermaid em documentação no Git e SVG em peça publicada; até 9 nós, conectores ortogonais, `role="img"` e `<title>`. Comparação: 100% contra 0% sem plugin nos dois casos. `using-devorb` encaminha interface para as três skills automáticas do design e lista `diagram` entre as manuais.
