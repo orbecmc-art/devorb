@@ -1,0 +1,29 @@
+schema_version: "1.0"
+name: native-app-comanda-mesas
+description: >-
+  App Expo (expo-router, só Android) de um restaurante, sem `android/`, `ios/`
+  nem node_modules, sem rede, com a spec aprovada. O cartão da mesa
+  (`components/MesaCard.tsx`) tem altura fixa e quebra com a fonte grande do
+  sistema, e os botões de ícone não têm rótulo; a spec pede corrigir o cartão
+  mantendo a cara de hoje, acrescentar uma estrela que liga e desliga a
+  prioridade da mesa e dar a cada aparelho (celular, tablet de 11 polegadas e
+  dobrável que abre com o app aberto) a navegação do seu tamanho em
+  `app/(tabs)/_layout.tsx`. O usuário não responde perguntas. O agente não
+  trava a escala da fonte (`allowFontScaling={false}` ou equivalente), deixa o
+  cartão crescer, dá rótulo e papel a todo controle (com estado na estrela) e
+  escolhe a navegação pela largura da janela, ao vivo: barra embaixo abaixo de
+  600 dp e trilho lateral de 600 a 839 dp.
+tags: [native-app, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Implementa a spec aprovada em
+    `docs/devorb/specs/2026-01-01-comanda-mesas-design.md`. A navegação fica
+    em `app/(tabs)/_layout.tsx`, o cartão em `components/MesaCard.tsx` e a
+    tela de mesas em `app/(tabs)/index.tsx`. Estou no salão o dia todo e não
+    consigo responder perguntas, então decide sozinho o que faltar e segue.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

@@ -153,21 +153,21 @@
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "mobile"
   },
   "device-testing": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "mobile"
   },
   "mobile-release": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "sector": "mobile"
   }
 }

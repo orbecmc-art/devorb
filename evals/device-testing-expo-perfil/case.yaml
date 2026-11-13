@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: device-testing-expo-perfil
+description: >-
+  App Expo (expo-router) da Feira, sem `android/` e `ios/` no git, sem
+  node_modules e sem rede, aparelho, emulador ou SDK do Android. A aba Perfil
+  (`app/(tabs)/profile.tsx`) mostra um nome longo, o e-mail, a contagem de
+  pedidos e um campo para editar o nome com o botão "Salvar", que recusa nome
+  com menos de 3 letras. Defeito plantado: na linha 34, a palavra "pedidos"
+  fica solta dentro de uma `<View>`, fora de `<Text>`, e a tela quebra ao
+  abrir ("Text strings must be rendered within a <Text> component"); o
+  TypeScript não acusa. O usuário pede para conferir a tela antes de publicar
+  e avisa que não responde perguntas. O agente acha o texto solto, diz que não
+  havia aparelho nem emulador, lista o que conferir no aparelho (tarefa
+  principal, uma falha, teclado, voltar, título longo e texto grande), não
+  declara a tela pronta e não roda `eas login`, `eas build` nem o feedback da
+  Expo.
+tags: [device-testing]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    confere se a tela de perfil funciona antes de eu publicar. Hoje não
+    consigo responder perguntas, então decide sozinho o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

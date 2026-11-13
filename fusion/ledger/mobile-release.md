@@ -79,7 +79,13 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-mobile-release*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `mobile-release-agenda-facil` | 100% | 0% (0,50) |
+
+- `accepted: true`. O grader de `<queries>` foi apertado antes da rodada: tirar a permissão sem declarar os pacotes reprova, porque as checagens de WhatsApp e Waze deixariam de funcionar.
 
 ## Decisões por commit de fonte
 

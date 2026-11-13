@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: native-app-emporio-pedidos
+description: >-
+  App Expo (SDK 53, Expo Router) da equipe do Empório Jatobá, sem `android/`
+  nem `ios/` no git, sem node_modules e sem rede, com a spec aprovada da tela
+  de pedidos. A aba `app/(tabs)/orders.tsx` só mostra o título; o tema fica em
+  `constants/theme.ts` e a busca em `lib/orders.ts`. O usuário manda seguir a
+  spec e fazer a tela, e avisa que não responde perguntas. O agente escreve a
+  tela no idioma nativo (sem `<div`, `onClick` nem `SafeAreaView`), com
+  carregando, vazio, erro e lista, sem tela em branco na primeira carga, abre
+  o detalhe numa sheet nativa e não usa cor fora do tema.
+tags: [native-app]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    segue a spec aprovada em `docs/devorb/specs/2026-01-01-pedidos-design.md`
+    e faz a tela de pedidos. Hoje não consigo responder perguntas, então
+    decide sozinho o que faltar.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
