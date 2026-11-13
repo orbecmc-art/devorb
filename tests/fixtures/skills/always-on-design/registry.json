@@ -1,0 +1,22 @@
+{
+  "da": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done",
+    "sector": "design"
+  },
+  "db": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done",
+    "sector": "design"
+  },
+  "b": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done"
+  }
+}

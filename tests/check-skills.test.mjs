@@ -33,6 +33,11 @@ test('manual skill with flag is fine without Use when', () => assert.deepEqual(e
 test('frontmatter name must match folder', () =>
   assert.ok(errs('name').includes('a: frontmatter name differs from folder')));
 test('always-on cost cap', () => assert.ok(errs('always-on').includes('always-on: 800 tokens > 706')));
+test('design skills have their own always-on cap', () => {
+  assert.ok(errs('always-on-design').includes('always-on design: 300 tokens > 250'));
+  assert.ok(!errs('always-on-design').some((e) => e.startsWith('always-on: ')));
+  assert.ok(errs('always-on-mobile').includes('always-on mobile: 200 tokens > 150'));
+});
 test('done without folder', () => assert.ok(errs('missing-done').includes('a: status done but folder missing')));
 test('planned without folder is fine', () => assert.deepEqual(errs('planned-no-folder'), []));
 test('referencing a planned skill is valid', () => assert.deepEqual(errs('planned-ref'), []));
@@ -79,6 +84,9 @@ test('a registry entry without a numeric ceilingTokens is an error, not a skippe
     ['a: missing ceilingTokens in registry', 'b: missing ceilingTokens in registry', 'p: missing ceilingTokens in registry'],
   );
 });
+
+test('a sector without a cap is an error, not an uncapped sector', () =>
+  assert.deepEqual(checkTree({ a: { ...ENTRY, sector: 'games' } }, { a: SKILL('a') }), ['a: unknown sector "games"']));
 
 test('a stray file in skills/ is not a folder', () => {
   const root = mkdtempSync(join(tmpdir(), 'devorb-'));

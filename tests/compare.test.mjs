@@ -113,8 +113,10 @@ test('decide ignores cases without devorb (baseline-only runs)', () => {
   assert.deepEqual(d({ c: { sp: 1 }, e: { devorb: 1, sp: 1 } }).accepted, true);
 });
 
-test('parseArms accepts only the four arms', () => {
+test('parseArms accepts only the known arms', () => {
   assert.deepEqual(parseArms('devorb,none'), ['devorb', 'none']);
+  assert.deepEqual(parseArms('devorb,ui-ux-pro-max,none'), ['devorb', 'ui-ux-pro-max', 'none']);
+  assert.throws(() => parseArms('devorb,hallmark'), /hallmark/);
   assert.deepEqual(parseArms('superpowers,mattpocock-skills,none'), ['superpowers', 'mattpocock-skills', 'none']);
   assert.throws(() => parseArms('devorb,trailofbits-skills'), /trailofbits-skills/);
 });
@@ -208,6 +210,29 @@ test('prepareArm source: fetched at the sha, its own suites replaced by ours', a
   assert.deepEqual(readdirSync(join(dir, 'evals-reserved')), ['demo-hold']);
   for (const gone of ['evals', '.git']) assert.ok(!existsSync(join(dir, gone)), gone);
   await assert.rejects(prepareArm({ name: 'superpowers', ref: 'main' }, { root }), /superpowers/);
+});
+
+test('prepareArm ui-ux-pro-max: the whole repo at its pin, without stack/', async () => {
+  const { root } = makeRoot();
+  const uiux = repo({
+    '.claude-plugin/plugin.json': '{"name":"ui-ux-pro-max"}',
+    '.claude/skills/u/SKILL.md': 'u',
+    'stack/big.bin': 'heavy',
+    'src/ui-ux-pro-max/data/colors.csv': 'c',
+  });
+  const sourcesPath = join(root, 'fusion', 'sources.json');
+  const sources = JSON.parse(read(sourcesPath));
+  const entry = { name: 'ui-ux-pro-max', url: uiux.url, lastAbsorbed: uiux.sha, paths: ['src/ui-ux-pro-max/data/colors.csv'] };
+  sources.sources.push(entry);
+  writeFileSync(sourcesPath, JSON.stringify(sources));
+  assert.equal(await resolveRef(entry), uiux.sha, 'its pin, not the remote HEAD');
+  const dir = await prepareArm({ name: 'ui-ux-pro-max', ref: uiux.sha }, { root });
+  assert.equal(dir, join(root, '.arms', `ui-ux-pro-max@${uiux.sha}`));
+  assert.equal(read(join(dir, '.claude-plugin', 'plugin.json')), '{"name":"ui-ux-pro-max"}');
+  assert.equal(read(join(dir, '.claude', 'skills', 'u', 'SKILL.md')), 'u');
+  assert.equal(read(join(dir, 'src', 'ui-ux-pro-max', 'data', 'colors.csv')), 'c');
+  assert.deepEqual(readdirSync(join(dir, 'evals')).sort(), ['demo-one', 'other-two']);
+  for (const gone of ['stack', '.git']) assert.ok(!existsSync(join(dir, gone)), gone);
 });
 
 test('prepareArm with ponytail copies it inside the arm and points every case at both plugins', async () => {
