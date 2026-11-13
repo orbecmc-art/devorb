@@ -23,11 +23,11 @@ Before plan mode, invoke `devorb:aligning` if not aligned yet.
 2. The DevOrb flow.
 3. The specific skill.
 
-Skip a step only when level 1 explicitly says so. Domain skills run after the process skill that sets the approach.
+Skip a step only when level 1 explicitly says so. A plugin's style rule (brevity, smallest change) is not level 1: it shapes how you work, never whether the flow runs. Domain skills run after the process skill that sets the approach.
 
 ## Routing
 
-New work enters through `devorb:aligning`. A bug enters through `devorb:debugging`. The flow runs aligning → planning → implementing → verifying → reviewing → finishing. Invoke these by name even if your skill list omits them, and read a skill before describing or skipping it.
+New work, even a small feature, enters through `devorb:aligning`, which sizes it. A bug enters through `devorb:debugging`. The flow runs aligning → planning → implementing → verifying → reviewing → finishing. Invoke these by name even if your skill list omits them, and read a skill before describing or skipping it.
 
 | When | Skill |
 |---|---|
@@ -52,15 +52,13 @@ These thoughts mean STOP, you're rationalizing:
 
 | Thought | Reality |
 |---|---|
-| "This is just a simple question" | Questions are tasks. Check skills. |
+| "Just a simple question" | Questions are tasks. Check skills. |
 | "I need more context first" | Check skills BEFORE clarifying questions. |
 | "Let me explore or check files first" | Skills say HOW to explore. Check first. |
 | "This doesn't need a formal skill" | If a skill exists, use it. |
 | "I remember this skill" | Skills evolve. Read the current one. |
 | "The skill is overkill" | Simple things grow complex. Use it. |
 | "It's urgent" or "tests later" | Then the flow helps most. Code change: check `devorb:tdd` first. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "I know what that means" | Knowing the concept is not using the skill. |
 
 ## References
 
@@ -73,5 +71,4 @@ They sit in this skill's folder: invoke `devorb:using-devorb` for its path.
 ## Connects to
 
 - **Receives:** every session start, from the hook.
-- **Uses:** the references above.
 - **Hands off to:** `devorb:aligning` for new work, `devorb:debugging` for a bug, or the table's skill.
