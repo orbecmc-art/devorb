@@ -6,9 +6,9 @@
   "ponytailRef": null,
   "ablation": "none",
   "summary": {
-    "score": 1,
-    "passRate": 1,
-    "costUsd": 0.5260856,
+    "score": 0.6666666666666666,
+    "passRate": 0.6666666666666666,
+    "costUsd": 0.5457668,
     "runs": 3,
     "errors": 0,
     "maxTurns": 0
