@@ -37,6 +37,7 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 | While building: test first | `devorb:tdd` |
 | Anything fails or surprises you | `devorb:debugging` |
 | Before claiming it works | `devorb:verifying` |
+| Building or changing a UI | `devorb:visual-direction` |
 | Changed a web UI | `devorb:browser-testing` |
 | Asking for or receiving a review | `devorb:reviewing` |
 | Integrating the branch | `devorb:finishing` |
@@ -56,7 +57,6 @@ These thoughts mean STOP, you're rationalizing:
 | "Let me explore or check files first" | Skills say HOW to explore. Check first. |
 | "This doesn't need a formal skill" | If a skill exists, use it. |
 | "I remember this skill" | Skills evolve. Read the current one. |
-| "The skill is overkill" | Simple things grow complex. Use it. |
 | "It's urgent" or "tests later" | Then the flow helps most. Code change: check `devorb:tdd` first. |
 
 ## References

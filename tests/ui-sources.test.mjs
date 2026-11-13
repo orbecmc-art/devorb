@@ -2,8 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-// Task D2 moves this file into skills/visual-direction/references/ and updates this path.
-const PATH = '../fusion/ui-sources.json';
+const PATH = '../skills/visual-direction/references/ui-sources.json';
 const data = JSON.parse(readFileSync(new URL(PATH, import.meta.url), 'utf8'));
 
 const KINDS = ['foundation', 'specialist', 'standout', 'screens', 'gallery', 'systems'];
