@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: using-devorb-mobile-triggers-native
+description: Pedido curto para fazer a tela de login num app Expo com spec aprovada; a skill de app nativo precisa disparar antes de qualquer código.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    a spec da tela de login está aprovada em
+    `docs/devorb/specs/2026-01-01-clube-login-design.md`, faz a tela de login do
+    app
+  max_turns: 15
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

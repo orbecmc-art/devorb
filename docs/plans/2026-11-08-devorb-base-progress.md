@@ -58,7 +58,8 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | D2. `visual-direction` | Feita: Clínica Serena 100% contra 0%, reservado 100% contra 33%; páginas do portão em `fusion/results/d2-portao/` | `1.2.0` |
 | D3 a D6. `design-system`, `motion`, `ui-review`, `diagram` | Feitas: design-system e ui-review e diagram 100% contra 0%; motion 4 de 5 contra 0% | `1.3.0` a `1.6.0` |
 | M1 a M3. `native-app`, `device-testing`, `mobile-release` | Feitas: native-app Expo 100% contra 67%; device-testing e mobile-release 100% contra 0% | `1.7.0` a `1.9.0` |
-| D7, D8, M4 e M5 | Em andamento | |
+| D7 e M4. Ligar os setores ao fluxo | Feitas: ligações, referências nativas e quatro casos de disparo. Skills tocadas comparadas de novo uma por uma, sem piora (a comparação geral pedia subir o teto para US$ 150, e o controle de permissões bloqueou) | `1.10.0` |
+| D8 e M5. Medir e uso real (portão do dono) | Step 1 feito: base 439 de 706, design 167 de 250, mobile 71 de 150. Falta o dono usar os setores em trabalho real e decidir o que desinstala (`taste-skill`, `frontend-design`, `ui-ux-pro-max`) | |
 
 **Decisões do dono (2026-11-13):** seguir o recomendado em tudo, lançar, mergear e seguir para design e mobile. Ficou assim:
 

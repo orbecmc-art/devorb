@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-design-triggers-visual
+description: Pedido curto para começar pela parte visual da landing de uma loja, num site estático com spec aprovada; a skill de direção visual precisa disparar antes de qualquer CSS.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    a spec da landing da minha loja está aprovada, começa pela parte visual
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

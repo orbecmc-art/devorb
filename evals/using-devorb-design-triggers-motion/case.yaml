@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-design-triggers-motion
+description: Pedido curto para animar a abertura de um modal descrita numa spec aprovada, num projeto React pequeno; a skill de movimento precisa disparar antes de qualquer animação.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    anima a abertura do modal que a spec descreve
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

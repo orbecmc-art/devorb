@@ -104,6 +104,7 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
   - `read.md`: a lista de tradições editoriais, a moldura, a coluna, o shell, "pull it back to the frame" e o material real (Impeccable).
   - `copy.md`: "with no facts, a model fills a template... the fix is facts and decisions" (taste-skill); os campos da folha de fatos; "an empty field stays empty"; a tabela de orçamento e seus exemplos; "a verb plus what the visitor gets"; o teste do rival, ler em voz alta como o cliente e a tique que substitui a removida (taste-skill); o teste de apagar o eyebrow, o link sem URL e o formulário sem endpoint (Hallmark). Um exemplo da folha de fatos citava uma clínica em Goiânia, perto demais do caso realista, e virou uma padaria.
   - `floor.md`: tokens, contêiner em 1920, foco, rótulos, ponto médio e seta (Hallmark); a ordem de mudança dos looks (Hallmark gate 65); a lista dos looks gastos (`frontend-design`), refeita como tabela própria.
+- 2026-11-13, Task M4 do plano mobile: o contrato do passo 6 ganha a linha **Platform**, só em tela de app: o idioma de cada plataforma (diretrizes da Apple no iOS, Material 3 no Android) ou o tratamento neutro escolhido, com o motivo. Vem da Fronteira de design da seção "Setor mobile" da spec e de `native-slop` (16) da Expo (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`, MIT, só ideia). `SKILL.md` foi de 8.390 para 8.544 bytes.
 
 ## Resultados
 

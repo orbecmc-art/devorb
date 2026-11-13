@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.10.0
+
+- Tasks D7 e M4: os setores entram no fluxo. A `aligning` passa tarefas com interface pela `visual-direction`; o `planning` cita os tokens do `DESIGN.md`; o `implementing` chama `motion` quando algo se move e `native-app` em app; o `verifying` roda `ui-review` depois de `browser-testing` (ou `device-testing` em app); o `reviewing` deixa a estética para a `ui-review`; no `prototype`, cada variante declara um eixo. `design-system`, `motion` e `ui-review` ganham `references/native.md`, e o contrato da `visual-direction` ganha a linha de plataforma.
+- Quatro casos de disparo (design e mobile). Skills tocadas comparadas de novo, uma por uma (o teto de US$ 20 por braço segue): nenhuma piora. `using-devorb` passa nos sete casos de roteamento, contra 0% a 100% no Superpowers.
+- Tasks D8 e M5, Step 1: custo fixo por setor medido. Base 439 de 706 tokens, design 167 de 250, mobile 71 de 150. O `plugin details` soma 962 porque conta também as descrições das manuais.
+
 ## 1.9.0
 
 - `mobile-release`, manual, Task M3: sobe a versão no campo certo, anuncia antes de subir SDK, `targetSdk` ou AGP, troca `QUERY_ALL_PACKAGES` por `<queries>` num config plugin e nunca roda EAS. Comparação: 100% contra 0%. `using-devorb` encaminha tela de app para `native-app` e `device-testing` e lista `mobile-release` entre as manuais.

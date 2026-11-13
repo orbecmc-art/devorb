@@ -89,6 +89,7 @@ As candidatas da spec **não entraram**: foco com `outline` por `forced-colors`,
 - 2026-11-13, conferência frase a frase contra cada fonte, depois da primeira escrita. Reescritas por estarem perto demais:
   - `SKILL.md`: "three or more uses with the same intent" e "look alike but do different jobs" (Impeccable `extract`); "build each step as size, weight, leading and tracking together" (Emil, hierarquia como conjunto); "focus is drawn with `outline`" virou "anel fora da borda", para não antecipar a regra candidata.
   - `design-md.md`: o exemplo de frontmatter fazia uma cor apontar para outra, o que o formato proíbe; refeito com papéis semânticos e o primitivo na prosa.
+- 2026-11-13, Task M4 do plano mobile: `references/native.md` novo, só ideias, palavras próprias. Cor semântica da plataforma em superfície, texto e separador; marca em pares claro e escuro; cor dinâmica só a partir da API 31, com os esquemas do projeto como reserva, nunca no iOS; cor de plataforma não se interpola; nunca `allowFontScaling={false}`, com `maxFontSizeMultiplier` só como último recurso registrado. Fontes: Expo `expo-native-ui/SKILL.md` e `expo-design-system/SKILL.md` (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`), Material 3 `skills/material-3/references/theming-and-dynamic-color.md` (`material-3-skill@14385f2bf3804d8779f8b4db2604211f1e70b4c1`), as duas MIT, `textReuse: false`. `SKILL.md` ganha uma linha que aponta para a referência (6.872 para 6.958 bytes).
 
 ## Resultados
 

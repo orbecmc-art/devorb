@@ -81,6 +81,7 @@ Add `## Direção visual` to the spec you received, in the spec's language, and 
 - **Sections or regions,** in order, from the visitor's job, and how the page ends.
 - **Material:** given, to show, missing; where each gap shows.
 - **Copy:** the primary action's exact wording and the voice in one line.
+- **Platform** (app screens only): each platform's own idiom (Apple's guidelines on iOS, Material 3 on Android), or the neutral treatment chosen and why.
 - **States** for every feature that loads data, submits or depends on access: what the user sees when loading, empty, failed, succeeded, partly loaded and not allowed, what triggers it and the next action. A state that does not apply says why.
 - **Floor:** `references/floor.md` holds; list any reflex broken, with this page's reason.
 

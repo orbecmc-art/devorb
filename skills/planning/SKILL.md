@@ -39,6 +39,7 @@ A step is done when the implementer can write exactly one reasonable thing from 
 
 - **Test step:** the test's name and its assertions, as code, with the spec's exact values. Point to a similar test in the codebase when there is one.
 - **Code step:** the exact signature (name, parameters, return type), its file, and the values the spec pins. The implementer writes the body. Show one only for an algorithm the signature and tests don't determine, or for exact copy the spec fixes.
+- **UI step:** when the work touches the interface, the step names the `DESIGN.md` tokens it uses, by name, never their raw values.
 - **Verification step:** the command, and the output that means it passed.
 - **Another task's work:** its Interfaces block says what to use. Don't repeat its code.
 
@@ -73,6 +74,6 @@ Give the user the plan's path and ask them to review it: does it capture what th
 
 ## Connects to
 
-- **Receives:** the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md` from `devorb:aligning`, or requirements with nothing open.
-- **Uses:** `GLOSSARY.md` and `docs/adr/`, kept by `devorb:domain-modeling`; `devorb:codebase-design` when an interface's shape is in question; `references/task-template.md`.
+- **Receives:** the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md` from `devorb:aligning` (through `devorb:visual-direction` and `devorb:design-system` when the task has an interface), or requirements with nothing open.
+- **Uses:** `GLOSSARY.md` and `docs/adr/`, kept by `devorb:domain-modeling`; `devorb:codebase-design` when an interface's shape is in question; the tokens of `DESIGN.md`, by name, when the work touches UI; `references/task-template.md`.
 - **Hands off to:** `devorb:implementing`, with the reviewed `docs/devorb/plans/YYYY-MM-DD-<topic>.md`.

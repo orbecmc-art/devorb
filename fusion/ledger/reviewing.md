@@ -111,6 +111,7 @@ Regras próprias só saem com decisão explícita do dono.
   - **Pacotes:** a checagem só consulta o registro público nomeado, nunca instala nem roda.
   - **Risco de cópia:** reescritas a frase do valor novo (sem a lista enum, status, tipo na ordem do gstack), a da falha aberta, a de checagem movida, os vereditos "além da spec" e "indecidível", o fecho de severidade do eixo Spec (cortado para duas frases, sem a frase sobre a força da redação) e a linha "Writing it out exposes most bad claims".
   - **Menores:** o nome de guarda cita exemplos (sanitizador, validador, checagem de acesso); "Needs checking" só aceita pista presa a uma linha citada; o limite do laço aponta para `fix-loop.md` de `implementing`.
+- 2026-11-13, Task D7 do plano de design: ligação ao setor de design. A frase que já mandava o diff com interface para `devorb:ui-review` agora diz que a aparência fica com aquela skill e que nenhum revisor daqui julga estética; `Connects to` acompanha. `SKILL.md` foi de 7.502 para 7.625 bytes.
 
 ## Resultados
 

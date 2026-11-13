@@ -9,6 +9,8 @@ This skill decides whether anything moves and how: tool, properties, curve, dura
 
 Three modes: **build** (default), **audit** and **remove** (both at the end). In build, walk steps 1 to 7 in order for each thing that moves; step 1 can end the work.
 
+For an app screen, read `references/native.md`.
+
 ## 1. Should it move?
 
 | How often the user meets it | Decision |
@@ -105,6 +107,7 @@ Only subtract. Keep motion that smooths over an abrupt jump. For each removal, a
 | `references/scroll.md` | Scroll-linked, pinned or scrubbed scenes, reveals, horizontal rails |
 | `references/shaders.md` | An animated shader or gradient background |
 | `references/three.md` | 3D, three.js or React Three Fiber |
+| `references/native.md` | An app screen (Expo or Android) |
 
 After the code, say in a few lines: the step 1 row and the purpose, the tool, properties, curve and duration, anything refused and why, and what still needs a feel check on a real phone.
 

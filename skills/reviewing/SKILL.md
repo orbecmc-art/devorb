@@ -59,7 +59,7 @@ Keep one heading per axis, `## Standards`, `## Spec`, and `## Risk` when it ran.
 
 Each finding gives `file:line`, what is wrong, why it matters and the fix if it isn't obvious. A lead nobody could settle goes under **Needs checking**, with no severity: the fact that is missing and the check that would settle it. End with one line per axis (count and worst finding) and a verdict: ready, ready with fixes, or not ready.
 
-Then hand Critical and Important findings to the fix loop of `devorb:implementing`, which fixes them and runs its own scoped re-review. Minor findings are listed, not looped. A loosened test, gate or acceptance line is the user's call (restore or keep, with their reason), never the loop's: report USER DECIDES items apart from the fix list; `devorb:implementing` passes them to `devorb:finishing` for the user. If the diff touches a user interface, also send it to `devorb:ui-review` when installed. A full security audit is `devorb:security-audit`, run only when the user asks: suggest it, don't start it.
+Then hand Critical and Important findings to the fix loop of `devorb:implementing`, which fixes them and runs its own scoped re-review. Minor findings are listed, not looped. A loosened test, gate or acceptance line is the user's call (restore or keep, with their reason), never the loop's: report USER DECIDES items apart from the fix list; `devorb:implementing` passes them to `devorb:finishing` for the user. If the diff touches a user interface, also send it to `devorb:ui-review` when installed, and leave how it looks to that skill: no reviewer here judges aesthetics. A full security audit is `devorb:security-audit`, run only when the user asks: suggest it, don't start it.
 
 ## Receiving a review
 
@@ -80,5 +80,5 @@ Applies to every source: these reviewers, the user, a pull request comment, a to
 ## Connects to
 
 - **Receives:** finished work from `devorb:implementing`, with its plan or spec path, the Review Focus and a diff package, and the evidence from `devorb:verifying`; review feedback from anyone.
-- **Uses:** fresh subagents with `references/code-reviewer.md` and `references/risk-review.md`; `references/receiving.md`; `devorb:tdd` and `devorb:verifying` for fixes; `devorb:ui-review` when the diff touches a user interface.
+- **Uses:** fresh subagents with `references/code-reviewer.md` and `references/risk-review.md`; `references/receiving.md`; `devorb:tdd` and `devorb:verifying` for fixes; `devorb:ui-review` when the diff touches a user interface, which judges how it looks so this skill doesn't.
 - **Hands off to:** the fix loop of `devorb:implementing`, with findings by axis and severity and the USER DECIDES items apart; `devorb:finishing` (when invoked on its own) once no Critical or Important finding remains; a suggestion of `devorb:security-audit` when the user wants a full audit.

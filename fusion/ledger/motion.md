@@ -113,6 +113,7 @@ Nenhuma. As candidatas da spec ("O foco usa `outline`", e `animation-timeline` e
   - `transitions.md`: "never on a plain fade" (transitions.dev) e o `scale(0.96)` do exemplo, que é um valor do transitions.dev, trocado por um valor meu.
   - `three.md`: "check the installed React major" (genjutsu `threejs-r3f`).
   - O que ainda casa são nomes de propriedade e de API, listas técnicas (`width`, `height`, `top`, `left`) e a media query de hover.
+- 2026-11-13, Task M4 do plano mobile: `references/native.md` novo, só ideias, palavras próprias. Troca de aba não desliza; navegação segue a plataforma; Reanimated, não `Animated`, com valores compartilhados e sem `setState` por quadro; mola quando o dedo está no elemento; háptico no mesmo quadro da animação, nunca como único retorno; em Compose, animar dentro do lambda `graphicsLayer {}`. Fontes: Emil `skills/animate-expo/SKILL.md` (`emil-skills@715c1807e08c497cfd1dc4feb450a2a3300ef2a9`), genjutsu `skills/_jutsu/compose-motion/references/recomposition-and-anim.md` (`genjutsu@5e00595ab7495d6bb966639f2f5ff1dbee364389`) e `native-slop` (14) da Expo (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`), todas MIT, `textReuse: false`. `SKILL.md` ganha uma linha e uma linha da tabela de referências (8.833 para 8.943 bytes).
 
 ## Resultados
 

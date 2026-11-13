@@ -84,6 +84,7 @@ Regras próprias só saem com decisão explícita do dono.
   - **Relatos de agentes:** o diff a ler é `git diff <base>...HEAD` mais `git status`; `git log` mostra mensagens, que são alegação, não mudança.
   - **Ambiente implantado:** checagem que altera dados exige permissão explícita e credencial de teste; afirmação sobre produção que só uma alteração de dados provaria fica como **not done**, com o motivo; logs citados ocultam segredos e dados pessoais. O parágrafo foi reordenado em lista própria (alcance, segurança, linha do relatório, logs), para não seguir a ordem das frases do ECC.
   - **Menores:** "tests pass" exige a suíte inteira, e a lista de peças faltando ("database, key or binary") virou exemplos próprios (contêiner, conta, ferramenta de linha de comando).
+- 2026-11-13, Task D7 do plano de design e Task M4 do plano mobile: ligação aos setores de design e mobile. Mudança de UI vai para `devorb:ui-review` depois de `devorb:browser-testing`; em app, `devorb:device-testing` roda no lugar de `browser-testing`, antes de `ui-review`. Uma frase depois da tabela e a linha `Uses`. Nenhuma regra muda. `SKILL.md` foi de 7.247 para 7.525 bytes.
 
 ## Resultados
 
