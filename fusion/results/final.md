@@ -47,6 +47,17 @@ Lacunas, em que nenhum braço passa:
 - **`domain-modeling`:** falha real. Com o ponytail, o agente chamou a `aligning`, escolheu o sentido certo de "aluno ativo" e explicou a escolha, mas não chamou a `domain-modeling` e não escreveu o `GLOSSARY.md` (0 de 3, com o trace guardado). A `aligning` passou a chamar a `domain-modeling` antes de construir, mesmo em tarefa pequena ou sob regra de mudança mínima, porque o glossário faz parte da tarefa (`7941db1`). Rodada de novo com o ponytail (`2026-11-13-domain-modeling-ponytail.md`): **67% contra 0%**, `accepted: true`.
 - Custo: uns US$ 3 de diagnóstico e US$ 3,54 nas duas comparações.
 
+## Fluxo inteiro e feature pequena (2026-11-13)
+
+Decisão do dono: seguir o recomendado. Feature pequena também passa pelo fluxo.
+
+- Com o ponytail, o caso `flow-small-feature` ia direto ao código. Duas causas, corrigidas na `using-devorb`:
+  - regra de estilo de plugin (brevidade, mudança mínima) não é instrução do usuário: muda como trabalhar, nunca se o fluxo roda (`9668fd5`);
+  - "sem perguntas" tira as perguntas, não os passos (`5ddb741`).
+- Os casos de roteamento da `using-devorb` continuam em 100% com o ponytail (`2026-11-13-using-devorb-ponytail.md`).
+- **Com o ponytail:** o fluxo passa a rodar `aligning`, `planning` e `implementing` em ordem (0,67), mas não chega à `finishing`, porque o `git` não roda no sandbox quando o ponytail entra pela lista `plugins:` do caso. É a mesma limitação que derruba a `evolving` com o ponytail. Limite da montagem do teste, não da skill.
+- **Sem o ponytail:** 2 de 2 rodadas com o trace guardado passaram nos três graders, com `aligning`, `planning`, `implementing` (com `tdd` e revisão por task), `reviewing` e `finishing`. Uma rodada isolada pelo comparador (`2026-11-13-flow.md`) deu 0. Somando, são 2 de 3.
+
 ## Custo fixo (Step 3)
 
 `claude plugin details devorb@devorb`, instalado numa configuração temporária: **~655 tokens sempre ligados**, dentro do limite de 706, com as 19 skills cada uma dentro do teto do registro. O hook de início de sessão também injeta o texto da `using-devorb`, uns 850 tokens por sessão. O `details` não conta esse custo, que segue o mesmo modelo do Superpowers.
@@ -56,6 +67,8 @@ Lacunas, em que nenhum braço passa:
 US$ 50,01 na rodada geral, US$ 1,57 na `improve-architecture`, US$ 10,95 na `evolving`, US$ 0,53 no fluxo e uns US$ 0,30 no diagnóstico. Total: cerca de US$ 63.
 
 ## Decisões do dono antes da 1.0.0
+
+Tomadas em 2026-11-13: seguir o recomendado em todas, lançar a `1.0.0` e mergear. As de antes ficam abaixo, como registro.
 
 1. Migrar (subir para `1.0.0` e fazer o merge). Nenhum caso piorou contra o Superpowers, e `improve-architecture` e `domain-modeling` já passam com o ponytail. O que sobra: a `evolving` comparada à parte (`evolving-planned-only` em 33% e `evolving-rehearsal` em 0%, como já era na Task 4) e as lacunas sem braço que passe.
 2. Feature pequena com o ponytail ligado. Duas saídas:

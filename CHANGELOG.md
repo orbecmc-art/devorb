@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- Lançamento: as 19 skills da base comparadas contra o Superpowers, com o ponytail ligado, sem nenhum caso pior (`fusion/results/final.md`).
+- `using-devorb`: feature pequena também entra pela `aligning`, que a dimensiona; regra de estilo de plugin muda como trabalhar, nunca se o fluxo roda; "sem perguntas" tira as perguntas, não os passos. Duas linhas repetidas das bandeiras vermelhas saíram para caber no limite de 3.500 bytes.
+- Decisões do dono registradas no progresso, incluindo a revisão dos scripts copiados do Superpowers.
+
 ## 0.15.1
 
 - Task 21, comparação final com o ponytail ligado: `aligning` chama `domain-modeling` mesmo em tarefa pequena ou sob regra de mudança mínima (67% contra 0% no Superpowers), e `improve-architecture` trata o relatório HTML como a entrega mesmo com pedido de brevidade (100% contra 0%). O grader do HTML aceita o caminho numa variável. Caso novo `flow-small-feature`. Detalhes em `fusion/results/final.md`.

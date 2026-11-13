@@ -52,8 +52,18 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 15. `finishing` | Feita: DevOrb 100%, Superpowers 100%, Matt 0% | `0.13.0` |
 | 16. `writing-skills` | Feita: DevOrb 100%, Superpowers 50% | `0.14.0` |
 | 23. `browser-testing` | Feita fora do sandbox (`--outside-sandbox`), por decisão do dono: DevOrb 100% contra 0% sem plugin | `0.15.0` |
-| 21. Comparação final | Steps 1 a 3 feitos; parada no Step 4, esperando o dono. `accepted: false`, sem nenhuma piora. Ver `fusion/results/final.md` | |
+| 21. Comparação final | Feita. Nenhum caso pior contra o Superpowers com o ponytail; o dono aprovou o lançamento em 2026-11-13. Ver `fusion/results/final.md` | `1.0.0` |
 | 22, D1 a D8 e M1 a M5 | Não começaram | |
+
+**Decisões do dono (2026-11-13):** seguir o recomendado em tudo, lançar, mergear e seguir para design e mobile. Ficou assim:
+
+- Reservado da `tdd` que manda ir direto ao código: fica como está; a instrução direta do usuário vale e é relatada.
+- Regras próprias dos ledgers: aceitas todas.
+- Scripts da `implementing` e `server.cjs` da `aligning`: revisados por diff contra o Superpowers no pino `22f0b46`. Só mudaram caminhos (`.superpowers/` para `.devorb/`), comentários e o caminho dos scripts irmãos; no `server.cjs`, só a telemetria forçada para desligada. O servidor escuta em `127.0.0.1` por padrão, com token e checagem de origem. Aprovados.
+- Arquivo de boas práticas da Anthropic: fica fora.
+- `security-audit` só leitura por padrão e pull request como rascunho na `finishing`: mantidos.
+- Feature pequena com o ponytail: segue o fluxo. A `using-devorb` diz que regra de estilo de plugin muda como trabalhar, nunca se o fluxo roda, e que feature pequena entra pela `aligning`, que a dimensiona.
+- Task 20 (agendamento mensal): recomendação mantida, rodar `/devorb:evolving` à mão até o dono escolher como proteger a `main`.
 
 **Onde parou (2026-11-12, fim do dia):** Task 21, Step 4. Tudo está commitado e enviado na branch `claude/devorb-subagentes-task4-43565b` (PR #9), versão `0.15.0`. O dono decide, com `fusion/results/final.md`:
 
