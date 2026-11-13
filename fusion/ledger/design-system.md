@@ -92,7 +92,16 @@ As candidatas da spec **não entraram**: foco com `outline` por `forced-colors`,
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve, 2 rodadas. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`). `fusion/results/2026-11-13-design-system*.md`.
+
+| Caso | DevOrb | Sem plugin | UI UX Pro Max |
+|---|---|---|---|
+| `design-system-cafe-moenda` | 100% | 0% (0,57) | 0% (0,71) |
+| `design-system-padaria-pedidos` | 100% | 0% (0,60) | 0% (0,60) |
+| `design-system-shadcn-padrao` | 100% | 100% | 100% |
+
+- `accepted: true`. O caso do tema padrão do shadcn passa em todos os braços e fica como guarda contra piora.
+- O grader de `DESIGN.md` intacto não carregava: o padrão começava com a linha `---` do próprio arquivo, que o leitor de cabeçalho tomou como fim do cabeçalho. Trocado por `-{3}`.
 
 ## Decisões por commit de fonte
 

@@ -63,7 +63,14 @@ Regras próprias só saem com decisão explícita do dono. Nenhuma regra própri
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-diagram*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `diagram-fluxo-login` | 100% | 0% (0,40) |
+| `diagram-planos-tabela` | 100% | 0% |
+
+- `accepted: true`.
 
 ## Decisões por commit de fonte
 

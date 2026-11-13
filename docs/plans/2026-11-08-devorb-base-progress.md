@@ -56,7 +56,8 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 22. Instalação e troca | Mac feito em 2026-11-13 (DevOrb 1.0.0 instalado, Superpowers desligado). Falta o PC com Windows e, quando o dono quiser, desinstalar o Superpowers | |
 | D1. Ferramentas do setor | Feita: tetos por setor, braço `ui-ux-pro-max`, sandbox lê sites | `1.1.0` |
 | D2. `visual-direction` | Feita: Clínica Serena 100% contra 0%, reservado 100% contra 33%; páginas do portão em `fusion/results/d2-portao/` | `1.2.0` |
-| D3 a D8 e M1 a M5 | Não começaram | |
+| D3 a D6. `design-system`, `motion`, `ui-review`, `diagram` | Feitas: design-system e ui-review e diagram 100% contra 0%; motion 4 de 5 contra 0% | `1.3.0` a `1.6.0` |
+| D7, D8 e M1 a M5 | Em andamento | |
 
 **Decisões do dono (2026-11-13):** seguir o recomendado em tudo, lançar, mergear e seguir para design e mobile. Ficou assim:
 

@@ -84,7 +84,13 @@ Todos pela Task D5:
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `ui-review-equipes` | 100% | 0% (0,38) |
+
+- `accepted: true`. Sem navegador no sandbox, a revisão diz "só código" e acha os três problemas plantados, o campo de 14 px e o `user-scalable=no`, cala o desvio autorizado e não muda os arquivos.
 
 ## Decisões por commit de fonte
 

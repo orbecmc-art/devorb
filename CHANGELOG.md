@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.6.0
+
+- `diagram`, manual, Task D6: tabela quando ela responde; Mermaid em documentação no Git e SVG em peça publicada; até 9 nós, conectores ortogonais, `role="img"` e `<title>`. Comparação: 100% contra 0% sem plugin nos dois casos. `using-devorb` encaminha interface para as três skills automáticas do design e lista `diagram` entre as manuais.
+
+## 1.5.0
+
+- `ui-review`, Task D5: nomeia o modo de cada seção, mede contra `DESIGN.md` e o contrato, o que eles autorizam não vira achado, achados só de P0 a P3, relata e para, e sem navegador diz "só código". Comparação: 100% contra 0% sem plugin.
+
+## 1.4.0
+
+- `motion`, Task D4: anima? → propósito → ferramenta (o que o projeto tem, depois CSS, Motion, GSAP) → propriedade → curva → interrupção → reduced motion, com a tabela do que nunca entregar e os modos de auditar e remover. Comparação: 4 de 5 rodadas contra 0% sem plugin.
+
+## 1.3.0
+
+- `design-system`, Task D3: tokens primitivos e semânticos a partir do contrato de direção, `DESIGN.md` no formato aberto e nunca sobrescrito sem pedido, cores em pares com contraste calculado por um script próprio nos dois temas, `@theme` no Tailwind 4, e o tema padrão do shadcn trocado pelos tokens do projeto (regra do dono). Comparação: 100% contra 0% sem plugin e no UI UX Pro Max nos dois casos que separam; empate no do shadcn.
+
 ## 1.2.0
 
 - `visual-direction`, Task D2 do setor de design: o modo vem do que o visitante quer fazer (Persuade, Operate, Read, Experience), três níveis de invenção, material antes da forma (o que falta vira lacuna visível, nada inventado), as fontes de referência fixas do dono no corpo da skill, escolha de biblioteca por tarefa, direção tirada do mundo do público com teste do espelho, e um contrato `## Direção visual` gravado na spec. Ideias de Impeccable, Hallmark, taste-skill, frontend-design, Emil, ECC, gstack, genjutsu e Monich, escritas com palavras próprias.

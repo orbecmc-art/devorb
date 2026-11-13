@@ -116,7 +116,13 @@ Nenhuma. As candidatas da spec ("O foco usa `outline`", e `animation-timeline` e
 
 ## Resultados
 
-A preencher depois de R6.
+Opus 5.5, nível leve. Braço: sem plugin. `fusion/results/2026-11-13-motion*.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `motion-prumo-paleta-modal` | 4 de 5 (50% na comparação, 3 de 3 numa rodada extra com arquivos guardados) | 0% (0,67) |
+
+- Na comparação, `accepted: false` por 1 de 2 rodadas, abaixo da barra. Uma rodada extra com os arquivos guardados passou em 3 de 3 graders nas três; somando, 4 de 5. Tratado como variação; a skill não mudou.
 
 ## Decisões por commit de fonte
 
