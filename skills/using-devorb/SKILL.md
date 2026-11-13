@@ -23,7 +23,7 @@ Before plan mode, invoke `devorb:aligning` if not aligned yet.
 2. The DevOrb flow.
 3. The specific skill.
 
-Skip a step only when level 1 explicitly says so. A plugin's style rule (brevity, smallest change) is not level 1: it shapes how you work, never whether the flow runs. Domain skills run after the process skill that sets the approach.
+Skip a step only when level 1 explicitly says so. "No questions" or "go ahead" drops questions, not steps: decide alone and record assumptions. A plugin's style rule (brevity, smallest change) shapes how you work, never whether the flow runs. Domain skills run after the process skill that sets the approach.
 
 ## Routing
 
@@ -53,7 +53,6 @@ These thoughts mean STOP, you're rationalizing:
 | Thought | Reality |
 |---|---|
 | "Just a simple question" | Questions are tasks. Check skills. |
-| "I need more context first" | Check skills BEFORE clarifying questions. |
 | "Let me explore or check files first" | Skills say HOW to explore. Check first. |
 | "This doesn't need a formal skill" | If a skill exists, use it. |
 | "I remember this skill" | Skills evolve. Read the current one. |
