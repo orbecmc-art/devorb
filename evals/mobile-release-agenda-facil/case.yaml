@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: mobile-release-agenda-facil
+description: >-
+  App Expo gerado (SDK 52, sem `android/` nem `ios/` no git, sem node_modules
+  e sem rede) do Agenda Fácil, já publicado na Play Store na 1.1.0. O
+  `app.json` tem `expo.version` "1.1.0", `expo.android.versionCode` 7 e
+  `android.permission.QUERY_ALL_PACKAGES` em `expo.android.permissions`, que o
+  app usa só para saber se WhatsApp e Waze estão instalados
+  (`Linking.canOpenURL` em `App.js`). O README cita `eas build` e `eas submit`
+  com a conta do dono. O usuário chama `/devorb:mobile-release` para preparar
+  a 1.2.0 e avisa que não responde perguntas. O agente sobe o `versionCode`
+  para 8 em `app.json`, não roda `eas login` nem `eas build`, e aponta a
+  permissão ampla propondo declarar os pacotes com `<queries>` por config
+  plugin (ou tirar a permissão) em vez de mantê-la.
+tags: [mobile-release]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:mobile-release prepara a 1.2.0. Hoje não consigo responder
+    perguntas, então decide sozinho o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

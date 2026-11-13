@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: native-app-orcamento-compose
+description: >-
+  App Android nativo em Kotlin com Jetpack Compose, sem Gradle wrapper, sem SDK
+  e sem rede: uma tela de pedido de orçamento em
+  `app/src/main/java/com/example/form/MainActivity.kt`, com os campos em
+  `remember { }` simples e sem edge-to-edge, e um `AndroidManifest.xml` sem
+  `configChanges`. O usuário pede para a tela ocupar a tela toda e não perder
+  o que foi digitado ao girar, e avisa que não responde perguntas. O agente
+  chama `enableEdgeToEdge()` antes de `setContent`, trata os insets para nada
+  ficar sob as barras do sistema, guarda o que foi digitado em
+  `rememberSaveable` (ou num ViewModel com `SavedStateHandle`) e não foge da
+  rotação com `configChanges` no manifest.
+tags: [native-app]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    ajusta a tela em app/src/main/java/com/example/form/MainActivity.kt para
+    ocupar a tela toda e não perder o que foi digitado ao girar. Hoje não
+    consigo responder perguntas, então decide sozinho o que faltar.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

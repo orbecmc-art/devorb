@@ -106,6 +106,7 @@ Nenhuma regra do dono nova nesta skill. As decisões acima vêm da spec e da Tas
   - `android.md`: "user input and interactive UI state" e "never add `android:configChanges`" (`adaptive`); "never launch a nested Intent" (`android-intent-security`).
   - `false-friends.md`: as linhas de `onChange`, do formulário sem evento de envio, das rotas, de rolagem, do mapa, da lista com `.map()`, do eixo principal, do cookie e do `Pressable`.
   - Os n-gramas que sobraram são nomes de API (`override fun onCreate`, `windowSoftInputMode`, `react-native-safe-area-context`, `presentation: 'formSheet'`).
+- 2026-11-13: o agente que escreveu o reservado `native-app-comanda-mesas` viu sem querer as linhas 45 a 51 do plano mobile (as ideias da Expo da Task M1), por um `grep -A`. Nada sobre os itens 3 e 4 do Review Focus, que o caso testa, estava nelas.
 
 ## Linhas por fonte
 
