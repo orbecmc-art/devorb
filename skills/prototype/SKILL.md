@@ -1,7 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype that answers one design question, either a logic demo or UI variants
-disable-model-invocation: true
+description: Use when the user wants to try, play with or compare an idea or its variants before building it for real
 ---
 
 # Prototype
@@ -24,7 +23,7 @@ Write the question at the top of the prototype, where the user will see it, befo
 1. **Throwaway from day one, and marked as such.** Start on a new `prototype/<name>` branch before writing anything, and build and commit there. Uncommitted changes in the tree? Use a git worktree on that branch instead, so the user's files are never touched. When done, return to the original branch. Never clean up with `git checkout`, `git restore` or `git stash` over the user's files. Put the prototype close to where it would be used (next to the module or page it explores), so the context is obvious, and name it so a casual reader sees a prototype, not production: `prototype` in the file or route name. Follow the project's routing convention for a throwaway route; don't invent a new top-level structure.
 2. **Trivial to run.** A UI prototype starts with one command from the project's task runner (`pnpm <name>`, `python <path>`, `bun <path>`). A logic demo is one HTML file the user double-clicks. Give the user that command or path; no thinking required to start it.
 3. **No persistence by default.** State lives in memory. Persistence is what a prototype might check, never something it depends on. If the question is about a database, use a scratch DB or a local file named so it reads "PROTOTYPE, wipe me", never the project's real database.
-4. **Skip the polish.** No tests, no error handling beyond what keeps it running, no abstractions. Calling this skill is the user's permission for `devorb:tdd` to skip tests, and it covers only the prototype. At hand-over, say that it is untested.
+4. **Skip the polish.** No tests, no error handling beyond what keeps it running, no abstractions. The user's request to try the idea is permission for `devorb:tdd` to skip tests, and it covers only the prototype. At hand-over, say that it is untested.
 5. **Show the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user sees what changed.
 6. **Capture it when done.** The prototype is a primary source: it stays on its `prototype/<name>` branch, committed and never merged, out of the main branch. Write the answer (the question, the verdict and the branch name) in the spec for this work in `docs/devorb/specs/`. No spec yet? Give the user the answer and the branch name; `devorb:aligning` puts them in the spec when it writes it.
 
@@ -34,6 +33,6 @@ Keeping anything is a new request. The verdict goes into the spec, and the real 
 
 ## Connects to
 
-- **Receives:** a call from the user (`/devorb:prototype`) with a design question that talking won't settle, often raised while `devorb:aligning` shapes the spec.
+- **Receives:** the user wanting to try an idea before building it, with a design question that talking won't settle, often raised while `devorb:aligning` shapes the spec.
 - **Uses:** `references/LOGIC.md` or `references/UI.md`; the project's task runner, routing and component library.
 - **Hands off to:** the spec in `docs/devorb/specs/` (or `devorb:aligning`, when there is none yet) with the verdict and the prototype branch, then `devorb:planning` to build what was decided.

@@ -97,9 +97,9 @@ test('only permissive sources with a license file may lend text', () => {
   }
 });
 
-test('security-audit is a manual base skill that joins the bootstrap when done', () => {
+test('security-audit is an automatic base skill that joins the bootstrap when done', () => {
   const s = registry['security-audit'];
-  assert.equal(s?.invocation, 'manual');
+  assert.equal(s?.invocation, 'auto');
   assert.equal(s.sector, undefined);
   assert.equal(s.bootstrap, 'when-done');
   assert.equal(s.ceilingTokens, 2500);
@@ -108,10 +108,10 @@ test('security-audit is a manual base skill that joins the bootstrap when done',
 test('registry has the 3 mobile skills of the spec', () => {
   const mobile = Object.keys(registry).filter((name) => registry[name].sector === 'mobile').sort();
   assert.deepEqual(mobile, ['device-testing', 'mobile-release', 'native-app']);
-  assert.equal(registry['native-app'].invocation, 'auto');
-  assert.equal(registry['device-testing'].invocation, 'auto');
-  assert.equal(registry['mobile-release'].invocation, 'manual');
-  for (const name of mobile) assert.equal(registry[name].ceilingTokens, 2500, name);
+  for (const name of mobile) {
+    assert.equal(registry[name].invocation, 'auto', name);
+    assert.equal(registry[name].ceilingTokens, 2500, name);
+  }
 });
 
 test('mobile sources only lend ideas', () => {
@@ -125,12 +125,10 @@ test('registry has the 19 base skills and the 5 design skills of the spec', () =
   const base = Object.keys(registry).filter((name) => !registry[name].sector);
   assert.equal(base.length, 19);
   assert.deepEqual(design.sort(), ['design-system', 'diagram', 'motion', 'ui-review', 'visual-direction']);
-  assert.equal(registry.diagram.invocation, 'manual');
   for (const name of design) {
     assert.equal(registry[name].ceilingTokens, 2500, name);
-    if (name !== 'diagram') assert.equal(registry[name].invocation, 'auto', name);
+    assert.equal(registry[name].invocation, 'auto', name);
   }
-  assert.equal(registry.evolving.invocation, 'manual');
   assert.equal(registry['using-devorb'].invocation, 'hook');
   assert.equal(registry.implementing.ceilingTokens, 5000);
   assert.equal(registry['browser-testing'].invocation, 'auto');
@@ -140,4 +138,9 @@ test('registry has the 19 base skills and the 5 design skills of the spec', () =
 
 test('package.json sets the Node floor for the test glob', () => {
   assert.deepEqual(pkg.engines, { node: '>=22' });
+});
+
+test('every skill but the bootstrap triggers by itself', () => {
+  for (const [name, s] of Object.entries(registry))
+    assert.equal(s.invocation, name === 'using-devorb' ? 'hook' : 'auto', name);
 });

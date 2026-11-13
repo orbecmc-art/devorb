@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-auto-handoff
+description: Controle de gastos com a exportação CSV pela metade e não commitada; o usuário vai parar e quer retomar amanhã em outra sessão. A skill de passagem de contexto precisa disparar sem ser chamada pelo nome.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    vou ter que parar agora e continuar amanhã em outra sessão, deixa tudo anotado pra retomar
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

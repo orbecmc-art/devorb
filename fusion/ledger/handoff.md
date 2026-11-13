@@ -70,3 +70,4 @@ Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-
 ## Revisões
 
 - 2026-11-12, revisão do coordenador: as definições de `ran`, `read` e `assumed` parafraseavam o `context-save` frase a frase. Foram reescritas a partir da redação do plano, com a fonte fechada, numa tabela própria, e saiu a cláusula "por mais seguro que esteja". Quem retoma passa a reconferir também os itens `ran`, não só os `read`, quando os arquivos mudaram depois do commit nomeado.
+- 2026-11-13: virou automática por decisão do dono (dispara pelo assunto da conversa); descrição reescrita com gatilhos.

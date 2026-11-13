@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.0
+
+- Decisão do dono: toda skill dispara sozinha pelo assunto da conversa, sem a pessoa precisar saber o nome. As oito que eram manuais (`improve-architecture`, `prototype`, `handoff`, `retro`, `security-audit`, `diagram`, `evolving`, `mobile-release`) ganharam descrições com gatilhos e entraram na tabela de roteamento da `using-devorb`; o comando com barra continua funcionando. Os cuidados ficam: `security-audit` só lê por padrão, `mobile-release` não roda EAS, e `evolving` disparada sozinha para no rascunho (só "roda o ciclo" publica).
+- Oito casos de disparo com frases naturais, sem citar a skill: todos em 100%. As skills convertidas seguem em 100% nos seus casos. Custo fixo: base 635 de 706 tokens, design 195 de 250, mobile 103 de 150.
+
 ## 1.10.0
 
 - Tasks D7 e M4: os setores entram no fluxo. A `aligning` passa tarefas com interface pela `visual-direction`; o `planning` cita os tokens do `DESIGN.md`; o `implementing` chama `motion` quando algo se move e `native-app` em app; o `verifying` roda `ui-review` depois de `browser-testing` (ou `device-testing` em app); o `reviewing` deixa a estética para a `ui-review`; no `prototype`, cada variante declara um eixo. `design-system`, `motion` e `ui-review` ganham `references/native.md`, e o contrato da `visual-direction` ganha a linha de plataforma.
