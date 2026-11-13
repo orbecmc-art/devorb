@@ -14,7 +14,7 @@ The **phase boundary** is the gap between two phases, and it is the only place t
 | **Subagent** | Send the task to its own context window and get a report back. |
 | **`/compact`** | Compress this context and seed a fresh session with the summary. |
 
-`/clear`, `/compact` and `devorb:handoff` are the user's to run. Recommend one and say why.
+`/clear` and `/compact` are the user's to run; `devorb:handoff` runs when the user pauses or moves on. Recommend one and say why.
 
 ## The tree
 

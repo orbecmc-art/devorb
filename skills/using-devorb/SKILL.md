@@ -31,8 +31,8 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 
 | When | Skill |
 |---|---|
-| New idea or change: settle it, spec in `docs/devorb/specs/` | `devorb:aligning` |
-| Spec ready: plan in `docs/devorb/plans/` | `devorb:planning` |
+| New idea or change | `devorb:aligning` |
+| Spec ready | `devorb:planning` |
 | Plan ready: build it | `devorb:implementing` |
 | While building: test first | `devorb:tdd` |
 | Anything fails or surprises you | `devorb:debugging` |
@@ -40,13 +40,19 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 | Building or changing a UI | `devorb:visual-direction`, `devorb:design-system`, `devorb:motion`, `devorb:ui-review` |
 | Mobile app screen | `devorb:native-app`, `devorb:device-testing` |
 | Changed a web UI | `devorb:browser-testing` |
-| Asking for or receiving a review | `devorb:reviewing` |
+| Review asked or received | `devorb:reviewing` |
 | Integrating the branch | `devorb:finishing` |
-| Domain terms and decisions: `GLOSSARY.md`, `docs/adr/` | `devorb:domain-modeling` |
+| Domain terms, ADRs | `devorb:domain-modeling` |
 | Shape of a module or interface | `devorb:codebase-design` |
+| Code hard to change | `devorb:improve-architecture` |
+| Try an idea before building it | `devorb:prototype` |
+| Pausing or moving session | `devorb:handoff` |
+| What went wrong this session | `devorb:retro` |
+| Security review or audit | `devorb:security-audit` |
+| A diagram or flowchart | `devorb:diagram` |
+| Releasing a mobile app version | `devorb:mobile-release` |
 | Creating or editing a skill | `devorb:writing-skills` |
-
-Manual skills run only when the user calls them; suggest, never start: `devorb:evolving`, `devorb:improve-architecture`, `devorb:prototype`, `devorb:handoff`, `devorb:retro`, `devorb:security-audit`, `devorb:diagram`, `devorb:mobile-release`.
+| Updating DevOrb's sources | `devorb:evolving` |
 
 ## Red Flags
 
@@ -60,7 +66,7 @@ These thoughts mean STOP, you're rationalizing:
 
 ## References
 
-They sit in this skill's folder: invoke `devorb:using-devorb` for its path.
+In this skill's folder; invoke `devorb:using-devorb` for its path.
 
 - `references/legacy-names.md`: for instructions citing skills of plugins DevOrb replaced.
 - `references/phase-boundaries.md`: at a phase boundary, to choose how to go on.
@@ -69,4 +75,4 @@ They sit in this skill's folder: invoke `devorb:using-devorb` for its path.
 ## Connects to
 
 - **Receives:** every session start, from the hook.
-- **Hands off to:** `devorb:aligning` for new work, `devorb:debugging` for a bug, or the table's skill.
+- **Hands off to:** the Routing table's skill.

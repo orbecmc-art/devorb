@@ -1,7 +1,6 @@
 ---
 name: retro
-description: Retrospective on a coding session that proposes changes to the agent's environment
-disable-model-invocation: true
+description: Use when the user asks what went wrong in a session, why the agent repeats a mistake, or how to improve its setup
 ---
 
 # Retro
@@ -45,6 +44,6 @@ Work runs in two stages. Implementation carries the most context pressure: it ex
 
 ## Connects to
 
-- **Receives:** the user's call, optionally with the session or log to look at; `devorb:using-devorb` suggests it in the session it looks back on, before clearing.
+- **Receives:** the user asking what went wrong or how to stop a repeated mistake, optionally with the session or log to look at; `devorb:using-devorb` suggests it in the session it looks back on, before clearing.
 - **Uses:** the session log; the repo's check commands, hooks, CI and steering files; `devorb:writing-skills` when the fix is a skill or a steering-file line.
 - **Hands off to:** the user, with candidates ranked by severity. Accepted standards go to the file `devorb:reviewing` reads; accepted checks land like any code change; accepted skill changes go through `devorb:writing-skills`.

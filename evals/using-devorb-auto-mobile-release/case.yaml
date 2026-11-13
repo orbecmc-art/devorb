@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-auto-mobile-release
+description: App Expo na versão 1.2.0; o usuário quer publicar a 1.3.0 na Play Store. A skill de release mobile precisa disparar sem ser chamada pelo nome.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    quero publicar a versão 1.3.0 do app na Play Store
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

@@ -1,15 +1,14 @@
 ---
 name: mobile-release
-description: Prepare an Expo or Kotlin Android app for a store release: version bump, announced SDK or build upgrades, Play policy check
+description: Use when the user wants to release a mobile app version, bump its version, or ship to the Play Store or App Store
 argument-hint: "Which version are you releasing? (e.g. 1.2.0)"
-disable-model-invocation: true
 ---
 
 # Mobile release
 
 The branch is done and merged; now the app has to get into the store. This skill changes only what the release needs: the version, the upgrades the store or a library forces, and what Play policy rejects. Shipping the build to the store stays with the owner.
 
-If the user passed a version, that is the release. Without one, ask; if nobody answers, stop and say which version the project has now.
+If the user named a version, as an argument or in the conversation, that is the release. Without one, ask; if nobody answers, stop and say which version the project has now.
 
 ## 1. Know the project
 
@@ -81,6 +80,6 @@ Never call the release ready while a policy finding is open.
 
 ## Connects to
 
-- **Receives:** the user's `/devorb:mobile-release <version>`, after `devorb:finishing` has merged or closed the branch.
+- **Receives:** the user wanting to release an app version, after `devorb:finishing` has merged or closed the branch.
 - **Uses:** `references/play-policy.md`; the versioned Expo or AGP documentation; `devorb:verifying` for the project's tests after any upgrade; `devorb:device-testing` for what a device must confirm.
 - **Hands off to:** the owner, with the EAS command, the Play Console forms and the device checks; the changes stay uncommitted unless the user asks, and then go through `devorb:finishing`.

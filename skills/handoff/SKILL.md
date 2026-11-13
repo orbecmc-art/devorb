@@ -1,13 +1,12 @@
 ---
 name: handoff
-description: Write a handoff file in the system temp folder so a fresh session can pick up this work
+description: Use when the user is stopping, moving to another session or machine, or asks to save context to resume later
 argument-hint: "What will the next session be used for?"
-disable-model-invocation: true
 ---
 
 # Handoff
 
-Compact this session into one markdown file that a fresh agent, in any harness or directory, can read and continue from. If the user passed arguments, they say what the next session is for: shape the file around that. Writing the handoff is the whole job; no other file changes.
+Compact this session into one markdown file that a fresh agent, in any harness or directory, can read and continue from. If the user said what the next session is for, as arguments or in the conversation, shape the file around that. Writing the handoff is the whole job; no other file changes.
 
 ## Where it goes
 
@@ -43,7 +42,7 @@ The file tells whoever resumes to check the `assumed` items first, before buildi
 From `<repo path>`, branch `<branch>` at `<short sha>`, <date>. Uncommitted: <files, or none>.
 
 ## Next session
-<What it is for: the user's arguments, else the next step. Two lines at most.>
+<What it is for: what the user said, else the next step. Two lines at most.>
 
 ## Read first
 - `<path, URL or command>`: <why>
@@ -62,7 +61,7 @@ Check the assumed items first.
 - `devorb:<skill>`: <when to call it>
 ```
 
-Leave out a section that would be empty. In **Suggested skills**, name the DevOrb skills the next agent should call; for a manual one (`devorb:prototype`, `devorb:retro`), say the user has to start it.
+Leave out a section that would be empty. In **Suggested skills**, name the DevOrb skills the next agent should call.
 
 ## Finish
 
@@ -70,6 +69,6 @@ Reply with the file path and a line the user can paste to start the next session
 
 ## Connects to
 
-- **Receives:** the user's call at a phase boundary, often after `devorb:using-devorb` recommends it for a new harness, a new directory, a colleague or a side task, with an optional focus for the next session.
+- **Receives:** the user pausing, switching session or machine, or asking to save context, at a phase boundary, often after `devorb:using-devorb` recommends it for a new harness, a new directory, a colleague or a side task, with an optional focus for the next session.
 - **Uses:** git state and the paths of the spec, plan and ADRs; this conversation for decisions, open items and dead ends.
 - **Hands off to:** a fresh session, which treats the file as claims to check, as `devorb:verifying` does with any earlier handoff, starting with the assumed items.

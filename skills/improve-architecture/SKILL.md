@@ -1,7 +1,6 @@
 ---
 name: improve-architecture
-description: Scan the codebase for deepening opportunities, show them in a visual HTML report, then question the one the user picks
-disable-model-invocation: true
+description: Use when the user asks to improve or refactor the architecture, or says the code is tangled or hard to change
 ---
 
 # Improve Architecture
@@ -68,6 +67,6 @@ Keep the domain model current as decisions settle, with `devorb:domain-modeling`
 
 ## Connects to
 
-- **Receives:** a call from the user (`/devorb:improve-architecture`), optionally with a direction: a module, a pain point or a spec.
+- **Receives:** the user asking to improve the architecture, or saying the code is hard to change, optionally with a direction: a module, a pain point or a spec.
 - **Uses:** `devorb:codebase-design` for the vocabulary and the deletion test; `GLOSSARY.md` and `docs/adr/` through `devorb:domain-modeling`; `git log` for hot spots; a fresh subagent to explore; `references/HTML-REPORT.md`.
 - **Hands off to:** `devorb:aligning`, with the chosen candidate; `devorb:codebase-design` when the user wants to compare interfaces for it.

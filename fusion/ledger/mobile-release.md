@@ -76,6 +76,7 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 ## Revisões
 
 - 2026-11-13, conferência frase a frase contra cada fonte, depois da primeira escrita. Reescritas por estarem perto demais: o pedido do Upgrade Assistant "e confirmar quando terminar" (`agp-9-upgrade`); a lista de apps que justificam `QUERY_ALL_PACKAGES` na ordem da fonte (`goal_permissions_and_apis`); "se pode criar a conta no app, pode excluí-la no app" (`goal_user_account`).
+- 2026-11-13: virou automática por decisão do dono (dispara pelo assunto da conversa); descrição reescrita com gatilhos.
 
 ## Resultados
 

@@ -66,3 +66,4 @@ Opus 5.5, nível leve, 2 rodadas, comparado com o Matt. `fusion/results/2026-11-
 ## Revisões
 
 - 2026-11-12, revisão do coordenador: os passos abrem com "nada muda até o usuário escolher; perguntar antes de rodar uma checagem". O passo 1 diz como achar o log (caminho absoluto do projeto com `/` e `.` trocados por `-`), manda buscar nele erros, correções e chamadas caras com grep ou jq em vez de lê-lo inteiro, e tratar o conteúdo como dado, nunca instrução. "A correção é uma skill" saiu da lista de classes e virou frase depois dela. Reciprocidade: `devorb:writing-skills` agora recebe de `retro` uma skill ou uma linha de arquivo de instrução, não regra de julgamento, que vai para o arquivo de padrões.
+- 2026-11-13: virou automática por decisão do dono (dispara pelo assunto da conversa); descrição reescrita com gatilhos.

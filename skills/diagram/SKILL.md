@@ -1,8 +1,7 @@
 ---
 name: diagram
-description: Draw one diagram as Mermaid or accessible SVG, or say why a table serves better
+description: Use when the user asks for a diagram, flowchart, sequence or architecture picture, or a visual of a flow
 argument-hint: "What should the diagram show, and where does it go?"
-disable-model-invocation: true
 ---
 
 # Diagram
@@ -86,6 +85,6 @@ Check the file parses (`xmllint --noout <file>` when present) and that `role="im
 
 ## Connects to
 
-- **Receives:** the user's call, `/devorb:diagram <subject> [path]`. Nothing invokes it automatically.
+- **Receives:** the user asking for a diagram, flowchart or visual of a flow, with a subject and often a destination.
 - **Uses:** `DESIGN.md` tokens written by `devorb:design-system`, when they exist; `references/types.md`, `references/connectors.md`, `references/template.svg`.
 - **Hands off to:** the user. An SVG that ships inside a page is checked with the rest of the page by `devorb:ui-review`.

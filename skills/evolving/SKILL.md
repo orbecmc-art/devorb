@@ -1,12 +1,11 @@
 ---
 name: evolving
-description: Monthly review of source updates, from the diff against each pin to a pull request draft in Portuguese
-disable-model-invocation: true
+description: Use when the user asks to run the monthly cycle or check DevOrb's sources for updates, in the DevOrb repo
 ---
 
 # Evolving
 
-Skills stay in English; ledger, changelog, draft and issues are in Portuguese. A rehearsal is a request that says it is one. Step 4 holds from the first source line you read. `<owner>/<repo>` are the last two path segments of `git remote get-url origin`, without `.git`.
+Skills stay in English; ledger, changelog, draft and issues are in Portuguese. A rehearsal is a request that says it is one, or that does not ask to run the cycle. Step 4 holds from the first source line you read. `<owner>/<repo>` are the last two path segments of `git remote get-url origin`, without `.git`.
 
 ## Final message
 
@@ -128,6 +127,6 @@ A red `npm test`, a rejected push or a refused pull request means status `FALHOU
 
 ## Connects to
 
-- **Receives:** the owner's `/devorb:evolving`, or the scheduled run.
+- **Receives:** the owner asking to run the cycle, or the scheduled run.
 - **Uses:** `tools/source-diff.mjs`, `tools/compare.mjs`, `gh api`, `fusion/`, `references/pr-template.md`, and `devorb:writing-skills`.
 - **Hands off to:** the owner, through the pull request or issue.

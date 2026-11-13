@@ -86,6 +86,7 @@ Regras próprias só saem com decisão explícita do dono.
   - **Severidade:** todo achado é Critical nos termos de `devorb:reviewing`.
   - **Leitura em volta:** em arquivo de código que casa um padrão de segredo, ler só as linhas em volta dos números achados, nunca as que casaram.
   - **Risco de cópia:** em `checklist.md`, "The weakest door is the real rule" virou "Check each one; the least guarded decides what is really allowed", porque ficava perto demais de uma frase da fonte.
+- 2026-11-13: virou automática por decisão do dono (dispara pelo assunto da conversa); descrição reescrita com gatilhos.
 
 ## Resultados
 

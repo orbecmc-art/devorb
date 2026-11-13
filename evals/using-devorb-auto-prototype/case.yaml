@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-auto-prototype
+description: Checkout de loja com frete fixo; o dono quer testar uma regra nova de frete antes de mexer no código de verdade. A skill de protótipo precisa disparar sem ser chamada pelo nome.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    antes de mexer no código de verdade, quero testar como ficaria essa regra nova de frete: grátis acima de R$ 200, e por região abaixo disso
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

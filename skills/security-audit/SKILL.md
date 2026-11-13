@@ -1,8 +1,7 @@
 ---
 name: security-audit
-description: Audit a whole project, a commit range or a pull request for security holes, check each finding apart, and report without fixing anything
+description: Use when the user asks for a security review or audit, about vulnerabilities, or whether a project or PR is safe to ship
 argument-hint: "What to audit: the project, a commit range (a1b2c3..HEAD) or a pull request number"
-disable-model-invocation: true
 ---
 
 # Security Audit
@@ -19,7 +18,7 @@ Find the holes that an outsider or a less privileged user could really use, prov
 
 ## 1. Pin the scope
 
-The argument names it. With none, ask once: the whole project, a commit range or a pull request.
+The argument or the conversation names it; a project about to go live means the whole project. Still unclear: ask once whether it is the whole project, a commit range or a pull request.
 
 - **Project:** everything tracked at `HEAD`. Note the commit and whether the tree has uncommitted changes.
 - **Commit range** `A..B`: list the changed files first with `git diff --name-only A..B` and run step 2's secret-name check on that list. A flagged file gets only step 2's commands. Read the hunks of the others one file at a time, `git diff A..B -- <file>`, plus every route, function and check the changed lines call or are called from.
@@ -111,6 +110,6 @@ Then stop. Don't start fixing. For each fix the user picks:
 
 ## Connects to
 
-- **Receives:** the user's `/devorb:security-audit` call with a scope; a suggestion from `devorb:reviewing` when a diff review calls for a full audit.
+- **Receives:** the user asking for a security review or whether the code is safe to ship, with a scope or not; a suggestion from `devorb:reviewing` when a diff review calls for a full audit.
 - **Uses:** fresh subagents as verifiers; `references/checklist.md` and `references/ecosystems.md`; read-only `git` and `gh`.
 - **Hands off to:** the user, with the report. The fixes they pick go through `devorb:debugging` and `devorb:tdd`.

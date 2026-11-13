@@ -53,3 +53,7 @@ Regras próprias só saem com decisão explícita do dono.
 ## Decisões por commit de fonte
 
 Nenhuma. `evolving` não absorve fonte.
+
+## Revisões
+
+- 2026-11-13: virou automática por decisão do dono (dispara pelo assunto da conversa); descrição reescrita com gatilhos.

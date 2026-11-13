@@ -107,11 +107,11 @@ test('new work enters through aligning and a bug through debugging', () => {
   assert.match(body, /A bug enters through `devorb:debugging`/);
 });
 
-test('manual skills are named as running only when the user calls them', () => {
+test('manual skills, if any remain, are named as running only when the user calls them', () => {
   const body = read('SKILL.md');
-  assert.match(body, /Manual skills run only when the user calls them/);
-  for (const [name, s] of Object.entries(registry))
-    if (s.invocation === 'manual' && inBootstrap(s)) assert.ok(body.includes(`devorb:${name}`), name);
+  const manual = Object.entries(registry).filter(([, s]) => s.invocation === 'manual' && inBootstrap(s));
+  if (manual.length) assert.match(body, /Manual skills run only when the user calls them/);
+  for (const [name] of manual) assert.ok(body.includes(`devorb:${name}`), name);
 });
 
 test('the only references are the three kept files, and the body points to each', () => {
