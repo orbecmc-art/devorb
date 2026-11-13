@@ -53,7 +53,10 @@ Design e mobile podem começar depois da etapa 2, em paralelo à etapa 3, respei
 | 16. `writing-skills` | Feita: DevOrb 100%, Superpowers 50% | `0.14.0` |
 | 23. `browser-testing` | Feita fora do sandbox (`--outside-sandbox`), por decisão do dono: DevOrb 100% contra 0% sem plugin | `0.15.0` |
 | 21. Comparação final | Feita. Nenhum caso pior contra o Superpowers com o ponytail; o dono aprovou o lançamento em 2026-11-13. Ver `fusion/results/final.md` | `1.0.0` |
-| 22, D1 a D8 e M1 a M5 | Não começaram | |
+| 22. Instalação e troca | Mac feito em 2026-11-13 (DevOrb 1.0.0 instalado, Superpowers desligado). Falta o PC com Windows e, quando o dono quiser, desinstalar o Superpowers | |
+| D1. Ferramentas do setor | Feita: tetos por setor, braço `ui-ux-pro-max`, sandbox lê sites | `1.1.0` |
+| D2. `visual-direction` | Feita: Clínica Serena 100% contra 0%, reservado 100% contra 33%; páginas do portão em `fusion/results/d2-portao/` | `1.2.0` |
+| D3 a D8 e M1 a M5 | Não começaram | |
 
 **Decisões do dono (2026-11-13):** seguir o recomendado em tudo, lançar, mergear e seguir para design e mobile. Ficou assim:
 

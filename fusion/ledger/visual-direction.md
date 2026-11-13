@@ -116,6 +116,8 @@ Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e U
 | Reservado `visual-direction-painel-padaria` | 100% (1,00) | 33% (0,82) | 33% (0,82) |
 
 - `accepted: true` nos dois. O caso das fontes fixas é lacuna em todos os braços, mas o DevOrb tem a maior nota.
+- Depois de R6, a skill passou a mandar usar o especialista escolhido mesmo sem rede (vai no manifesto, com o aviso de que falta instalar) e a nomear as fontes na mensagem final (`af8adfb`). Rodado de novo, o caso das fontes fixas ficou em 0% (0,48), contra 0,18 nos dois outros braços: o agente lê a lista e abre as galerias antes do código, mas ainda não põe o `sonner` em nenhuma das rodadas. Causa não conferida no trace. Fica como lacuna.
+- Portão do dono: as duas páginas da Clínica Serena (com a skill e sem plugin) e a spec com a direção estão em `fusion/results/d2-portao/`. Por decisão do dono (seguir o recomendado), o setor segue; a avaliação de gosto fica com ele quando abrir as páginas.
 - Custo: US$ 8,82 nas linhas de base e US$ 24,33 na comparação. O caso das fontes fixas custa uns US$ 4 por rodada com a skill, porque o agente consulta as fontes na web.
 
 ## Decisões por commit de fonte
