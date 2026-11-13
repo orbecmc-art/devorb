@@ -1,0 +1,17 @@
+schema_version: "1.0"
+name: writing-skills-commit-do-time
+description: Loja em Node com um padrão de mensagem de commit próprio do time no CONTRIBUTING.md (tipos em português, área pela pasta de src/, limite de 60 caracteres, rodapé de ticket) e uma skill de exemplo em skills/; o usuário pede uma skill nova para escrever commits no padrão, e o agente precisa rodar um cenário de linha de base antes de escrever o SKILL.md.
+tags: [writing-skills]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    cria uma skill para escrever mensagens de commit no padrão do time, que
+    está no `CONTRIBUTING.md`. Chama ela `commit-do-time` e deixa em
+    `skills/commit-do-time/SKILL.md`, junto da `rodar-testes` que já
+    existe. Vou ficar fora o resto do dia e não consigo responder: não me
+    pergunta nada, decide e vai até o fim.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

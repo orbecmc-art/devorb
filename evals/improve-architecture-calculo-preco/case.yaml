@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: improve-architecture-calculo-preco
+description: >-
+  Loja em Node, sem dependências, com 15 commits; `src/precos.js` é um módulo
+  raso (cinco funções pequenas que carrinho, pedido e nota fiscal precisam
+  compor na ordem desconto, cupom, imposto e frete) e mudou em 12 deles, quase
+  sempre em correções da ordem dos passos. `src/relatorios.js` é o maior
+  arquivo, mas mudou uma vez só. O usuário chama `/devorb:improve-architecture`
+  sem dizer onde dói; o agente acha o ponto quente pelo `git log` e entrega um
+  relatório HTML de candidatos antes de propor qualquer interface.
+tags: [improve-architecture]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:improve-architecture A equipe reclama que toda mudança pequena
+    neste projeto vira caça a bug em produção. Quero entender onde vale a
+    pena aprofundar a arquitetura.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

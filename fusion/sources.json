@@ -360,6 +360,15 @@
         "skills/material-3/references/theming-and-dynamic-color.md",
         "skills/material-3/references/navigation-patterns.md"
       ]
+    },
+    {
+      "name": "ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "license": "MIT",
+      "trackedForFusion": false,
+      "textReuse": false,
+      "lastAbsorbed": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "paths": ["skills/"]
     }
   ]
 }

@@ -1,0 +1,18 @@
+schema_version: "1.0"
+name: domain-modeling-aluno-ativo
+description: Relatório do financeiro de uma academia com "alunos ativos", termo que o código já usa em dois sentidos (matrícula cobrada no mês e check-in nos últimos 30 dias); o agente precisa fixar o sentido certo num GLOSSARY.md antes de construir, sem abrir ADR para escolha trivial.
+tags: [domain-modeling]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O financeiro quer, no fim de cada mês, um relatório com quantos alunos
+    ativos a academia tem e quanto eles somam de mensalidade, para conferir
+    com o extrato do banco. Cria um script que lê os dados em `data/` e
+    imprime isso, e um jeito de rodar com `npm run relatorio`. Hoje não
+    consigo responder perguntas: se algo ficar ambíguo, decide pelo que faz
+    sentido para o financeiro e me conta o que decidiu.
+  max_turns: 30
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

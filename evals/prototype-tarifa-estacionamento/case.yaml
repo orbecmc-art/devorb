@@ -1,0 +1,26 @@
+schema_version: "1.0"
+name: prototype-tarifa-estacionamento
+description: >-
+  Caixa de estacionamento em Node, sem dependências, com a regra atual (R$ 10
+  por hora começada) em `src/tarifa.js`. O dono quer uma regra nova de cobrança,
+  com tolerância, frações de 15 minutos e teto diário, e o usuário chama
+  `/devorb:prototype` para brincar com ela antes de mexer no código de verdade.
+  É uma regra de lógica, sem tela: o agente escolhe um protótipo de lógica,
+  marca o arquivo como descartável, deixa `src/` intacto e diz como rodar com
+  um comando só.
+tags: [prototype]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:prototype O dono quer trocar a cobrança do estacionamento: 15
+    minutos de tolerância sem cobrar nada; passando disso, a primeira hora
+    custa R$ 12,00 e depois são R$ 3,00 a cada 15 minutos ou fração; o máximo
+    por dia é R$ 60,00, e quem fica mais de 24 horas paga o teto de cada dia
+    começado. Antes de mexer em `src/tarifa.js`, quero brincar com essa regra
+    e ver quanto ela cobra nos casos de borda, tipo 15 e 16 minutos, 1h01,
+    23h59 e 25 horas.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

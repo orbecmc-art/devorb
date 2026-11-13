@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-triggers-bug
+description: Relato curto de teste falhando num projeto pequeno de carrinho com cupom; a skill de depuração precisa disparar antes de qualquer conserto.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    esse teste está falhando
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

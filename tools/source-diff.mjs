@@ -44,24 +44,27 @@ async function git({ source, cacheDir, timeoutMs }, args, { cwd, env = {}, raw =
 const repoDir = (source, cacheDir) => {
   const safe = source.name.replace(/[^A-Za-z0-9._-]/g, '_');
   const hash = createHash('sha1').update(source.url).digest('hex').slice(0, 8);
-  return join(cacheDir, `${safe}-${hash}`);
+  // Bare, as sandboxes refuse writes to any `.git/config`; new name, so old non-bare caches are never reused.
+  return join(cacheDir, `${safe}-${hash}-bare`);
 };
 
 async function ensureRepo(ctx) {
   const { source, cacheDir } = ctx;
   const dir = repoDir(source, cacheDir);
-  if (existsSync(join(dir, '.git', 'HEAD'))) {
+  if (existsSync(join(dir, 'HEAD'))) {
     await git(ctx, ['fetch', '--quiet', '--prune', '--no-tags', 'origin'], { cwd: dir });
-    await git(ctx, ['remote', 'set-head', 'origin', '--auto'], { cwd: dir });
   } else {
     mkdirSync(cacheDir, { recursive: true });
     try {
-      await git(ctx, ['clone', '--quiet', '--filter=blob:none', '--no-checkout', '--no-tags', '--', source.url, dir]);
+      // The refspec keeps the non-bare layout: everything is read from refs/remotes/origin/*.
+      await git(ctx, ['clone', '--quiet', '--bare', '--filter=blob:none', '--no-tags',
+        '-c', 'remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*', '--', source.url, dir]);
     } catch (e) {
       rmSync(dir, { recursive: true, force: true }); // never leave a half clone to be "fetched" next time
       throw e;
     }
   }
+  await git(ctx, ['remote', 'set-head', 'origin', '--auto'], { cwd: dir }); // a bare clone has no origin/HEAD
   return dir;
 }
 

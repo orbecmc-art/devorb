@@ -9,61 +9,61 @@
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "planning": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "implementing": {
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 5000,
-    "status": "planned"
+    "status": "done"
   },
   "tdd": {
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "debugging": {
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "verifying": {
     "invocation": "auto",
     "level": "full",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "browser-testing": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "reviewing": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "finishing": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "writing-skills": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 5000,
-    "status": "planned"
+    "status": "done"
   },
   "evolving": {
     "invocation": "manual",
@@ -75,43 +75,43 @@
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "codebase-design": {
     "invocation": "auto",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "improve-architecture": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "prototype": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "handoff": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "retro": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned"
+    "status": "done"
   },
   "security-audit": {
     "invocation": "manual",
     "level": "light",
     "ceilingTokens": 2500,
-    "status": "planned",
+    "status": "done",
     "bootstrap": "when-done"
   },
   "visual-direction": {

@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: codebase-design-baixa-estoque
+description: Loja com módulo de estoque raso (cinco funções pequenas que cada chamador precisa chamar na ordem certa, sobre um wrapper de JSON que só repassa ao fs) ganha um novo chamador, a importação de pedidos do marketplace, que precisa de teste; o agente recomenda onde pôr o seam e como aprofundar o módulo, sem cair no adaptador especulativo de ERP sugerido por um colega.
+tags: [codebase-design]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Vamos começar a receber pedidos do marketplace: um job novo vai ler os
+    pedidos que chegaram e dar baixa no estoque. Quero que esse fluxo tenha
+    teste, principalmente o caso de um pedido com vários itens em que um
+    deles está sem saldo e nada pode ser baixado. Hoje o checkout não tem
+    teste nenhum porque grava direto em `data/`, e o `src/troca.js` já
+    repete os passos do estoque do jeito dele. Um colega sugeriu criar uma
+    interface `EstoqueProvider` com um adaptador para a API do ERP, porque
+    talvez a gente passe a usar um ERP no ano que vem. Antes de mexer em
+    qualquer coisa: onde você colocaria o seam e como reformaria o módulo
+    de estoque? Quero só a recomendação, não escreve código ainda.
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

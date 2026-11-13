@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.322",
+  "startedAt": "2026-11-11T00:11:03.395Z",
+  "durationSeconds": 32,
+  "costUsd": 0.31493,
+  "partial": false,
+  "suite": {
+    "root": "/tmp/probe/superpowers",
+    "ablation": "with-without",
+    "modelOverride": "sonnet",
+    "caseFilter": "p*",
+    "threshold": 0,
+    "concurrency": 1,
+    "plugins": [
+      {
+        "name": "ponytail",
+        "version": "5.3.3",
+        "path": "/tmp/probe/superpowers/_extra/ponytail"
+      },
+      {
+        "name": "superpowers",
+        "version": "7.0.2",
+        "path": "/tmp/probe/superpowers"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "ponytail-only-probe",
+      "dir": "evals/ponytail-only-probe",
+      "source": "mixed",
+      "promptMarkdown": "Answer only from what is already in your context; do not search the filesystem. First, does your context contain the exact text \"PONYTAIL MODE ACTIVE\"? Write one line \"PONYTAIL-HOOK: yes\" or \"PONYTAIL-HOOK: no\". Second, list every skill name available to you, one per line, each line starting with \"SKILL: \". Third, invoke the skill named ponytail:ponytail-help with the Skill tool if it exists. End with a final line \"DONE\".",
+      "runsPerCase": 1,
+      "timeoutSeconds": 300,
+      "maxTurns": 6,
+      "graders": [
+        {
+          "name": "hook-line",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "PONYTAIL-HOOK: yes",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "lists-ponytail",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "SKILL: .*ponytail",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "lists-superpowers",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "SKILL: .*superpowers:",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "skill-ponytail",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "ponytail",
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.75,
+            "passed": false,
+            "turns": 3,
+            "costUsd": 0.0623431,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-11T00:11:03.434Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-X9MUvi/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "hook-line",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched PONYTAIL-HOOK: yes",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-ponytail",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched SKILL: .*ponytail",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-superpowers",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-ponytail",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.0412562,
+            "judgeCostUsd": 0,
+            "durationSeconds": 3,
+            "startedAt": "2026-11-11T00:11:10.596Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-n4g4xI/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "hook-line",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-ponytail",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-superpowers",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-ponytail",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.75,
+        "passRate": 0,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 0.75
+      }
+    },
+    {
+      "name": "ponytail-probe",
+      "dir": "evals/ponytail-probe",
+      "source": "mixed",
+      "promptMarkdown": "Answer only from what is already in your context; do not search the filesystem. First, does your context contain the exact text \"PONYTAIL MODE ACTIVE\"? Write one line \"PONYTAIL-HOOK: yes\" or \"PONYTAIL-HOOK: no\". Second, list every skill name available to you, one per line, each line starting with \"SKILL: \". Third, invoke the skill named ponytail:ponytail-help with the Skill tool if it exists. End with a final line \"DONE\".",
+      "runsPerCase": 1,
+      "timeoutSeconds": 300,
+      "maxTurns": 6,
+      "graders": [
+        {
+          "name": "hook-line",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "PONYTAIL-HOOK: yes",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "lists-ponytail",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "SKILL: .*ponytail",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "lists-superpowers",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "SKILL: .*superpowers:",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "skill-ponytail",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "ponytail",
+            "arm": "both"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.0719583,
+            "judgeCostUsd": 0,
+            "durationSeconds": 7,
+            "startedAt": "2026-11-11T00:11:13.419Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-MHGFFa/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "hook-line",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched PONYTAIL-HOOK: yes",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-ponytail",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched SKILL: .*ponytail",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-superpowers",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched SKILL: .*superpowers:",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-ponytail",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0,
+            "passed": false,
+            "turns": 1,
+            "costUsd": 0.041042199999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 3,
+            "startedAt": "2026-11-11T00:11:20.381Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-YeeNJy/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "hook-line",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-ponytail",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "lists-superpowers",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in last_message",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill-ponytail",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0,
+        "passRateWithout": 0,
+        "delta": 1
+      }
+    },
+    {
+      "name": "probe",
+      "dir": "evals/probe",
+      "source": "mixed",
+      "promptMarkdown": "Use the Bash tool to run `wc -l < data.txt` in the current directory. Then use the Bash tool to write that number, alone, to a new file result.txt. End your reply with one final line in the form `PROBE-COUNT: <number>`.",
+      "runsPerCase": 1,
+      "timeoutSeconds": 300,
+      "maxTurns": 10,
+      "graders": [
+        {
+          "name": "count-line",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "PROBE-COUNT: 3\\b",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "plugin-skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill"
+          }
+        },
+        {
+          "name": "result-file",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "result.txt"
+            },
+            "pattern": "^\\s*3\\s*$",
+            "flags": "",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "used-bash",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Bash"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.0539035,
+            "judgeCostUsd": 0,
+            "durationSeconds": 4,
+            "startedAt": "2026-11-11T00:11:22.952Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-EUY4gk/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "count-line",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched PROBE-COUNT: 3\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "plugin-skill",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "result-file",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^\\s*3\\s*$",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "used-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 3,
+            "costUsd": 0.044426700000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 8,
+            "startedAt": "2026-11-11T00:11:27.253Z",
+            "error": null,
+            "tracePath": "/private/tmp/e-vv1WJ1/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "count-line",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched PROBE-COUNT: 3\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "result-file",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^\\s*3\\s*$",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "used-bash",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Bash called 2x (expected 1..∞)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 3,
+    "casesPassed": 3,
+    "overallScore": 0.9166666666666666,
+    "overallPassRate": 0.6666666666666666,
+    "meanDelta": 0.5833333333333334
+  }
+}

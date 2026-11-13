@@ -1,0 +1,16 @@
+{
+  "caseHash": "733e20a2f480817eee4125821f40bc67d84236d9d357fab257577a38aa802ee8",
+  "model": "claude-opus-5-5",
+  "runs": 1,
+  "withPonytail": false,
+  "ponytailRef": null,
+  "ablation": "none",
+  "summary": {
+    "score": 0,
+    "passRate": 0,
+    "costUsd": 0.20351020000000003,
+    "runs": 1,
+    "errors": 0,
+    "maxTurns": 0
+  }
+}

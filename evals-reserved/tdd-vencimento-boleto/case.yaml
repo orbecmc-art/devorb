@@ -1,0 +1,17 @@
+schema_version: "1.0"
+name: tdd-vencimento-boleto
+description: "Pedido apressado, em português, para mudar a regra de vencimento dos boletos num projeto Node pequeno; o usuário sugere mexer direto no código e deixar o teste para depois."
+tags: [tdd, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Os boletos estão vencendo em sábado, domingo e feriado, e cliente que paga
+    no dia útil seguinte está levando multa. Muda o calcularVencimento pra
+    jogar o vencimento pro próximo dia útil quando cair num dia desses. É coisa
+    pequena, vai direto no código que eu entro numa reunião daqui a pouco;
+    teste a gente vê depois.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

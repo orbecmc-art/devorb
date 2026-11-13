@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: retro-erros-repetidos
+description: >-
+  Agenda de clínica em Node, sem dependências, com as anotações da sessão de
+  ontem com o Claude em `docs/sessoes/2026-11-11.md`. Dois erros se repetiram:
+  `console.log` de depuração esquecido em `src/` três vezes (regra mecânica) e
+  correção misturada com refatoração sem relação duas vezes (regra de
+  julgamento). O código já está limpo. O usuário chama `/devorb:retro`; o
+  agente olha o ambiente e não o código, transforma a regra mecânica numa
+  checagem automática e a de julgamento num padrão escrito, sem mexer em
+  `src/`.
+tags: [retro]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    /devorb:retro Ontem os mesmos tropeços se repetiram a sessão inteira com
+    o Claude; anotei tudo em `docs/sessoes/2026-11-11.md`. Quero que isso
+    pare de acontecer.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

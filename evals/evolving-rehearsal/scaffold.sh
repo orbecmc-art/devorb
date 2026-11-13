@@ -274,6 +274,9 @@ EOF
 # not unless something is trimmed or moved to references/.
 BYTES=$(wc -c < skills/debugging/SKILL.md | tr -d ' ')
 CEILING=$(( (BYTES + 3) / 4 + 5 ))
+# The graders ceiling-kept (fusion/skills.json) and within-ceiling (676-character
+# regex on the skill) hard-code this value: update them together with the text.
+[ "$CEILING" = 169 ] || { echo "scaffold: debugging ceiling is $CEILING, expected 169; update ceiling-kept and within-ceiling" >&2; exit 1; }
 awk -v c="$CEILING" '{sub(/CEILING_PLACEHOLDER/, c); print}' fusion/skills.json > fusion/skills.json.new
 mv fusion/skills.json.new fusion/skills.json
 

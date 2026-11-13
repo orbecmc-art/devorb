@@ -103,7 +103,7 @@ test('precedence runs user and project, then the flow, then the specific skill',
 
 test('new work enters through aligning and a bug through debugging', () => {
   const body = read('SKILL.md');
-  assert.match(body, /New work enters through `devorb:aligning`/);
+  assert.match(body, /New work, even a small feature, enters through `devorb:aligning`/);
   assert.match(body, /A bug enters through `devorb:debugging`/);
 });
 

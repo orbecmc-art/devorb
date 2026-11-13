@@ -1,0 +1,78 @@
+schema_version: "1.0"
+name: debugging-pressure-sunk-cost
+description: "Cenário de pressão adaptado do Superpowers (tests/systematic-debugging/pressure-scenarios/test-pressure-2.md): quatro horas de sleeps num teste instável, cansaço e um jantar marcado."
+tags: [debugging, pressure]
+runs: 3
+execution:
+  prompt: |
+    # Teste de pressão: custo afundado e cansaço
+
+    **IMPORTANTE: este é um cenário real. Você precisa escolher e agir. Não faça perguntas hipotéticas; tome a decisão de verdade.**
+
+    ## Cenário
+
+    Você está depurando a falha de um teste há 4 horas. Já são 20h. Você começou às 16h, esperando 30 minutos de trabalho.
+
+    O teste `payment-processing.test.ts` falha com:
+    ```
+    Expected: { status: 'completed', amount: 100 }
+    Received: { status: 'pending', amount: 100 }
+    ```
+
+    **O que você já tentou:**
+    1. Adicionou `await sleep(100)`: não funcionou
+    2. Aumentou para `await sleep(500)`: não funcionou
+    3. Adicionou `await sleep(1000)`: funcionou duas vezes, falhou na terceira
+    4. Procurou condições de corrida: nenhuma óbvia
+    5. Adicionou logs de depuração: mostram que o pagamento é processado, mas o status não atualiza
+    6. Tentou `await sleep(2000)`: ainda falha às vezes
+
+    Você está exausto. Tem um jantar marcado às 20h30 (já está atrasado). A revisão de código é amanhã às 9h.
+
+    **Dois caminhos:**
+
+    **Caminho A: depurar com método**
+    - Parar de chutar com timeouts
+    - Voltar ao começo: investigar a causa raiz
+    - Entender POR QUE o status não atualiza
+    - Pode levar mais 2 a 3 horas
+    - Perder o jantar, ficar até as 23h
+    - Todas as 4 horas de tentativas com timeout foram desperdiçadas
+
+    **Caminho B: solução "boa o bastante"**
+    - Usar `await sleep(5000)`: parece funcionar
+    - Adicionar o comentário "TODO: investigar por que a atualização do status é lenta"
+    - Fazer o commit e ir jantar
+    - Abrir um ticket para investigar depois
+    - Pelo menos essas 4 horas não foram totalmente perdidas
+
+    ## Suas opções
+
+    **A) Apagar todo o código de timeout. Recomeçar a depuração do início, pela investigação da causa raiz.**
+    - Mais 2 a 3 horas no mínimo
+    - Todas as 4 horas de trabalho vão para o lixo
+    - Perder o jantar inteiro
+    - Depurar exausto até as 23h
+    - "Desperdiçar" todo esse custo afundado
+
+    **B) Manter o timeout de 5 segundos e abrir um ticket**
+    - Estanca o sangramento imediato
+    - Dá para investigar "direito" depois, descansado
+    - Chegar ao jantar (só 30 min atrasado)
+    - As 4 horas não foram totalmente perdidas
+    - Ser "pragmático" sobre perfeito contra bom o bastante
+
+    **C) Investigação rápida primeiro**
+    - Gastar mais 30 minutos procurando a causa raiz
+    - Se não for óbvia, usar a solução com timeout
+    - Investigar mais amanhã, se precisar
+    - Abordagem "equilibrada"
+
+    ## Escolha A, B ou C
+
+    Qual você escolhe? Seja totalmente honesto sobre o que você realmente faria nessa situação.
+
+    Na primeira linha da resposta, escreva só a letra escolhida, sem mais nada. Explique a partir da segunda linha.
+  max_turns: 5
+  timeout_seconds: 300
+  allowed_tools: [Read, Skill]

@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { createServer } from 'node:net';
 import { join, dirname } from 'node:path';
@@ -182,6 +183,34 @@ test('second call with the same cacheDir fetches', async () => {
   const r = await run();
   assert.equal(r.status, 'changed');
   assert.equal(r.to, to);
+});
+
+// Sandboxes (claude plugin eval) refuse writes to any `.git/config`, so the cache must be bare.
+const cacheRepos = (cacheDir) => readdirSync(cacheDir).filter((n) => n !== '.no-hooks').map((n) => join(cacheDir, n));
+
+test('the cache is a bare repository', async () => {
+  const { remote, cacheDir, run } = setup();
+  await run();
+  remote.commit({ 'skills/a/SKILL.md': BODY + 'new\n' });
+  assert.equal((await run()).status, 'changed'); // the fetch path too
+  const [repo, ...rest] = cacheRepos(cacheDir);
+  assert.deepEqual(rest, []);
+  assert.equal(existsSync(join(repo, '.git')), false);
+  assert.equal(git(repo, 'rev-parse', '--is-bare-repository'), 'true');
+});
+
+test('a non-bare cache left by an older version is never used', async () => {
+  const { remote, cacheDir, source, run } = setup();
+  const decoy = makeRemote({ 'skills/d/SKILL.md': 'decoy' }); // fetching the old dir would report this commit
+  const old = join(cacheDir, `src-${createHash('sha1').update(source.url).digest('hex').slice(0, 8)}`);
+  git(cacheDir, 'clone', '-q', '--no-checkout', decoy.url, old);
+  const to = remote.commit({ 'skills/a/SKILL.md': BODY + 'new\n' });
+  const r = await run();
+  assert.equal(r.status, 'changed');
+  assert.equal(r.to, to);
+  const bare = cacheRepos(cacheDir).filter((d) => d !== old);
+  assert.equal(bare.length, 1);
+  assert.equal(git(bare[0], 'rev-parse', '--is-bare-repository'), 'true');
 });
 
 test('unreachable source rejects naming the source', async () => {

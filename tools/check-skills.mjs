@@ -43,15 +43,19 @@ export function checkSkills(root, registry) {
     ? readdirSync(skillsDir, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name)
     : [];
 
+  // Own keys only: `constructor` or `__proto__` must not look registered.
+  const registered = (name) => Object.hasOwn(registry, name);
+
   for (const name of Object.keys(registry)) {
     if (registry[name].status === 'done' && !folders.includes(name)) {
       errors.push(`${name}: status done but folder missing`);
     }
+    if (!Number.isFinite(registry[name].ceilingTokens)) errors.push(`${name}: missing ceilingTokens in registry`);
   }
 
   let alwaysOn = 0;
   for (const name of folders) {
-    const entry = registry[name];
+    const entry = registered(name) ? registry[name] : undefined;
     if (!entry) {
       errors.push(`${name}: folder not in registry`);
       continue;
@@ -95,7 +99,7 @@ export function checkSkills(root, registry) {
       for (const m of content.matchAll(/devorb:([a-z0-9-]+)/g)) refsFound.add(m[1]);
     }
     for (const l of legacyFound) errors.push(`${name}: legacy name ${l}`);
-    for (const r of refsFound) if (!(r in registry)) errors.push(`${name}: devorb:${r} not in registry`);
+    for (const r of refsFound) if (!registered(r)) errors.push(`${name}: devorb:${r} not in registry`);
   }
 
   if (alwaysOn > ALWAYS_ON_CAP) errors.push(`always-on: ${alwaysOn} tokens > ${ALWAYS_ON_CAP}`);

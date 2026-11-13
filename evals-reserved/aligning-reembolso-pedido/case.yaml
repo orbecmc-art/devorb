@@ -1,0 +1,15 @@
+schema_version: "1.0"
+name: aligning-reembolso-pedido
+description: "Pedido curto em português para o sistema de uma loja virtual pequena, que já existe, passar a fazer o reembolso de pedidos que o atendimento hoje faz à mão."
+tags: [aligning, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O atendimento faz reembolso de pedido na mão hoje, numa planilha, e toda
+    semana dá confusão. Quero que o sistema faça o reembolso do pedido. O
+    código está aqui no projeto.
+  max_turns: 15
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

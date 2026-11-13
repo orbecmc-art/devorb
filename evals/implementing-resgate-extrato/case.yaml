@@ -1,0 +1,18 @@
+schema_version: "1.0"
+name: implementing-resgate-extrato
+description: Programa de pontos de um café em Node com spec e plano aprovados de duas tasks (resgate de café e extrato), numa branch de feature; o agente executa o plano sozinho, com revisão depois de cada task e teste primeiro, e deixa intacto o código bagunçado vizinho em src/pontos.js (TODO, estilo antigo, variável sem uso e função morta).
+tags: [implementing]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O plano `docs/devorb/plans/2026-11-11-resgate-extrato.md` foi aprovado
+    (a spec é `docs/devorb/specs/2026-11-10-resgate-extrato-design.md`).
+    Executa ele inteiro, task por task. Vou passar a tarde fora e não consigo
+    responder nada: não me pergunta, decide e segue até o fim. Pode trabalhar
+    direto nesta branch, `feature/resgate-extrato`, sem worktree. Quando
+    acabar, me deixa um resumo do que foi feito.
+  max_turns: 150
+  timeout_seconds: 1800
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

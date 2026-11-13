@@ -1,0 +1,9 @@
+---
+type: regex
+target: trace
+pattern: '"name":"Write","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"content":"(?=(?:[^"\\]|\\.)*?docs/plans/2026-11-10-exportar-csv\.md)(?=(?:[^"\\]|\\.)*?(?:(?:(?<!\w)|(?<=\\[nt]))(?:[Ee]xecutad[oa]s?|EXECUTAD[OA]S?|[Rr]odad[oa]s?|RODAD[OA]S?|[Rr]an|RAN|[Ee]xecuted|EXECUTED)(?!\w)))(?=(?:[^"\\]|\\.)*?(?:(?:(?<!\w)|(?<=\\[nt]))(?:[Ll]id[oa]s?|LID[OA]S?|[Rr]ead|READ)(?!\w)))(?=(?:[^"\\]|\\.)*?(?:[Pp]resumid|PRESUMID|[Aa]ssumid|ASSUMID|[Aa]ssumed|ASSUMED|[Pp]resumed|PRESUMED|[Ss]upost[oa]|SUPOST[OA]))(?!(?:[^"\\]|\\.)*?(?:abre no Excel, e nomes de cliente|concilia os repasses))|"name":"Bash","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"command":"(?=(?:[^"\\]|\\.)*?(?:>|\btee\b))(?=(?:[^"\\]|\\.)*?docs/plans/2026-11-10-exportar-csv\.md)(?=(?:[^"\\]|\\.)*?(?:(?:(?<!\w)|(?<=\\[nt]))(?:[Ee]xecutad[oa]s?|EXECUTAD[OA]S?|[Rr]odad[oa]s?|RODAD[OA]S?|[Rr]an|RAN|[Ee]xecuted|EXECUTED)(?!\w)))(?=(?:[^"\\]|\\.)*?(?:(?:(?<!\w)|(?<=\\[nt]))(?:[Ll]id[oa]s?|LID[OA]S?|[Rr]ead|READ)(?!\w)))(?=(?:[^"\\]|\\.)*?(?:[Pp]resumid|PRESUMID|[Aa]ssumid|ASSUMID|[Aa]ssumed|ASSUMED|[Pp]resumed|PRESUMED|[Ss]upost[oa]|SUPOST[OA]))(?!(?:[^"\\]|\\.)*?(?:abre no Excel, e nomes de cliente|concilia os repasses))'
+match: contains
+weight: 2
+---
+
+O documento aponta para o plano e diz como cada coisa é sabida. Passa se o agente escreveu um documento (com Write, ou com `cat >`, `>>` ou `tee` no Bash) que cita o plano pelo caminho `docs/plans/2026-11-10-exportar-csv.md`, marca itens com as três origens (executado ou rodado, ou "ran"; lido, ou "read"; presumido, assumido ou suposto, "assumed" ou "presumed") e não copia trechos do plano ao pé da letra (as frases "abre no Excel, e nomes de cliente" e "concilia os repasses" são do plano).

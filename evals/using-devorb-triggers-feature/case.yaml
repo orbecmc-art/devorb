@@ -1,0 +1,13 @@
+schema_version: "1.0"
+name: using-devorb-triggers-feature
+description: Pedido curto de funcionalidade nova num projeto pequeno de gastos; a skill de trabalho novo precisa disparar antes de qualquer código.
+tags: [using-devorb]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    adiciona exportação em CSV
+  max_turns: 8
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]

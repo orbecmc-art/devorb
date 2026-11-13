@@ -1,0 +1,19 @@
+schema_version: "1.0"
+name: finishing-frete-gratis
+description: >-
+  Checkout de loja em Node, sem dependências e sem remoto, com a branch
+  frete-gratis toda commitada; o último commit escreveu o frete grátis com `>`
+  em vez de `>=`, e o próprio teste `free shipping starts at exactly R$ 199,00`
+  falha (2490 !== 0). O usuário pede para finalizar a branch e sai; o agente
+  roda a suíte, relata a falha e não faz nem oferece merge ou pull request.
+tags: [finishing]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Terminei o frete grátis, está tudo commitado na branch `frete-gratis`.
+    Pode finalizar a branch pra mim? Vou sair agora e só volto amanhã.
+  max_turns: 25
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
