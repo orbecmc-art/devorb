@@ -13,7 +13,7 @@ A prototype is **throwaway code that answers one question**. The question decide
 Find the question being answered, from the user's request and the surrounding code, and ask the user when it isn't clear:
 
 - **"Does this logic or state model feel right?"** Read `references/LOGIC.md`. Build one shareable HTML file (free-play buttons plus tabbed guided walkthroughs) that pushes the state model through the cases hard to reason about on paper, and that a non-developer can drive.
-- **"What should this look like?"** Read `references/UI.md`. Build several radically different UI variants on one route, switched by a URL search param and a floating bottom bar.
+- **"What should this look like?"** Read `references/UI.md`. Build several radically different UI variants on one route, switched by a URL search param and a floating bottom bar. Each variant names the one axis it changes (layout, density, how it is operated); variants that differ only in colour or wording count as one.
 
 The two branches produce very different artifacts, so a wrong pick wastes the whole prototype. Still ambiguous and the user isn't reachable? Take the branch that matches the surrounding code (a backend module: logic; a page or component: UI) and state the assumption at the top of the prototype.
 

@@ -15,6 +15,8 @@ Read, in this order: the spec's `## Direção visual`, `DESIGN.md`, every place 
 - **`DESIGN.md` exists:** it is the reference. Do not edit or overwrite it unless the user asked. New tokens follow its names and scales; list in your final message what it would need to cover them.
 - **Nothing exists:** build the system below from the contract.
 
+For an app screen, read `references/native.md`.
+
 Colours come from the direction: each one traces to something in the world the contract names, or to a colour the spec or the client's material fixes. Never seed from a framework default, a generator's palette or the colours a model reaches for by habit. If the contract is missing, say so and build only what the spec fixes.
 
 ## 2. Two layers, few tokens
@@ -69,5 +71,5 @@ Your final message names: the files where the tokens live, whether `DESIGN.md` w
 ## Connects to
 
 - **Receives:** the spec with `## Direção visual` from `devorb:visual-direction`, or a request to set up or extend a project's tokens or theme.
-- **Uses:** `references/color-roles.md`, `references/contrast.md` (its script, run on every pair) and `references/design-md.md`.
+- **Uses:** `references/color-roles.md`, `references/contrast.md` (its script, run on every pair), `references/design-md.md` and, for an app, `references/native.md`.
 - **Hands off to:** `devorb:planning` and `devorb:implementing`, which cite the tokens; `devorb:ui-review`, which measures the build against them.

@@ -75,6 +75,7 @@ Everything you paste into a dispatch, and everything a subagent prints back, sta
 - Use `prompts/implementer.md`. The dispatch holds: one line on where the task fits; the brief path, as "read this first: it is your requirements, with the exact values to use verbatim"; interfaces and rulings from earlier tasks the brief can't know; your resolution of any ambiguity you noticed; the report path and contract. Exact values appear only in the brief. Never make a subagent read the whole plan.
 - A dispatch describes one task, not the session's history. Never paste summaries of earlier tasks: one real dispatch reached 42k characters, 99% of them pasted history. If an earlier task parked a finding in this area, point to that ledger line.
 - The template carries two contracts: the implementer never dispatches subagents (a reviewer it spawns duplicates yours at full cost), and every line it changes must answer to the brief.
+- A task where something on screen moves names `devorb:motion` in the dispatch, and a screen in an app project (`expo` in `package.json`, or an `AndroidManifest.xml`) names `devorb:native-app`: the implementer invokes it before writing that code.
 - Record the implementer's agent identity: fix rounds 1-3 resume it.
 - One implementer at a time, outside `references/parallel.md`. Parallel implementers on shared code conflict.
 
@@ -133,5 +134,5 @@ Delivery ends at `devorb:finishing`, which presents the options. Never merge out
 ## Connects to
 
 - **Receives:** the reviewed `docs/devorb/plans/YYYY-MM-DD-<topic>.md` from `devorb:planning`, and the spec it names.
-- **Uses:** `devorb:tdd` in every task, at the seam the plan names; `devorb:debugging` when something fails or surprises; `devorb:verifying` before any completion claim; `devorb:reviewing` for the whole-branch review; `scripts/`, `prompts/` and `references/` in this folder.
+- **Uses:** `devorb:tdd` in every task, at the seam the plan names; `devorb:debugging` when something fails or surprises; `devorb:verifying` before any completion claim; `devorb:reviewing` for the whole-branch review; `devorb:motion` whenever something moves; `devorb:native-app` when the project is an app; `scripts/`, `prompts/` and `references/` in this folder.
 - **Hands off to:** `devorb:finishing`, with the branch and the three lists: "Rulings I made", "Deferred minors" and "User decides".

@@ -54,7 +54,7 @@ You understand what they want when nothing that changes the build is open or sil
 4. **Reviewer, for a project.** Tell the user a reviewer reads it first and you may come back once with a few questions. Dispatch a fresh subagent with `references/builder-check-prompt.md`. Sort what it asks: answered already (put the answer in the doc); minor (settle it, mark it as your call); theirs (only the user can answer, and it changes the build). Bring "theirs" in one message, most important first (one round only), update the doc, and hand it over with a short list of your calls. No subagent tool: read it as that builder yourself.
 
 <HARD-GATE>
-Nothing gets built until the user approves the design doc, short or full. Building includes product code, scaffolding, installing dependencies, creating projects and invoking an implementation skill. Reading and exploring are fine. Exceptions: they opted out of the conversation, or a spike they said yes to, which stays labeled throwaway; keeping it is a new request, back through this gate. After approval, the next step is `devorb:planning` and no other skill.
+Nothing gets built until the user approves the design doc, short or full. Building includes product code, scaffolding, installing dependencies, creating projects and invoking an implementation skill. Reading and exploring are fine. Exceptions: they opted out of the conversation, or a spike they said yes to, which stays labeled throwaway; keeping it is a new request, back through this gate. After approval, the next step is `devorb:planning` and no other skill; a task with an interface (a web UI or an app screen) goes through `devorb:visual-direction` first.
 </HARD-GATE>
 
 ## Visual companion
@@ -65,4 +65,4 @@ A browser tab for mockups, diagrams and clickable throwaway prototypes. Offer it
 
 - **Receives:** new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard; a chosen deepening candidate from `devorb:improve-architecture`; a prototype's verdict from `devorb:prototype` when no spec exists yet.
 - **Uses:** fresh subagents for facts and for the reviewer; `devorb:domain-modeling` for terms and hard-to-reverse decisions; `references/` for the grilling round, sizing and red flags, the reviewer prompt and the companion.
-- **Hands off to:** `devorb:planning`, with the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md`.
+- **Hands off to:** `devorb:planning`, with the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md`; first to `devorb:visual-direction` when the task has an interface (a web UI or an app screen).

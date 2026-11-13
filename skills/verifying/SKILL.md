@@ -48,6 +48,8 @@ Skipping a step is lying, not verifying.
 | Works when deployed | A check on that environment (below) | Local tests, review, merge |
 | Faster | Measured as below | One run, reading the code |
 
+A UI change then goes to `devorb:ui-review`, after `devorb:browser-testing`; in an app project, `devorb:device-testing` runs instead of `devorb:browser-testing`, before `devorb:ui-review`.
+
 ## Regression tests: see the red
 
 Write, run (pass), take out only the fix, run (**must fail**), put it back, run (pass). A test you never saw fail may not test the bug.
@@ -106,5 +108,5 @@ Report each claim with its command and the result you saw (counts, exit code), w
 ## Connects to
 
 - **Receives:** finished work from `devorb:implementing`, or a fix from `devorb:debugging`.
-- **Uses:** `devorb:browser-testing` when the task has a user interface.
+- **Uses:** `devorb:browser-testing` when the task has a user interface, then `devorb:ui-review`; for an app, `devorb:device-testing` before `devorb:ui-review`.
 - **Hands off to:** `devorb:reviewing`, with the evidence.

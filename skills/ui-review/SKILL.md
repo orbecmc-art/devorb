@@ -13,7 +13,7 @@ THE RENDER JUDGES, THE CODE LOCATES. UNMEASURED IS NOT PASSED.
 
 ## 1. Gather what was declared
 
-Read, in this order: `DESIGN.md` at the project root, the contract (`## Direção visual` in the spec), `references/floor.md` of `devorb:visual-direction`, and the references of `devorb:design-system` and `devorb:motion` when those skills are installed. These, plus WCAG 2.2 (`references/a11y.md`) and the mobile web floor (`references/mobile-web.md`), are the only rules. A value nobody declared is never a finding.
+Read, in this order: `DESIGN.md` at the project root, the contract (`## Direção visual` in the spec), `references/floor.md` of `devorb:visual-direction`, and the references of `devorb:design-system` and `devorb:motion` when those skills are installed. These, plus WCAG 2.2 (`references/a11y.md`) and the mobile web floor (`references/mobile-web.md`), are the only rules. A value nobody declared is never a finding. For an app screen, read `references/native.md`.
 
 Whatever `DESIGN.md` or the contract authorizes is not a finding: that check is clear, with no finding and no recommendation.
 
@@ -89,6 +89,6 @@ Then stop. Change no file: no fix, no fixture in the tree, no formatting. When f
 
 ## Connects to
 
-- **Receives:** from `devorb:verifying`, after `devorb:browser-testing`, a built screen with a UI; or a request to review an interface.
-- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`.
+- **Receives:** from `devorb:verifying`, after `devorb:browser-testing` (or `devorb:device-testing` for an app), a built screen with a UI; or a request to review an interface.
+- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`, `references/native.md`.
 - **Hands off to:** the caller with the report; `devorb:debugging` when the task includes fixing.
