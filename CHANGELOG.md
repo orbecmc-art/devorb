@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.0
+
+- Um lembrete curto do DevOrb (280 bytes) vai junto de cada mensagem do usuário, por um hook `UserPromptSubmit`: antes de lista de tarefas, plano, leitura ou comando, chamar a skill que o pedido precisa; skill de estilo não conta; pergunta e conversa não precisam. Motivo: em sessões longas do app desktop (com um `AGENTS.md` de 37 mil tokens e o app pedindo a lista de tarefas primeiro), o agente chamava a skill de estilo do dono e pulava a do fluxo, embora as regras do DevOrb tivessem chegado no início da sessão.
+- Dois casos de roteamento com uma skill de estilo que o `CLAUDE.md` manda rodar primeiro. Roteamento: 17 casos, todos aprovados.
+
 ## 1.11.0
 
 - Decisão do dono: toda skill dispara sozinha pelo assunto da conversa, sem a pessoa precisar saber o nome. As oito que eram manuais (`improve-architecture`, `prototype`, `handoff`, `retro`, `security-audit`, `diagram`, `evolving`, `mobile-release`) ganharam descrições com gatilhos e entraram na tabela de roteamento da `using-devorb`; o comando com barra continua funcionando. Os cuidados ficam: `security-audit` só lê por padrão, `mobile-release` não roda EAS, e `evolving` disparada sozinha para no rascunho (só "roda o ciclo" publica).
