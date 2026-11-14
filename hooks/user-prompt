@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# UserPromptSubmit hook for the DevOrb plugin: a short routing reminder on every
+# user message. The full rules arrive once, at session start; in long sessions,
+# or in apps that want a task list first, the flow skill was being skipped.
+# No external command and no subshell runs here (see session-start for why).
+
+trap '' PIPE
+printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":"DevOrb: if this message asks for work, invoke the DevOrb skill it needs before any task list, plan, file read or command (bug: devorb:debugging; new work: devorb:aligning; others: the using-devorb routing table). A style or mode skill does not count. Questions and chat need none."}}' 2>/dev/null || true
+exit 0

@@ -104,7 +104,7 @@ test('the wrapper exits quietly when no shell can run the hook', needsBash, () =
   assert.equal(r.stderr, '');
 });
 
-test('hooks.json runs the wrapper on every session start', () => {
+test('hooks.json runs the wrapper on every session start and every user message', () => {
   const config = JSON.parse(readFileSync(join(root, 'hooks', 'hooks.json'), 'utf8'));
   assert.deepEqual(config, {
     hooks: {
@@ -122,12 +122,25 @@ test('hooks.json runs the wrapper on every session start', () => {
           ],
         },
       ],
+      UserPromptSubmit: [
+        {
+          hooks: [
+            {
+              type: 'command',
+              command: '"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd" user-prompt',
+              powershell: '& "${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd" user-prompt',
+              shell: 'bash',
+              async: false,
+            },
+          ],
+        },
+      ],
     },
   });
 });
 
 test('hook scripts are executable in the git index', () => {
-  const r = spawnSync('git', ['ls-files', '-s', 'hooks/run-hook.cmd', 'hooks/session-start'], {
+  const r = spawnSync('git', ['ls-files', '-s', 'hooks/run-hook.cmd', 'hooks/session-start', 'hooks/user-prompt'], {
     cwd: root,
     encoding: 'utf8',
   });
@@ -139,5 +152,19 @@ test('hook scripts are executable in the git index', () => {
       .filter(Boolean)
       .map((line) => [line.split('\t')[1], line.split(' ')[0]]),
   );
-  assert.deepEqual(modes, { 'hooks/run-hook.cmd': '100755', 'hooks/session-start': '100755' });
+  assert.deepEqual(modes, { 'hooks/run-hook.cmd': '100755', 'hooks/session-start': '100755', 'hooks/user-prompt': '100755' });
+});
+
+// Long sessions and app prompts that want a task list first pushed the flow skill out in real use:
+// a short reminder rides on every user message.
+test('user-prompt hook reminds which skill to invoke, in a few tokens, with an empty PATH', needsBash, () => {
+  const r = spawnBash([wrapperPath, 'user-prompt'], { PATH: '' });
+  assert.equal(r.status, 0);
+  assert.equal(r.stderr, '');
+  const out = JSON.parse(r.stdout).hookSpecificOutput;
+  assert.equal(out.hookEventName, 'UserPromptSubmit');
+  assert.match(out.additionalContext, /devorb:debugging/);
+  assert.match(out.additionalContext, /devorb:aligning/);
+  assert.match(out.additionalContext, /style/i);
+  assert.ok(Buffer.byteLength(out.additionalContext) <= 400, `${Buffer.byteLength(out.additionalContext)} bytes`);
 });
