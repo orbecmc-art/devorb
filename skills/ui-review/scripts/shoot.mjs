@@ -54,33 +54,22 @@ async function scrollThrough(page) {
   await page.evaluate(() => window.__devorbScroller().scrollTo(0, 0));
 }
 
-async function main(argv) {
-  const opts = parseArgs(argv);
-  if (!opts.url || !opts.out || !(opts.mode in MODE_MIN_RATIO) || !opts.widths.every((w) => w > 0)) {
-    console.error(USAGE);
-    return 1;
-  }
-  const pw = await resolvePlaywright({ dir: opts.pw });
-  if (!pw) {
-    console.log(NEED);
-    return 3;
-  }
-  const browser = await launch(pw.chromium ?? pw.default.chromium);
-  if (!browser) {
-    console.log(NEED);
-    return 3;
-  }
-  let failed = false;
+// throws an Error with code 'NEED_PLAYWRIGHT' when no browser is available
+export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], mode = 'persuade', scroll = true, pw: pwDir } = {}) {
+  const pw = await resolvePlaywright({ dir: pwDir });
+  const browser = pw && (await launch(pw.chromium ?? pw.default.chromium));
+  if (!browser) throw Object.assign(new Error(NEED), { code: 'NEED_PLAYWRIGHT' });
+  const all = {};
   try {
-    for (const width of opts.widths) {
-      const dir = join(opts.out, String(width));
+    for (const width of widths) {
+      const dir = join(outDir, String(width));
       mkdirSync(dir, { recursive: true });
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       const page = await context.newPage();
-      await page.goto(opts.url, { waitUntil: 'load' });
+      await page.goto(url, { waitUntil: 'load' });
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {}); // pages that poll never go idle
       await page.addScriptTag({ path: COLLECTOR });
-      if (opts.scroll) await scrollThrough(page);
+      if (scroll) await scrollThrough(page);
       await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
@@ -90,16 +79,31 @@ async function main(argv) {
         const s = metrics.sections[i];
         await page.screenshot({ path: join(dir, `section-${i}.png`), fullPage: true, clip: { x: s.x, y: s.top, width: s.width, height: Math.min(s.height, 16000) } });
       }
-      const checks = checkFloor(metrics, opts.mode);
-      failed ||= checks.some((c) => c.status === 'FAIL');
       writeFileSync(join(dir, 'metrics.json'), JSON.stringify(metrics, null, 2));
-      writeFileSync(join(dir, 'checks.json'), JSON.stringify(checks, null, 2));
+      writeFileSync(join(dir, 'checks.json'), JSON.stringify(checkFloor(metrics, mode), null, 2));
+      all[width] = metrics;
       await context.close();
     }
   } finally {
     await browser.close();
   }
-  return failed ? 2 : 0;
+  return all;
+}
+
+async function main(argv) {
+  const opts = parseArgs(argv);
+  if (!opts.url || !opts.out || !(opts.mode in MODE_MIN_RATIO) || !opts.widths.every((w) => w > 0)) {
+    console.error(USAGE);
+    return 1;
+  }
+  try {
+    const all = await shootPage(opts.url, opts.out, opts);
+    return Object.values(all).some((m) => checkFloor(m, opts.mode).some((c) => c.status === 'FAIL')) ? 2 : 0;
+  } catch (e) {
+    if (e.code !== 'NEED_PLAYWRIGHT') throw e;
+    console.log(NEED);
+    return 3;
+  }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
