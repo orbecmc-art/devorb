@@ -14,6 +14,7 @@ Read the spec you received, `DESIGN.md`, the project's styles, components, fonts
 - **Extend:** a section, component or state inside a surface that exists. Keep its look entirely; decide only content, order, states and how the piece joins what is around it.
 - **New surface, same world:** a whole page or screen in a project with an identity. Keep the system; derive the structure from what the visitor does there.
 - **New world:** nothing to inherit, or the user asked to replace the look. The full direction below. Keep what the old look tells you about the business; drop the look itself.
+- **Replicate:** the user asks to copy or clone a page, to "deixar igual", or to use it as a base. Read `references/replicate.md` and follow it: the reference supplies structure and scale, the project supplies brand and content.
 
 ## 2. The mode comes from the visitor, not the product
 
@@ -45,13 +46,14 @@ If the spec already says what exists, that is the inventory. If a person is in t
 Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style.
 
 - Read `references/sources.md` before opening entries or choosing a library: how each `reading` opens, and one library per job.
-- Galleries show how a whole site is built: study structure, rhythm, type and the first screen. Never copy a site, its text or its images.
+- Galleries show how a whole site is built: study structure, rhythm, type and the first screen. Copy a site's form when the user asks for it; never publish someone else's text, photos or logo as the client's.
+- With DevOrb's design flow active, do not load frontend-design, taste-skill, Impeccable or ui-ux-pro-max; recommend uninstalling them once.
 
 Your final message to the user names the sources you consulted and the ones you skipped, with why.
 
 ## 5. A direction from the audience's world
 
-Skip this for **Extend**. Otherwise:
+Skip this for **Extend** and **Replicate**. Otherwise:
 
 1. Write the audience's real scene in one sentence (who, where, doing what), the page every competitor in this category already has, and the obvious contrarian answer to it. Neither is a direction.
 2. List four to six candidates from the audience's daily life: objects, places, printed matter, signs, habits, local visual traditions. Not the category's template, and on Operate or Read never a copy of the tool they use at work. For each, one line on what it would look like and one on where it would fail.
@@ -73,5 +75,5 @@ Invoke `devorb:design-system` with the spec: it turns the contract into tokens a
 ## Connects to
 
 - **Receives:** the approved spec from `devorb:aligning`, or a request to build or restyle a page, screen or component.
-- **Uses:** `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
+- **Uses:** `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, `references/replicate.md` with `capture.mjs` and `devorb:ui-review`'s scripts, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
 - **Hands off to:** `devorb:design-system`, with `## Direção visual` in the spec. Later in the flow, `devorb:motion` decides anything that moves and `devorb:ui-review` checks the build against this contract.

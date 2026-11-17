@@ -105,6 +105,19 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
   - `copy.md`: "with no facts, a model fills a template... the fix is facts and decisions" (taste-skill); os campos da folha de fatos; "an empty field stays empty"; a tabela de orçamento e seus exemplos; "a verb plus what the visitor gets"; o teste do rival, ler em voz alta como o cliente e a tique que substitui a removida (taste-skill); o teste de apagar o eyebrow, o link sem URL e o formulário sem endpoint (Hallmark). Um exemplo da folha de fatos citava uma clínica em Goiânia, perto demais do caso realista, e virou uma padaria.
   - `floor.md`: tokens, contêiner em 1920, foco, rótulos, ponto médio e seta (Hallmark); a ordem de mudança dos looks (Hallmark gate 65); a lista dos looks gastos (`frontend-design`), refeita como tabela própria.
 - 2026-11-13, Task M4 do plano mobile: o contrato do passo 6 ganha a linha **Platform**, só em tela de app: o idioma de cada plataforma (diretrizes da Apple no iOS, Material 3 no Android) ou o tratamento neutro escolhido, com o motivo. Vem da Fronteira de design da seção "Setor mobile" da spec e de `native-slop` (16) da Expo (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`, MIT, só ideia). `SKILL.md` foi de 8.390 para 8.544 bytes.
+- 2026-11-17, Task 4 do plano `docs/plans/2026-11-17-design-quality-fase-1.md` (modo cópia):
+  - **Espaço:** a §4 (tipos de `reading` e escolha de biblioteca) foi para `references/sources.md` e a lista de campos da §6 para `references/contract.md`, sem mudança de comportamento. `SKILL.md` foi de 8.544 para 6.479 bytes e, com o modo cópia, ficou em 7.011 bytes (cerca de 1.753 tokens, teto 2.500).
+  - **Replicate,** quarto nível de invenção na §1, entra quando o usuário pede para copiar, clonar, "deixar igual" ou usar como base, e aponta para `references/replicate.md`: capturar o pacote com `capture.mjs`; atrás de login, o navegador já logado do usuário com `collect-in-page.js` pela ferramenta de JavaScript; sem navegador nenhum, ler o HTML e o CSS da referência, escrever `secoes.md` e `notas.md` à mão e dizer que a captura e o espelho não rodaram; perguntar antes de commitar o pacote e sugerir `design/referencias/` no `.gitignore` quando o conteúdo é de terceiros; o padrão do que fica igual e do que muda, perguntado uma vez quando há pessoa na conversa; construir seção por seção com espelho contra `section-<i>.png`; `compareStructure` e depois `devorb:ui-review`. A §5 (direção) não roda no Replicate: a referência é a direção.
+  - **Scripts pelo caminho absoluto** da pasta da skill, com `--pw <dir>` quando o projeto não tem Playwright. Instalar Playwright no projeto do usuário só com o sim dele; sem isso, numa pasta temporária.
+  - **Origem das ideias,** todas com as fontes fechadas e texto próprio:
+    - ai-website-cloner-template (MIT): as fases (capturar, mapear as seções, construir seção por seção, comparar no fim). Só ideia.
+    - taste-skill (MIT, `textReuse: false`): fotografar o build e conferir a consistência contra a referência. Só ideia; os scripts do DevOrb (`shoot.mjs`, `rules.mjs`) são próprios.
+    - `mirror.js` da skill `av-design-system` do dono: neutralizar revelações travadas por scroll. Só ideia, porque a origem e a licença não estão confirmadas: aqui virou a seção `hidden` lida da fonte e registrada como movimento.
+    - dembrandt (MIT, `0.39.2` no npm): conferido com `npx -y dembrandt --help` em 2026-11-17, que funcionou. O comando gravado é `npx -y dembrandt@0.39.2 <url> --design-md`, opcional e só em página pública. Não rodei contra uma página, então o caminho exato do `DESIGN.md` que ele escreve (sob `output/`) não foi conferido.
+  - **Regras "nunca copie" reescritas:** §4 do `SKILL.md` (copiar a forma quando pedido; nunca publicar texto, fotos ou logo de terceiros como do cliente), regra 3 de `ui-sources.json` e `skills/design-system/references/design-md.md` (estrutura e escala quando pedido; cores, fontes e assinatura de outra marca só quando o usuário é dono dela). `tests/ui-sources.test.mjs` não cita a frase antiga e não mudou.
+  - **Outras skills de gosto:** uma linha na §4 manda não carregar frontend-design, taste-skill, Impeccable nem ui-ux-pro-max com o fluxo de design do DevOrb ativo, e recomendar desinstalá-las uma vez (decisão 8 da spec).
+  - **Contrato:** `contract.md` ganhou os rótulos fixos que as Tasks 5 a 8 leem: `Mode`, `Invention level`, `Motion level: Suave | Equilibrado | Impacto`, `Reference pack: design/referencias/<slug>/ (até 3)`, `Same as reference:`, `Changed:`, `Sections:` (padrão, fonte do texto e movimento por seção) e `Do not:`. Os rótulos ficam como escritos, em qualquer língua da spec.
+  - **Razão título/texto 2.0 em Read e Experience:** a spec fixa só 3.0 em Persuade e 1.6 em Operate. Para Read e Experience, o construtor escolheu 2.0 (Task 1, `MODE_MIN_RATIO` em `skills/ui-review/scripts/rules.mjs`): leitura e vitrine precisam de hierarquia clara, mas não do título de vitrine de venda, e 2.0 é a razão medida na Ligare, uma tela real de app (`progress.md` da Task 1). Fica para o dono confirmar.
 
 ## Resultados
 
@@ -120,6 +133,14 @@ Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e U
 - Depois de R6, a skill passou a mandar usar o especialista escolhido mesmo sem rede (vai no manifesto, com o aviso de que falta instalar) e a nomear as fontes na mensagem final (`af8adfb`). Rodado de novo, o caso das fontes fixas ficou em 0% (0,48), contra 0,18 nos dois outros braços: o agente lê a lista e abre as galerias antes do código, mas ainda não põe o `sonner` em nenhuma das rodadas. Causa não conferida no trace. Fica como lacuna.
 - Portão do dono: as duas páginas da Clínica Serena (com a skill e sem plugin) e a spec com a direção estão em `fusion/results/d2-portao/`. Por decisão do dono (seguir o recomendado), o setor segue; a avaliação de gosto fica com ele quando abrir as páginas.
 - Custo: US$ 8,82 nas linhas de base e US$ 24,33 na comparação. O caso das fontes fixas custa uns US$ 4 por rodada com a skill, porque o agente consulta as fontes na web.
+
+Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--outside-sandbox`), Opus 5.5, 2 rodadas:
+
+| Etapa | DevOrb | Sem plugin |
+|---|---|---|
+| RED (`--baseline-only`) | não roda | 0% (0,63), US$ 1,36 |
+
+- `fusion/results/2026-11-17-visual-direction-outside-baseline.md`. GREEN (`--arms devorb,none` e `--reserved`) fica com o controlador.
 
 ## Decisões por commit de fonte
 
@@ -169,3 +190,7 @@ Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e U
 - `genjutsu@5e00595ab7495d6bb966639f2f5ff1dbee364389:skills/_jutsu/tells/references/web.md` | recusado | o formato de três campos e as entradas já cobertas por outra fonte
 - `monich@ae98c316fed8f9ba7d17e8bd3e99f6a5d473f808:installable/monich/assets/templates/web-template/design-systems/TAG-VOCABULARY.md` | adotado | cada candidato diz onde não serve (`avoid_for`)
 - `monich@ae98c316fed8f9ba7d17e8bd3e99f6a5d473f808:installable/monich/assets/templates/web-template/design-systems/TAG-VOCABULARY.md` | recusado | o vocabulário controlado e o índice de marcas
+- `ai-website-cloner-template` (MIT) | adotado | só a ideia das fases do clone (capturar, mapear, construir por seção, comparar); sem texto
+- `taste-skill@f6b76575f949707b4e3c37cd86cb44b0b98643e8` (scripts de print e consistência) | adotado | só a ideia de fotografar o build e conferir contra a referência; scripts próprios
+- `av-design-system:mirror.js` (do dono, origem e licença não confirmadas) | adotado | só a ideia de neutralizar revelações; sem texto nem código
+- `dembrandt@0.39.2` (MIT, npm) | adotado | comando opcional de tokens em página pública, conferido com `--help`
