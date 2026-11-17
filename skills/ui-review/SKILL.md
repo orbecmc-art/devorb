@@ -5,7 +5,7 @@ description: Use when a built page, screen or component must be checked against 
 
 # UI review
 
-`devorb:browser-testing` answers whether the screen works. This skill answers whether it came out as agreed: it measures the build against what was declared and reports. It decides no taste and no value, and writes no fix.
+`devorb:browser-testing` answers whether the screen works. This skill answers whether it came out as agreed: it measures the build against what was declared and reports. Taste is judged only through the written rubric (§6); it creates no value rule and writes no fix.
 
 ```
 THE RENDER JUDGES, THE CODE LOCATES. UNMEASURED IS NOT PASSED.
@@ -54,20 +54,36 @@ Run each: every contract line (mode, first screen, sections in order, states, th
 
 Each check ends in exactly one of: **found** (with the finding), **clear**, or **not applicable**. Not applicable means the check did not run: it goes under not checked and never counts as a pass.
 
-## 6. Severity
+## 6. Visual critique
+
+The look is scored against `references/critique.md` by a reviewer who never sees the code. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Install Playwright in the project only with a yes; otherwise `npm i --prefix <tmp>/pw playwright && npx --prefix <tmp>/pw playwright install chromium`, and pass `--pw <tmp>/pw`.
+
+1. **Shoot:** `node "$UI_DIR/scripts/shoot.mjs" <url, or file:// plus the absolute path> <tmp>/shots --mode <the contract's main mode, lower case> [--pw <dir>]`. Per width: `full.png`, `section-<i>.png`, `metrics.json`, `checks.json`.
+2. **Floor checks:** each `checks.json` FAIL is a `[P1]` finding, each WARN a `[P2]`, with the check id as the rule.
+3. **Reference pack** (the contract's `Reference pack:` or one the user names): without `1440/metrics.json` in it, shoot its URL or `source.html` into `<tmp>/ref` the same way. Then:
+   `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`
+   Each `reasons` item is a `[P1]` Conceptual mismatch; each `deviations` item a `[P2]`.
+4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and quotes the contract's `## Direção visual`. Nothing else: no code, no source path, no word on who built it. Never paste the rubric; the critic reads the file.
+5. **Copy** its `Critique` block into the report as returned. Each score below 8 becomes a `[P1]` finding: its gap line, class `Conceptual mismatch` (the page is organized wrong) or `Local defect` (one spot), rule `Critique: <dimension>`.
+
+No subagent tool: critique yourself from the shots alone, by `critique.md`, and title the block `Critique (self, no fresh reviewer):`. No browser (shoot exits 3 and Playwright cannot be installed): write the block yourself, from code only; the report's first line says "only code", every render-only score carries "(from code)", and no screenshot or measured value is claimed.
+
+## 7. Severity
 
 - **P0:** the task cannot be finished, data is lost, the state shown is false, or a path is closed to keyboard or screen-reader users.
 - **P1:** a WCAG 2.2 A or AA failure, or a contract or floor line visibly broken.
 - **P2:** a deviation with a workaround: token drift, a one-off, a minor floor slip.
 - **P3:** polish and recommendations, only those worth someone's time.
 
-Targets: under 24 x 24 CSS px with no WCAG exception is P1; under 44 px on touch is a P3 recommendation. Inputs on mobile render at 16 px or more; below that is a finding. No grade, score or total anywhere: only P0 to P3.
+Targets: under 24 x 24 CSS px with no WCAG exception is P1; under 44 px on touch is a P3 recommendation. Inputs on mobile render at 16 px or more; below that is a finding. No grade outside the Critique block: findings are P0 to P3.
 
-## 7. Report and stop
+## 8. Report and stop
 
 ```
 Measured: <URL or files>, <viewports>, <engine>  |  or: only code, no browser
 Modes: <section: mode>
+Critique (fresh reviewer):
+  <dimension>: <0-10> — a 10 here: <one line> — gap: <one line>   (9 lines, in critique.md's order)
 Findings, P0 first:
   [P1] <what> at <selector>, <file:line>. Declared: <value and where>. Measured: <value and how>. Class: <one of four>. Rule: <DESIGN.md line, contract line, floor item or WCAG criterion>.
 Checks: <check>: found | clear | not checked (<why>)
@@ -83,12 +99,13 @@ Then stop. Change no file: no fix, no fixture in the tree, no formatting. When f
 |---|---|
 | "The CSS says 150ms, so the motion is 150ms" | Read `getAnimations()`; overrides and inline styles win. |
 | "No browser, but the code looks clean" | The report says "only code" and the render checks stay unchecked. |
-| "This deviation is ugly" | Ugly is not a rule. Without a declared value it is not a finding. |
+| "This deviation is ugly" | Ugly is judged by the rubric, with a fresh reviewer. A value nobody declared is still no token finding. |
+| "The critic will understand better with the CSS" | The critic sees shots, pack and contract, never code. |
 | "I'll just fix this one" | Report and stop. |
 | "Not applicable, so it passed" | It never ran. |
 
 ## Connects to
 
 - **Receives:** from `devorb:verifying`, after `devorb:browser-testing` (or `devorb:device-testing` for an app), a built screen with a UI; or a request to review an interface.
-- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`, `references/native.md`.
+- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`, `references/native.md`, `references/critique.md`; `scripts/shoot.mjs` and `compareStructure` in `scripts/rules.mjs`; a reference pack from `devorb:visual-direction`.
 - **Hands off to:** the caller with the report; `devorb:debugging` when the task includes fixing.

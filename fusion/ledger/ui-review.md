@@ -1,6 +1,6 @@
 # Ledger: `ui-review`
 
-Skill automática de nível leve, da Task D5 do plano de design (`"sector": "design"`). Espinha: gstack (`docs/design-lint.md`, `design-review/sections/craft-audit`). Outras fontes: Impeccable (`audit`, `polish`, `harden`), Emil (`break-ui`, `mobile-native`), UI UX Pro Max (`ux-guidelines.csv`), genjutsu (`design-audit`, `desktop-principles`, `desktop-principles/references/keyboard-patterns`) e reanimate (`references/capture`). Todas com `textReuse: false`: entraram só ideias, escritas com voz própria.
+Skill automática, de nível leve na Task D5 e de nível completo desde a Task 5 do plano `docs/plans/2026-11-17-design-quality-fase-1.md`. Nasceu da Task D5 do plano de design (`"sector": "design"`). Espinha: gstack (`docs/design-lint.md`, `design-review/sections/craft-audit`). Outras fontes: Impeccable (`audit`, `polish`, `harden`), Emil (`break-ui`, `mobile-native`), UI UX Pro Max (`ux-guidelines.csv`), genjutsu (`design-audit`, `desktop-principles`, `desktop-principles/references/keyboard-patterns`) e reanimate (`references/capture`). Todas com `textReuse: false`: entraram só ideias, escritas com voz própria.
 
 Pinos lidos, buscados rasos (`--depth 1 --filter=blob:limit=2m`, hooks desligados, `core.symlinks=false`), uma pasta por fonte, só nos caminhos de `fusion/sources.json`, sem rodar nada:
 
@@ -20,7 +20,7 @@ A skill foi escrita sem abrir `evals/ui-review-*`, `evals-reserved/` nem `fusion
 | Parte | Origem |
 |---|---|
 | `description` | DevOrb: só gatilhos (tela construída a conferir contra contrato, `DESIGN.md`, acessibilidade ou web no celular; pedido de revisar interface) |
-| Abertura: `browser-testing` responde se funciona, esta skill se ficou como combinado; não decide gosto nem valor, não corrige | Fronteiras da spec ("Setor de design") e interface da Task D5 |
+| Abertura: `browser-testing` responde se funciona, esta skill se ficou como combinado; não decide gosto nem valor, não corrige | Fronteiras da spec ("Setor de design") e interface da Task D5. Desde 2026-11-17: gosto só pela régua escrita (ver Revisões) |
 | Linha em destaque: o render julga, o código localiza; não medido não passa | Conflito da Task D5 (render julga) e gstack (`design-lint.md`, URL sem navegador sai com código próprio e nunca passa), só ideia |
 | 1. Ler `DESIGN.md`, o contrato, o piso de `visual-direction` e as referências de `design-system` e `motion`; só essas, WCAG 2.2 e o piso de web no celular são regras; valor não declarado não é achado | Interface da Task D5 ("Não cria regra de valor") |
 | O que `DESIGN.md` ou o contrato autoriza não é achado: a checagem fica limpa, sem achado nem recomendação | Impeccable (`polish`, estabelecer o sistema antes) e gstack (`design-lint.md`, dispensas registradas e casa em `DESIGN.md`), só ideias, por decisão da Task D5 |
@@ -60,14 +60,14 @@ Todos pela Task D5:
 - **Render ou código:** o gstack mede o render e também lê o código; o genjutsu audita só o código. O render julga se há desvio, e o código localiza. Sem navegador, o relatório diz "só código".
 - **Alvo de toque:** a Impeccable e o genjutsu dão 24 px do WCAG com exceções; a UI UX Pro Max e o Emil falam em 44. Abaixo de 24 px sem exceção é P1; 44 px no toque é recomendação.
 - **Input no celular:** a Impeccable aceita 14 px para texto secundário. Input fica em 16 px ou mais no celular.
-- **Notas:** a Impeccable dá de 0 a 4 por dimensão e um total de 20; o gstack dá de 0 a 10 em `plan-design-review` (ledger de `visual-direction`). Só P0 a P3.
+- **Notas:** a Impeccable dá de 0 a 4 por dimensão e um total de 20; o gstack dá de 0 a 10 em `plan-design-review` (ledger de `visual-direction`). Só P0 a P3. Revisto em 2026-11-17: notas de 0 a 10 só no bloco Critique, e cada nota abaixo de 8 vira P1.
 - **Corrigir ou relatar:** a Impeccable (`polish`, `harden`) e o Emil (`mobile-native`) corrigem; `break-ui` corrige sob pedido. A skill relata e para.
 - **Ordem:** a Impeccable põe o funcional antes do cosmético; o gstack ordena por ganho visual. Funcional antes de visual.
 - **`overflow-wrap`:** o Emil pede `anywhere` para não quebrar palavra de título; o gstack proíbe `anywhere` em título. `anywhere` em dados, `break-word` em títulos.
 
 ## Fora
 
-- **Pela Task D5:** as personas (a usuária chata do `break-ui`, o engenheiro sênior do `mobile-native`), Nielsen, as notas, os subagentes isolados, o código de `frontend-a11y` (ECC), `user-select: none` em todo link e `overscroll-behavior: none` na raiz.
+- **Pela Task D5:** as personas (a usuária chata do `break-ui`, o engenheiro sênior do `mobile-native`), Nielsen, as notas e os subagentes isolados (os dois voltaram na Task 5 de 2026-11-17, só no bloco Critique), o código de `frontend-a11y` (ECC), `user-select: none` em todo link e `overscroll-behavior: none` na raiz.
 - **gstack:** o binário `gstack-design-lint`, o daemon de navegador, as regras de valor da tabela (px, OKLCH, durações), que são de `design-system` e `motion`, os comentários de dispensa, os códigos de saída, o perfil `--scope app` e a ordem de correção do `craft-audit`.
 - **Impeccable:** o detector, `critique-storage`, os comandos sugeridos, os achados positivos obrigatórios, a parte de apps desktop com CDP e as seções de i18n árabe e persa (sem cenário).
 - **Emil:** a resposta inicial fixa, o alternador "Demo data / Worst case" e a fixture deixada no projeto, as correções aplicadas, o realce de toque, `theme-color`, `user-select` em controles, hover só com `(hover: hover)` (sem cenário) e tudo de PWA.
@@ -83,6 +83,31 @@ Todos pela Task D5:
   - `mobile-web.md`: a explicação do zoom do iOS, os `env()` que valem 0, "people copy addresses and order numbers" e a lista do que a emulação não mostra (Emil).
 - 2026-11-13, Task M4 do plano mobile: `references/native.md` novo, só ideias, palavras próprias. Os vícios de "native slop" da Expo (`plugins/expo/skills/expo-design-system/references/native-slop.md`, `expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`, MIT, `textReuse: false`) viram buscas próprias e uma lista do que só a tela mostra, sem nota nem contagem; alvo mínimo de 44 pt ou 48 dp, medido com `hitSlop` (genjutsu `mobile-principles/SKILL.md`, `genjutsu@5e00595ab7495d6bb966639f2f5ff1dbee364389`). Severidade do alvo abaixo do mínimo, P2 e P1 na ação principal: decisão minha. Duas buscas são minhas: hex fora do tema e o filtro de tema em `fontFamily`. `SKILL.md` aponta para a referência e recebe de `devorb:device-testing` em app (6.767 para 6.879 bytes).
 
+- 2026-11-17, Task 5 do plano `docs/plans/2026-11-17-design-quality-fase-1.md`: crítico de olhos novos.
+  - **Fronteira mudou.** Antes a skill não julgava gosto ("Ugly is not a rule"). Agora julga a estética, mas só pela régua escrita em `references/critique.md` e por um revisor que não vê o código. Valor que ninguém declarou continua sem ser achado de token. Três frases mudaram: a abertura ("taste is judged only through the written rubric"), a §7 ("no grade outside the Critique block") e o sinal de parada ("Ugly is judged by the rubric, with a fresh reviewer"). A §6 nova, "Visual critique", fica depois das checagens, e Severidade e Relatório viraram §7 e §8.
+  - **§6 em cinco passos:**
+    1. `shoot.mjs` pelo caminho absoluto, no modo do contrato, com `--pw` quando o projeto não tem Playwright;
+    2. FAIL do `checks.json` vira P1, WARN vira P2;
+    3. com pacote de referência, `compareStructure` (o motivo de `grossFail` é P1 Conceptual mismatch, o desvio é P2); sem as métricas no pacote, fotografar o `source.html` ou a URL dele;
+    4. despachar um subagente novo cujo prompt cita pelo caminho `references/critique.md`, os prints, o pacote e o contrato, sem código e sem dizer quem construiu; a régua nunca é colada no prompt;
+    5. copiar o bloco `Critique` no relatório; nota abaixo de 8 vira `[P1]`, com classe Conceptual mismatch ou Local defect.
+
+    Sem ferramenta de subagente, o próprio revisor critica só pelos prints e diz isso no título do bloco. Sem navegador, o bloco sai do código, a primeira linha diz "only code" e as notas de render levam "(from code)".
+  - **`references/critique.md`:** a régua tem 9 dimensões nesta ordem: hierarchy, layout-grid, spacing-rhythm, typography, color-contrast, visual-moment, motion, finish e reference-fidelity (`n/a` sem pacote). Cada uma diz o que olha e como é o 10. O arquivo traz âncoras de 10, 8, 5 e 2, o formato `Critique (fresh reviewer):` com uma linha `<dimension>: <0-10> — a 10 here: … — gap: …` por dimensão, e três exemplos próprios (padaria, academia, página de preços). Os exemplos não repetem o cenário do caso de avaliação.
+  - **Origem das ideias.** Só ideias, com texto próprio, e `textReuse: false` em todas:
+    - gstack (MIT): nota de 0 a 10 com "como seria o 10" por dimensão. A ideia já estava registrada no ledger de `visual-direction` (`plan-design-review`, mesmo pino `1b96d9f8538ae0f3b66dd52b75793a3767e514d4`). Não reabri o arquivo nesta task.
+    - Hallmark (MIT, `407fa689f4a276f2fd389208d271d0fef08f5058`): o revisor de contexto limpo, que nunca viu o código nem quem fez.
+    - UICrit (Duan et al., UIST 2024, conjunto de dados de críticas de UI, CC BY 4.0): a forma de cada exemplo (problema, onde, por que importa, correção). Nenhum texto do conjunto foi copiado, e os três exemplos são meus. Não está em `fusion/sources.json`, porque é artigo e conjunto de dados, não repositório com pino.
+    - taste-skill (MIT, `f6b76575f949707b4e3c37cd86cb44b0b98643e8`): conferir a consistência do build pelos prints (escala, ritmo, acabamento). Essa parte já entrou como `checks.json` na Task 2. Aqui virou as dimensões spacing-rhythm e finish.
+  - **Caso novo** `evals-outside/ui-review-critica-em-breve`, fora do sandbox porque precisa de navegador. É uma página "Em breve" do Prumo que usa só tokens do `DESIGN.md` e é feia do jeito da Ligare: faixa chapada com título de 26px, corpo de 13px, coluna esquerda com três linhas e um vazio, nenhum momento visual e quatro seções contra seis da referência. Traz um pacote pronto em `design/referencias/ref-agenda/`. Os graders são:
+    - `critique` (bloco com as 9 dimensões, notas abaixo de 8 em hierarchy e reference-fidelity, e P1 para as duas);
+    - `fresh` (um `Agent` cujo input cita `critique.md`);
+    - `no-edits-index` e `no-edits-styles`;
+    - `token-pass` (não acusar token errado onde os tokens estão certos).
+
+    Há também um caso reservado no sandbox, escrito por um subagente novo, que não abri.
+  - `fusion/skills.json`: `ui-review.level` foi de `light` para `full`. `SKILL.md` foi de 6.879 para 9.680 bytes (cerca de 2.420 tokens, teto 2.500).
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.
@@ -92,6 +117,14 @@ Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13
 | `ui-review-equipes` | 100% | 0% (0,38) |
 
 - `accepted: true`. Sem navegador no sandbox, a revisão diz "só código" e acha os três problemas plantados, o campo de 14 px e o `user-scalable=no`, cala o desvio autorizado e não muda os arquivos.
+
+RED da Task 5, 2026-11-17: Opus 5.5, braço sem plugin, fora do sandbox. `fusion/results/2026-11-17-ui-review-outside-baseline.md`.
+
+| Caso | Sem plugin |
+|---|---|
+| `ui-review-critica-em-breve` | 0% (0,50), US$ 0,90 |
+
+- O braço com a skill antiga não rodou neste RED. Ela proibia nota ("No grade, score or total anywhere") e dizia "Ugly is not a rule", então não podia produzir o bloco Critique. O GREEN (`--arms devorb,none --outside-sandbox` e `--reserved`) fica para o controlador.
 
 ## Decisões por commit de fonte
 
