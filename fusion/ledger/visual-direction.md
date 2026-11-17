@@ -81,6 +81,8 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 1. **Regra do dono: fontes de referência fixas.** Antes de escolher a direção ou fazer um componente do zero, a skill lê `references/ui-sources.json`, consulta as fontes que combinam com as palavras do cliente seguindo as `rules`, abre `reading: "browser"` só com ferramenta de navegador e `reading: "account"` só com a conta do dono, e o contrato registra as fontes consultadas, a fundação, os especialistas e o componente de destaque. Está no corpo do `SKILL.md`, não numa referência. Nenhuma fusão a tira. Cenário: o caso das fontes fixas da Task D2 (landing "bem clean" com shadcn/ui e Tailwind).
 
+2. **Cópia fiel na estrutura, honesta no conteúdo.** No Replicate, toda seção da referência fica, na ordem dela, com o mesmo tipo e a mesma forma, e cada tratamento assinatura listado em `secoes.md` (título bicolor, mockup flutuante, número grande em faixa escura, avatares com inicial) fica, salvo se `Changed:` o nomeia. Quando o cliente não tem o fato que a seção pede, a forma recebe o que é verdade (serviços reais no layout de planos, etapas reais no de números) ou uma lacuna visível marcada; nunca se tira, junta ou troca a seção. Essas lacunas não contam no limite de duas por página da §3 e vão todas para a entrega. Está em `references/replicate.md` (passos 2 a 5) e numa frase da §3 do `SKILL.md`. Cenário: o caso reservado `visual-direction-copia-landing-clinica` (2026-11-17, `devorb@d873e93`): sem navegador, o agente montou o pacote, manteve a marca e não copiou texto, mas nas duas rodadas trocou as seções de depoimentos e de planos por outras para não inventar fatos e largou o título bicolor da referência. Falhou em estrutura e escala de tipo.
+
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
 ## Fora
@@ -106,7 +108,7 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
   - `floor.md`: tokens, contêiner em 1920, foco, rótulos, ponto médio e seta (Hallmark); a ordem de mudança dos looks (Hallmark gate 65); a lista dos looks gastos (`frontend-design`), refeita como tabela própria.
 - 2026-11-13, Task M4 do plano mobile: o contrato do passo 6 ganha a linha **Platform**, só em tela de app: o idioma de cada plataforma (diretrizes da Apple no iOS, Material 3 no Android) ou o tratamento neutro escolhido, com o motivo. Vem da Fronteira de design da seção "Setor mobile" da spec e de `native-slop` (16) da Expo (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`, MIT, só ideia). `SKILL.md` foi de 8.390 para 8.544 bytes.
 - 2026-11-17, Task 4 do plano `docs/plans/2026-11-17-design-quality-fase-1.md` (modo cópia):
-  - **Espaço:** a §4 (tipos de `reading` e escolha de biblioteca) foi para `references/sources.md` e a lista de campos da §6 para `references/contract.md`, sem mudança de comportamento. `SKILL.md` foi de 8.544 para 6.479 bytes e, com o modo cópia, ficou em 7.016 bytes (cerca de 1.754 tokens, teto 2.500).
+  - **Espaço:** a §4 (tipos de `reading` e escolha de biblioteca) foi para `references/sources.md` e a lista de campos da §6 para `references/contract.md`, sem mudança de comportamento. `SKILL.md` foi de 8.544 para 6.479 bytes e, com o modo cópia, ficou em 7.128 bytes (cerca de 1.782 tokens, teto 2.500).
   - **Replicate,** quarto nível de invenção na §1, entra quando o usuário pede para copiar, clonar, "deixar igual" ou usar como base, e aponta para `references/replicate.md`: capturar o pacote com `capture.mjs`; atrás de login, o navegador já logado do usuário com `collect-in-page.js` pela ferramenta de JavaScript; sem navegador nenhum, ler o HTML e o CSS da referência, escrever `secoes.md` e `notas.md` à mão e dizer que a captura e o espelho não rodaram; perguntar antes de commitar o pacote e sugerir `design/referencias/` no `.gitignore` quando o conteúdo é de terceiros; o padrão do que fica igual e do que muda, perguntado uma vez quando há pessoa na conversa; construir seção por seção com espelho contra `section-<i>.png`; `compareStructure` e depois `devorb:ui-review`. A §5 (direção) não roda no Replicate: a referência é a direção.
   - **Scripts pelo caminho absoluto** da pasta da skill, com `--pw <dir>` quando o projeto não tem Playwright. Instalar Playwright no projeto do usuário só com o sim dele; sem isso, numa pasta temporária.
   - **Origem das ideias,** todas com as fontes fechadas e texto próprio:
@@ -139,8 +141,9 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 | Etapa | DevOrb | Sem plugin |
 |---|---|---|
 | RED (`--baseline-only`) | não roda | 0% (0,63), US$ 1,36 |
+| Reservado `visual-direction-copia-landing-clinica` (`devorb@d873e93`, sem navegador) | 0% (0,71), US$ 1,76 | 0% (0,74), US$ 0,63 |
 
-- `fusion/results/2026-11-17-visual-direction-outside-baseline.md`. GREEN (`--arms devorb,none` e `--reserved`) fica com o controlador.
+- `fusion/results/2026-11-17-visual-direction-outside-baseline.md` e `fusion/results/2026-11-17-visual-direction-reserved.md`. No reservado, o DevOrb falhou em estrutura e escala de tipo: trocou seções sem fato do cliente (depoimentos, planos) por outras e largou o título bicolor. Daí a regra própria 2. Na mesma rodada, o reservado `visual-direction-painel-padaria` deu 50% (0,86) com o DevOrb contra 100% (1,00) sem plugin. A causa não foi conferida nesta tarefa. GREEN do caso de fora do sandbox fica com o controlador.
 
 ## Decisões por commit de fonte
 

@@ -18,7 +18,7 @@ The user asked to copy, clone, "deixar igual" or use a page as a base. Copying t
 
 ## 2. Write the pack notes
 
-- `secoes.md`: one line per section in order, with its pattern (hero with product mockup, dark band with one number, timeline, comparison table, card grid, closing call), its grid, and the movement you saw, in place of the `Movimento observado` line. A section marked `hidden` in `metrics.json` was a scroll reveal: read its content from the source and record the reveal as movement.
+- `secoes.md`: one line per section in order, with its pattern (hero with product mockup, dark band with one number, timeline, comparison table, card grid, closing call), its grid, its signature treatments (a two-tone headline, a floating product mockup over a dotted glow, one huge number on a dark band, initial-letter avatars on a timeline), its heading-to-body type ratio, and the movement you saw, in place of the `Movimento observado` line. A section marked `hidden` in `metrics.json` was a scroll reveal: read its content from the source and record the reveal as movement.
 - `notas.md`: under `## Levar` and `## Não levar`, what the user said to keep and to drop, in their words; otherwise the defaults of step 3.
 - Ask before committing the pack. When its content belongs to someone else, suggest adding `design/referencias/` to `.gitignore`. With nobody to ask, leave the pack uncommitted and say so.
 
@@ -30,7 +30,9 @@ Default, written in the contract as `Same as reference:` and `Changed:`:
 - **Changed:** colour, font and logo follow the project's `DESIGN.md` or theme, unless the user asks otherwise.
 - **Always replaced:** a third party's text, photos and logo. They stay only when the content is the user's own.
 
-When a person is in the conversation, show this default and ask once. Otherwise go with it. The new text comes from §3 of `SKILL.md` and `references/copy.md`: a slot the client has no fact for (a big number, a quote, a name) gets a fact the project gives, or becomes a visible gap. Never reuse the reference's sentences, numbers or people.
+When a person is in the conversation, show this default and ask once. Otherwise go with it. The new text comes from §3 of `SKILL.md` and `references/copy.md`. Never reuse the reference's sentences, numbers or people.
+
+Keep every reference section, in the reference's order, with the same kind and form. Honesty governs the content, never the structure. When the client lacks the facts a section needs, fill its form with what is true (the client's real services in the plans layout, real process steps in the stats layout) or with a marked visible gap the client must fill (a testimonials block that says it awaits real testimonials). Never drop, merge or replace a section to avoid a gap. These gaps do not count toward §3's two per page; list each one in the handoff.
 
 ## 4. Build section by section
 
@@ -38,7 +40,7 @@ Follow `secoes.md` in order, one element per reference section as a direct child
 
 `node "$UI_DIR/scripts/shoot.mjs" file://<abs path>/index.html <tmp>/build --widths 1440,390 [--pw <dir>]`
 
-Read `<tmp>/build/1440/section-<i>.png` and the pack's `1440/section-<i>.png`, and fix proportion, scale and spacing before the next section.
+Read `<tmp>/build/1440/section-<i>.png` and the pack's `1440/section-<i>.png`, and fix proportion, scale and spacing before the next section. Keep every treatment `secoes.md` lists for the section unless `Changed:` names it.
 
 ## 5. Compare, then hand to the critic
 
@@ -46,4 +48,4 @@ Read `<tmp>/build/1440/section-<i>.png` and the pack's `1440/section-<i>.png`, a
 node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/build/1440/metrics.json'), m('design/referencias/<slug>/1440/metrics.json')), null, 2))"
 ```
 
-`grossFail` (a different section count, or a heading ratio below 80% of the reference's) is fixed before anything else. Then hand the build, the pack and the `deviations` list to `devorb:ui-review`.
+`grossFail` (a different section count, or a heading ratio below 80% of the reference's) is fixed before anything else. Without a browser, check by reading the build. Before handoff, confirm: section count and order equal the reference's, and each treatment in `secoes.md` is present. Then hand the build, the pack and the `deviations` list to `devorb:ui-review`.

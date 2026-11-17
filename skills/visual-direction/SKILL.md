@@ -39,7 +39,7 @@ Before any layout, list three things:
 - **To show:** what the page will show and where each comes from: the user's files, captures of the real product, the product built with real controls, or nothing.
 - **Missing:** every proof and fact nobody gave.
 
-If the spec already says what exists, that is the inventory. If a person is in the conversation and it does not, ask once for material (photos, screenshots, real numbers, a named quote) before shaping. Nothing missing gets invented: a missing fact the visitor needs becomes a visible gap, at most two per page, and the rest go to the handoff. Write the copy from this list with `references/copy.md`.
+If the spec already says what exists, that is the inventory. If a person is in the conversation and it does not, ask once for material (photos, screenshots, real numbers, a named quote) before shaping. Nothing missing gets invented: a missing fact the visitor needs becomes a visible gap, at most two per page, and the rest go to the handoff. On Replicate, a gap that keeps a reference section does not count toward the two; list each one in the handoff. Write the copy from this list with `references/copy.md`.
 
 ## 4. The owner's reference sources
 
