@@ -66,7 +66,8 @@ test('the in-page copy of the section algorithm matches rules.mjs', () => {
   const narrowAndShort = structuredClone(shell);
   const main = findSectionsRoot(narrowAndShort);
   main.children.push({ tag: 'div', rect: { x: 240, y: 1400, w: 600, h: 400 }, children: [] }, { tag: 'hr', rect: { x: 240, y: 1800, w: 1272, h: 100 }, children: [] });
-  for (const tree of [shell, narrowAndShort]) {
+  const ligare = JSON.parse(readFileSync(new URL('./fixtures/design/dom-ligare-shell.json', import.meta.url)));
+  for (const tree of [shell, narrowAndShort, ligare]) {
     const root = window.__devorbFindSectionsRoot(tree);
     assert.equal(root, findSectionsRoot(tree));
     assert.deepEqual([...window.__devorbSectionNodes(root)], sectionNodes(root));

@@ -1,15 +1,16 @@
 // Browser script with no imports: shoot.mjs injects it with page.addScriptTag.
 (() => {
   // Copy of findSectionsRoot and sectionNodes from rules.mjs; tests/design-shoot.test.mjs keeps them equal.
-  const visible = (n) => n.rect.w > 0 && n.rect.h > 0;
   const find = (n, pred) => (pred(n) ? n : n.children.reduce((hit, c) => hit || find(c, pred), null));
   const findSectionsRoot = (tree) => {
     let node = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
-    for (let kids = node.children.filter(visible); kids.length === 1; kids = node.children.filter(visible)) node = kids[0];
+    // descend while one child qualifies as a section: small title rows and footers sit beside the content wrapper
+    for (let kids = sectionNodes(node); kids.length === 1; kids = sectionNodes(node)) node = kids[0];
     return node;
   };
   const sectionNodes = (root) => root.children.filter((c) => c.rect.w >= 0.5 * root.rect.w && c.rect.h >= 120);
 
+  const visible = (n) => n.rect.w > 0 && n.rect.h > 0;
   const pathTo = (n, target) => {
     if (n === target) return [n];
     for (const c of n.children) {

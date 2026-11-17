@@ -56,6 +56,15 @@ test('sections come from content, not the sidebar', () => {
   assert.equal(root.tag, 'main');
   assert.equal(sectionNodes(root).length, 3);
 });
+test('sections go past small title rows beside the content wrapper', () => {
+  assert.equal(sectionNodes(findSectionsRoot(load('dom-ligare-shell.json'))).length, 3);
+});
+test('a small footer beside the content wrapper does not hide its sections', () => {
+  const node = (tag, y, h, children = []) => ({ tag, rect: { x: 0, y, w: 1174, h }, children });
+  const sections = [0, 1, 2, 3].map((i) => node('section', i * 1400, 1400));
+  const tree = node('main', 0, 5793, [node('div', 0, 5754, sections), node('footer', 5754, 39)]);
+  assert.equal(sectionNodes(findSectionsRoot(tree)).length, 4);
+});
 test('a build with no visible sections is a gross fail, not a crash', () => {
   const b = load('metrics-pilot.json');
   b.sections = [];
