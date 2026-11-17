@@ -40,18 +40,18 @@ async function launch(chromium) {
   } catch (e) {
     // no bundled browser: use the system Google Chrome instead of a 150 MB download
     if (!/Executable doesn't exist/i.test(e.message)) throw e;
-    return chromium.launch({ headless: true, channel: 'chrome' });
+    return chromium.launch({ headless: true, channel: 'chrome' }).catch(() => null);
   }
 }
 
 // scroll-reveal pages only show a section once it has entered the viewport
 async function scrollThrough(page) {
-  const [height, step] = await page.evaluate(() => [document.documentElement.scrollHeight, innerHeight * 0.8]);
+  const [height, step] = await page.evaluate(() => [window.__devorbScroller().scrollHeight, innerHeight * 0.8]);
   for (let y = step; y < height; y += step) {
-    await page.evaluate((top) => scrollTo(0, top), y);
+    await page.evaluate((top) => window.__devorbScroller().scrollTo(0, top), y);
     await page.waitForTimeout(300);
   }
-  await page.evaluate(() => scrollTo(0, 0));
+  await page.evaluate(() => window.__devorbScroller().scrollTo(0, 0));
 }
 
 async function main(argv) {
@@ -66,6 +66,10 @@ async function main(argv) {
     return 3;
   }
   const browser = await launch(pw.chromium ?? pw.default.chromium);
+  if (!browser) {
+    console.log(NEED);
+    return 3;
+  }
   let failed = false;
   try {
     for (const width of opts.widths) {
@@ -74,15 +78,17 @@ async function main(argv) {
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       const page = await context.newPage();
       await page.goto(opts.url, { waitUntil: 'load' });
-      if (opts.scroll) await scrollThrough(page);
+      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {}); // pages that poll never go idle
       await page.addScriptTag({ path: COLLECTOR });
+      if (opts.scroll) await scrollThrough(page);
+      await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
       const { fullClip, perSection } = planShots(pageHeight, metrics.sections);
       await page.screenshot({ path: join(dir, 'full.png'), fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
       for (const i of perSection) {
         const s = metrics.sections[i];
-        await page.screenshot({ path: join(dir, `section-${i}.png`), fullPage: true, clip: { x: 0, y: s.top, width, height: Math.min(s.height, 16000) } });
+        await page.screenshot({ path: join(dir, `section-${i}.png`), fullPage: true, clip: { x: s.x, y: s.top, width: s.width, height: Math.min(s.height, 16000) } });
       }
       const checks = checkFloor(metrics, opts.mode);
       failed ||= checks.some((c) => c.status === 'FAIL');

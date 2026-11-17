@@ -10,9 +10,29 @@
   };
   const sectionNodes = (root) => root.children.filter((c) => c.rect.w >= 0.5 * root.rect.w && c.rect.h >= 120);
 
+  const pathTo = (n, target) => {
+    if (n === target) return [n];
+    for (const c of n.children) {
+      const p = pathTo(c, target);
+      if (p) return [n, ...p];
+    }
+    return null;
+  };
+  const scrolls = (n) => n.scrollHeight > n.clientHeight && (n.overflowY === 'auto' || n.overflowY === 'scroll');
+  // app shells scroll an inner box (main or a wrapper), not the window: the sections root or its nearest scrolling ancestor
+  const findScroller = (tree) => pathTo(tree, findSectionsRoot(tree)).reverse().find(scrolls) ?? null;
+
   const toNode = (el) => {
     const r = el.getBoundingClientRect();
-    const node = { tag: el.tagName.toLowerCase(), role: el.getAttribute('role') || undefined, rect: { x: r.x + scrollX, y: r.y + scrollY, w: r.width, h: r.height }, children: [...el.children].map(toNode) };
+    const node = {
+      tag: el.tagName.toLowerCase(),
+      role: el.getAttribute('role') || undefined,
+      rect: { x: r.x + scrollX, y: r.y + scrollY, w: r.width, h: r.height },
+      scrollHeight: el.scrollHeight,
+      clientHeight: el.clientHeight,
+      overflowY: getComputedStyle(el).overflowY,
+      children: [...el.children].map(toNode)
+    };
     Object.defineProperty(node, 'el', { value: el }); // not enumerable, so the node keeps the DomNode shape
     return node;
   };
@@ -72,8 +92,19 @@
     return spacing.map(Math.round).filter((s) => s > 0);
   };
 
+  let scroller;
+  const innerScroller = () => (scroller ??= findScroller(toNode(document.body))?.el ?? null);
+
   window.__devorbFindSectionsRoot = findSectionsRoot;
   window.__devorbSectionNodes = sectionNodes;
+  window.__devorbFindScroller = findScroller;
+  window.__devorbScroller = () => innerScroller() ?? document.scrollingElement;
+  // let the document carry the inner scroller's full height, so tops are page-relative and fullPage shots see everything
+  window.__devorbExpand = () => {
+    for (let el = innerScroller(); el; el = el.parentElement) {
+      for (const [prop, value] of [['height', 'auto'], ['max-height', 'none'], ['overflow', 'visible']]) el.style.setProperty(prop, value, 'important');
+    }
+  };
   window.__devorbMetrics = () => {
     const root = findSectionsRoot(toNode(document.body));
     const nodes = sectionNodes(root);
@@ -81,6 +112,7 @@
       const cs = getComputedStyle(n.el);
       return {
         index,
+        x: Math.round(n.rect.x),
         top: Math.round(n.rect.y),
         height: Math.round(n.rect.h),
         width: Math.round(n.rect.w),

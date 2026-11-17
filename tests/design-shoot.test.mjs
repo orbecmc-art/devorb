@@ -25,11 +25,11 @@ test('planShots shoots only visible sections, by index', () => {
 });
 
 // a folder that holds a fake node_modules/playwright, as `npm i playwright` would leave it
-const withPlaywright = () => {
+const withPlaywright = (source = '') => {
   const dir = realpathSync(mkdtempSync(join(tmpdir(), 'devorb-pw-'))); // realpath: macOS tmpdir is a symlink
   mkdirSync(join(dir, 'node_modules', 'playwright'), { recursive: true });
   writeFileSync(join(dir, 'node_modules', 'playwright', 'package.json'), '{"name":"playwright","main":"index.js"}');
-  writeFileSync(join(dir, 'node_modules', 'playwright', 'index.js'), '');
+  writeFileSync(join(dir, 'node_modules', 'playwright', 'index.js'), source);
   return dir;
 };
 const empty = () => mkdtempSync(join(tmpdir(), 'devorb-empty-'));
@@ -74,12 +74,46 @@ test('the in-page copy of the section algorithm matches rules.mjs', () => {
   assert.equal(sectionNodes(main).length, 3);
 });
 
-test('the CLI exits 3 with both install options when playwright is missing', () => {
+const shoot = (cwd) => {
   const env = { ...process.env };
   delete env.DEVORB_PLAYWRIGHT_DIR;
-  const cwd = empty();
-  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(cwd, 'out')], { cwd, env, encoding: 'utf8' });
+  return spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(cwd, 'out')], { cwd, env, encoding: 'utf8' });
+};
+test('the CLI exits 3 with both install options when playwright is missing', () => {
+  const r = shoot(empty());
   assert.equal(r.status, 3, r.stderr);
   assert.match(r.stdout, /NEED: npm i -D playwright && npx playwright install chromium/);
   assert.match(r.stdout, /--pw <dir>/);
+});
+test('the CLI exits 3 without a stack trace when no browser launches', () => {
+  const r = shoot(withPlaywright("exports.chromium = { launch: async () => { throw new Error(\"browserType.launch: Executable doesn't exist at /nowhere\"); } };"));
+  assert.equal(r.status, 3, r.stderr);
+  assert.match(r.stdout, /npx playwright install chromium/);
+  assert.equal(r.stderr, '');
+});
+
+// DomNode plus the scroll fields the page converter adds
+const box = (tag, h, kids = [], scroll = {}) => ({ tag, rect: { x: 0, y: 0, w: 1200, h }, scrollHeight: h, clientHeight: h, overflowY: 'visible', ...scroll, children: kids });
+const appShell = (mainScroll, wrapped = false) => {
+  const sections = [0, 1, 2, 3].map(() => box('section', 600));
+  const content = wrapped ? [box('div', 2400, sections)] : sections;
+  return box('body', 800, [box('div', 800, [box('aside', 800), box('main', 800, content, mainScroll)])]);
+};
+const loadCollector = () => {
+  const window = {};
+  vm.runInNewContext(readFileSync(new URL('../skills/ui-review/scripts/collect-in-page.js', import.meta.url), 'utf8'), { window });
+  return window;
+};
+test('findScroller picks the overflowing main of an app shell', () => {
+  const tree = appShell({ scrollHeight: 2400, overflowY: 'auto' });
+  assert.equal(loadCollector().__devorbFindScroller(tree).tag, 'main');
+});
+test('findScroller climbs from a wrapper root to its scrolling ancestor', () => {
+  const tree = appShell({ scrollHeight: 2400, overflowY: 'scroll' }, true);
+  assert.equal(loadCollector().__devorbFindScroller(tree).tag, 'main');
+});
+test('findScroller gives null when only the window scrolls or overflow is hidden', () => {
+  const { __devorbFindScroller: findScroller } = loadCollector();
+  assert.equal(findScroller(appShell({})), null);
+  assert.equal(findScroller(appShell({ scrollHeight: 2400, overflowY: 'hidden' })), null);
 });
