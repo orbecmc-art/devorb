@@ -13,7 +13,7 @@ Pinos lidos, buscados rasos (`--depth 1 --filter=blob:limit=2m`, hooks desligado
 
 A skill foi escrita sem abrir `evals/ui-review-*`, `evals-reserved/` nem `fusion/results/`. Os casos só são conhecidos pelo texto da Task D5 no plano. `devorb:design-system` e `devorb:motion` estavam sendo escritas em paralelo: a skill as cita pelo nome e aponta para "as referências" delas, sem nomear arquivo que talvez não exista.
 
-`SKILL.md` tinha 6.767 bytes na Task D5 e tem hoje 9.828 (ver Revisões, Task 5 de 2026-11-17; teto de 2.500 tokens). A descrição custa cerca de 44 tokens com o nome, dos 250 do setor.
+`SKILL.md` tinha 6.767 bytes na Task D5 e tem hoje 9.729 (ver Revisões, Task 5 de 2026-11-17; teto de 2.500 tokens). A descrição custa cerca de 44 tokens com o nome, dos 250 do setor.
 
 ## Origem por parte
 
@@ -106,13 +106,18 @@ Todos pela Task D5:
     - `token-pass` (não acusar token errado onde os tokens estão certos).
 
     Há também um caso reservado no sandbox, escrito por um subagente novo, que não abri.
-  - `fusion/skills.json`: `ui-review.level` foi de `light` para `full`. `SKILL.md` foi de 6.879 para 9.828 bytes (cerca de 2.457 tokens, teto 2.500).
+  - `fusion/skills.json`: `ui-review.level` foi de `light` para `full`. `SKILL.md` foi de 6.879 para 9.729 bytes (cerca de 2.433 tokens, teto 2.500).
   - **Rodada de correção da revisão:**
     - o 10 de typography passou a 60 a 75 caracteres por linha, como o piso;
     - a lacuna do crítico que mira o que o `DESIGN.md` ou o contrato autoriza, ou que só pede um valor que ninguém declarou, é descartada e não vira P1, e o crítico recebe o `DESIGN.md` para não mirar nas exceções;
     - instalar o Playwright ou baixar navegador segue `devorb:browser-testing`: decide o usuário, só o sim explícito dele conta, e sem o sim a revisão é só de código;
     - a ordem dos fallbacks ficou explícita: `Critique (self):` com prints e sem subagente, e `Critique (self, from code):` sem navegador;
     - o caso ganhou o grader `design-unchanged`, e `token-pass` libera `320px`, `640px` e bordas de 1px.
+  - **Segunda rodada:**
+    - sem navegador e com ferramenta de subagente, o crítico novo é despachado mesmo assim, pelo caminho de `critique.md`, com os caminhos do `DESIGN.md`, do contrato, do pacote e do HTML e CSS da página. Só nesse caminho ele lê código, porque não há prints, e não afirma nenhuma medida visual. O bloco sai como `Critique (fresh reviewer, from code):`.
+    - Sem navegador e sem subagente, o bloco continua `Critique (self, from code):`.
+    - A ordem dos quatro fallbacks foi para o fim de `critique.md`, e o `SKILL.md` aponta para ela.
+    - O prompt do caso ganhou um sim explícito para instalar: "Pode instalar o que precisar para renderizar a página."
 
 ## Resultados
 

@@ -63,10 +63,10 @@ A reviewer who never sees the code scores the look by `references/critique.md`. 
 3. **Reference pack** (the contract's `Reference pack:` or one the user names): without `1440/metrics.json` in it, shoot its URL or `source.html` into `<tmp>/ref` the same way. Then:
    `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`
    Each `reasons` item is a `[P1]` Conceptual mismatch; each `deviations` item a `[P2]`.
-4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`. Nothing else: no code, no source path, no word on who built it. Never paste the rubric; the critic reads the file.
+4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`. Nothing else: no code (except in the no-browser fallback), no word on who built it. Never paste the rubric; the critic reads the file.
 5. **Copy** its `Critique` block into the report as returned. Each score below 8 becomes a `[P1]` finding: its gap line, class `Conceptual mismatch` (the page is organized wrong) or `Local defect` (one spot), rule `Critique: <dimension>`. A gap that targets what `DESIGN.md` or the contract authorizes, or only demands a value nobody declared (a hex, a size), is dropped.
 
-No subagent tool: critique yourself from the shots, by `critique.md`, titled `Critique (self):`. No browser, with or without a subagent tool: critique yourself from code only, titled `Critique (self, from code):`; the report's first line says "only code", every render-only score carries "(from code)", and no screenshot or measured value is claimed.
+No browser or no subagent tool: follow the fallbacks at the end of `critique.md`. Without a browser the report's first line says "only code" and no screenshot or measured value is claimed.
 
 ## 7. Severity
 
@@ -82,7 +82,7 @@ Targets: under 24 x 24 CSS px with no WCAG exception is P1; under 44 px on touch
 ```
 Measured: <URL or files>, <viewports>, <engine>  |  or: only code, no browser
 Modes: <section: mode>
-Critique (fresh reviewer):
+Critique (fresh reviewer):   (or the fallback title from critique.md)
   <dimension>: <0-10> — a 10 here: <one line> — gap: <one line>   (9 lines, in critique.md's order)
 Findings, P0 first:
   [P1] <what> at <selector>, <file:line>. Declared: <value and where>. Measured: <value and how>. Class: <one of four>. Rule: <DESIGN.md line, contract line, floor item or WCAG criterion>.

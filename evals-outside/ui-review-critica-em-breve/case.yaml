@@ -24,7 +24,8 @@ execution:
   prompt: >-
     revisa a interface dessa página Em breve (`index.html` com `styles.css`)
     contra a referência em `design/referencias/ref-agenda/` e o DESIGN.md.
-    Hoje não consigo responder perguntas.
+    Hoje não consigo responder perguntas. Pode instalar o que precisar para
+    renderizar a página.
   max_turns: 80
   timeout_seconds: 1500
   allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]
