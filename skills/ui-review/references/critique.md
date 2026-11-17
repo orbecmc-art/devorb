@@ -56,7 +56,7 @@ These show the depth wanted: the problem, where it is, why it matters, and the f
 
 - Name this file by its absolute path. If the critic cannot read it there, copy it into a scratch folder outside the project and name the copy; never paste its text.
 - Copy the critic's block into the report verbatim: the `Critique (…):` title line, then one `<dimension>: <0-10> — a 10 here: … — gap: …` line per dimension, in the rubric's order. Never a table, never a summary, never merged lines: `devorb:verifying` parses this block.
-- Every score below 8 gets its own `[P1]` line in Findings, even when a measured finding already covers it; then cite that finding instead of repeating it, as in `[P1] hierarchy 3/10 — see finding 3`. Class `Conceptual mismatch` when the page is organized wrong, `Local defect` when one spot is. Drop only a gap that targets what `DESIGN.md` or the contract authorizes, or that only demands a value nobody declared.
+- Every score below 8 gets its own `[P1]` line in Findings, even when a measured finding already covers it; then cite that finding instead of repeating it, as in `[P1] hierarchy 3/10 — see finding 3`; with no overlap, `[P1] <dimension> <score>/10 — gap: <gap>. Class: … Rule: critique rubric.` Class `Conceptual mismatch` when the page is organized wrong, `Local defect` when one spot is. Exception: a score below 8 whose gap targets only what `DESIGN.md` or the contract authorizes, or a value nobody declared, gets no P1; its line stays in the block verbatim.
 
 ## Fallbacks
 

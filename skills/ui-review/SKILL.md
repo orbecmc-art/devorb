@@ -64,7 +64,7 @@ A reviewer who never sees the code scores the look by `references/critique.md`. 
    `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`
    Each `reasons` item is a `[P1]` Conceptual mismatch; each `deviations` item a `[P2]`.
 4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`. Nothing else: no code (except in the no-browser fallback), no word on who built it. Never paste the rubric; if the critic cannot read that path, copy `critique.md` into `<tmp>` and name the copy.
-5. **Copy** its block verbatim, in `critique.md`'s line format: never a table, never a summary. Every score below 8 gets its own `[P1]` line, even when a measured finding covers it (`[P1] hierarchy 3/10 — see finding 3`): its gap, class `Conceptual mismatch` or `Local defect`, rule `Critique: <dimension>`. A gap that targets what `DESIGN.md` or the contract authorizes, or only demands a value nobody declared (a hex, a size), is dropped.
+5. **Copy** its block verbatim, in `critique.md`'s line format: never a table, never a summary. Every score below 8 gets its own `[P1]` line (§8), even when a measured finding covers it, unless its gap targets only what `DESIGN.md` or the contract authorizes, or a value nobody declared: then the score line stays and no P1 is added.
 
 No browser or no subagent tool: follow the fallbacks at the end of `critique.md`. Without a browser the report's first line says "only code" and no screenshot or measured value is claimed.
 
@@ -86,6 +86,7 @@ Critique (fresh reviewer):   (or the fallback title from critique.md)
   <dimension>: <0-10> — a 10 here: <one line> — gap: <one line>   (9 lines, in critique.md's order)
 Findings, P0 first:
   [P1] <what> at <selector>, <file:line>. Declared: <value and where>. Measured: <value and how>. Class: <one of four>. Rule: <DESIGN.md line, contract line, floor item or WCAG criterion>.
+  [P1] <dimension> <score>/10 — see finding <n>  |  or: — gap: <gap>. Class: Conceptual mismatch | Local defect. Rule: critique rubric.
 Checks: <check>: found | clear | not checked (<why>)
 Inventory: colours, radii, font families, durations, easings, each with up to five file:line, no verdict
 Not checked: <what, and what would check it: a phone, a login, a browser>
