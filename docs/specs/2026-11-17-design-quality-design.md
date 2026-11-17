@@ -1,6 +1,6 @@
 # Qualidade de design do DevOrb
 
-Data: 2026-11-17. Status: aguardando aprovação do dono.
+Data: 2026-11-17. Status: aprovado pelo dono em 2026-11-17.
 
 ## Intenção
 
