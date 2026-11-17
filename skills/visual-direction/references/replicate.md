@@ -34,7 +34,7 @@ When a person is in the conversation, show this default and ask once. Otherwise 
 
 Keep every reference section, in the reference's order, with the same kind and form. Honesty governs the content, never the structure. When the client lacks the facts a section needs, fill its form with what is true (the client's real services in the plans layout, real process steps in the stats layout) or with a marked visible gap the client must fill (a testimonials block that says it awaits real testimonials). Never drop, merge or replace a section to avoid a gap.
 
-Composition includes counts. Each repeated group keeps the reference's item count: reshape true content to fill it (more moments of the day, more steps of the real flow, roles or example personas clearly marked as examples). Drop an item only when nothing true can fill it, and name each dropped item in the handoff. These gaps do not count toward §3's two per page; list each one in the handoff.
+Composition includes counts. Each repeated group keeps the reference's item count: reshape true content to fill it (more moments of the day, more steps of the real flow, roles or example personas, each clearly marked as an example). Drop an item only when nothing true can fill it, and name each dropped item in the handoff. These missing-fact gaps and dropped items do not count toward §3's two per page; list each one in the handoff.
 
 ## 4. Build section by section
 
