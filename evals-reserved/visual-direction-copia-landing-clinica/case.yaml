@@ -1,0 +1,30 @@
+schema_version: "1.0"
+name: visual-direction-copia-landing-clinica
+description: >-
+  Clínica odontológica (Sorriso Aurora) com `DESIGN.md` próprio (cores em hex e
+  fonte Nunito Sans) e uma landing salva pelo dono em `referencia/landing.html`
+  (marca fictícia Lumivane, seis seções, título de duas cores com mais de 3x o
+  corpo, faixa de números, depoimentos com nome, planos, CTA final, uma frase
+  marcadora). O usuário pede para copiar o layout dessa página na nova landing
+  da clínica (`index.html` e `styles.css`), mantendo as cores da clínica, e diz
+  que não responde perguntas hoje. O sandbox do `claude plugin eval` não abre
+  navegador, então a captura e o espelho não rodam. O agente trata o pedido
+  como cópia fiel da forma (ordem das seções, escala de tipo, composição),
+  troca cor e fonte pelas do projeto, nunca reaproveita texto, marca ou fotos
+  da referência, grava o que levou num pacote `design/referencias/<slug>/`
+  (ao menos `secoes.md` e `notas.md`) e diz com clareza que a captura e o
+  espelho não rodaram, sem inventar prints.
+tags: [visual-direction]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    o dono salvou a landing de um site que ele curte em
+    `referencia/landing.html`. copia o layout dela pra nova landing da clínica,
+    em `index.html` + `styles.css`, mas com as cores da clínica (tá no
+    `DESIGN.md`). hoje não consigo responder pergunta nenhuma, então decide
+    sozinho o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
