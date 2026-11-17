@@ -34,8 +34,9 @@ Agent (general-purpose):
        ask about it.
     2. When a test fails unexpectedly or something surprises you, invoke
        devorb:debugging before changing code to make it pass.
-    3. Commit your work as the brief's commit steps say.
-    4. Self-review (below), then report.
+    3. User-interface task only: run the Mirror (below) before committing.
+    4. Commit your work as the brief's commit steps say.
+    5. Self-review (below), then report.
 
     Never stash, reset --hard, checkout --, clean or push. Commit or report.
 
@@ -96,6 +97,48 @@ Agent (general-purpose):
     you've read file after file without progress. Say what you're stuck on,
     what you tried and what help you need.
 
+    ## Mirror (user-interface tasks only)
+
+    [Keep this section only when the task builds or changes a page, screen
+    or component; delete it otherwise.]
+
+    - Contract: [spec path], section `## Direção visual`
+    - Design system: [path of DESIGN.md]
+    - Reference pack: [design/referencias/<slug>/, or none]
+    - Floor: [absolute path of devorb:visual-direction's references/floor.md]
+    - UI_DIR: [absolute path of devorb:ui-review's folder]
+    - Install yes: [the user's explicit yes to install Playwright, or none]
+
+    Before committing, look at what you built. `<tmp>` is a scratch folder
+    outside the project; shots never go in the commit.
+
+    1. Serve the page (the project's dev server) or open it as `file://`
+       plus the absolute path of a static page.
+    2. Shoot: `node "$UI_DIR/scripts/shoot.mjs" <url> <tmp>/shots-<round>
+       --mode <the contract's Mode, lower case> [--pw <dir>]`. Per width
+       (1440, 1024, 768, 390): `full.png`, `section-<i>.png`,
+       `metrics.json`, `checks.json`.
+    3. With a pack holding `1440/metrics.json`, compare structure:
+       `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots-<round>/1440/metrics.json'), m('<pack>/1440/metrics.json'))))"`
+    4. Read the shots against the pack's `section-<i>.png` and `secoes.md`
+       (every section, in order, with its treatment and type scale), or,
+       without a pack, against `floor.md`. A `checks.json` FAIL, a
+       `grossFail` reason or a section that doesn't match is a fix.
+    5. Fix, then shoot again. At most 3 rounds; what still fails after the
+       third goes in your concerns.
+
+    `--pw <dir>` points at a Playwright install outside the project. None
+    found (shoot prints `NEED:`): installing one is the user's call, as in
+    devorb:browser-testing, and only the install yes above counts ("decide
+    alone" is not one). With it, install outside the project as the `NEED:`
+    line says and pass `--pw <dir>`. Without it, skip the mirror, write
+    `Mirror: not run (<why>)`, report DONE_WITH_CONCERNS, and never claim a
+    screenshot or a measured value.
+
+    Your report carries the line, exactly:
+    `Mirror: rounds <n>/3 · shots <dir> · checks FAIL <n> WARN <n> · vs reference: <grossFail yes/no>`
+    (`vs reference: none` when there is no pack).
+
     ## Self-review before reporting
 
     - **Completeness:** everything in the brief built? Requirements missed?
@@ -125,6 +168,7 @@ Agent (general-purpose):
     - TDD evidence: RED (command, the failing output, why that failure was
       expected) and GREEN (command, the passing output)
     - Files changed
+    - User-interface task: the `Mirror:` line
     - Self-review findings, and anything you noticed but left alone
     - Issues or concerns
 

@@ -76,6 +76,7 @@ Everything you paste into a dispatch, and everything a subagent prints back, sta
 - A dispatch describes one task, not the session's history. Never paste summaries of earlier tasks: one real dispatch reached 42k characters, 99% of them pasted history. If an earlier task parked a finding in this area, point to that ledger line.
 - The template carries two contracts: the implementer never dispatches subagents (a reviewer it spawns duplicates yours at full cost), and every line it changes must answer to the brief.
 - A task where something on screen moves names `devorb:motion` in the dispatch, and a screen in an app project (`expo` in `package.json`, or an `AndroidManifest.xml`) names `devorb:native-app`: the implementer invokes it before writing that code.
+- A task that builds or changes a user interface (a page, screen or component) names in the dispatch: the contract (the spec's `## Direção visual`), `DESIGN.md`, the reference pack (`design/referencias/<slug>/`) when the contract lists one, the absolute path of `devorb:visual-direction`'s `references/floor.md`, any explicit yes from the user to install Playwright, and the order to run the template's Mirror step before committing. Other tasks get no mirror.
 - Record the implementer's agent identity: fix rounds 1-3 resume it.
 - One implementer at a time, outside `references/parallel.md`. Parallel implementers on shared code conflict.
 
@@ -134,5 +135,5 @@ Delivery ends at `devorb:finishing`, which presents the options. Never merge out
 ## Connects to
 
 - **Receives:** the reviewed `docs/devorb/plans/YYYY-MM-DD-<topic>.md` from `devorb:planning`, and the spec it names.
-- **Uses:** `devorb:tdd` in every task, at the seam the plan names; `devorb:debugging` when something fails or surprises; `devorb:verifying` before any completion claim; `devorb:reviewing` for the whole-branch review; `devorb:motion` whenever something moves; `devorb:native-app` when the project is an app; `scripts/`, `prompts/` and `references/` in this folder.
+- **Uses:** `devorb:tdd` in every task, at the seam the plan names; `devorb:debugging` when something fails or surprises; `devorb:verifying` before any completion claim; `devorb:reviewing` for the whole-branch review; `devorb:motion` whenever something moves; `devorb:native-app` when the project is an app; for a user-interface task, `devorb:visual-direction`'s `references/floor.md` and `devorb:ui-review`'s `scripts/shoot.mjs` and `scripts/rules.mjs` (the mirror); `scripts/`, `prompts/` and `references/` in this folder.
 - **Hands off to:** `devorb:finishing`, with the branch and the three lists: "Rulings I made", "Deferred minors" and "User decides".

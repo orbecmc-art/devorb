@@ -62,6 +62,10 @@ compare:
   Later tasks read the ruling from the ledger. A step that contradicts the
   spec on what gets built is the fourth stop.
 
+A task that builds or changes a user interface runs the Mirror section of
+`prompts/implementer.md` before its commit, and its ledger line carries the
+`Mirror:` line.
+
 Commit as the plan's commit steps say. Several commits per task are fine; the
 range starts at BASE, never `HEAD~1`.
 
