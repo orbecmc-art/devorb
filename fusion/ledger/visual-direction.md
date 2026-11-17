@@ -83,6 +83,8 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 2. **Cópia fiel na estrutura, honesta no conteúdo.** No Replicate, toda seção da referência fica, na ordem dela, com o mesmo tipo e a mesma forma, e cada tratamento assinatura listado em `secoes.md` (título bicolor, mockup flutuante, número grande em faixa escura, avatares com inicial) fica, salvo se `Changed:` o nomeia. Quando o cliente não tem o fato que a seção pede, a forma recebe o que é verdade (serviços reais no layout de planos, etapas reais no de números) ou uma lacuna visível marcada; nunca se tira, junta ou troca a seção. Essas lacunas não contam no limite de duas por página da §3 e vão todas para a entrega. Está em `references/replicate.md` (passos 2 a 5) e numa frase da §3 do `SKILL.md`. Cenário: o caso reservado `visual-direction-copia-landing-clinica` (2026-11-17, `devorb@d873e93`): sem navegador, o agente montou o pacote, manteve a marca e não copiou texto, mas nas duas rodadas trocou as seções de depoimentos e de planos por outras para não inventar fatos e largou o título bicolor da referência. Falhou em estrutura e escala de tipo.
 
+3. **A composição inclui as contagens.** No Replicate, `secoes.md` registra quantos itens tem cada grupo repetido (cards, pessoas, linhas, logos), e o build mantém essa contagem, remodelando o conteúdo verdadeiro para preenchê-la (mais momentos do dia, mais etapas do fluxo real, papéis ou personas de exemplo marcadas como exemplo). Um item só sai quando nada verdadeiro o preenche, e cada um que sai é nomeado na entrega. A conferência antes da entrega compara as contagens por seção. Está em `references/replicate.md` (passos 2 a 5). Cenário: o GREEN de `visual-direction-copia-referencia` (2026-11-17, `devorb@66e054a`): a rodada com a skill manteve as 6 seções em ordem, o título bicolor e a marca, mas cortou os 6 cards de horário para 3 e trocou a linha do tempo de 4 pessoas por papéis, "porque só há três coisas verdadeiras para mostrar". Falhou só em `structure`.
+
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
 ## Fora
@@ -141,9 +143,10 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 | Etapa | DevOrb | Sem plugin |
 |---|---|---|
 | RED (`--baseline-only`) | não roda | 0% (0,63), US$ 1,36 |
+| GREEN (`--arms devorb,none`, `devorb@66e054a`) | 0% (0,67), US$ 2,06 | 0% (0,56), US$ 1,29 |
 | Reservado `visual-direction-copia-landing-clinica` (`devorb@d873e93`, sem navegador) | 0% (0,71), US$ 1,76 | 0% (0,74), US$ 0,63 |
 
-- `fusion/results/2026-11-17-visual-direction-outside-baseline.md` e `fusion/results/2026-11-17-visual-direction-reserved.md`. No reservado, o DevOrb falhou em estrutura e escala de tipo: trocou seções sem fato do cliente (depoimentos, planos) por outras e largou o título bicolor. Daí a regra própria 2. Na mesma rodada, o reservado `visual-direction-painel-padaria` deu 50% (0,86) com o DevOrb contra 100% (1,00) sem plugin. A causa não foi conferida nesta tarefa. GREEN do caso de fora do sandbox fica com o controlador.
+- `fusion/results/2026-11-17-visual-direction-outside-baseline.md` e `fusion/results/2026-11-17-visual-direction-reserved.md`. No reservado, o DevOrb falhou em estrutura e escala de tipo: trocou seções sem fato do cliente (depoimentos, planos) por outras e largou o título bicolor. Daí a regra própria 2. Na mesma rodada, o reservado `visual-direction-painel-padaria` deu 50% (0,86) com o DevOrb contra 100% (1,00) sem plugin. A causa não foi conferida nesta tarefa. No GREEN de fora do sandbox (`fusion/results/2026-11-17-visual-direction-outside.md`), `accepted: true`, mas o caso é lacuna (nenhum braço passa): com a skill, tudo passou menos `structure`, porque o build cortou os 6 cards para 3 e as 4 pessoas para papéis. Daí a regra própria 3.
 
 ## Decisões por commit de fonte
 
