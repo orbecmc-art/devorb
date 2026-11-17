@@ -52,7 +52,13 @@ These show the depth wanted: the problem, where it is, why it matters, and the f
 - **layout-grid: 5.** Problem: a gym's class schedule mixes cards of three widths that start at different left edges, and the timetable below uses its own narrower column. Where: sections 2 and 3 at 1440; at 390 everything stacks to one column and looks fine. Why it matters: edges that almost line up look like mistakes, and the eye stops trusting the page as a schedule. Fix: put cards and timetable on one shared column grid, with widths set by the grid, not by each card's text. Line: `layout-grid: 5 — a 10 here: cards and timetable share one grid and one left edge — gap: at 1440 the class cards start at three different edges and the timetable sits on a narrower column`.
 - **reference-fidelity: 3.** Problem: the reference pricing page has a comparison of three plans side by side with the middle one raised, then a question list; the build turns the plans into one long text list and drops the questions. Where: sections 2 and 3, compared with the pack's `secoes.md` and its 1440 shots. Why it matters: the contract asked for the reference's form; what made it work, seeing the three choices at once with one recommended, is gone, so the visitor must read everything to compare. Fix: rebuild the three plans side by side with the middle one marked, and restore the question list in its place. Line: `reference-fidelity: 3 — a 10 here: three plans side by side with the middle raised, then the question list, as in the pack — gap: plans became a single text list and the question section is missing`.
 
-## Fallbacks (for the reviewer who dispatches the critic)
+## For the reviewer who dispatches the critic
+
+- Name this file by its absolute path. If the critic cannot read it there, copy it into a scratch folder outside the project and name the copy; never paste its text.
+- Copy the critic's block into the report verbatim: the `Critique (…):` title line, then one `<dimension>: <0-10> — a 10 here: … — gap: …` line per dimension, in the rubric's order. Never a table, never a summary, never merged lines: `devorb:verifying` parses this block.
+- Every score below 8 gets its own `[P1]` line in Findings, even when a measured finding already covers it; then cite that finding instead of repeating it, as in `[P1] hierarchy 3/10 — see finding 3`. Class `Conceptual mismatch` when the page is organized wrong, `Local defect` when one spot is. Drop only a gap that targets what `DESIGN.md` or the contract authorizes, or that only demands a value nobody declared.
+
+## Fallbacks
 
 Which block the report carries, in this order:
 

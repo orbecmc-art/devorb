@@ -13,7 +13,7 @@ Pinos lidos, buscados rasos (`--depth 1 --filter=blob:limit=2m`, hooks desligado
 
 A skill foi escrita sem abrir `evals/ui-review-*`, `evals-reserved/` nem `fusion/results/`. Os casos só são conhecidos pelo texto da Task D5 no plano. `devorb:design-system` e `devorb:motion` estavam sendo escritas em paralelo: a skill as cita pelo nome e aponta para "as referências" delas, sem nomear arquivo que talvez não exista.
 
-`SKILL.md` tinha 6.767 bytes na Task D5 e tem hoje 9.729 (ver Revisões, Task 5 de 2026-11-17; teto de 2.500 tokens). A descrição custa cerca de 44 tokens com o nome, dos 250 do setor.
+`SKILL.md` tinha 6.767 bytes na Task D5 e tem hoje 9.861 (ver Revisões, Task 5 de 2026-11-17; teto de 2.500 tokens). A descrição custa cerca de 44 tokens com o nome, dos 250 do setor.
 
 ## Origem por parte
 
@@ -65,6 +65,12 @@ Todos pela Task D5:
 - **Ordem:** a Impeccable põe o funcional antes do cosmético; o gstack ordena por ganho visual. Funcional antes de visual.
 - **`overflow-wrap`:** o Emil pede `anywhere` para não quebrar palavra de título; o gstack proíbe `anywhere` em título. `anywhere` em dados, `break-word` em títulos.
 
+## Regras próprias
+
+- **Bloco Critique copiado ao pé da letra, e cada nota abaixo de 8 com sua linha `[P1]`.** O revisor copia o bloco do crítico no formato fixo: a linha `Critique (…):` e, depois, uma linha `<dimension>: <0-10> — a 10 here: … — gap: …` por dimensão, na ordem da régua. Nunca tabela, nunca resumo, porque `devorb:verifying` lê esse bloco. Toda nota abaixo de 8 ganha sua própria linha `[P1]` nos achados, mesmo quando um achado medido já cobre o mesmo problema: nesse caso a linha cita o número do achado (`[P1] hierarchy 3/10 — see finding 3`) em vez de sumir. Se o crítico não consegue ler `critique.md` no caminho do plugin, o revisor copia o arquivo para uma pasta temporária e passa o caminho da cópia, sem colar o texto. Está no passo 5 da §6 do `SKILL.md` e em `references/critique.md`.
+
+  Cenário: o GREEN fora do sandbox de 2026-11-17 (`devorb@cbba161`, `fusion/results/2026-11-17-ui-review-outside.md`). O crítico acertou o conteúdo: hierarchy 3, visual-moment 1, reference-fidelity 1, e a razão medida de 2,0 contra 3,29. Mesmo assim, nas duas rodadas o revisor transformou o bloco numa tabela em markdown e não listou as notas baixas como P1, dizendo que "repetiam os achados medidos". O crítico também não conseguiu ler `critique.md` no caminho do plugin; o revisor copiou o arquivo para uma pasta temporária e rodou de novo.
+
 ## Fora
 
 - **Pela Task D5:** as personas (a usuária chata do `break-ui`, o engenheiro sênior do `mobile-native`), Nielsen, as notas e os subagentes isolados (os dois voltaram na Task 5 de 2026-11-17, só no bloco Critique), o código de `frontend-a11y` (ECC), `user-select: none` em todo link e `overscroll-behavior: none` na raiz.
@@ -106,7 +112,7 @@ Todos pela Task D5:
     - `token-pass` (não acusar token errado onde os tokens estão certos).
 
     Há também um caso reservado no sandbox, escrito por um subagente novo, que não abri.
-  - `fusion/skills.json`: `ui-review.level` foi de `light` para `full`. `SKILL.md` foi de 6.879 para 9.729 bytes (cerca de 2.433 tokens, teto 2.500).
+  - `fusion/skills.json`: `ui-review.level` foi de `light` para `full`. `SKILL.md` foi de 6.879 para 9.861 bytes (cerca de 2.466 tokens, teto 2.500).
   - **Rodada de correção da revisão:**
     - o 10 de typography passou a 60 a 75 caracteres por linha, como o piso;
     - a lacuna do crítico que mira o que o `DESIGN.md` ou o contrato autoriza, ou que só pede um valor que ninguém declarou, é descartada e não vira P1, e o crítico recebe o `DESIGN.md` para não mirar nas exceções;
@@ -136,6 +142,14 @@ RED da Task 5, 2026-11-17: Opus 5.5, braço sem plugin, fora do sandbox. `fusion
 | `ui-review-critica-em-breve` | 0% (0,50), US$ 0,90 |
 
 - O braço com a skill antiga não rodou neste RED. Ela proibia nota ("No grade, score or total anywhere") e dizia "Ugly is not a rule", então não podia produzir o bloco Critique. O GREEN (`--arms devorb,none --outside-sandbox` e `--reserved`) fica para o controlador.
+
+GREEN da Task 5, 2026-11-17: Opus 5.5, 2 rodadas, fora do sandbox, com a skill em `devorb@cbba161` (antes da regra própria acima). Arquivo: `fusion/results/2026-11-17-ui-review-outside.md`.
+
+| Caso | DevOrb | Sem plugin |
+|---|---|---|
+| `ui-review-critica-em-breve` | 0% (0,67), US$ 2,59 | 0% (0,56), US$ 0,72 |
+
+- `accepted: true`, e o caso ficou como lacuna (nenhum braço passa). As duas rodadas do DevOrb passaram em `fresh`, `no-edits-*`, `design-unchanged` e `token-pass`, e falharam em `critique`: o bloco virou tabela e as notas abaixo de 8 não viraram P1. Isso deu origem à regra própria acima, que foi escrita depois desta rodada e ainda não foi medida.
 
 ## Decisões por commit de fonte
 
