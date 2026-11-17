@@ -39,6 +39,15 @@
   ],
   "text": [
     {
+      "role": "h1",
+      "fontSize": 16,
+      "lineHeight": 20,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
       "role": "h2",
       "fontSize": 26,
       "lineHeight": 32,

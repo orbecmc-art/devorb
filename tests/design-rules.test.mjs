@@ -56,3 +56,15 @@ test('sections come from content, not the sidebar', () => {
   assert.equal(root.tag, 'main');
   assert.equal(sectionNodes(root).length, 3);
 });
+test('a build with no visible sections is a gross fail, not a crash', () => {
+  const b = load('metrics-pilot.json');
+  b.sections = [];
+  const r = compareStructure(b, load('metrics-pilot.json'));
+  assert.equal(r.grossFail, true);
+  assert.ok(r.reasons.some((x) => x.includes('section count')));
+});
+test('body-size fails closed with no body samples', () => {
+  const m = load('metrics-pilot.json');
+  m.text = m.text.filter((t) => t.role !== 'body');
+  assert.equal(status(checkFloor(m, 'persuade'), 'body-size'), 'FAIL');
+});

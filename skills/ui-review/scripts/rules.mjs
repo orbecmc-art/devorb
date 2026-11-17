@@ -9,8 +9,8 @@ const sizes = (m, role) => m.text.filter((t) => t.role === role).map((t) => t.fo
 const distinct = (xs) => new Set(xs).size;
 
 export function headingRatio(m) {
-  const h1 = sizes(m, 'h1');
-  const top = Math.max(...(h1.length ? h1 : sizes(m, 'h2')));
+  // h1 can be a small page title; the real headline may be an h2
+  const top = Math.max(...sizes(m, 'h1'), ...sizes(m, 'h2'));
   return top / median(sizes(m, 'body'));
 }
 
@@ -24,7 +24,7 @@ export function checkFloor(m, mode) {
   const check = (id, bad, level, detail) => ({ id, status: bad ? level : 'PASS', detail });
   return [
     check('heading-ratio', !(ratio >= min), 'FAIL', `ratio ${ratio.toFixed(2)}, min ${min} for ${mode}`),
-    check('body-size', bodyMedian < 16 && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`),
+    check('body-size', !(bodyMedian >= 16) && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`),
     check('measure', wide > 0, 'WARN', `${wide} body samples above 75 chars per line`),
     check('spacing-grid', off > 0.2 * m.spacing.length, 'WARN', `${off} of ${m.spacing.length} spacings off the 4px grid`),
     check('font-sizes', distinct(m.text.map((t) => t.fontSize)) > 8, 'WARN', `${distinct(m.text.map((t) => t.fontSize))} distinct font sizes`),
@@ -40,7 +40,7 @@ export function compareStructure(build, ref) {
   const reasons = [];
   if (b.length !== r.length) reasons.push(`section count ${b.length} differs from reference ${r.length}`);
   if (headingRatio(build) < 0.8 * headingRatio(ref)) reasons.push(`heading ratio ${headingRatio(build).toFixed(2)} is below 80% of reference ${headingRatio(ref).toFixed(2)}`);
-  const page = (xs) => xs.at(-1).top + xs.at(-1).height;
+  const page = (xs) => (xs.length ? xs.at(-1).top + xs.at(-1).height : 0);
   const differs = (x, y) => Math.max(x, y) > 0 && Math.abs(x - y) / Math.max(x, y) > 0.25;
   const deviations = [];
   const [pb, pr] = [page(b), page(r)];
