@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -53,4 +53,22 @@ test('capture exits 3 with the NEED message when playwright is missing', () => {
   const r = spawnSync(process.execPath, [CAPTURE, 'file:///x.html', root], { encoding: 'utf8', cwd: root, env });
   assert.equal(r.status, 3);
   assert.match(r.stdout, /^NEED: /);
+});
+test('slugFromUrl falls back to ref when nothing is left', () => {
+  assert.equal(slugFromUrl('file:///'), 'ref');
+});
+test('re-capturing a slug keeps the hand-written notes', () => {
+  const root = mkdtempSync(join(tmpdir(), 'devorb-cap-'));
+  assert.equal(cli('https://d.example/x', root, '--dry-run').status, 0);
+  const notas = join(root, 'design', 'referencias', 'd-x', 'notas.md');
+  writeFileSync(notas, '## Levar\n- o grid\n\n## Não levar\n');
+  assert.equal(cli('https://d.example/x', root, '--dry-run').status, 0);
+  assert.match(readFileSync(notas, 'utf8'), /- o grid/);
+});
+test('an exit-3 run on a new slug leaves no pack directory', () => {
+  const root = mkdtempSync(join(tmpdir(), 'devorb-cap-'));
+  const env = { ...process.env, DEVORB_PLAYWRIGHT_DIR: '' };
+  const r = spawnSync(process.execPath, [CAPTURE, 'https://d.example/x', root], { encoding: 'utf8', cwd: root, env });
+  assert.equal(r.status, 3);
+  assert.equal(existsSync(join(root, 'design', 'referencias', 'd-x')), false);
 });

@@ -1,5 +1,5 @@
 import { parseArgs as parseCli } from 'node:util';
-import { mkdirSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { headingRatio } from '../../ui-review/scripts/rules.mjs';
@@ -15,7 +15,7 @@ export function slugFromUrl(url) {
   const last = u.pathname.split('/').filter(Boolean).at(-1) ?? '';
   const host = u.hostname.replace(/^www\./, '').split('.');
   if (host.length > 1) host.pop(); // drop the TLD
-  return kebab(`${host.join(' ')} ${last.replace(/\.\w+$/, '')}`);
+  return kebab(`${host.join(' ')} ${last.replace(/\.\w+$/, '')}`) || 'ref';
 }
 
 export function buildTokens(m) {
@@ -54,27 +54,27 @@ async function main(argv) {
   }
   const base = join(root, 'design', 'referencias');
   const existing = existsSync(base) ? readdirSync(base, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort() : [];
-  const slug = v.slug ?? slugFromUrl(url);
+  const slug = kebab(v.slug ?? '') || slugFromUrl(url);
   if (existing.length >= 3 && !existing.includes(slug)) {
     console.log(`MAX 3 referências: ${existing.join(', ')}`);
     return 4;
   }
   const dir = join(base, slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, 'url.txt'), url + '\n');
-  writeFileSync(join(dir, 'notas.md'), '## Levar\n\n## Não levar\n');
-  if (v['dry-run']) {
-    writeFileSync(join(dir, 'tokens.json'), '{}\n');
-    writeFileSync(join(dir, 'secoes.md'), `(dry-run: sem navegador)\n${MOVEMENT}\n`);
-    return 0;
-  }
+  const isNew = !existsSync(dir);
+  const meta = (m) => {
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'url.txt'), url + '\n');
+    if (!existsSync(join(dir, 'notas.md'))) writeFileSync(join(dir, 'notas.md'), '## Levar\n\n## Não levar\n'); // keep the user's notes
+    writeFileSync(join(dir, 'tokens.json'), m ? JSON.stringify(buildTokens(m[1440]), null, 2) : '{}\n');
+    writeFileSync(join(dir, 'secoes.md'), m ? sectionsMarkdown(m[1440], m[390]) : `(dry-run: sem navegador)\n${MOVEMENT}\n`);
+  };
+  if (v['dry-run']) return meta(null) ?? 0;
   try {
     // a FAIL in the floor checks is not an error here: the reference is data, not under review
-    const m = await shootPage(url, dir, { widths: [1440, 390], pw: v.pw });
-    writeFileSync(join(dir, 'tokens.json'), JSON.stringify(buildTokens(m[1440]), null, 2));
-    writeFileSync(join(dir, 'secoes.md'), sectionsMarkdown(m[1440], m[390]));
+    meta(await shootPage(url, dir, { widths: [1440, 390], pw: v.pw }));
     return 0;
   } catch (e) {
+    if (isNew) rmSync(dir, { recursive: true, force: true }); // a failed run must not use up a pack slot
     if (e.code !== 'NEED_PLAYWRIGHT') throw e;
     console.log(e.message);
     return 3;
