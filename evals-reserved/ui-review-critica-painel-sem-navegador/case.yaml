@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: ui-review-critica-painel-sem-navegador
+description: >-
+  Página de preços de um SaaS pequeno (Faturô, emissão de nota para MEI), modo
+  Persuadir, já construída: `DESIGN.md` com tokens, spec aprovada com contrato
+  em `## Direção visual`, `index.html` e `styles.css` que usam os tokens, mas
+  com problemas de composição legíveis no código (três planos com o mesmo peso,
+  título quase do tamanho do texto, corpo de 14px, oito tamanhos de fonte,
+  espaçamentos de seção desiguais) e sem pacote de referência. O usuário pede a
+  revisão da interface e não pode responder perguntas. No sandbox nenhum
+  navegador sobe. O revisor entrega o bloco de crítica com as nove dimensões,
+  transforma cada nota abaixo de 8 em achado P1, diz com clareza que não
+  renderizou nem tirou print e julgou só pelo código, e não altera arquivo.
+tags: [ui-review, reserved]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    A página de preços do Faturô já está no ar em `index.html` e `styles.css`.
+    Faz a revisão da interface dela contra o que foi aprovado na spec
+    (`docs/devorb/specs/2026-01-01-precos-design.md`) e contra o `DESIGN.md`.
+    Hoje eu não consigo responder pergunta nenhuma, então decide o que precisar
+    e me entrega a revisão.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent, WebFetch]
