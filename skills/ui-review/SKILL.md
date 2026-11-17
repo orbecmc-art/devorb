@@ -56,17 +56,17 @@ Each check ends in exactly one of: **found** (with the finding), **clear**, or *
 
 ## 6. Visual critique
 
-The look is scored against `references/critique.md` by a reviewer who never sees the code. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Install Playwright in the project only with a yes; otherwise `npm i --prefix <tmp>/pw playwright && npx --prefix <tmp>/pw playwright install chromium`, and pass `--pw <tmp>/pw`.
+A reviewer who never sees the code scores the look by `references/critique.md`. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Installing Playwright or downloading a browser is the user's call, as in `devorb:browser-testing`: ask; only their explicit yes counts ("decide alone" is not one). Without it, go code-only. An install outside the project is passed as `--pw <dir>`.
 
 1. **Shoot:** `node "$UI_DIR/scripts/shoot.mjs" <url, or file:// plus the absolute path> <tmp>/shots --mode <the contract's main mode, lower case> [--pw <dir>]`. Per width: `full.png`, `section-<i>.png`, `metrics.json`, `checks.json`.
 2. **Floor checks:** each `checks.json` FAIL is a `[P1]` finding, each WARN a `[P2]`, with the check id as the rule.
 3. **Reference pack** (the contract's `Reference pack:` or one the user names): without `1440/metrics.json` in it, shoot its URL or `source.html` into `<tmp>/ref` the same way. Then:
    `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`
    Each `reasons` item is a `[P1]` Conceptual mismatch; each `deviations` item a `[P2]`.
-4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and quotes the contract's `## Direção visual`. Nothing else: no code, no source path, no word on who built it. Never paste the rubric; the critic reads the file.
-5. **Copy** its `Critique` block into the report as returned. Each score below 8 becomes a `[P1]` finding: its gap line, class `Conceptual mismatch` (the page is organized wrong) or `Local defect` (one spot), rule `Critique: <dimension>`.
+4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`. Nothing else: no code, no source path, no word on who built it. Never paste the rubric; the critic reads the file.
+5. **Copy** its `Critique` block into the report as returned. Each score below 8 becomes a `[P1]` finding: its gap line, class `Conceptual mismatch` (the page is organized wrong) or `Local defect` (one spot), rule `Critique: <dimension>`. A gap that targets what `DESIGN.md` or the contract authorizes, or only demands a value nobody declared (a hex, a size), is dropped.
 
-No subagent tool: critique yourself from the shots alone, by `critique.md`, and title the block `Critique (self, no fresh reviewer):`. No browser (shoot exits 3 and Playwright cannot be installed): write the block yourself, from code only; the report's first line says "only code", every render-only score carries "(from code)", and no screenshot or measured value is claimed.
+No subagent tool: critique yourself from the shots, by `critique.md`, titled `Critique (self):`. No browser, with or without a subagent tool: critique yourself from code only, titled `Critique (self, from code):`; the report's first line says "only code", every render-only score carries "(from code)", and no screenshot or measured value is claimed.
 
 ## 7. Severity
 
@@ -107,5 +107,5 @@ Then stop. Change no file: no fix, no fixture in the tree, no formatting. When f
 ## Connects to
 
 - **Receives:** from `devorb:verifying`, after `devorb:browser-testing` (or `devorb:device-testing` for an app), a built screen with a UI; or a request to review an interface.
-- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`, `references/native.md`, `references/critique.md`; `scripts/shoot.mjs` and `compareStructure` in `scripts/rules.mjs`; a reference pack from `devorb:visual-direction`.
+- **Uses:** `DESIGN.md`, the spec's contract, `devorb:visual-direction`'s `references/floor.md`, the references of `devorb:design-system` and `devorb:motion`, the rendering of `devorb:browser-testing`; `references/a11y.md`, `references/mobile-web.md`, `references/worst-case.md`, `references/native.md`, `references/critique.md`, `scripts/shoot.mjs`, `scripts/rules.mjs`; a pack from `devorb:visual-direction`.
 - **Hands off to:** the caller with the report; `devorb:debugging` when the task includes fixing.
