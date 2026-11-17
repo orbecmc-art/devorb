@@ -83,6 +83,7 @@ O agente não levou a estrutura, a escala, a composição nem os recursos da ref
 8. Movimento dosado conforme o pedido: minimalista é suave e fluido, "absurdo" é muito animado, e o padrão nunca é seco.
 9. O plugin guia o usuário leigo com recomendações e oferece abrir referências no Chrome ou no navegador para ele escolher.
 10. Sobre a taste-skill, que dizem ser a melhor: a escolha fica com Claude. Ver a decisão 6 das calls de Claude.
+11. Testes da Fase 1: ciclo completo (caso que falha antes, depois a mudança, comparação com braço de controle) nas três skills que mudam de comportamento: `visual-direction` (modo cópia), `implementing` (espelho do construtor) e `ui-review` (crítico de olhos novos). As outras skills tocadas (`aligning`, `planning`, `verifying`, `browser-testing`, `reviewing`) ganham só casos leves e baratos de regex ou de rastro. Estimativa de custo: US$ 60 a 80. Casos com navegador rodam por `tools/eval-outside.mjs`, porque o Chromium não abre no sandbox do `claude plugin eval`.
 
 ## Abordagens consideradas
 
