@@ -1,7 +1,7 @@
 ---
 type: regex
 target: trace
-pattern: '"command":\s*"[^"]*capture\.mjs|design/referencias/[\w.-]+/secoes\.md'
+pattern: '"command":\s*"(?:[^"\\]|\\.)*capture\.mjs|design/referencias/[\w.-]+/secoes\.md'
 match: contains
 ---
 

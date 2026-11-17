@@ -3,6 +3,7 @@ type: llm
 focus:
   source: file
   path: styles.css
+weight: 2
 ---
 
 Contexto: a página de referência tem um título principal (h1) de 56px sobre um corpo de 17px, ou seja, o título é mais de 3 vezes maior que o texto corrido. A cópia, em `styles.css`, deve manter essa escala no computador.

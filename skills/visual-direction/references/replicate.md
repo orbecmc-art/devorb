@@ -12,9 +12,9 @@ The user asked to copy, clone, "deixar igual" or use a page as a base. Copying t
 `node "$SKILL_DIR/scripts/capture.mjs" <url> <project root> --slug <slug> [--pw <dir>]`. A local file is `file://` plus its absolute path. It writes `design/referencias/<slug>/`: `url.txt`, `notas.md`, `tokens.json`, `secoes.md`, and `1440/` and `390/` with `full.png`, `section-<i>.png`, `metrics.json` and `checks.json`.
 
 - Exit 3: Playwright is missing; install it as above and run again. Exit 4: the project already has 3 packs; ask which one to reuse or remove, and never delete one yourself.
-- Behind a login: the script cannot sign in, and you never type a password. Ask the user to log in in their own browser, then use a browser tool (Claude in Chrome or the built-in browser): paste `collect-in-page.js` from `UI_DIR/scripts/` through the JavaScript tool, run `window.__devorbMetrics()`, save the result as `1440/metrics.json`, and take the screenshots with the browser tool.
+- Behind a login: the script cannot sign in, and you never type a password. Ask the user to log in in their own browser, then use a browser tool (Claude in Chrome or the built-in browser): paste `collect-in-page.js` from `UI_DIR/scripts/` through the JavaScript tool, resize the browser window to 1440 wide, run `window.__devorbMetrics()` and save the result as `1440/metrics.json`; repeat at 390 for `390/`. Take the screenshots with the browser tool.
 - No browser at all (no Playwright that launches and no browser tool): `capture.mjs … --dry-run` still makes the pack folder. Read the reference's HTML and CSS instead: section order, what each section holds, heading and body font sizes, grid and spacing. Write `secoes.md` and `notas.md` from that by hand. Say plainly in your final message that capture and the mirror did not run; never claim a screenshot or a measured value.
-- Tokens, optional, public pages only: inside the pack folder, `npx -y dembrandt@0.39.2 <url> --design-md` writes a `DESIGN.md` under `output/`; keep it as `DESIGN.ref.md`. It is reference data, never the client's tokens.
+- Tokens, optional, public pages only: inside the pack folder, `npx -y dembrandt@0.39.2 <url> --design-md`; find the `DESIGN.md` it writes (its location was not verified) and keep it as `DESIGN.ref.md`. It is reference data, never the client's tokens.
 
 ## 2. Write the pack notes
 

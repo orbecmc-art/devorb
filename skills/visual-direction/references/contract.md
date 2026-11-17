@@ -2,7 +2,7 @@
 
 `## Direção visual` in the spec. Short lines, no values. Each field starts with its label exactly as written here, whatever the spec's language; what follows the label is in the spec's language. `devorb:design-system`, `devorb:motion`, the builder and `devorb:ui-review` read these labels. Fields, in this order:
 
-- `Mode`: Persuade, Operate, Read or Experience. `Invention level`: Extend, New surface, New world or Replicate.
+- `Mode`: Persuade, Operate, Read or Experience. `Invention level`: Extend, New surface, same world, New world or Replicate.
 - `Motion level: Suave | Equilibrado | Impacto`: keep the one that fits; on Replicate, the reference's.
 - `Reference pack: design/referencias/<slug>/ (até 3)`: the pack this page follows (Replicate, or any page built from a captured reference); omit when there is none.
 - `Same as reference:` and `Changed:` (Replicate): what stays as in the reference and what follows the project, from step 3 of `references/replicate.md`.
