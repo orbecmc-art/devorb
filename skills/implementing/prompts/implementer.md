@@ -106,7 +106,6 @@ Agent (general-purpose):
     - Design system: [path of DESIGN.md]
     - Reference pack: [design/referencias/<slug>/, or none]
     - Floor: [absolute path of devorb:visual-direction's references/floor.md]
-    - UI_DIR: [absolute path of devorb:ui-review's folder]
     - Install yes: [the user's explicit yes to install Playwright, or none]
 
     Before committing, look at what you built. `<tmp>` is a scratch folder
@@ -114,15 +113,16 @@ Agent (general-purpose):
 
     1. Serve the page (the project's dev server) or open it as `file://`
        plus the absolute path of a static page.
-    2. Shoot: `node "$UI_DIR/scripts/shoot.mjs" <url> <tmp>/shots-<round>
+    2. Shoot: `node "[UI_DIR]/scripts/shoot.mjs" <url> <tmp>/shots-<round>
        --mode <the contract's Mode, lower case> [--pw <dir>]`. Per width
        (1440, 1024, 768, 390): `full.png`, `section-<i>.png`,
        `metrics.json`, `checks.json`.
     3. With a pack holding `1440/metrics.json`, compare structure:
-       `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots-<round>/1440/metrics.json'), m('<pack>/1440/metrics.json'))))"`
-    4. Read the shots against the pack's `section-<i>.png` and `secoes.md`
-       (every section, in order, with its treatment and type scale), or,
-       without a pack, against `floor.md`. A `checks.json` FAIL, a
+       `node --input-type=module -e "import { compareStructure } from '[UI_DIR]/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots-<round>/1440/metrics.json'), m('<pack>/1440/metrics.json'))))"`
+    4. Read the shots against the pack's `<pack>/1440/section-<i>.png` and
+       `<pack>/390/section-<i>.png` and its `secoes.md` (every section, in
+       order, with its treatment and type scale), or, without a pack,
+       against `floor.md`. A `checks.json` FAIL, a
        `grossFail` reason or a section that doesn't match is a fix.
     5. Fix, then shoot again. At most 3 rounds; what still fails after the
        third goes in your concerns.
@@ -137,7 +137,8 @@ Agent (general-purpose):
 
     Your report carries the line, exactly:
     `Mirror: rounds <n>/3 · shots <dir> · checks FAIL <n> WARN <n> · vs reference: <grossFail yes/no>`
-    (`vs reference: none` when there is no pack).
+    (`vs reference: none` when there is no pack; `vs reference: no metrics`
+    when the pack has no `1440/metrics.json`).
 
     ## Self-review before reporting
 

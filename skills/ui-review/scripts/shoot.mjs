@@ -7,7 +7,7 @@ import { checkFloor, MODE_MIN_RATIO } from './rules.mjs';
 
 const COLLECTOR = fileURLToPath(new URL('./collect-in-page.js', import.meta.url));
 const USAGE = 'usage: node shoot.mjs <url> <outDir> [--widths a,b] [--mode persuade|operate|read|experience] [--no-scroll] [--pw <dir>]';
-const NEED = 'NEED: npm i -D playwright && npx playwright install chromium (or, to keep it out of the project: npm i --prefix <temp dir> playwright, then pass --pw <dir> with that folder)';
+const NEED = 'NEED: npm i -D playwright && npx playwright install chromium (or, to keep it out of the project: npm i --prefix <temp dir> playwright && npx --prefix <temp dir> playwright install chromium, then pass --pw <dir> with that folder)';
 
 export function parseArgs(argv) {
   const { values: v, positionals: [url, out] } = parseCli({
