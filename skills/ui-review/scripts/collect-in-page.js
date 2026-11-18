@@ -1,6 +1,6 @@
 // Browser script with no imports: shoot.mjs injects it with page.addScriptTag.
 (() => {
-  // Copy of findSectionsRoot and sectionNodes from rules.mjs; tests/design-shoot.test.mjs keeps them equal.
+  // Copy of findSectionsRoot, sectionNodes and findSections from rules.mjs; tests/design-shoot.test.mjs keeps them equal.
   const find = (n, pred) => (pred(n) ? n : n.children.reduce((hit, c) => hit || find(c, pred), null));
   const findSectionsRoot = (tree) => {
     let node = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
@@ -9,6 +9,21 @@
     return node;
   };
   const sectionNodes = (root) => root.children.filter((c) => c.rect.w >= 0.5 * root.rect.w && c.rect.h >= 120);
+  const findSections = (tree) => {
+    const root = findSectionsRoot(tree);
+    const nodes = sectionNodes(root);
+    if (nodes.length >= 2) return { root, nodes };
+    // wrappers with no box (display: contents) hide the sections: take the level with most full-width blocks, first on a tie
+    const start = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
+    let best = { root: start, nodes: [] };
+    const visit = (n) => {
+      const blocks = n.children.filter((c) => c.rect.w >= 0.9 * start.rect.w && c.rect.h >= 120);
+      if (blocks.length > best.nodes.length) best = { root: n, nodes: blocks };
+      n.children.forEach(visit);
+    };
+    visit(start);
+    return best.nodes.length >= 2 ? best : { root, nodes };
+  };
 
   const visible = (n) => n.rect.w > 0 && n.rect.h > 0;
   const pathTo = (n, target) => {
@@ -161,7 +176,9 @@
 
   window.__devorbFindSectionsRoot = findSectionsRoot;
   window.__devorbSectionNodes = sectionNodes;
+  window.__devorbFindSections = findSections;
   window.__devorbFindScroller = findScroller;
+  window.__devorbTree = () => toNode(document.body);
   window.__devorbScroller = () => innerScroller() ?? document.scrollingElement;
   // let the document carry the inner scroller's full height, so tops are page-relative and fullPage shots see everything
   window.__devorbExpand = () => {
@@ -170,8 +187,7 @@
     }
   };
   window.__devorbMetrics = () => {
-    const root = findSectionsRoot(toNode(document.body));
-    const nodes = sectionNodes(root);
+    const { root, nodes } = findSections(toNode(document.body));
     const sections = nodes.map((n, index) => {
       const cs = getComputedStyle(n.el);
       return {

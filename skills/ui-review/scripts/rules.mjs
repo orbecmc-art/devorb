@@ -66,3 +66,19 @@ export function findSectionsRoot(tree) {
 export function sectionNodes(root) {
   return root.children.filter((c) => c.rect.w >= 0.5 * root.rect.w && c.rect.h >= 120);
 }
+
+export function findSections(tree) {
+  const root = findSectionsRoot(tree);
+  const nodes = sectionNodes(root);
+  if (nodes.length >= 2) return { root, nodes };
+  // wrappers with no box (display: contents) hide the sections: take the level with most full-width blocks, first on a tie
+  const start = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
+  let best = { root: start, nodes: [] };
+  const visit = (n) => {
+    const blocks = n.children.filter((c) => c.rect.w >= 0.9 * start.rect.w && c.rect.h >= 120);
+    if (blocks.length > best.nodes.length) best = { root: n, nodes: blocks };
+    n.children.forEach(visit);
+  };
+  visit(start);
+  return best.nodes.length >= 2 ? best : { root, nodes };
+}

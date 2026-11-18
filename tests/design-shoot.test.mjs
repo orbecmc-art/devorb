@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import vm from 'node:vm';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { findSectionsRoot, sectionNodes, checkFloor } from '../skills/ui-review/scripts/rules.mjs';
+import { findSections, findSectionsRoot, sectionNodes, checkFloor } from '../skills/ui-review/scripts/rules.mjs';
 import { parseArgs, planShots, resolvePlaywright } from '../skills/ui-review/scripts/shoot.mjs';
 
 test('parseArgs applies the defaults', () => {
@@ -84,10 +84,17 @@ test('the in-page copy of the section algorithm matches rules.mjs', () => {
   const main = findSectionsRoot(narrowAndShort);
   main.children.push({ tag: 'div', rect: { x: 240, y: 1400, w: 600, h: 400 }, children: [] }, { tag: 'hr', rect: { x: 240, y: 1800, w: 1272, h: 100 }, children: [] });
   const ligare = JSON.parse(readFileSync(new URL('./fixtures/design/dom-ligare-shell.json', import.meta.url)));
+  const billow = JSON.parse(readFileSync(new URL('./fixtures/design/dom-billow-shape.json', import.meta.url)));
   for (const tree of [shell, narrowAndShort, ligare]) {
     const root = window.__devorbFindSectionsRoot(tree);
     assert.equal(root, findSectionsRoot(tree));
     assert.deepEqual([...window.__devorbSectionNodes(root)], sectionNodes(root));
+  }
+  for (const tree of [shell, narrowAndShort, ligare, billow]) {
+    const inPage = window.__devorbFindSections(tree);
+    const expected = findSections(tree);
+    assert.equal(inPage.root, expected.root);
+    assert.deepEqual([...inPage.nodes], expected.nodes);
   }
   assert.equal(sectionNodes(main).length, 3);
 });

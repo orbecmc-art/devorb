@@ -140,6 +140,12 @@ Todos pela Task D5:
   - **`metrics.json`** ganha `shotErrors: { shot, error }[]`, com `shot` igual a `full` ou `section-<i>`.
   - **`goto`** espera `domcontentloaded` em vez de `load`, seguido da espera de rede ociosa de 5s que já existia: sites que nunca terminam de carregar deixam de travar a captura.
 
+- 2026-11-18, Task 3 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: segundo critério de seções.
+  - **Problema.** A Billow dava 0 seções. Sem `main`, o primeiro critério desce por `body` e dois `div` de página inteira até o rodapé, porque os blocos de conteúdo ficam atrás de um wrapper sem caixa (0×0, `display: contents`) e o cabeçalho tem 79px.
+  - **`findSections(tree)`** devolve `{ root, nodes }`. Usa o primeiro critério quando ele dá 2 seções ou mais. Senão, a partir de `main` (ou da árvore), escolhe o nó com mais filhos de largura de pelo menos 90% da largura de partida e altura de 120px ou mais, o primeiro em pré-ordem no empate; com 2 ou mais, esse nó e esses filhos são as seções. `findSectionsRoot`, `sectionNodes` e `findScroller` não mudam.
+  - **Coletor.** `__devorbMetrics` usa a cópia `__devorbFindSections`, e `root` passa a ser a tag do nó escolhido. `__devorbTree()` devolve a árvore medida, para depurar.
+  - **Billow medida.** 5 seções a 1440 e a 390. O estudo A contou cerca de 13: os três blocos que têm cada um o seu próprio wrapper sem caixa e o rodapé ficam de fora, porque o critério só conta filhos diretos.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { headingRatio, checkFloor, compareStructure, findSectionsRoot, sectionNodes } from '../skills/ui-review/scripts/rules.mjs';
+import { headingRatio, checkFloor, compareStructure, findSections, findSectionsRoot, sectionNodes } from '../skills/ui-review/scripts/rules.mjs';
 const load = (f) => JSON.parse(readFileSync(new URL(`./fixtures/design/${f}`, import.meta.url)));
 const status = (checks, id) => checks.find((c) => c.id === id).status;
 
@@ -64,6 +64,22 @@ test('a small footer beside the content wrapper does not hide its sections', () 
   const sections = [0, 1, 2, 3].map((i) => node('section', i * 1400, 1400));
   const tree = node('main', 0, 5793, [node('div', 0, 5754, sections), node('footer', 5754, 39)]);
   assert.equal(sectionNodes(findSectionsRoot(tree)).length, 4);
+});
+test('the second rule finds the sections behind a wrapper with no box', () => {
+  const t = load('dom-billow-shape.json');
+  assert.ok(sectionNodes(findSectionsRoot(t)).length <= 1);
+  assert.deepEqual(findSections(t).nodes.map((n) => n.rect.y), [0, 1637, 2583, 5837, 6635]);
+});
+test('the second rule picks the level with most full-width blocks', () => {
+  const node = (tag, y, w, h, children = []) => ({ tag, rect: { x: 0, y, w, h }, children });
+  const blocks = (n, from) => Array.from({ length: n }, (_, i) => node('section', (from + i) * 600, 1440, 600));
+  const tree = node('body', 0, 1440, 3600, [node('main', 0, 1440, 3600, [node('div', 0, 0, 0, blocks(4, 0)), node('div', 0, 0, 0, blocks(2, 4))])]);
+  assert.equal(findSections(tree).nodes.length, 4);
+});
+test('the first rule wins when it already finds two or more', () => {
+  const { root, nodes } = findSections(load('dom-app-shell.json'));
+  assert.equal(root.tag, 'main');
+  assert.equal(nodes.length, 3);
 });
 test('a build with no visible sections is a gross fail, not a crash', () => {
   const b = load('metrics-pilot.json');
