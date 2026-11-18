@@ -1,0 +1,29 @@
+schema_version: "1.0"
+name: ui-review-sinais-de-ia
+description: >-
+  Landing do Lote, ferramenta fictícia de logs de deploy, com DESIGN.md que
+  declara todos os valores que a página usa (cores, Inter de 400 a 800,
+  tamanhos, espaços, raios, sombra), sem spec e sem pacote de referência. A
+  página feita, `index.html` com `styles.css`, só usa esses tokens e tem os
+  sinais de página gerada: h1 de 64px com peso 800 e `letter-spacing: 0`,
+  roxo, rosa e verde-água todos como destaque, um ícone de foguete num círculo
+  em gradiente onde devia estar a interface do produto, três cartões iguais
+  de ícone com os títulos "Feature 1", "Feature 2" e "Feature 3", números
+  genéricos ("10x mais rápido", "99% de satisfação", "24/7"), tudo
+  centralizado, e no celular as colunas só empilham. O usuário pede a revisão
+  da interface contra o DESIGN.md. O agente despacha um crítico de olhos
+  novos com `critique.md`, relata o bloco Critique com `finish` abaixo de 8 e
+  os sinais nomeados, relata os checks `display-weight` e `accent-count` e não
+  corrige nada.
+tags: [ui-review]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    revisa a interface dessa landing (`index.html` com `styles.css`) contra o
+    DESIGN.md. Hoje não consigo responder perguntas. Pode instalar o que
+    precisar para renderizar a página.
+  max_turns: 80
+  timeout_seconds: 1500
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]
