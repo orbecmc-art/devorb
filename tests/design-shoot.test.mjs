@@ -210,6 +210,23 @@ test('__devorbReveal shows visibility-hidden text and skips content inside a fix
   assert.ok('data-devorb-reveal' in autoAlpha.attrs);
   assert.deepEqual(inDrawer.attrs, {});
 });
+// a rotator: one phrase showing, the others absolutely placed on top of it; the last one sits below, apart
+const rotator = () => {
+  const box = (y) => () => ({ x: 0, y, width: 600, height: 20 });
+  const phrases = [text('span', {}, { getBoundingClientRect: box(0) }), text('span', { position: 'absolute', opacity: '0' }, { getBoundingClientRect: box(5) }), text('span', { position: 'absolute', opacity: '0' }, { getBoundingClientRect: box(40) })];
+  const parent = el('div', 60, phrases);
+  for (const p of phrases) p.parentElement = parent;
+  return { parent, phrases };
+};
+test('__devorbReveal leaves aria-hidden slides and stacked rotator phrases alone', () => {
+  const slide = text('li', { opacity: '0' }, { closest: (sel) => (sel.includes('[aria-hidden=true]') ? {} : null) });
+  const { parent, phrases } = rotator();
+  const page = fakePage({ content: [slide, parent] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  assert.deepEqual([slide, ...phrases].map((e) => 'data-devorb-reveal' in e.attrs), [false, false, false, true]);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1); // the fake never applies the reveal style: only the phrase apart counts
+});
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
   const page = fakePage({ content: [

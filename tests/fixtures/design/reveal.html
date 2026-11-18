@@ -19,6 +19,12 @@
   .rise { animation: rise 1s 30s both; }
   @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
   .ghost { opacity: 0; }
+  /* a rotator and a carousel hide their inactive states on purpose: not scroll reveals */
+  .rotator { position: relative; }
+  .rotator .off { position: absolute; left: 0; top: 0; opacity: 0; }
+  .slides { display: grid; margin: 0; padding: 0; list-style: none; }
+  .slides li { grid-area: 1 / 1; }
+  .slides li[aria-hidden="true"] { visibility: hidden; }
   /* GSAP autoAlpha: 0 leaves both */
   .auto-alpha { opacity: 0; visibility: hidden; }
   /* a fixed bar whose button fades in on scroll: it stays as the page left it */
@@ -47,6 +53,15 @@
   <section>
     <h2>Delivery</h2>
     <p class="auto-alpha">Bread by bike, before eight, within two miles.</p>
+  </section>
+  <section>
+    <h2>Kind words</h2>
+    <p class="rotator"><span>Baked at dawn.</span><span class="off">Sold by noon.</span><span class="off">Gone by one.</span></p>
+    <ul class="slides">
+      <li>"The best rye in town." Ana</li>
+      <li aria-hidden="true">"Worth the early queue." Ben</li>
+      <li aria-hidden="true">"My Saturday ritual." Caro</li>
+    </ul>
   </section>
   <section>
     <h2>Find us</h2>
