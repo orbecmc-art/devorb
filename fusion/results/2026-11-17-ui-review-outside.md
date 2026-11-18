@@ -3,14 +3,13 @@
 - Data: 2026-11-17
 - Suíte: `evals-outside`, casos `ui-review-*`, 2 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
 - Ponytail: não
-- Braços: `devorb@cbba161`, `none`
+- Braços: `devorb@da01833`
 
 | Caso | Braço | Aprovação | Pontuação | Custo |
 |---|---|---|---|---|
-| ui-review-critica-em-breve | devorb@cbba161 | 0% | 0.67 | US$ 2.5916 |
-| ui-review-critica-em-breve | none | 0% | 0.56 | US$ 0.7188 |
+| ui-review-critica-em-breve | devorb@da01833 | 100% | 1.00 | US$ 2.7057 |
 
-Custo total desta execução: US$ 3.3104 (linhas de base em cache não contam).
+Custo total desta execução: US$ 2.7057 (linhas de base em cache não contam).
 
 - Casos ausentes (não carregaram ou não rodaram): nenhum
 - Rodadas parciais (teto de custo atingido): nenhuma
@@ -22,4 +21,4 @@ Custo total desta execução: US$ 3.3104 (linhas de base em cache não contam).
 - Aprovado: sim
 - Regressões (pior que a melhor linha de base por mais de uma rodada): nenhuma
 - Abaixo da barra de 2/3: nenhum
-- Lacunas (nenhum braço passa): `ui-review-critica-em-breve`
+- Lacunas (nenhum braço passa): nenhuma
