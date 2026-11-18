@@ -117,7 +117,7 @@ test('the CLI refuses a mode that is only an inherited property', () => {
 test('the CLI exits 2 with one summary line naming the failed checks and widths', () => {
   // a fake page whose metrics fail heading-ratio and body-size at every width
   const r = shoot(withPlaywright(`
-    const metrics = { url: 'http://x/', sections: [], text: [{ role: 'h1', fontSize: 14 }, { role: 'body', fontSize: 14 }], buttons: [], textColors: [], spacing: [], images: [] };
+    const metrics = { url: 'http://x/', sections: [], text: [{ role: 'h1', fontSize: 12 }, { role: 'body', fontSize: 12 }], buttons: [], textColors: [], spacing: [], images: [] };
     const page = {
       goto: async () => {}, waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {}, screenshot: async () => {},
       evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100)
@@ -264,6 +264,7 @@ test('the collector strips query and hash from the page and image URLs, and coll
   assert.doesNotMatch(JSON.stringify(m), /token/);
   assert.equal(m.url, 'https://app.example/painel');
   assert.deepEqual([...m.sections[0].headings], ['Quiet tools for loud work']);
+  assert.deepEqual([...m.fills], []);
   assert.equal(checkFloor({ ...m, text: [{ role: 'h1', fontSize: 48 }, { role: 'body', fontSize: 16 }] }, 'operate').find((c) => c.id === 'photo-repeat').status, 'WARN');
 });
 
@@ -393,6 +394,11 @@ test('hiddenContent counts each element by its own opacity, not the product with
   stubborn(box);
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1);
+});
+test('fills holds each button background once', () => {
+  const page = fakePage({ content: ['rgb(0, 0, 255)', 'rgb(0, 0, 255)', 'rgb(255, 0, 0)'].map((backgroundColor) => text('button', { backgroundColor })) });
+  runCollector(page);
+  assert.deepEqual([...page.window.__devorbMetrics().fills], ['rgb(0, 0, 255)', 'rgb(255, 0, 0)']);
 });
 test('a faded popup inside a link or button is a hover state: neither revealed nor counted', () => {
   const popup = text('div', { position: 'absolute', opacity: '0' });

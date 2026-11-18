@@ -77,6 +77,7 @@
     const text = [];
     const buttons = [];
     const textColors = new Set();
+    const fills = new Set();
     for (const el of document.querySelectorAll('body *')) {
       const r = el.getBoundingClientRect();
       const words = el.innerText?.trim();
@@ -89,9 +90,12 @@
       const lines = Math.max(1, Math.round(r.height / lineHeight));
       text.push({ role, fontSize, lineHeight, fontWeight: Number(cs.fontWeight), letterSpacing: px(cs.letterSpacing), fontFamily: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), lineChars: Math.round(words.length / lines) });
       textColors.add(cs.color);
-      if (role === 'button') buttons.push([fontSize, lineHeight, cs.fontWeight, cs.color, cs.backgroundColor, cs.borderTopLeftRadius].join('|'));
+      if (role === 'button') {
+        fills.add(cs.backgroundColor);
+        buttons.push([fontSize, lineHeight, cs.fontWeight, cs.color, cs.backgroundColor, cs.borderTopLeftRadius].join('|'));
+      }
     }
-    return { text, buttons, textColors: [...textColors] };
+    return { text, buttons, textColors: [...textColors], fills: [...fills] };
   };
 
   // Vertical paddings of each section and gaps between its children, below single-child wrappers.

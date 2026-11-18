@@ -59,3 +59,13 @@ These come out of models whatever the subject. Each is fine when the brief asks 
 | Product default | near-white | tight grotesque, heavy | a framework's stock blue or violet | 1 px border under a soft shadow |
 
 If the plan matches a row the brief never asked for, change it and record what changed. Try another accent before touching the ground or the display face.
+
+## Measured
+
+`shoot.mjs` checks these at every width. The limits come from the 23 reference sites measured on 2026-11-18.
+
+- Headline over body (largest h1 or h2 over the body median): FAIL below 2.5 on Persuade (1.6 Operate, 2.0 Read and Experience); WARN below 4.0, the Persuade target.
+- Body median: FAIL below 13px on Persuade and Read; WARN from 13 to under 14px on Read.
+- Display weight: WARN when an h1 or h2 of 48px or more has weight 700 or more at tracking 0 or above.
+- Accents: WARN with more than 2 saturated hues across text, button fills and section backgrounds.
+- Also WARN: more than 12 font sizes, more than 3 button styles, more than 8 text colours, body lines over 75 characters, over 20% of spacings off the 4px grid, a repeated image.
