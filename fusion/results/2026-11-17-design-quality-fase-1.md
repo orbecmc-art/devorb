@@ -6,33 +6,37 @@ A Fase 1 entregou quatro coisas. O modo cópia do `visual-direction` (replicar a
 
 ## Rodadas pagas
 
-Custo é o "custo total desta execução" de cada arquivo de resultado. "Reservado" são os casos que o implementador nunca viu.
+Custo de cada rodada vem do ledger do projeto, que é a fonte correta. Vários arquivos de resultado foram sobrescritos por rodadas seguintes com o mesmo nome, então a pasta sozinha mostra menos rodadas do que foram pagas. "Reservado" são os casos que o implementador nunca viu.
 
 | Data | Skill | Tipo | Caso(s) | Braço(s) | Aprovação / nota | Custo (US$) |
 |---|---|---|---|---|---|---|
-| 2026-11-17 | visual-direction | RED | copia-referencia (fora do sandbox) | none | 0% / 0.63 | 1.3585 |
-| 2026-11-17 | visual-direction | GREEN | copia-referencia (fora do sandbox) | devorb@66e054a, none | devorb 0% / 0.67; none 0% / 0.56 (lacuna) | 3.3482 |
-| 2026-11-17 | visual-direction | GREEN, tentativa com falha | copia-referencia | devorb | sem resultado (ENOENT: duas execuções ao mesmo tempo no mesmo HEAD apagaram a pasta do braço) | custo não registrado (uns US$ 1 a 2, estimativa do ledger) |
-| 2026-11-17 | visual-direction | reservado, parcial | copia-landing-clinica, painel-padaria (d873e93, 2 rodadas) | devorb, none | sem arquivo de resultado; ledger: clínica devorb 0% (0.71) vs none 0% (0.74); padaria devorb 50% vs none 100% | US$ 6.16 só no ledger, sem arquivo |
-| 2026-11-17 | ui-review | RED | critica-em-breve (fora do sandbox) | none | 0% / 0.50 | 0.8986 |
-| 2026-11-17 | ui-review | GREEN | critica-em-breve (fora do sandbox) | devorb@da01833 | 100% / 1.00 | 2.7057 |
-| 2026-11-17 | ui-review | regressão | equipes | devorb@64b9a51 | 100% / 1.00 | 1.3466 |
-| 2026-11-17 | implementing | RED | espelho-em-breve (fora do sandbox) | none | 0% / 0.56 | 2.2954 |
-| 2026-11-17 | implementing | GREEN | espelho-em-breve (fora do sandbox) | devorb@9af742a, none | devorb 50% / 0.94 (100% após corrigir o avaliador); none 0% / 0.56 | 15.6188 |
-| 2026-11-17 | aligning | GREEN | agendamento, manda-ver-tela | devorb@4d2ffb5 | agendamento 0% / 0.60; manda-ver-tela 100% / 1.00 | 2.4440 |
-| 2026-11-17 | planning | GREEN | multa-atraso, tela-com-referencia | devorb@4d2ffb5 | 100% / 1.00 nos dois | 2.6823 |
-| 2026-11-17 | visual-direction | reservado | copia-landing-clinica, painel-padaria | devorb@46dfe79 | clínica 0% / 0.78; padaria 67% / 0.91 | 7.8389 |
-| 2026-11-17 | ui-review | reservado | critica-painel-sem-navegador | devorb@73b42a1 | 0% / 0.57 (antes da correção) | 1.3842 |
-| 2026-11-18 | implementing | reservado | cashback, espelho-sem-navegador | devorb@5ccbbaf | cashback 100% / 1.00; espelho-sem-navegador 0% / 0.70 | 12.9634 |
-| 2026-11-18 | ui-review | reservado | critica-painel-sem-navegador | devorb@5ccbbaf | 100% / 1.00 | 1.4503 |
-| 2026-11-17 | implementing | reservado, parcial (interrompida) | cashback, espelho-sem-navegador | devorb | sem arquivo de resultado: a execução foi encerrada antes de terminar | custo não registrado (estimativa de uns US$ 5) |
+| 2026-11-17 | visual-direction | RED | copia-referencia (fora do sandbox) | none | 0% / 0.63 | 1.36 |
+| 2026-11-17 | visual-direction | GREEN, falhou | copia-referencia (fora do sandbox) | devorb | sem resultado: duas execuções ao mesmo tempo no mesmo HEAD apagaram a pasta do braço (ENOENT) | custo não registrado (parte da estimativa de US$ 5) |
+| 2026-11-17 | visual-direction | reservado, 1ª rodada | copia-landing-clinica, painel-padaria (d873e93, 2 rodadas) | devorb, none | clínica devorb 0% (0.71) vs none 0% (0.74); padaria devorb 50% vs none 100% | 6.16 |
+| 2026-11-17 | visual-direction | GREEN | copia-referencia (fora do sandbox) | devorb@66e054a, none | devorb 0% / 0.67; none 0% / 0.56 (lacuna) | 3.35 |
+| 2026-11-17 | ui-review | RED | critica-em-breve (fora do sandbox) | none | 0% / 0.50 | 0.90 |
+| 2026-11-17 | ui-review | GREEN | critica-em-breve (fora do sandbox) | devorb | 0% / 0.67 (revisor reformatou a crítica em tabela); none 0.56 | 3.31 |
+| 2026-11-17 | aligning | RED, tentativa 1 | agendamento, manda-ver-tela | devorb@d14e942 | manda-ver-tela 100% (caso fraco, reescrito); agendamento 100% (era o ponto fora da curva) | 1.48 |
+| 2026-11-17 | implementing | RED | espelho-em-breve (fora do sandbox) | none | 0% / 0.56 | 2.30 |
+| 2026-11-17 | aligning | RED, repetição | manda-ver-tela (reescrito), agendamento | devorb@ec039b7 | manda-ver-tela 67%; agendamento 0% | 2.01 |
+| 2026-11-17 | planning | RED | tela-com-referencia, multa-atraso | devorb@809bbfe | tela-com-referencia 0% / 0.40; multa-atraso 100% | 3.43 |
+| 2026-11-17 | aligning | GREEN | agendamento, manda-ver-tela | devorb@4d2ffb5 | agendamento 0% / 0.60; manda-ver-tela 100% | 2.44 |
+| 2026-11-17 | planning | GREEN | multa-atraso, tela-com-referencia | devorb@4d2ffb5 | 100% / 1.00 nos dois | 2.68 |
+| 2026-11-17 | ui-review | GREEN, repetição | critica-em-breve (fora do sandbox) | devorb@da01833 | 100% / 1.00 | 2.71 |
+| 2026-11-17 | ui-review | regressão | equipes | devorb@64b9a51 | 100% / 1.00 | 1.35 |
+| 2026-11-17 | implementing | GREEN | espelho-em-breve (fora do sandbox) | devorb@9af742a, none | devorb 50% / 0.94 (100% após corrigir o avaliador); none 0% / 0.56 | 15.62 |
+| 2026-11-17 | visual-direction | reservado | copia-landing-clinica, painel-padaria | devorb@46dfe79 | clínica 0% / 0.78; padaria 67% / 0.91 | 7.84 |
+| 2026-11-17 | ui-review | reservado | critica-painel-sem-navegador | devorb@73b42a1 | 0% / 0.57 (antes da correção) | 1.38 |
+| 2026-11-17 | implementing | reservado, interrompido | cashback, espelho-sem-navegador | devorb | sem resultado: a execução foi encerrada antes de terminar | custo não registrado (parte da estimativa de US$ 5) |
+| 2026-11-18 | ui-review | reservado, repetição | critica-painel-sem-navegador | devorb@5ccbbaf | 100% / 1.00 | 1.45 |
+| 2026-11-18 | implementing | reservado | cashback, espelho-sem-navegador | devorb@5ccbbaf | cashback 100% / 1.00; espelho-sem-navegador 0% / 0.70 | 12.96 |
 
 ## Total
 
-- Soma dos custos registrados nos arquivos de resultado: **US$ 56.33** (56.3349).
-- As duas rodadas sem custo registrado (a GREEN que falhou e a reservada interrompida) somam um valor desconhecido. Estimativa, não medida: uns US$ 5.
-- O ledger do projeto (`progress.md`) soma cerca de **US$ 81** gastos. Ele inclui rodadas que não têm arquivo de resultado nesta pasta (as rodadas RED de `aligning` e `planning`, e a primeira reservada de `visual-direction`) e usa valores arredondados. Não fechei a diferença linha a linha. Para o teto, vale o número do ledger.
+- Soma dos custos registrados: **US$ 72.74** (a soma das linhas arredondadas dá 72.73; a diferença é arredondamento).
+- As duas rodadas sem custo registrado (a GREEN que falhou e a reservada interrompida) somam um valor desconhecido. Estimativa, não medida: cerca de US$ 5. Com ela, o gasto fica em cerca de **US$ 78**.
 - Teto do dono: **US$ 90** (subiu de US$ 85 em 2026-11-17). O gasto ficou abaixo do teto.
+- Por que os arquivos sozinhos subestimam: vários arquivos de resultado foram sobrescritos por rodadas posteriores com o mesmo nome (`2026-11-17-aligning.md` três vezes, `planning.md` duas, `ui-review-outside.md` duas, `visual-direction-outside.md` depois da rodada que falhou, `visual-direction-reserved.md` duas, `ui-review-reserved.md` uma e depois o arquivo de 2026-11-18). A soma dos arquivos que sobraram dá US$ 56.33. O ledger guarda o custo de cada rodada.
 
 ## Antes e depois
 
