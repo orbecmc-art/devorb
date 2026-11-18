@@ -132,6 +132,14 @@ Todos pela Task D5:
   - **`metrics.json`** ganha `revealed` (quantos elementos a revelação mostrou) e `hiddenContent` por seção (conteúdo com opacidade efetiva abaixo de 0,1, o produto das opacidades até a seção, ou escondido). `replicate.md` lê `revealed` acima de 0 como movimento ao rolar, e o caminho com ferramenta de navegador de `critique.md` roda `__devorbReveal()`.
   - **Origem da ideia.** Trocar o `IntersectionObserver` e terminar as animações antes do print vem do `mirror.js` da skill `av-design-system` do dono. Só a ideia: o código e o texto são do DevOrb, sem trecho copiado.
 
+- 2026-11-18, Task 2 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: página longa e site pesado.
+  - **Problema.** Quatro sites de referência derrubavam o `shoot.mjs` inteiro por um print só. Shopify Editions e Patensify, com páginas acima de 16.000px, paravam em "Clipped area is either empty or outside the resulting image"; Audienceful e Melius, em "Timeout 30000ms exceeded".
+  - **`planShots(pageHeight, sections, viewportHeight = 900)`** devolve `fullClip`, `perSection` e `skipped`. A seção que cabe na imagem de página inteira (16.000px) sai recortada dela; a que passa disso sai sozinha, com `fullPage: false`, depois de rolar a janela até o topo dela. Seção escondida ou com largura ou altura abaixo de 1px é pulada, com o motivo.
+  - **Rolagem no fim da página.** A janela para antes do topo de uma seção curta no fim da página (o rodapé). `shootPage` desloca o recorte pelo que a janela não conseguiu rolar, para o print não pegar a seção de cima.
+  - **Print que falha.** Todo `page.screenshot` usa `animations: 'disabled'` e `timeout: 60000`. Na falha, tenta mais uma vez com `caret: 'hide'`; na segunda falha, a primeira linha da mensagem entra em `shotErrors` e a execução segue. As seções puladas também entram, como `skipped: hidden` ou `skipped: empty`.
+  - **`metrics.json`** ganha `shotErrors: { shot, error }[]`, com `shot` igual a `full` ou `section-<i>`.
+  - **`goto`** espera `domcontentloaded` em vez de `load`, seguido da espera de rede ociosa de 5s que já existia: sites que nunca terminam de carregar deixam de travar a captura.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.

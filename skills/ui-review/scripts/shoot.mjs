@@ -20,9 +20,21 @@ export function parseArgs(argv) {
   return { url, out, widths, mode: v.mode ?? 'persuade', scroll: !v['no-scroll'], pw: v.pw };
 }
 
-// Chromium cannot encode a PNG taller than about 16384px
-export function planShots(pageHeight, sections) {
-  return { fullClip: Math.min(pageHeight, 16000), perSection: sections.filter((s) => !s.hidden).map((s) => s.index) };
+// Chromium cannot encode a PNG taller than about 16384px: a section below the full-page image is shot alone, scrolled into the window
+export function planShots(pageHeight, sections, viewportHeight = 900) {
+  const fullClip = Math.min(pageHeight, 16000);
+  const perSection = [];
+  const skipped = [];
+  for (const s of sections) {
+    if (s.hidden) skipped.push({ index: s.index, reason: 'hidden' });
+    else if (s.width < 1 || s.height < 1) skipped.push({ index: s.index, reason: 'empty' });
+    else {
+      const height = Math.min(s.height, pageHeight - s.top);
+      if (s.top + height <= fullClip) perSection.push({ index: s.index, scrollTo: null, clip: { x: s.x, y: s.top, width: s.width, height } });
+      else perSection.push({ index: s.index, scrollTo: s.top, clip: { x: s.x, y: 0, width: s.width, height: Math.min(s.height, viewportHeight) } });
+    }
+  }
+  return { fullClip, perSection, skipped };
 }
 
 // Node resolves a bare import next to the importing file, so look in the user's folders instead
@@ -68,7 +80,7 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       await context.addInitScript({ path: REVEAL_INIT });
       const page = await context.newPage();
-      await page.goto(url, { waitUntil: 'load' });
+      await page.goto(url, { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {}); // pages that poll never go idle
       await page.addScriptTag({ path: COLLECTOR });
       if (scroll) await scrollThrough(page);
@@ -76,12 +88,28 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
-      const { fullClip, perSection } = planShots(pageHeight, metrics.sections);
-      await page.screenshot({ path: join(dir, 'full.png'), fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
-      for (const i of perSection) {
-        const s = metrics.sections[i];
-        await page.screenshot({ path: join(dir, `section-${i}.png`), fullPage: true, clip: { x: s.x, y: s.top, width: s.width, height: Math.min(s.height, 16000) } });
+      const { fullClip, perSection, skipped } = planShots(pageHeight, metrics.sections);
+      const shotErrors = skipped.map(({ index, reason }) => ({ shot: `section-${index}`, error: `skipped: ${reason}` }));
+      // a heavy page can time out or fail once; a shot that fails twice is logged and the run goes on
+      const shoot = async (shot, opts) => {
+        const o = { path: join(dir, `${shot}.png`), animations: 'disabled', timeout: 60000, ...opts };
+        try {
+          await page.screenshot(o);
+        } catch {
+          await page.screenshot({ ...o, caret: 'hide' }).catch((e) => shotErrors.push({ shot, error: e.message.split('\n')[0] }));
+        }
+      };
+      await shoot('full', { fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
+      for (const { index, scrollTo, clip } of perSection) {
+        if (scrollTo === null) {
+          await shoot(`section-${index}`, { fullPage: true, clip });
+          continue;
+        }
+        // the window stops short of a section near the page end, so shift the clip by what it could not scroll
+        const offset = await page.evaluate((top) => (window.scrollTo(0, top), top - window.scrollY), scrollTo);
+        await shoot(`section-${index}`, { fullPage: false, clip: { ...clip, y: clip.y + offset } });
       }
+      metrics.shotErrors = shotErrors;
       writeFileSync(join(dir, 'metrics.json'), JSON.stringify(metrics, null, 2));
       writeFileSync(join(dir, 'checks.json'), JSON.stringify(checkFloor(metrics, mode), null, 2));
       all[width] = metrics;

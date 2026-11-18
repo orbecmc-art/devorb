@@ -21,7 +21,20 @@ test('planShots caps the full-page clip at 16000px', () => {
 });
 test('planShots shoots only visible sections, by index', () => {
   const s = (index, hidden) => ({ index, top: 0, height: 500, width: 1440, bg: '', hidden, headings: [] });
-  assert.deepEqual(planShots(3000, [s(0, false), s(1, true), s(2, false)]).perSection, [0, 2]);
+  const plan = planShots(3000, [s(0, false), s(1, true), s(2, false)]);
+  assert.deepEqual(plan.perSection.map((p) => p.index), [0, 2]);
+  assert.deepEqual(plan.skipped, [{ index: 1, reason: 'hidden' }]);
+});
+const sec = (index, top, height) => ({ index, x: 0, top, height, width: 1440, bg: '', hidden: false, headings: [] });
+test('planShots keeps sections inside the 16000px image and scrolls to the rest', () => {
+  const plan = planShots(40000, [sec(0, 1000, 800), sec(1, 15500, 2000), sec(2, 30000, 3000), sec(3, 31000, 0)]);
+  assert.deepEqual(plan.perSection[0], { index: 0, scrollTo: null, clip: { x: 0, y: 1000, width: 1440, height: 800 } });
+  assert.deepEqual(plan.perSection[1], { index: 1, scrollTo: 15500, clip: { x: 0, y: 0, width: 1440, height: 900 } });
+  assert.equal(plan.perSection[2].scrollTo, 30000);
+  assert.deepEqual(plan.skipped, [{ index: 3, reason: 'empty' }]);
+});
+test('planShots clamps a clip to the page', () => {
+  assert.equal(planShots(3000, [sec(0, 2500, 1000)]).perSection[0].clip.height, 500);
 });
 
 // a folder that holds a fake node_modules/playwright, as `npm i playwright` would leave it
@@ -101,6 +114,35 @@ test('the CLI exits 2 with one summary line naming the failed checks and widths'
     exports.chromium = { launch: async () => ({ newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {} }) };`), '--widths', '1440,390');
   assert.equal(r.status, 2, r.stderr);
   assert.equal(r.stdout, 'FAIL: heading-ratio, body-size at 1440, 390\n');
+});
+test('a failing shot is retried once with the caret hidden, then logged, and the run goes on', () => {
+  // the fake logs every goto and screenshot option set to CALLS; full.png always times out, section-0 only the first time
+  const cwd = withPlaywright(`
+    const { appendFileSync } = require('node:fs');
+    const log = (kind, opts) => appendFileSync(process.env.CALLS, JSON.stringify({ kind, ...opts }) + '\\n');
+    const metrics = { url: 'http://x/', sections: [{ index: 0, x: 0, top: 0, height: 500, width: 1440, bg: '', hidden: false, headings: [] }], text: [], buttons: [], textColors: [], spacing: [], images: [] };
+    const tries = {};
+    const page = {
+      goto: async (url, opts) => log('goto', opts), waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {},
+      screenshot: async (opts) => {
+        log('screenshot', opts);
+        const name = opts.path.split('/').pop();
+        tries[name] = (tries[name] ?? 0) + 1;
+        if (name === 'full.png' || (name === 'section-0.png' && tries[name] === 1)) throw new Error('Timeout 60000ms exceeded.\\nCall log: …');
+      },
+      evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 1000)
+    };
+    exports.chromium = { launch: async () => ({ newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {} }) };`);
+  const calls = join(cwd, 'calls.jsonl');
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(cwd, 'out'), '--widths', '1440'], { cwd, env: { ...process.env, DEVORB_PLAYWRIGHT_DIR: '', CALLS: calls }, encoding: 'utf8' });
+  assert.ok([0, 2].includes(r.status), `status ${r.status}: ${r.stderr}`);
+  assert.equal(r.stderr, '');
+  assert.deepEqual(JSON.parse(readFileSync(join(cwd, 'out', '1440', 'metrics.json'), 'utf8')).shotErrors, [{ shot: 'full', error: 'Timeout 60000ms exceeded.' }]);
+  const log = readFileSync(calls, 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+  const shots = log.filter((c) => c.kind === 'screenshot');
+  assert.deepEqual(shots.map((c) => [c.path.split('/').pop(), c.caret]), [['full.png', undefined], ['full.png', 'hide'], ['section-0.png', undefined], ['section-0.png', 'hide']]);
+  assert.ok(shots.every((c) => c.animations === 'disabled' && c.timeout === 60000), JSON.stringify(shots));
+  assert.deepEqual(log.filter((c) => c.kind === 'goto').map((c) => c.waitUntil), ['domcontentloaded']);
 });
 test('the CLI exits 3 without a stack trace when no browser launches', () => {
   const r = shoot(withPlaywright("exports.chromium = { launch: async () => { throw new Error(\"browserType.launch: Executable doesn't exist at /nowhere\"); } };"));
