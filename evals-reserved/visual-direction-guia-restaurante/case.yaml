@@ -1,0 +1,12 @@
+schema_version: "1.0"
+name: visual-direction-guia-restaurante
+description: Dona de restaurante leiga pede um site bonito sem saber nada de design; a primeira resposta deve guiar com uma só pergunta recomendada, oferecer referências do estilo restaurante e não construir página nenhuma.
+tags: [visual-direction]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: "oi! quero um site bonito pro meu restaurante, não entendo nada de design. pode fazer pra mim?"
+  max_turns: 15
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
