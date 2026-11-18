@@ -228,3 +228,4 @@ RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem
 - registro em fusion/sources.json: decisão do dono
 - `taste-skill@sem-pin:ideia do cardápio de padrões com sorteio (citada na spec da Fase 2)` | adotado (só ideia) | um cardápio de padrões de onde o guia escolhe; texto, lista e padrões próprios, a partir dos estudos A e B; o sorteio com histórico fica para a Task 11
 - `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md` (nossos) | adotado | os 10 padrões de abertura, os 12 de seção, as faixas de `Measures` e a recomposição no celular
+- `docs/specs/2026-11-18-referencias/urls.txt` (lista do dono, 23 sites, termos não conferidos por decisão do dono, Suposição 1) | adotado | 22 entradas `reference` na biblioteca (a Mobbin segue como `screens`), só URL, etiquetas e descrição nossa; Melius e Audienceful etiquetados pelos prints do `refs-check`
