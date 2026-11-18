@@ -88,6 +88,9 @@ Agent (general-purpose):
     - **Misunderstood:** the right feature built the wrong way, or the wrong
       problem solved.
 
+    A task that builds or changes a user interface needs a `Mirror:` line
+    in the report; one missing, or `not run` without a reason, is Missing.
+
     If the brief lists several files, each with its own change (a batched
     dispatch), check file by file: a listed file the diff never touches is
     Missing, however clean the rest looks.

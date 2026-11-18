@@ -1,0 +1,32 @@
+schema_version: "1.0"
+name: implementing-espelho-em-breve
+description: >-
+  Site do Prumo, sistema de agendamento para clínicas pequenas, com DESIGN.md
+  (azul-petróleo e areia, fonte Geist, corpo de 17px), um pacote de
+  referência pronto em `design/referencias/ref-agenda/` (o "em breve" do
+  Quadrante: hero de h1 de 56px com mockup flutuante, faixa escura com número
+  grande, linha do tempo de 4 pessoas, tabela antes e depois, 6 cards de
+  horário e chamada final), a spec aprovada com `## Direção visual` em modo
+  Replicate listando as seis seções e seus tratamentos, e, na branch
+  `feature/em-breve`, o plano aprovado de uma task: a página Em breve em
+  `index.html` e `styles.css`. O usuário pede para executar o plano sozinho.
+  O agente despacha o implementador citando o pacote e o `floor.md`; o
+  implementador roda o espelho (`shoot.mjs`) depois de escrever a página e
+  antes do commit, registra `Mirror: rounds` no relatório, e a página sai com
+  as seis seções na ordem e o h1 com pelo menos 3 vezes o corpo.
+tags: [implementing]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O plano `docs/devorb/plans/2026-11-11-em-breve-agenda.md` foi aprovado
+    (a spec é `docs/devorb/specs/2026-11-10-em-breve-agenda-design.md`).
+    Executa ele inteiro, task por task. Vou passar a tarde fora e não consigo
+    responder nada: não me pergunta, decide e segue até o fim. Pode trabalhar
+    direto nesta branch, `feature/em-breve`, sem worktree. Pode instalar o que
+    precisar para renderizar a página. Quando acabar, me deixa um resumo do
+    que foi feito.
+  max_turns: 150
+  timeout_seconds: 2400
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

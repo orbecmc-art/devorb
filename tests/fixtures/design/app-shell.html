@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App shell fixture</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body { font-family: system-ui, sans-serif; color: #1a1a1a; background: #fff; }
+  .shell { display: flex; height: 100vh; }
+  aside { flex: none; width: 240px; padding: 24px; background: #f2f2f2; font-size: 14px; }
+  /* the window never scrolls: main does */
+  main { flex: 1; height: 100vh; overflow: auto; }
+  section { height: 600px; padding: 64px 48px; border-bottom: 1px solid #e5e5e5; }
+  section:nth-child(even) { background: #f7f7fb; }
+  h1 { margin: 0 0 24px; font-size: 56px; line-height: 64px; }
+  h2 { margin: 0 0 24px; font-size: 36px; line-height: 44px; }
+  p { margin: 0; max-width: 36em; font-size: 16px; line-height: 24px; }
+  /* scroll reveal inside the inner scroller */
+  .reveal { opacity: 0; transition: opacity 0.2s; }
+  .reveal.in { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>Overview<br>Orders<br>Customers<br>Settings</aside>
+  <main>
+    <section><h1>Overview</h1><p>Orders, revenue and open tickets for the current week.</p></section>
+    <section><h2>Orders</h2><p>The latest orders, newest first, with their payment status.</p></section>
+    <section class="reveal"><h2>Customers</h2><p>Customers who ordered more than once this month.</p></section>
+    <section><h2>Settings</h2><p>Team members, billing and notification rules.</p></section>
+  </main>
+</div>
+<script>
+  new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('in')))
+    .observe(document.querySelector('.reveal'));
+</script>
+</body>
+</html>

@@ -137,7 +137,7 @@
   },
   "ui-review": {
     "invocation": "auto",
-    "level": "light",
+    "level": "full",
     "ceilingTokens": 2500,
     "status": "done",
     "sector": "design"

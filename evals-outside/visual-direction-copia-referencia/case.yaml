@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: visual-direction-copia-referencia
+description: >-
+  Site do Prumo, sistema de agendamento para clínicas pequenas, com DESIGN.md
+  próprio (azul-petróleo e areia, fonte Geist) e uma página de referência em
+  `ref/index.html`: o "em breve" do Quadrante, outra marca, com hero de h1
+  bicolor e mockup flutuante, faixa escura com número grande, linha do tempo
+  de 4 pessoas, tabela antes e depois, 6 cards de horário e CTA final. O
+  usuário pede para copiar essa página para a página Em breve do módulo Agenda
+  do Prumo, com as cores e a fonte do DESIGN.md, e avisa que não responde
+  perguntas hoje. O agente captura a referência num pacote, reproduz a mesma
+  sequência de seções e a escala do título com a marca do Prumo, e não copia o
+  texto do Quadrante.
+tags: [visual-direction]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    copia essa página `ref/index.html` para a nossa página Em breve do módulo
+    Agenda em `index.html` e `styles.css`, com as cores e a fonte do nosso
+    DESIGN.md. Hoje não consigo responder perguntas.
+  max_turns: 80
+  timeout_seconds: 1500
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, WebFetch]

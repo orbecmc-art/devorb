@@ -1,0 +1,31 @@
+schema_version: "1.0"
+name: ui-review-critica-em-breve
+description: >-
+  Site do Prumo, sistema de agendamento para clínicas pequenas, com DESIGN.md
+  de tokens (azul-petróleo e areia, fonte Geist, escalas de tamanho e
+  espaço), a spec aprovada da página Em breve da Agenda com `## Direção
+  visual` em modo Replicate, e um pacote de referência pronto em
+  `design/referencias/ref-agenda/` (o "em breve" do Quadrante, com hero de
+  56px sobre corpo de 17px, mockup flutuante e seis seções). A página feita,
+  `index.html` com `styles.css`, usa só tokens do DESIGN.md e é feia mesmo
+  assim: faixa chapada com título de 26px, corpo de 13px com entrelinha de
+  1.25, uma seção de duas colunas com três linhas curtas e um vazio à
+  esquerda e um cartão à direita, nenhum momento visual, todas as seções no
+  mesmo ritmo, e quatro seções onde a referência tem seis. O usuário pede a
+  revisão da interface contra a referência e o DESIGN.md. O agente despacha
+  um crítico de olhos novos com `critique.md`, relata o bloco Critique com as
+  nove dimensões e notas baixas em hierarquia e fidelidade à referência,
+  cada uma também como P1, não acusa token errado e não corrige nada.
+tags: [ui-review]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    revisa a interface dessa página Em breve (`index.html` com `styles.css`)
+    contra a referência em `design/referencias/ref-agenda/` e o DESIGN.md.
+    Hoje não consigo responder perguntas. Pode instalar o que precisar para
+    renderizar a página.
+  max_turns: 80
+  timeout_seconds: 1500
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

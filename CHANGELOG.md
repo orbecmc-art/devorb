@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.13.0
+
+- Design, Fase 1: o modo cópia na `visual-direction`. Quando a pessoa pede "igual a este site", a skill entra no nível Replicate (`references/replicate.md`), captura a referência num pacote em `design/referencias/<slug>/` com `scripts/capture.mjs`, mantém todas as seções, os tratamentos de assinatura e a contagem de itens, e nunca publica texto, foto ou logo de terceiros como se fossem do cliente. As regras de "nunca copiar" foram reescritas. Caso `visual-direction-copia-referencia` (fora do eval): sem o plugin 0% (0,63); com o DevOrb 0,67 contra 0,56, aceito com uma lacuna. As regras de preservar seções e contar itens saíram das rodadas reservada e GREEN.
+- Um crítico de olhos novos na `ui-review` (`references/critique.md`, 9 dimensões): nota abaixo de 8 vira P1, o bloco sai literal e valor autorizado nunca vira achado. O nível leve passou a completo. Caso `ui-review-critica-em-breve`: sem o plugin 0% (0,56), com o DevOrb 100% (1,00). `ui-review-equipes` segue em 100%.
+- O espelho do construtor no `implementing`: o despacho leva o contrato, o `DESIGN.md`, o pacote e o `floor.md`; quem implementa roda `skills/ui-review/scripts/shoot.mjs` em 1440, 1024, 768 e 390, corrige até 3 rodadas e relata a linha `Mirror:`. Caso `implementing-espelho-em-breve`: sem o plugin 0% (0,56); DevOrb 50% (0,94) pelo primeiro avaliador e 100% nos mesmos rastros depois de corrigir o avaliador.
+- Ligações: o `aligning` manda pedido de interface pela `visual-direction` nos dois atalhos (caso de pedido de cópia 67% para 100%); o `planning` põe contrato, pacote e critério do espelho nos passos de UI (caso 0% para 100%); o `browser-testing` passa a comparação visual para a `ui-review` quando há pacote; o `verifying` exige a linha `Mirror:` e uma Critique sem nota abaixo de 8 (ou os achados declarados). `Mirror: not run` não é aprovação.
+- Scripts próprios, com ideias só de taste-skill, Hallmark, gstack, ai-website-cloner-template e do `mirror.js` do av-design-system do dono: `skills/ui-review/scripts/rules.mjs`, `collect-in-page.js` e `shoot.mjs`, e `skills/visual-direction/scripts/capture.mjs`. Conferidos nas páginas reais do Pilot (9 seções) e da Ligare (3 seções). O Playwright vem do projeto ou de `--pw <dir>`, cai para o Chrome do sistema, e instalá-lo pede o sim explícito do usuário.
+- Lacuna conhecida: `aligning-agendamento` já falhava antes (0% desde 2026-11-11).
+
 ## 1.12.0
 
 - Um lembrete curto do DevOrb (280 bytes) vai junto de cada mensagem do usuário, por um hook `UserPromptSubmit`: antes de lista de tarefas, plano, leitura ou comando, chamar a skill que o pedido precisa; skill de estilo não conta; pergunta e conversa não precisam. Motivo: em sessões longas do app desktop (com um `AGENTS.md` de 37 mil tokens e o app pedindo a lista de tarefas primeiro), o agente chamava a skill de estilo do dono e pulava a do fluxo, embora as regras do DevOrb tivessem chegado no início da sessão.

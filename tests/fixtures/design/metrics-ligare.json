@@ -1,0 +1,122 @@
+{
+  "url": "https://ligare.example/",
+  "width": 1440,
+  "root": "main",
+  "sections": [
+    {
+      "index": 0,
+      "top": 0,
+      "height": 500,
+      "width": 1440,
+      "bg": "rgb(255, 255, 255)",
+      "hidden": false,
+      "headings": [
+        "Painel"
+      ]
+    },
+    {
+      "index": 1,
+      "top": 500,
+      "height": 700,
+      "width": 1440,
+      "bg": "rgb(250, 250, 250)",
+      "hidden": false,
+      "headings": [
+        "Contatos"
+      ]
+    },
+    {
+      "index": 2,
+      "top": 1200,
+      "height": 600,
+      "width": 1440,
+      "bg": "rgb(255, 255, 255)",
+      "hidden": false,
+      "headings": [
+        "Agenda"
+      ]
+    }
+  ],
+  "text": [
+    {
+      "role": "h1",
+      "fontSize": 16,
+      "lineHeight": 20,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "h2",
+      "fontSize": 26,
+      "lineHeight": 32,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "h3",
+      "fontSize": 18,
+      "lineHeight": 24,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "body",
+      "fontSize": 13,
+      "lineHeight": 20,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 70
+    },
+    {
+      "role": "body",
+      "fontSize": 13,
+      "lineHeight": 20,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 64
+    },
+    {
+      "role": "body",
+      "fontSize": 13,
+      "lineHeight": 20,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 52
+    },
+    {
+      "role": "button",
+      "fontSize": 13,
+      "lineHeight": 16,
+      "fontWeight": 500,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    }
+  ],
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24
+  ],
+  "buttons": [
+    "13|16|500|#fff|#2563eb|6"
+  ],
+  "images": [
+    "/logo.png"
+  ],
+  "textColors": [
+    "rgb(17, 24, 39)",
+    "rgb(107, 114, 128)"
+  ]
+}

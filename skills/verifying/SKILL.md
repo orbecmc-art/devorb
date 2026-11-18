@@ -48,7 +48,7 @@ Skipping a step is lying, not verifying.
 | Works when deployed | A check on that environment (below) | Local tests, review, merge |
 | Faster | Measured as below | One run, reading the code |
 
-A UI change then goes to `devorb:ui-review`, after `devorb:browser-testing`; in an app project, `devorb:device-testing` runs instead of `devorb:browser-testing`, before `devorb:ui-review`.
+A UI change then goes to `devorb:ui-review`, after `devorb:browser-testing`; in an app project, `devorb:device-testing` runs instead of `devorb:browser-testing`, before `devorb:ui-review`. A UI change is done only with the implementer's `Mirror:` line and the `devorb:ui-review` Critique block with no score below 8, or with the remaining findings stated plainly to the user: outside a build task, for a score whose gap gets no P1, or after the 3-round cap. When the task includes building the UI, each Critique `[P1]` from a score below 8 first goes back to the builder (the `devorb:implementing` fix loop, the implementer resumed with the critic's gap lines verbatim); then the page is shot and critiqued again, 3 rounds at most in all. `Mirror: not run (<why>)` is not a pass: state it to the user as a gap.
 
 ## Regression tests: see the red
 

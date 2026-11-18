@@ -1,0 +1,180 @@
+{
+  "url": "https://pilot.example/",
+  "width": 1440,
+  "root": "main",
+  "sections": [
+    {
+      "index": 0,
+      "top": 0,
+      "height": 800,
+      "width": 1440,
+      "bg": "rgb(10, 10, 10)",
+      "hidden": false,
+      "headings": [
+        "Hero"
+      ]
+    },
+    {
+      "index": 1,
+      "top": 880,
+      "height": 600,
+      "width": 1440,
+      "bg": "rgb(255, 255, 255)",
+      "hidden": false,
+      "headings": [
+        "Features"
+      ]
+    },
+    {
+      "index": 2,
+      "top": 1560,
+      "height": 640,
+      "width": 1440,
+      "bg": "rgb(245, 245, 245)",
+      "hidden": false,
+      "headings": [
+        "Proof"
+      ]
+    },
+    {
+      "index": 3,
+      "top": 2280,
+      "height": 560,
+      "width": 1440,
+      "bg": "rgb(255, 255, 255)",
+      "hidden": false,
+      "headings": [
+        "Pricing"
+      ]
+    },
+    {
+      "index": 4,
+      "top": 2920,
+      "height": 520,
+      "width": 1440,
+      "bg": "rgb(245, 245, 245)",
+      "hidden": false,
+      "headings": [
+        "FAQ"
+      ]
+    },
+    {
+      "index": 5,
+      "top": 3520,
+      "height": 400,
+      "width": 1440,
+      "bg": "rgb(10, 10, 10)",
+      "hidden": false,
+      "headings": [
+        "CTA"
+      ]
+    },
+    {
+      "index": 6,
+      "top": 3920,
+      "height": 0,
+      "width": 1440,
+      "bg": "rgb(0, 0, 0)",
+      "hidden": true,
+      "headings": []
+    }
+  ],
+  "text": [
+    {
+      "role": "h1",
+      "fontSize": 56,
+      "lineHeight": 60,
+      "fontWeight": 700,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "h2",
+      "fontSize": 36,
+      "lineHeight": 44,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "h3",
+      "fontSize": 22,
+      "lineHeight": 30,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "body",
+      "fontSize": 17.5,
+      "lineHeight": 28,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 62
+    },
+    {
+      "role": "body",
+      "fontSize": 17.5,
+      "lineHeight": 28,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 66
+    },
+    {
+      "role": "body",
+      "fontSize": 17.5,
+      "lineHeight": 28,
+      "fontWeight": 400,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 58
+    },
+    {
+      "role": "button",
+      "fontSize": 16,
+      "lineHeight": 24,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    },
+    {
+      "role": "eyebrow",
+      "fontSize": 13,
+      "lineHeight": 16,
+      "fontWeight": 600,
+      "letterSpacing": 0,
+      "fontFamily": "Inter",
+      "lineChars": 0
+    }
+  ],
+  "spacing": [
+    8,
+    16,
+    24,
+    32,
+    48,
+    64,
+    80,
+    96
+  ],
+  "buttons": [
+    "16|24|600|#fff|#0a0a0a|8",
+    "16|24|600|#0a0a0a|#fff|8"
+  ],
+  "images": [
+    "/hero.jpg",
+    "/a.jpg",
+    "/b.jpg"
+  ],
+  "textColors": [
+    "rgb(10, 10, 10)",
+    "rgb(255, 255, 255)",
+    "rgb(102, 102, 102)"
+  ]
+}

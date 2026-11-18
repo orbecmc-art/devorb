@@ -5,29 +5,29 @@ description: Use when asked for a new feature, component, behavior change or pro
 
 # Aligning
 
-You are good at building, and you build what you believe the user wants. That belief is usually thinner than it feels. This skill finds out what they want, and why, before anything is built. Knowing the why, you make the hundred decisions they never mention the way they would.
+You build what you believe the user wants. That belief is thinner than it feels. This skill finds out what they want, and why, before anything is built. Knowing the why, you make the hundred unmentioned decisions the way they would.
 
 ## First: what do you know?
 
-- **Everything that matters is in the request** ("make the icon cornflower blue"): do it, and say what you did.
+- **Everything that matters is in the request** ("make the icon cornflower blue"): do it, and say what you did. An interface still gets `devorb:visual-direction` before UI code: skip the questions, never the direction.
 - **Something non-trivial is missing:** start the conversation.
 
 Otherwise, before building, in order: lay out the approaches in a message of their own and have the user pick one; write the design doc; get their approval of it; invoke `devorb:planning`. If nothing is open at your first message and there is one sensible way, the first three happen in that message.
 
 ## Facts are yours, decisions are theirs
 
-Never ask what the project already answers, or reopen what they decided. In an existing project, or when they point at context (a spec, files, a handoff), dispatch a fresh subagent before your first message to report how the relevant parts work today and what the change would touch. Dispatch one for later facts too; don't wait on it, only questions that depend on the fact do. No subagent tool: look yourself. Decisions (what it does, for whom, which trade-off) are the user's: put each to them and wait.
+Never ask what the project answers, or reopen what they decided. In an existing project, or when they point at context (spec, files, handoff), dispatch a fresh subagent before your first message to report how the relevant parts work today and what the change would touch. Dispatch one for later facts too; only questions that depend on the fact wait on it. No subagent tool: look yourself. Decisions (what it does, for whom, which trade-off) are the user's: put each to them and wait.
 
 **Code is not intent.** It records what the system does now, maybe by accident. A retention period, SLA, price or compliance duty you find in it is a guess about the business: write it as an assumption and have the user confirm it.
 
 ## Your first message
 
-No "Using …" line and no skill or process names: open with the content. The message asks the user exactly one thing: one question with one unknown. Not "who, what and with whom?", not numbered options to pick from, not "correct me if I got it wrong" on top of the question (the question invites that already). Business rules you found in the code (deadlines, prices, retention) appear as assumptions ("the code uses 7 days; I'm treating that as an assumption"), never as settled facts.
+No "Using …" line and no skill or process names: open with the content. Ask the user exactly one thing: one question, one unknown. Not "who, what and with whom?", not numbered options, not "correct me if I got it wrong" on top of the question (it invites that already). Business rules found in the code (deadlines, prices, retention) appear as assumptions ("the code uses 7 days; I'm treating that as an assumption"), never as settled facts.
 
-- **They said what they want** (a spec, a plan, a detailed request): about 200 words. Echo it in your own words (what, for whom, why, as far as they said) and add what you found that bears on it. Say plainly anything they may not have considered that would change the request or how it's built: a constraint, a conflict, a cheaper path. End with one line inviting corrections. Then, if they haven't said why, ask that: one open question in their terms, with nothing to pick from. If they have, ask about the open point that would most change what gets built; when its choices can be named, sketch each with its trade-off and your pick. Nothing open: end with the short design (the approach, why the others don't fit, the design in a few lines) and ask them to approve it. That approval covers approach and design: then write the short doc as approved and invoke `devorb:planning`.
+- **They said what they want** (a spec, a plan, a detailed request): about 200 words. Echo it in your words (what, for whom, why, as far as said) and add what you found that bears on it. Say plainly what they may not have considered that would change the request or its build: a constraint, a conflict, a cheaper path. End with one line inviting corrections. Then, if they haven't said why, ask that: one open question in their terms, nothing to pick from. If they have, ask about the open point that would most change what gets built; when its choices can be named, sketch each with its trade-off and your pick. Nothing open: end with the short design (the approach, why the others don't fit, the design in a few lines) and ask them to approve it. That approval covers approach and design: then write the short doc as approved and invoke `devorb:planning`.
 - **They haven't:** one open question with a single unknown (no "and" joining two asks, no second request), in their terms, about the biggest thing left unsettled, saying what the answer would change. For "a website for my bakery": "If it's mostly for people deciding whether to stop by, I'd lead with hours and what's in the case today; taking orders is a different site. What do you want someone to do when they land on it?"
 
-Unless they asked for this conversation, end with a light offer: "Or if you'd rather I just dive in, say so." If they take it, or already said to just build it, state any big how-it-gets-made choice (platform, language) in one line and do the work through the normal flow. This skill and its gate end there.
+Unless they asked for this conversation, end with a light offer: "Or if you'd rather I just dive in, say so." If they take it, or already said to just build it, state any big how-it-gets-made choice (platform, language) in one line and do the work through the normal flow, `devorb:visual-direction` first for an interface. This skill and its gate end there.
 
 ## The conversation
 

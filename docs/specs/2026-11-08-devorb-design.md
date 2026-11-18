@@ -275,16 +275,16 @@ A `prototype` da base recebe uma ideia de Emil `prototype`, registrada na tabela
 
 ### Fronteiras
 
-- **`visual-direction`** decide o modo, a quantidade de invenção, o conteúdo, os estados, a família tipográfica, que vem do mundo do público, e as bibliotecas de componentes, a partir das fontes de referência fixas. Registra o contrato de direção e o piso de entrega. Não escolhe valores.
+- **`visual-direction`** decide o modo, a quantidade de invenção, o conteúdo, os estados, a família tipográfica, que vem do mundo do público, e as bibliotecas de componentes, a partir das fontes de referência fixas. Registra o contrato de direção e o piso de entrega. Não escolhe valores. Tem o modo Replicate: a pedido, reproduz a forma de uma referência capturada. Detalhes em `docs/specs/2026-11-17-design-quality-design.md`.
 - **`design-system`** é a única que escolhe valores: cor, escala e ritmo tipográfico, espaço, raio, borda e estados. Quando a fundação é o shadcn/ui, é ela que troca o tema padrão pelos tokens do projeto. Grava `DESIGN.md`, em projeto novo ou lendo o que já existe. As restrições de acessibilidade nascem aqui como tokens: pares de contraste, foco e o limiar de texto grande.
 - **`motion`** é a única que decide se algo se move e como, inclusive duração e curva. Se o projeto guarda esses valores como tokens, `design-system` só os grava. Scroll e shaders são referências dela, não skills à parte.
-- **`ui-review`** mede o que foi construído contra `DESIGN.md`, o contrato de direção e os pisos das outras três skills. Os passes de acessibilidade e de web no celular são dela. Relata de P0 a P3 e para, sem corrigir. Não decide estética nem valores.
+- **`ui-review`** mede o que foi construído contra `DESIGN.md`, o contrato de direção e os pisos das outras três skills. Os passes de acessibilidade e de web no celular são dela. Relata de P0 a P3 e para, sem corrigir. Não decide estética nem valores. Só julga estética pela régua escrita, com um revisor de olhos novos (o crítico). Detalhes em `docs/specs/2026-11-17-design-quality-design.md`.
 - **`browser-testing`** continua respondendo se a tela funciona, e `ui-review`, se ficou como combinado. `reviewing` só encaminha quando o diff toca interface.
 - **`diagram`** é ferramenta eventual, não etapa. Por ser manual, não custa nada em toda sessão, mas linguagem natural não a aciona.
 
 ### Fluxo
 
-Quando a tarefa tem interface: `aligning` → `visual-direction` → `design-system` → `planning` → `implementing`, com `motion` quando algo se move → `verifying`, com `browser-testing` e depois `ui-review` → `reviewing` → `finishing`. Em superfície que já existe, `visual-direction` só estende e `design-system` só lê. Sem interface, nada muda.
+Quando a tarefa tem interface: `aligning` → `visual-direction` → `design-system` → `planning` → `implementing`, com `motion` quando algo se move → `verifying`, com `browser-testing` e depois `ui-review` → `reviewing` → `finishing`. Em superfície que já existe, `visual-direction` só estende e `design-system` só lê. Sem interface, nada muda. No `implementing`, quem constrói confere o próprio resultado com o espelho (`shoot.mjs`); no `verifying`, o crítico roda pela `ui-review`. Detalhes em `docs/specs/2026-11-17-design-quality-design.md`.
 
 O contrato de direção fica na spec de `aligning`, em `## Direção visual`. `DESIGN.md` fica na raiz do projeto, no formato de `google-labs-code/design.md`, que a Impeccable segue: tokens no frontmatter YAML e prosa depois. Nunca é sobrescrito sem pedido.
 
@@ -309,7 +309,7 @@ Decisão do dono: quando a parte de design for usada, ela olha primeiro estas fo
 
 - Antes de escolher a direção ou de fazer um componente do zero, lê a lista e consulta as fontes do estilo pedido. A resposta diz quais consultou.
 - A fundação e os especialistas servem a qualquer estilo. Os componentes de destaque, as telas reais e as galerias são escolhidos pelas palavras do cliente, que a lista agrupa em clean, ousado, animado, divertido, IA e produto. Quando uma galeria tem páginas por estilo, como a página "minimal" da Awwwards, a skill abre essas páginas primeiro.
-- Galeria serve para estudar estrutura, ritmo, tipografia e a primeira tela. A skill nunca copia um site, o texto ou as imagens dele.
+- Galeria serve para estudar estrutura, ritmo, tipografia e a primeira tela. A forma só é copiada a pedido do cliente (modo Replicate); a skill nunca publica texto, fotos ou logo de terceiros como se fossem do cliente.
 - Cada fonte diz como abre: por leitura de texto, só num navegador de verdade, porque a leitura simples esbarra num bloqueio contra robôs ou numa página vazia, ou só com a conta do dono. Sem o meio certo, a skill diz que pulou aquela fonte.
 - A combinação é uma fundação, o especialista de cada função no lugar de uma versão feita à mão, e no máximo um componente de destaque por página.
 - O que já está no `package.json` vem primeiro. Biblioteca nova entra no contrato de direção antes de ser instalada.

@@ -62,4 +62,4 @@ Sections in this order; leave out any the project has nothing for.
 
 ## Reference files of real brands
 
-Collections of brand `DESIGN.md` files (such as getdesign.md in the owner's source list) are for seeing how the file is organised. Never copy a brand's colours, fonts or signature into a client's system.
+Collections of brand `DESIGN.md` files (such as getdesign.md in the owner's source list) are for seeing how the file is organised. Copy another brand's structure and scale when the user asks for it. By default the project's own colours, fonts and signature hold. When the user asks to keep the reference's colours, fonts or signature, keep them, and check each font's licence before it ships. Another brand's logo, text and photos never go into a client's system unless the user owns that brand.

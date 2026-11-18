@@ -3,7 +3,7 @@
   "rules": [
     "Look here first, before building a component from scratch or choosing a direction. Name in the answer which entries you consulted.",
     "Foundations and specialists serve every style. Match standouts, screens and galleries by the client's words in 'styles'; when an entry has 'byStyle', open those pages first.",
-    "Galleries show whole sites: study layout, rhythm, type and how the first screen is built, then make it the client's own. Never copy a site, its text or its images.",
+    "Galleries show whole sites: study layout, rhythm, type and how the first screen is built, then make it the client's own. Copy a site's form (structure and scale) when the user asks for it; never publish its text, photos or logo as the client's.",
     "Stack: one foundation, the specialist for each job it covers (toasts, drawers, command menus, animated numbers) instead of a hand-built version, and at most one standout component per page (the one-standout rule). On Operate surfaces (dashboards, admin, settings) use no standout at all: a system's identity lives in its details.",
     "Reuse what package.json already has. A new library is named in the direction contract before it is installed.",
     "Default shadcn has become an AI look of its own: when shadcn/ui is the foundation, restyle its theme tokens from the project's direction.",

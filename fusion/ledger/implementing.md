@@ -71,6 +71,7 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 1. **Plano contra spec no que se constrói é parada.** Uma task que constrói o que a spec proíbe, um valor diferente ou um requisito da spec que nenhuma task cobre cai na quarta condição de parada: o usuário aprovou os dois, e qual deles vale é decisão dele. O pre-flight procura isso antes do Task 1, e o laço de correção e o modo inline mandam para a mesma parada quando aparece depois. Caso: o reservado da Task 13, descrito no plano ("um plano que contradiz a spec, em que o certo é parar"), sem abrir os arquivos dele. Sem a regra, a frase "a spec é a autoridade" do Superpowers leva o controlador a decidir sozinho e seguir.
 2. **Paralelo só com a marca do plano, e com merge verificado.** A marca de independência vem do plano, em palavras; a leitura do controlador não basta, e o pre-flight confere a marca (duas tasks "independentes" que tocam o mesmo arquivo rodam em sequência). Depois de cada merge na integração, roda a suíte; vermelho é uma rodada de correção. Conflito volta ao implementador da task, com re-revisão sobre `<ponta da integração>..<cabeça da task>`. Nenhuma fonte diz como revisar uma task que precisou de merge, e duas tasks verdes sozinhas podem quebrar juntas.
 3. **O revisor da task também cobra a regra do Karpathy.** A Task 13 põe a regra no prompt de quem implementa. O `task-reviewer.md` passou a contar como "Extra" a edição de código vizinho que a task não pedia (renomear, reformatar, reescrever comentário, apagar código morto que já existia), e o `re-reviewer.md` conta como quebra nova a mudança que os achados não pediam. Caso: o realista da Task 13, com código vizinho bagunçado. Sem a regra, a revisão por task só confere o que falta e o que sobra de funcionalidade, e a edição no vizinho passa.
+4. **Espelho do construtor em task de interface.** Uma task que constrói ou muda uma página, tela ou componente roda o espelho antes do commit: serve a página, roda `shoot.mjs` de `devorb:ui-review` no modo do contrato, compara com `compareStructure` quando o pacote tem `1440/metrics.json`, olha os prints contra o pacote ou o `floor.md`, corrige e repete, no máximo 3 rodadas. O relatório traz `Mirror: rounds <n>/3 · shots <dir> · checks FAIL <n> WARN <n> · vs reference: <grossFail yes/no>`. Sem navegador e sem o sim explícito do usuário para instalar, `Mirror: not run (<why>)` e DONE_WITH_CONCERNS, sem afirmar print nem medida. O despacho nomeia o contrato, o `DESIGN.md`, o pacote, o `floor.md` e a ordem do espelho. Caso: `evals-outside/implementing-espelho-em-breve` (Task 6 do plano de qualidade de design), em que a linha de base fez a página certa, mas nunca se olhou nem levou o pacote e o `floor.md` ao despacho. Task sem interface não muda: `implementing-resgate-extrato` segue igual.
 
 ## Fora
 
@@ -92,6 +93,14 @@ Opus 5.5, 3 rodadas, `--ablation none`. `fusion/results/2026-11-12-implementing*
 | Reservado `implementing-cashback` | 100% (1,00) | 0% (0,25) | 100% (1,00) |
 
 - `accepted: true` nos dois. O DevOrb é o único braço que passa nos dois casos.
+
+Espelho do construtor (Task 6 do plano de qualidade de design), fora do sandbox, Opus 5.5, `fusion/results/2026-11-17-implementing-outside-baseline.md`:
+
+| Caso | Braço | Aprovação | Pontuação |
+|---|---|---|---|
+| `implementing-espelho-em-breve` (RED, 2 rodadas) | `none` | 0% | 0,56 |
+
+- RED: o braço `none` falha em `brief-carries`, `mirror-ran` e `report-field` e passa em `result` e `result-scale`. A página sai certa, mas ninguém a fotografa antes do commit. O GREEN fica para a comparação com `devorb,superpowers`.
 
 ## Decisões por commit de fonte
 
@@ -127,6 +136,9 @@ Opus 5.5, 3 rodadas, `--ablation none`. `fusion/results/2026-11-12-implementing*
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/implement-spec/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `karpathy-skills@2c606141936f1eeef17fa3043a72095b4765b9c2:skills/karpathy-guidelines/SKILL.md` | adotado | só a ideia da mudança cirúrgica, com texto próprio, no prompt de quem implementa
 - `karpathy-skills@2c606141936f1eeef17fa3043a72095b4765b9c2:skills/karpathy-guidelines/SKILL.md` | recusado | as outras três diretrizes, já cobertas por outras skills do DevOrb
+- `taste-skill@sem-pin:portão de 3 rodadas e prints por largura (commit visto f6b76575f949707b4e3c37cd86cb44b0b98643e8, caminho fora dos rastreados)` | adotado (só ideia) | portão do construtor com no máximo 3 rodadas e prints em várias larguras, no passo Mirror de `prompts/implementer.md`; texto próprio
+- `hallmark@407fa689f4a276f2fd389208d271d0fef08f5058:skills/hallmark/SKILL.md` | adotado (só ideia) | construir e revisar antes de seguir, começando pelo hero, que virou olhar os prints contra o pacote seção por seção antes do commit; texto próprio
+- registro em fusion/sources.json: decisão do dono
 
 ## Scripts para revisão humana
 
@@ -182,3 +194,11 @@ Os seis scripts vêm do Superpowers no commit `22f0b463e7a5e579904dd6211a5203210
   - **Script:** o comentário da linha 9 de `sdd-repo` ficou neutro sobre o commit do plano. Tabela e lista de mudanças acima atualizadas, com o novo SHA-256.
   - **Ledger:** registrada a reescrita da terceira parada e qualificada a frase sobre rede (o comando de `task-done` é do chamador).
 - 2026-11-13, Task D7 do plano de design e Task M4 do plano mobile: ligação aos setores de design e mobile. O despacho nomeia `devorb:motion` quando algo na tela se move e `devorb:native-app` quando o projeto é app (`expo` no `package.json` ou `AndroidManifest.xml`), e `Connects to` lista as duas. Nenhuma regra muda. `SKILL.md` foi de 13.350 para 13.687 bytes.
+- **2026-11-17, Task 6 do plano de qualidade de design: espelho do construtor.**
+  - `SKILL.md`: a task de interface nomeia no despacho o contrato (`## Direção visual`), o `DESIGN.md`, o pacote (`design/referencias/<slug>/`) quando o contrato tem um, o caminho absoluto do `references/floor.md` de `devorb:visual-direction`, o sim explícito do usuário para instalar Playwright, se houver, e a ordem de rodar o espelho antes do commit. `Connects to` passou a citar `floor.md`, `shoot.mjs` e `rules.mjs`. Foi de 13.687 para 14.310 bytes (cerca de 3.578 tokens, teto 5.000).
+  - `prompts/implementer.md`: novo passo 3, "Mirror", antes do commit (o commit virou 4 e o self-review, 5), e a seção Mirror com os caminhos a preencher, os cinco passos, a regra de instalação de `devorb:browser-testing` e a linha `Mirror:` do relatório. O passo fica antes do commit, e não logo antes do self-review como dizia o plano, porque o self-review vem depois do commit e o espelho tem de olhar a página antes de ela entrar no histórico.
+  - `prompts/task-reviewer.md`: numa task de interface, a linha `Mirror:` faltando, ou `not run` sem motivo, conta como Missing.
+  - `references/inline.md`: quem executa inline roda o mesmo espelho antes do commit e põe a linha `Mirror:` no ledger.
+  - Origem: taste-skill (portão com no máximo 3 rodadas e prints por largura) e Hallmark (construir e revisar o hero antes de seguir), só ideias, com `textReuse: false`. Regra própria 4.
+  - Caso novo `evals-outside/implementing-espelho-em-breve`, fora do sandbox porque precisa de navegador. Graders: `mirror-ran`, `report-field`, `brief-carries`, `result` e `result-scale`. Um subagente novo escreveu um caso reservado no sandbox, que não abri.
+- **2026-11-18, decisão do dono: grader `report-field` estrito.** Em `evals-outside/implementing-espelho-em-breve/graders/report-field.md` saiu a alternativa `Mirror: not run \(`: só passa uma escrita de `task-<n>-report.md` com `Mirror: rounds <número>/3`, porque o espelho tem de rodar. Conferido nos rastros reais do GREEN (`.arms/devorb@9af742a`): as duas rodadas `devorb` passam e as duas `none` falham. Amostras sintéticas: Write e Bash com `Mirror: rounds <n>/3` (número) passam; Write e Bash com `Mirror: not run (` falham; o modelo `Mirror: rounds <n>/3` sem número falha.
