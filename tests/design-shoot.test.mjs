@@ -327,6 +327,20 @@ test('hiddenContent leaves out what sits inside a stacked rotator phrase', () =>
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1); // only the phrase apart, below
 });
+test('hiddenContent leaves out a closed accordion and the slides nested in an inactive one', () => {
+  // a collapsed panel clips its words away; a hidden slide's own aria-hidden layers sit beside only each other
+  const words = text('p', {});
+  const accordion = el('div', 0, [words], { style: { opacity: '0', overflow: 'hidden' }, getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: 0 }) });
+  words.parentElement = accordion;
+  const inner = text('div', {}, { closest(sel) { return sel === '[aria-hidden=true]' ? this : null; } });
+  const slide = ariaHidden([text('li', {})]).e;
+  slide.textContent = 'Plans';
+  slide.children = [inner];
+  inner.parentElement = slide;
+  const page = fakePage({ content: [accordion, slide.parentElement] });
+  runCollector(page);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 0);
+});
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
   const page = fakePage({ content: [

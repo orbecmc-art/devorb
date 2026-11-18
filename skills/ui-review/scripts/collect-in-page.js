@@ -129,19 +129,23 @@
     const slide = el.closest('[aria-hidden=true]');
     return !!slide && showingSiblings(slide).some((s) => s.getAttribute('aria-hidden') !== 'true');
   };
+  // a closed menu or dialog, a fixed layer, an inactive slide or a stacked rotator state
+  const leftHidden = (el, cs, r) => cs.position === 'fixed' || !!el.closest(OVERLAYS) || inFixedLayer(el) || inactiveSlide(el) || (cs.position === 'absolute' && stackedOverShowing(el, r));
   // textContent, not innerText: innerText is empty under visibility: hidden
   const isContent = (el, cs) => {
     const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0 && cs.position !== 'fixed' && !el.closest(OVERLAYS) && !!(el.textContent.trim() || el.querySelector('img, svg, video, canvas, picture'))
-      && !inFixedLayer(el) && !inactiveSlide(el) && !(cs.position === 'absolute' && stackedOverShowing(el, r));
+    return r.width > 0 && r.height > 0 && !!(el.textContent.trim() || el.querySelector('img, svg, video, canvas, picture')) && !leftHidden(el, cs, r);
   };
+  // a closed accordion: no size, and its overflow clips the words away
+  const collapsed = (cs, r) => (r.width === 0 || r.height === 0) && cs.overflow !== 'visible';
   // content under an effective opacity (its own times its ancestors' down from the section) below 0.1, or hidden
   const hiddenIn = (el, opacity) => [...el.children].reduce((sum, c) => {
     const cs = getComputedStyle(c);
     const own = opacity * px(cs.opacity);
-    // a rotator state stays hidden on purpose, and its words with it
-    if (faded(own, cs) && cs.position === 'absolute' && stackedOverShowing(c, c.getBoundingClientRect())) return sum;
-    return sum + (faded(own, cs) && isContent(c, cs) ? 1 : 0) + hiddenIn(c, own);
+    // what stays hidden on purpose takes its words with it
+    if (!faded(own, cs)) return sum + hiddenIn(c, own);
+    const r = c.getBoundingClientRect();
+    return leftHidden(c, cs, r) || collapsed(cs, r) ? sum : sum + (isContent(c, cs) ? 1 : 0) + hiddenIn(c, own);
   }, 0);
 
   let revealed = 0;
