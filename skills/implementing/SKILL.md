@@ -95,6 +95,7 @@ Questions from the implementer, before or during the work, get complete answers.
 - Dispatch `prompts/task-reviewer.md` with the brief, the report, the package, and the Global Constraints that bind the task, copied verbatim: exact values, formats, stated relationships ("same layout as X"). The template already carries the process rules.
 - Don't pre-judge findings. If your prompt says "do not flag", "at most Minor" or "the plan chose", you are sparing yourself a loop: delete it, and adjudicate in the loop. Don't ask for tests the implementer already ran, or add open-ended directives ("check all uses") without a task-specific reason.
 - Never skip the review, and never accept one missing either verdict. The implementer's self-review never replaces it.
+- **A user-interface task** also gets `devorb:ui-review` on its build once the review is clean. Its Critique is a review input: each `[P1]` from a score below 8 enters the fix loop (`references/fix-loop.md`).
 - **"Cannot verify from diff" items:** resolve each one yourself before completing the task; you hold the plan and the cross-task context. A real gap counts as a failed spec review.
 
 ### 4. The fix loop

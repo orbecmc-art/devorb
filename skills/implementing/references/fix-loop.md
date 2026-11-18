@@ -1,7 +1,14 @@
 # The fix loop
 
 The task review reported spec ❌, a Critical or Important finding, or a
-cannot-verify item you confirmed as a real gap.
+cannot-verify item you confirmed as a real gap; or, on a user-interface
+task, the `devorb:ui-review` Critique has a `[P1]` from a score below 8.
+
+**Critique findings** go to the builder as Important findings, with the
+critic's gap lines verbatim. After each fix, run `devorb:ui-review` again: a
+fresh shoot and a fresh Critique. Three Critique rounds at most, the first
+included; the findings still open after the third are stated plainly to the
+user, never parked in silence.
 
 ## Before the loop
 

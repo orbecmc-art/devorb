@@ -56,7 +56,7 @@ Each check ends in exactly one of: **found** (with the finding), **clear**, or *
 
 ## 6. Visual critique
 
-A reviewer who never sees the code scores the look by `references/critique.md`. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Installing Playwright or downloading a browser is the user's call, as in `devorb:browser-testing`: ask; only their explicit yes counts ("decide alone" is not one). Without it, go code-only. An install outside the project is passed as `--pw <dir>`.
+A reviewer who never sees the code scores the look by `references/critique.md`. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Installing Playwright or downloading a browser is the user's call, as in `devorb:browser-testing`: ask; only their explicit yes counts ("decide alone" is not one). Without it, use a browser tool (`critique.md`, Fallbacks); with none, go code-only. An install outside the project is passed as `--pw <dir>`.
 
 1. **Shoot:** `node "$UI_DIR/scripts/shoot.mjs" <url, or file:// plus the absolute path> <tmp>/shots --mode <the contract's main mode, lower case> [--pw <dir>]`. Per width: `full.png`, `section-<i>.png`, `metrics.json`, `checks.json`.
 2. **Floor checks:** each `checks.json` FAIL is a `[P1]` finding, each WARN a `[P2]`, with the check id as the rule.
@@ -101,7 +101,7 @@ Then stop. Change no file: no fix, no fixture in the tree, no formatting. When f
 | "The CSS says 150ms, so the motion is 150ms" | Read `getAnimations()`; overrides and inline styles win. |
 | "No browser, but the code looks clean" | The report says "only code" and the render checks stay unchecked. |
 | "This deviation is ugly" | Ugly is judged by the rubric, with a fresh reviewer. A value nobody declared is still no token finding. |
-| "The critic will understand better with the CSS" | The critic sees shots, pack and contract, never code. |
+| "The critic will understand better with the CSS" | The critic sees shots, pack and contract, never code, except in the no-browser path. |
 | "I'll just fix this one" | Report and stop. |
 | "Not applicable, so it passed" | It never ran. |
 
