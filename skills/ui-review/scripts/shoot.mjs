@@ -137,5 +137,7 @@ async function main(argv) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  process.exitCode = await main(process.argv.slice(2));
+  const code = await main(process.argv.slice(2));
+  // system Chrome leaves helpers (updater, crash handler) holding the browser's stderr pipe, which keeps node alive for minutes: exit once stdout is flushed
+  process.stdout.write('', () => process.exit(code));
 }

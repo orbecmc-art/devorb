@@ -143,8 +143,12 @@ test('a stale temp folder from a killed run never reaches the pack', () => {
       evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100),
       screenshot: async ({ path }) => require('node:fs').writeFileSync(path, 'new')
     };
-    exports.chromium = { launch: async () => ({ newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {} }) };`);
-  const r = spawnSync(process.execPath, [CAPTURE, 'https://d.example/x', root], { encoding: 'utf8', cwd: root, env: { ...process.env, DEVORB_PLAYWRIGHT_DIR: pw } });
-  assert.equal(r.status, 0, r.stderr);
+    // system Chrome leaves its updater and crash handler holding the browser's stderr for minutes: a long sleep stands in
+    exports.chromium = { launch: async () => {
+      const helper = require('node:child_process').spawn('sleep', ['30'], { stdio: ['ignore', 'pipe', 'pipe'] });
+      return { newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {}, helper };
+    } };`);
+  const r = spawnSync(process.execPath, [CAPTURE, 'https://d.example/x', root], { encoding: 'utf8', cwd: root, env: { ...process.env, DEVORB_PLAYWRIGHT_DIR: pw }, timeout: 10000 });
+  assert.equal(r.status, 0, `status ${r.status} signal ${r.signal}: ${r.stderr}`);
   assert.deepEqual(readdirSync(join(dir, '1440')).sort(), ['checks.json', 'full.png', 'metrics.json', 'section-0.png']);
 });

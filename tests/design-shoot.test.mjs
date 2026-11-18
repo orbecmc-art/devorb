@@ -126,6 +126,23 @@ test('the CLI exits 2 with one summary line naming the failed checks and widths'
   assert.equal(r.status, 2, r.stderr);
   assert.equal(r.stdout, 'FAIL: heading-ratio, body-size at 1440, 390\n');
 });
+test('the CLI exits once done, even while a browser helper still holds the browser stderr pipe', () => {
+  // system Chrome leaves its updater and crash handler holding the browser's stderr for minutes: a long sleep stands in
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(empty(), 'out'), '--widths', '1440'], {
+    cwd: withPlaywright(`
+    const metrics = { url: 'http://x/', sections: [], text: [{ role: 'h1', fontSize: 48 }, { role: 'body', fontSize: 16 }], buttons: [], textColors: [], spacing: [], images: [] };
+    const page = {
+      goto: async () => {}, waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {}, screenshot: async () => {},
+      evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100)
+    };
+    exports.chromium = { launch: async () => {
+      const helper = require('node:child_process').spawn('sleep', ['30'], { stdio: ['ignore', 'pipe', 'pipe'] });
+      return { newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {}, helper };
+    } };`),
+    env: { ...process.env, DEVORB_PLAYWRIGHT_DIR: '' }, encoding: 'utf8', timeout: 10000
+  });
+  assert.equal(r.status, 0, `status ${r.status} signal ${r.signal}: ${r.stderr}`);
+});
 // a fake Playwright page that logs every goto and screenshot option set to CALLS; the sections, the page height,
 // the screenshot body and the answer to the scroll-to-section evaluate are JavaScript source
 const fakeShooter = ({ sections = '[{ index: 0, x: 0, top: 0, height: 500, width: 1440, hidden: false }]', pageHeight = 1000, screenshot = '', scroll = '0' } = {}) => withPlaywright(`
