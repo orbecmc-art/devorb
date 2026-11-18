@@ -26,13 +26,13 @@ export function planShots(pageHeight, sections, viewportHeight = 900) {
   const perSection = [];
   const skipped = [];
   for (const s of sections) {
+    // a pinned or transformed section can start above the page or end below it: keep only the part on the page
+    const y = Math.max(0, s.top);
+    const height = Math.min(s.top + s.height, pageHeight) - y;
     if (s.hidden) skipped.push({ index: s.index, reason: 'hidden' });
-    else if (s.width < 1 || s.height < 1) skipped.push({ index: s.index, reason: 'empty' });
-    else {
-      const height = Math.min(s.height, pageHeight - s.top);
-      if (s.top + height <= fullClip) perSection.push({ index: s.index, scrollTo: null, clip: { x: s.x, y: s.top, width: s.width, height } });
-      else perSection.push({ index: s.index, scrollTo: s.top, clip: { x: s.x, y: 0, width: s.width, height: Math.min(s.height, viewportHeight) } });
-    }
+    else if (s.width < 1 || height < 1) skipped.push({ index: s.index, reason: 'empty' });
+    else if (y + height <= fullClip) perSection.push({ index: s.index, scrollTo: null, clip: { x: s.x, y, width: s.width, height } });
+    else perSection.push({ index: s.index, scrollTo: y, clip: { x: s.x, y: 0, width: s.width, height: Math.min(height, viewportHeight) } });
   }
   return { fullClip, perSection, skipped };
 }
@@ -91,24 +91,20 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       const { fullClip, perSection, skipped } = planShots(pageHeight, metrics.sections);
       const shotErrors = skipped.map(({ index, reason }) => ({ shot: `section-${index}`, error: `skipped: ${reason}` }));
       // a heavy page can time out or fail once; a shot that fails twice is logged and the run goes on
-      const shoot = async (shot, opts) => {
-        const o = { path: join(dir, `${shot}.png`), animations: 'disabled', timeout: 60000, ...opts };
+      const shoot = async (shot, { scrollTo = null, clip, ...opts }) => {
+        const attempt = async (extra) => {
+          // the window stops short of a section near the page end, so shift the clip by what it could not scroll
+          const offset = scrollTo === null ? 0 : await page.evaluate((top) => (window.scrollTo(0, top), top - window.scrollY), scrollTo);
+          await page.screenshot({ path: join(dir, `${shot}.png`), animations: 'disabled', timeout: 60000, ...opts, clip: { ...clip, y: clip.y + offset }, ...extra });
+        };
         try {
-          await page.screenshot(o);
+          await attempt({});
         } catch {
-          await page.screenshot({ ...o, caret: 'hide' }).catch((e) => shotErrors.push({ shot, error: e.message.split('\n')[0] }));
+          await attempt({ caret: 'hide' }).catch((e) => shotErrors.push({ shot, error: e.message.split('\n')[0] }));
         }
       };
       await shoot('full', { fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
-      for (const { index, scrollTo, clip } of perSection) {
-        if (scrollTo === null) {
-          await shoot(`section-${index}`, { fullPage: true, clip });
-          continue;
-        }
-        // the window stops short of a section near the page end, so shift the clip by what it could not scroll
-        const offset = await page.evaluate((top) => (window.scrollTo(0, top), top - window.scrollY), scrollTo);
-        await shoot(`section-${index}`, { fullPage: false, clip: { ...clip, y: clip.y + offset } });
-      }
+      for (const { index, scrollTo, clip } of perSection) await shoot(`section-${index}`, { fullPage: scrollTo === null, scrollTo, clip });
       metrics.shotErrors = shotErrors;
       writeFileSync(join(dir, 'metrics.json'), JSON.stringify(metrics, null, 2));
       writeFileSync(join(dir, 'checks.json'), JSON.stringify(checkFloor(metrics, mode), null, 2));
