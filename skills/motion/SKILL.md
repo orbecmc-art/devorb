@@ -22,6 +22,8 @@ For an app screen, read `references/native.md`.
 
 Writing no animation is a valid result: say which row decided it. Data the user reads or acts on (charts, tables, totals) moves only to show a real change in value, never on every load. A marketing page gets **one authored moment**, not motion on every section, and the page reads complete without JavaScript: the markup holds the final state, and motion only enhances it.
 
+A page's contract `Motion level` picks its row in `references/dial.md`.
+
 ## 2. Name the purpose
 
 Feedback, where something came from or went, a state change, bridging a jump that would otherwise teleport, explanation (marketing and onboarding only) or delight (rare row only). If none fits, do not build it.
@@ -98,6 +100,7 @@ Only subtract. Keep motion that smooths over an abrupt jump. For each removal, a
 
 | Read | When |
 |---|---|
+| `references/dial.md` | The contract sets `Motion level`, or a page's sections enter |
 | `references/choreography.md` | Two or more elements move on one event |
 | `references/gestures.md` | Drag, swipe, sheet, anything following the pointer |
 | `references/performance.md` | Jank, many moving elements, frame loops |
