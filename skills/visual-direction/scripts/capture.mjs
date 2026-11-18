@@ -1,5 +1,5 @@
 import { parseArgs as parseCli } from 'node:util';
-import { mkdirSync, writeFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync, renameSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { headingRatio } from '../../ui-review/scripts/rules.mjs';
@@ -7,6 +7,7 @@ import { shootPage } from '../../ui-review/scripts/shoot.mjs';
 
 const USAGE = 'usage: node capture.mjs <url> <projectRoot> [--slug s] [--pw <dir>] [--dry-run]';
 const MOVEMENT = 'Movimento observado: <preencher olhando os prints e a página>';
+const DRY_SECOES = `(dry-run: sem navegador)\n${MOVEMENT}\n`;
 const kebab = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const uniq = (xs) => [...new Set(xs)];
 
@@ -35,14 +36,15 @@ export function buildTokens(m) {
   };
 }
 
+// line N is section N, the same N as section-N.png, even past a hidden section
 export function sectionsMarkdown(m1440, m390) {
-  const vis = (m) => m.sections.filter((s) => !s.hidden);
-  const share = (xs, i) => {
-    const page = xs.at(-1).top + xs.at(-1).height;
-    return xs[i] ? `${Math.round((xs[i].height / page) * 100)}%` : '—';
+  const share = (m, s) => {
+    if (!s || s.hidden) return '—';
+    const last = m.sections.at(-1);
+    return `${Math.round((s.height / (last.top + last.height)) * 100)}%`;
   };
-  const [a, b] = [vis(m1440), vis(m390)];
-  const rows = a.map((s, i) => `${i + 1}. ${share(a, i)} · fundo ${s.bg} · títulos: ${s.headings.map((h) => `"${h}"`).join(' / ')} · 390: ${b.length ? share(b, i) : '—'}`);
+  const titles = (s) => s.headings.map((h) => `"${h.replace(/\s+/g, ' ').trim()}"`).join(' / ');
+  const rows = m1440.sections.filter((s) => !s.hidden).map((s) => `${s.index}. ${share(m1440, s)} · fundo ${s.bg} · títulos: ${titles(s)} · 390: ${share(m390, m390.sections[s.index])}`);
   return [...rows, MOVEMENT].join('\n') + '\n';
 }
 
@@ -61,23 +63,40 @@ async function main(argv) {
   }
   const dir = join(base, slug);
   const isNew = !existsSync(dir);
+  const urlFile = join(dir, 'url.txt');
+  const oldUrl = existsSync(urlFile) ? readFileSync(urlFile, 'utf8').trim() : url;
+  if (oldUrl !== url) {
+    console.log(`SLUG OCUPADO: ${slug} guarda ${oldUrl}, não ${url}; use outro --slug`);
+    return 5;
+  }
+  // write the pack files without clobbering hand-written work: notes and section lines stay, a dry run keeps tokens
   const meta = (m) => {
     mkdirSync(dir, { recursive: true });
-    writeFileSync(join(dir, 'url.txt'), url + '\n');
-    if (!existsSync(join(dir, 'notas.md'))) writeFileSync(join(dir, 'notas.md'), '## Levar\n\n## Não levar\n'); // keep the user's notes
-    writeFileSync(join(dir, 'tokens.json'), m ? JSON.stringify(buildTokens(m[1440]), null, 2) : '{}\n');
-    writeFileSync(join(dir, 'secoes.md'), m ? sectionsMarkdown(m[1440], m[390]) : `(dry-run: sem navegador)\n${MOVEMENT}\n`);
+    writeFileSync(urlFile, url + '\n');
+    const keep = (name) => existsSync(join(dir, name));
+    if (!keep('notas.md')) writeFileSync(join(dir, 'notas.md'), '## Levar\n\n## Não levar\n');
+    if (m || !keep('tokens.json')) writeFileSync(join(dir, 'tokens.json'), m ? JSON.stringify(buildTokens(m[1440]), null, 2) : '{}\n');
+    const secoes = join(dir, 'secoes.md');
+    if (!keep('secoes.md') || (m && readFileSync(secoes, 'utf8') === DRY_SECOES)) writeFileSync(secoes, m ? sectionsMarkdown(m[1440], m[390]) : DRY_SECOES);
   };
   if (v['dry-run']) return meta(null) ?? 0;
+  const tmp = join(dir, '.shoot-tmp'); // shots land here, and replace 1440/ and 390/ only once all of them succeed
   try {
     // a FAIL in the floor checks is not an error here: the reference is data, not under review
-    meta(await shootPage(url, dir, { widths: [1440, 390], pw: v.pw }));
+    const m = await shootPage(url, tmp, { widths: [1440, 390], pw: v.pw });
+    for (const w of ['1440', '390']) {
+      rmSync(join(dir, w), { recursive: true, force: true });
+      renameSync(join(tmp, w), join(dir, w));
+    }
+    meta(m);
     return 0;
   } catch (e) {
     if (isNew) rmSync(dir, { recursive: true, force: true }); // a failed run must not use up a pack slot
     if (e.code !== 'NEED_PLAYWRIGHT') throw e;
     console.log(e.message);
     return 3;
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
   }
 }
 

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import vm from 'node:vm';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { findSectionsRoot, sectionNodes } from '../skills/ui-review/scripts/rules.mjs';
+import { findSectionsRoot, sectionNodes, checkFloor } from '../skills/ui-review/scripts/rules.mjs';
 import { parseArgs, planShots, resolvePlaywright } from '../skills/ui-review/scripts/shoot.mjs';
 
 test('parseArgs applies the defaults', () => {
@@ -75,16 +75,32 @@ test('the in-page copy of the section algorithm matches rules.mjs', () => {
   assert.equal(sectionNodes(main).length, 3);
 });
 
-const shoot = (cwd) => {
+const shoot = (cwd, ...args) => {
   const env = { ...process.env };
   delete env.DEVORB_PLAYWRIGHT_DIR;
-  return spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(cwd, 'out')], { cwd, env, encoding: 'utf8' });
+  return spawnSync(process.execPath, [fileURLToPath(new URL('../skills/ui-review/scripts/shoot.mjs', import.meta.url)), 'http://x/', join(cwd, 'out'), ...args], { cwd, env, encoding: 'utf8' });
 };
-test('the CLI exits 3 with both install options when playwright is missing', () => {
+test('the CLI exits 3 with both install options, the out-of-project one first, when playwright is missing', () => {
   const r = shoot(empty());
   assert.equal(r.status, 3, r.stderr);
-  assert.match(r.stdout, /NEED: npm i -D playwright && npx playwright install chromium/);
-  assert.match(r.stdout, /--pw <dir>/);
+  assert.match(r.stdout, /^NEED: npm i --prefix <temp dir> playwright[\s\S]*--pw <dir>[\s\S]*npm i -D playwright && npx playwright install chromium/);
+});
+test('the CLI refuses a mode that is only an inherited property', () => {
+  const r = shoot(empty(), '--mode', 'toString');
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /^usage: .*exit 2/);
+});
+test('the CLI exits 2 with one summary line naming the failed checks and widths', () => {
+  // a fake page whose metrics fail heading-ratio and body-size at every width
+  const r = shoot(withPlaywright(`
+    const metrics = { url: 'http://x/', sections: [], text: [{ role: 'h1', fontSize: 14 }, { role: 'body', fontSize: 14 }], buttons: [], textColors: [], spacing: [], images: [] };
+    const page = {
+      goto: async () => {}, waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {}, screenshot: async () => {},
+      evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100)
+    };
+    exports.chromium = { launch: async () => ({ newContext: async () => ({ newPage: async () => page, close: async () => {} }), close: async () => {} }) };`), '--widths', '1440,390');
+  assert.equal(r.status, 2, r.stderr);
+  assert.equal(r.stdout, 'FAIL: heading-ratio, body-size at 1440, 390\n');
 });
 test('the CLI exits 3 without a stack trace when no browser launches', () => {
   const r = shoot(withPlaywright("exports.chromium = { launch: async () => { throw new Error(\"browserType.launch: Executable doesn't exist at /nowhere\"); } };"));
@@ -117,4 +133,30 @@ test('findScroller gives null when only the window scrolls or overflow is hidden
   const { __devorbFindScroller: findScroller } = loadCollector();
   assert.equal(findScroller(appShell({})), null);
   assert.equal(findScroller(appShell({ scrollHeight: 2400, overflowY: 'hidden' })), null);
+});
+
+// a page with two sections, a heading broken over lines and two signed copies of one photo, at a logged-in URL
+const fakePage = () => {
+  const style = { overflowY: 'visible', backgroundColor: 'rgb(1, 2, 3)', opacity: '1', paddingTop: '0', paddingBottom: '0' };
+  const el = (tag, h, kids = [], extra = {}) => ({
+    tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h,
+    getAttribute: () => null, getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], ...extra
+  });
+  const heading = { innerText: '  Quiet tools\n    for loud work ' };
+  const body = el('body', 800, [el('main', 800, [el('section', 800, [], { querySelectorAll: () => [heading] }), el('section', 800)])]);
+  const img = (src) => ({ currentSrc: src, src, getBoundingClientRect: () => ({ width: 100 }) });
+  return {
+    window: {}, getComputedStyle: () => style, innerWidth: 1200, scrollX: 0, scrollY: 0,
+    location: { href: 'https://app.example/painel?token=x#y' },
+    document: { body, scrollingElement: body, querySelectorAll: () => [], images: [img('https://cdn.example/a.jpg?token=s1#z'), img('https://cdn.example/a.jpg?token=s2')] }
+  };
+};
+test('the collector strips query and hash from the page and image URLs, and collapses heading whitespace', () => {
+  const page = fakePage();
+  vm.runInNewContext(readFileSync(new URL('../skills/ui-review/scripts/collect-in-page.js', import.meta.url), 'utf8'), page);
+  const m = page.window.__devorbMetrics();
+  assert.doesNotMatch(JSON.stringify(m), /token/);
+  assert.equal(m.url, 'https://app.example/painel');
+  assert.deepEqual([...m.sections[0].headings], ['Quiet tools for loud work']);
+  assert.equal(checkFloor({ ...m, text: [{ role: 'h1', fontSize: 48 }, { role: 'body', fontSize: 16 }] }, 'operate').find((c) => c.id === 'photo-repeat').status, 'WARN');
 });

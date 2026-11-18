@@ -119,10 +119,12 @@
         width: Math.round(n.rect.w),
         bg: bgOf(n.el),
         hidden: px(cs.opacity) < 0.1,
-        headings: [...n.el.querySelectorAll('h1, h2, h3')].map((h) => h.innerText.trim())
+        headings: [...n.el.querySelectorAll('h1, h2, h3')].map((h) => h.innerText.replace(/\s+/g, ' ').trim())
       };
     });
-    const images = [...document.images].filter((i) => i.getBoundingClientRect().width > 0).map((i) => i.currentSrc || i.src);
-    return { url: location.href, width: innerWidth, root: root.tag, sections, ...collectText(), spacing: collectSpacing(nodes), images };
+    // query and hash can carry a session token or a signed-URL key
+    const bare = (url) => url.split(/[?#]/)[0];
+    const images = [...document.images].filter((i) => i.getBoundingClientRect().width > 0).map((i) => bare(i.currentSrc || i.src));
+    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, ...collectText(), spacing: collectSpacing(nodes), images };
   };
 })();

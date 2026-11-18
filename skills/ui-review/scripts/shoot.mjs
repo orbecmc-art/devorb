@@ -6,8 +6,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { checkFloor, MODE_MIN_RATIO } from './rules.mjs';
 
 const COLLECTOR = fileURLToPath(new URL('./collect-in-page.js', import.meta.url));
-const USAGE = 'usage: node shoot.mjs <url> <outDir> [--widths a,b] [--mode persuade|operate|read|experience] [--no-scroll] [--pw <dir>]';
-const NEED = 'NEED: npm i -D playwright && npx playwright install chromium (or, to keep it out of the project: npm i --prefix <temp dir> playwright && npx --prefix <temp dir> playwright install chromium, then pass --pw <dir> with that folder)';
+const USAGE = 'usage: node shoot.mjs <url> <outDir> [--widths a,b] [--mode persuade|operate|read|experience] [--no-scroll] [--pw <dir>] (exit 2: a floor check FAILed, see <width>/checks.json)';
+const NEED = 'NEED: npm i --prefix <temp dir> playwright && npx --prefix <temp dir> playwright install chromium, then pass --pw <dir> with that folder (or, inside the project: npm i -D playwright && npx playwright install chromium)';
 
 export function parseArgs(argv) {
   const { values: v, positionals: [url, out] } = parseCli({
@@ -92,13 +92,16 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
 
 async function main(argv) {
   const opts = parseArgs(argv);
-  if (!opts.url || !opts.out || !(opts.mode in MODE_MIN_RATIO) || !opts.widths.every((w) => w > 0)) {
+  if (!opts.url || !opts.out || !Object.hasOwn(MODE_MIN_RATIO, opts.mode) || !opts.widths.every((w) => w > 0)) {
     console.error(USAGE);
     return 1;
   }
   try {
     const all = await shootPage(opts.url, opts.out, opts);
-    return Object.values(all).some((m) => checkFloor(m, opts.mode).some((c) => c.status === 'FAIL')) ? 2 : 0;
+    const failed = opts.widths.map((w) => [w, checkFloor(all[w], opts.mode).filter((c) => c.status === 'FAIL').map((c) => c.id)]).filter(([, ids]) => ids.length);
+    if (!failed.length) return 0;
+    console.log(`FAIL: ${[...new Set(failed.flatMap(([, ids]) => ids))].join(', ')} at ${failed.map(([w]) => w).join(', ')}`);
+    return 2;
   } catch (e) {
     if (e.code !== 'NEED_PLAYWRIGHT') throw e;
     console.log(NEED);
