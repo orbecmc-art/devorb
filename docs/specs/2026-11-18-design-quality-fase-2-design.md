@@ -129,7 +129,7 @@ Arquivos novos em `skills/visual-direction/references/` e `skills/design-system/
 
 ## Suposições a confirmar
 
-1. Os 23 sites podem ser abertos por automação para estudo. Não verifiquei os termos de cada um. Só entram URL e números; nada é salvo deles no repositório.
+1. Decisão do dono (2026-11-18): os 23 sites ficam na biblioteca sem checar os termos de uso de cada um. Só entram URL, números medidos e descrições nossas; nada é salvo deles no repositório.
 2. O orçamento das rodadas pagas da Fase 2 ainda não foi definido. Antes da primeira rodada paga, peço o teto.
 
 ## Para o construtor decidir
