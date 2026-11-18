@@ -7,6 +7,10 @@ description: Use when a web page, screen or UI component is about to be built, r
 
 A generated page looks generated because nothing was decided: the category's usual page got filled in. This skill makes the decisions before any UI code and writes them into the spec as a contract, so the builder, `devorb:design-system` and the later review all hold the same one. It decides words, never values: no colours, sizes or spacing here.
 
+## 0. Guide
+
+Read `references/guide.md` and follow it before step 1. It starts from what is known and asks only what is missing, one question at a time, each with your recommendation and why; it offers 4 to 6 references to open and pick from, sets the motion level from `devorb:motion`'s dial, and draws the patterns with `scripts/draw.mjs` so pages do not repeat.
+
 ## 1. What is already true
 
 Read the spec you received, `DESIGN.md`, the project's styles, components, fonts and `package.json`, and the running product if one exists. An identity visible in the code counts even without `DESIGN.md`. Then pick how much to invent, and say which:
@@ -75,5 +79,5 @@ Invoke `devorb:design-system` with the spec: it turns the contract into tokens a
 ## Connects to
 
 - **Receives:** the approved spec from `devorb:aligning`, or a request to build or restyle a page, screen or component.
-- **Uses:** `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, `references/replicate.md` with `capture.mjs` and `devorb:ui-review`'s scripts, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
+- **Uses:** `references/guide.md` with `scripts/draw.mjs` and `devorb:motion`'s `references/dial.md`, `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, `references/replicate.md` with `capture.mjs` and `devorb:ui-review`'s scripts, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
 - **Hands off to:** `devorb:design-system`, with `## Direção visual` in the spec. Later in the flow, `devorb:motion` decides anything that moves and `devorb:ui-review` checks the build against this contract.
