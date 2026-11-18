@@ -1,6 +1,6 @@
 # Qualidade de design do DevOrb — Fase 2
 
-Data: 2026-11-18. Status: ordem e abordagem aprovadas pelo dono em 2026-11-18 ("Aprovo, pode seguir com a Fase 2 nessa ordem"). Continua `docs/specs/2026-11-17-design-quality-design.md`, cujos Pilares 4 e 5 esta fase detalha. Fica fora daqui o Pilar 5 (competição e três versões), que é a Fase 3.
+Data: 2026-11-18. Status: aprovado pelo dono em 2026-11-18 (ordem, abordagem e documento). Continua `docs/specs/2026-11-17-design-quality-design.md`, cujos Pilares 4 e 5 esta fase detalha. Fica fora daqui o Pilar 5 (competição e três versões), que é a Fase 3.
 
 ## Intenção
 
