@@ -39,7 +39,7 @@ A step is done when the implementer can write exactly one reasonable thing from 
 
 - **Test step:** the test's name and its assertions, as code, with the spec's exact values. Point to a similar test in the codebase when there is one.
 - **Code step:** the exact signature (name, parameters, return type), its file, and the values the spec pins. The implementer writes the body. Show one only for an algorithm the signature and tests don't determine, or for exact copy the spec fixes.
-- **UI step:** when the work touches the interface, the step names the `DESIGN.md` tokens it uses, by name, never their raw values.
+- **UI step:** when the work touches the interface, the step names the `DESIGN.md` tokens it uses, by name, never their raw values, and the spec's `## Direção visual` contract. When the contract lists a `Reference pack`, the step names its path. Done is the implementer's `Mirror:` line with no check FAIL, and the `devorb:ui-review` Critique with no score below 8 or its findings handed to the user.
 - **Verification step:** the command, and the output that means it passed.
 - **Another task's work:** its Interfaces block says what to use. Don't repeat its code.
 

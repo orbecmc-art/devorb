@@ -45,7 +45,7 @@ Then, for the screen in question:
 
 Before clicking, check the element is visible: Playwright can report success for a click that reached nothing a user could see. Screenshot the page when a check fails, and keep the file path.
 
-Console errors and failed requests are bugs; console warnings are noise. With no stored reference image, a visual comparison proves nothing: report it as inconclusive.
+Console errors and failed requests are bugs; console warnings are noise. With a reference pack, the visual comparison belongs to `devorb:ui-review`. With no stored reference, it proves nothing: report it as inconclusive.
 
 `references/playwright.md` has a script that does all of this.
 
