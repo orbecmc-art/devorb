@@ -136,8 +136,9 @@ Espelho do construtor (Task 6 do plano de qualidade de design), fora do sandbox,
 - `mattpocock-skills@4ae2317ddb22b046e26455e4f9c9b3aaaf62212d:skills/engineering/implement-spec/agents/openai.yaml` | recusado | metadado de outra ferramenta
 - `karpathy-skills@2c606141936f1eeef17fa3043a72095b4765b9c2:skills/karpathy-guidelines/SKILL.md` | adotado | só a ideia da mudança cirúrgica, com texto próprio, no prompt de quem implementa
 - `karpathy-skills@2c606141936f1eeef17fa3043a72095b4765b9c2:skills/karpathy-guidelines/SKILL.md` | recusado | as outras três diretrizes, já cobertas por outras skills do DevOrb
-- `taste-skill@f6b76575f949707b4e3c37cd86cb44b0b98643e8` | adotado (só ideia) | portão do construtor com no máximo 3 rodadas e prints em várias larguras, no passo Mirror de `prompts/implementer.md`; texto próprio
+- `taste-skill@sem-pin:portão de 3 rodadas e prints por largura (commit visto f6b76575f949707b4e3c37cd86cb44b0b98643e8, caminho fora dos rastreados)` | adotado (só ideia) | portão do construtor com no máximo 3 rodadas e prints em várias larguras, no passo Mirror de `prompts/implementer.md`; texto próprio
 - `hallmark@407fa689f4a276f2fd389208d271d0fef08f5058:skills/hallmark/SKILL.md` | adotado (só ideia) | construir e revisar antes de seguir, começando pelo hero, que virou olhar os prints contra o pacote seção por seção antes do commit; texto próprio
+- registro em fusion/sources.json: decisão do dono
 
 ## Scripts para revisão humana
 

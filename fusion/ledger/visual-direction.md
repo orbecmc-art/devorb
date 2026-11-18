@@ -196,7 +196,8 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 - `genjutsu@5e00595ab7495d6bb966639f2f5ff1dbee364389:skills/_jutsu/tells/references/web.md` | recusado | o formato de três campos e as entradas já cobertas por outra fonte
 - `monich@ae98c316fed8f9ba7d17e8bd3e99f6a5d473f808:installable/monich/assets/templates/web-template/design-systems/TAG-VOCABULARY.md` | adotado | cada candidato diz onde não serve (`avoid_for`)
 - `monich@ae98c316fed8f9ba7d17e8bd3e99f6a5d473f808:installable/monich/assets/templates/web-template/design-systems/TAG-VOCABULARY.md` | recusado | o vocabulário controlado e o índice de marcas
-- `ai-website-cloner-template` (MIT) | adotado | só a ideia das fases do clone (capturar, mapear, construir por seção, comparar); sem texto
-- `taste-skill@f6b76575f949707b4e3c37cd86cb44b0b98643e8` (scripts de print e consistência) | adotado | só a ideia de fotografar o build e conferir contra a referência; scripts próprios
-- `av-design-system:mirror.js` (do dono, origem e licença não confirmadas) | adotado | só a ideia de neutralizar revelações; sem texto nem código
-- `dembrandt@0.39.2` (MIT, npm) | adotado | comando opcional de tokens em página pública, conferido com `--help`
+- `ai-website-cloner-template@sem-pin:fases do clone (capturar, mapear, construir por seção, comparar)` | adotado | só a ideia das fases, MIT; sem texto
+- `taste-skill@sem-pin:scripts de print e consistência (commit visto f6b76575f949707b4e3c37cd86cb44b0b98643e8, caminho fora dos rastreados)` | adotado | só a ideia de fotografar o build e conferir contra a referência; scripts próprios
+- `av-design-system@sem-pin:mirror.js` | adotado | só a ideia de neutralizar revelações, do dono, origem e licença não confirmadas; sem texto nem código
+- `dembrandt@sem-pin:pacote npm 0.39.2, saída de --help` | adotado | comando opcional de tokens em página pública, MIT
+- registro em fusion/sources.json: decisão do dono
