@@ -129,10 +129,17 @@
     const slide = el.closest('[aria-hidden=true]');
     return !!slide && showingSiblings(slide).some((s) => s.getAttribute('aria-hidden') !== 'true');
   };
-  const INTERACTIVE = 'a, button, [role=button], [tabindex], summary';
+  // tabindex=-1 marks a focus target (a skip link's main), not a control
+  const INTERACTIVE = 'a, button, [role=button], [tabindex]:not([tabindex="-1"]), summary';
+  // the sections and their root, found once per reveal: a control that is or holds one wraps the page, it owns no popup
+  let sectionEls = [];
+  const popupOwner = (el) => {
+    const owner = el.parentElement?.closest(INTERACTIVE);
+    return !!owner && !sectionEls.some((s) => owner.contains(s));
+  };
   // a closed menu or dialog, a fixed layer, an inactive slide, a stacked rotator state or a hover popup
   const leftHidden = (el, cs, r) => cs.position === 'fixed' || !!el.closest(OVERLAYS) || inFixedLayer(el) || inactiveSlide(el)
-    || (cs.position === 'absolute' && (stackedOverShowing(el, r) || !!el.parentElement?.closest(INTERACTIVE)));
+    || (cs.position === 'absolute' && (stackedOverShowing(el, r) || popupOwner(el)));
   // textContent, not innerText: innerText is empty under visibility: hidden
   const isContent = (el, cs) => {
     const r = el.getBoundingClientRect();
@@ -163,6 +170,8 @@
     return all;
   };
   window.__devorbReveal = () => {
+    const { root, nodes } = findSections(toNode(document.body));
+    sectionEls = [root.el, ...nodes.map((n) => n.el)];
     const done = finishAnimations();
     const hidden = [...document.querySelectorAll('body *')].filter((el) => {
       const cs = getComputedStyle(el);

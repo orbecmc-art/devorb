@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -21,6 +21,9 @@ test('parseUrls throws on an unknown mode with the line number', () => {
 });
 test('parseUrls throws on a duplicate slug with the line number', () => {
   assert.throws(() => parseUrls('a https://a/\n# x\na https://b/'), /line 3: duplicate slug a/);
+});
+test('parseUrls throws on a line with no url', () => {
+  assert.throws(() => parseUrls('a https://a/\nlonely'), /line 2: missing url/);
 });
 test("the repo's urls.txt holds the 23 references with their modes", () => {
   const refs = parseUrls(readFileSync(join(ROOT, 'docs/specs/2026-11-18-referencias/urls.txt'), 'utf8'));
@@ -70,6 +73,13 @@ test('judgeSite reports a missing width folder', () => {
   assert.deepEqual(judgeSite({ dir, widths: [1440, 390], exit: 0 }).reasons, ['no metrics at 390']);
 });
 
+test('judgeSite reads a broken metrics.json or a missing checks.json as no metrics', () => {
+  const dir = site({ 1440: good, 390: good });
+  writeFileSync(join(dir, '1440', 'metrics.json'), '{"sections": [');
+  rmSync(join(dir, '390', 'checks.json'));
+  assert.deepEqual(judgeSite({ dir, widths: [1440, 390], exit: 0 }).reasons, ['no metrics at 1440', 'no metrics at 390']);
+});
+
 test('report lists each site and ends with the pass count', () => {
   const text = report([
     { slug: 'a', mode: 'persuade', status: 'PASS', reasons: [], warns: ['measure at 1440'], shotErrors: [] },
@@ -86,8 +96,15 @@ test('report lists each site and ends with the pass count', () => {
 
 test('the CLI refuses an --out inside the repo', () => {
   const out = join(ROOT, `refs-out-${process.pid}`);
-  const r = spawnSync(process.execPath, [TOOL, '--out', out], { encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [TOOL, '--out', out, '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
+  assert.equal(existsSync(out), false);
+});
+test('the CLI exits 1 when --only selects no reference, before shooting anything', () => {
+  const out = join(mkdtempSync(join(tmpdir(), 'devorb-refs-')), 'out');
+  const r = spawnSync(process.execPath, [TOOL, '--out', out, '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no reference selected/);
   assert.equal(existsSync(out), false);
 });

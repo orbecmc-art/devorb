@@ -153,7 +153,7 @@ const fakeShooter = ({ sections = '[{ index: 0, x: 0, top: 0, height: 500, width
   const page = {
     goto: async (url, opts) => log('goto', opts), waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {},
     screenshot: async (opts) => { log('screenshot', opts); const name = opts.path.split('/').pop(); tries[name] = (tries[name] ?? 0) + 1; ${screenshot} },
-    evaluate: async (fn) => { const f = String(fn); return f.includes('__devorbMetrics') ? metrics : f.includes('innerHeight') ? [0, 1] : f.includes('scrollY') ? ${scroll} : ${pageHeight}; }
+    evaluate: async (fn) => { const f = String(fn); if (f.includes('__devorbReveal')) log('reveal'); return f.includes('__devorbMetrics') ? metrics : f.includes('innerHeight') ? [0, 1] : f.includes('scrollY') ? ${scroll} : ${pageHeight}; }
   };
   exports.chromium = { launch: async () => ({ newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {} }) };`);
 const runFake = (cwd) => {
@@ -171,6 +171,13 @@ test('a failing shot is retried once with the caret hidden, then logged, and the
   assert.deepEqual(shots.map((c) => [c.path.split('/').pop(), c.caret]), [['full.png', undefined], ['full.png', 'hide'], ['section-0.png', undefined], ['section-0.png', 'hide']]);
   assert.ok(shots.every((c) => c.animations === 'disabled' && c.timeout === 60000), JSON.stringify(shots));
   assert.deepEqual(log.filter((c) => c.kind === 'goto').map((c) => c.waitUntil), ['domcontentloaded']);
+});
+test('the reveal runs again right before every shot', () => {
+  // a looping script can hide content again between the measure and a shot
+  const { log } = runFake(fakeShooter({ sections: '[{ index: 0, x: 0, top: 0, height: 500, width: 1440, hidden: false }, { index: 1, x: 0, top: 20000, height: 500, width: 1440, hidden: false }]', pageHeight: 20500 }));
+  const kinds = log.map((c) => c.kind).filter((k) => k !== 'goto');
+  const shots = kinds.flatMap((k, i) => (k === 'screenshot' ? [kinds[i - 1]] : []));
+  assert.deepEqual(shots, ['reveal', 'reveal', 'reveal']);
 });
 test('a section the window cannot scroll up to the top of is clipped lower in the window', () => {
   const { shots } = runFake(fakeShooter({ sections: '[{ index: 0, x: 0, top: 20000, height: 500, width: 1440, hidden: false }]', pageHeight: 20500, scroll: '300' }));
@@ -220,7 +227,7 @@ test('findScroller gives null when only the window scrolls or overflow is hidden
 const el = (tag, h, kids = [], extra = {}) => ({
   tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h, style: {}, attrs: {}, textContent: '',
   getAttribute: () => null, setAttribute(name, value) { this.attrs[name] = value; }, closest: () => null, querySelector: () => null,
-  getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], ...extra
+  getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], contains(o) { return o === this || descendants(this).includes(o); }, ...extra
 });
 // like Chromium, innerText is empty under visibility: hidden while textContent keeps the words
 const text = (tag, style, extra = {}) => Object.defineProperty(el(tag, 20, [], { style, textContent: 'Plans', ...extra }), 'innerText', { get() { return this.style.visibility === 'hidden' ? '' : 'Plans'; } });
@@ -395,6 +402,26 @@ test('a faded popup inside a link or button is a hover state: neither revealed n
   runCollector(page);
   assert.equal(page.window.__devorbReveal(), 0);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 0);
+});
+test('a faded block under a tabindex=-1 skip-link target or a link that wraps the sections is a scroll reveal, not a popup', () => {
+  // main#main tabindex=-1 is a focus target, not a control; a link around the sections is a wrapper, not a popup owner
+  const underMain = text('p', { position: 'absolute', opacity: '0' });
+  const underWrapper = text('p', { position: 'absolute', opacity: '0' });
+  const page = fakePage({ content: [underMain, underWrapper] });
+  const main = page.document.body.children[0];
+  const matches = (sel, part) => sel.split(', ').includes(part);
+  underMain.parentElement = el('div', 100, [], { closest: (sel) => (matches(sel, '[tabindex]') ? main : null) });
+  underWrapper.parentElement = el('div', 100, [], { closest: (sel) => (matches(sel, 'a') ? main : null) });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 2);
+});
+test('a faded block under a tabindex=-1 element is counted when the reveal cannot show it', () => {
+  const p = text('p', { position: 'absolute', opacity: '0' });
+  const page = fakePage({ content: [p] });
+  p.parentElement = el('main', 100, [], { closest(sel) { return sel.split(', ').includes('[tabindex]') ? this : null; } });
+  stubborn(p);
+  runCollector(page);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1);
 });
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);

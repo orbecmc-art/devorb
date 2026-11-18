@@ -93,6 +93,8 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       // a heavy page can time out or fail once; a shot that fails twice is logged and the run goes on
       const shoot = async (shot, { scrollTo = null, clip, ...opts }) => {
         const attempt = async (extra) => {
+          // a looping script can hide content again between the measure and the shot
+          await page.evaluate(() => window.__devorbReveal());
           // the window stops short of a section near the page end, so shift the clip by what it could not scroll;
           // instant, as a smooth-scrolling page has not moved yet when the clip is placed
           const offset = scrollTo === null ? 0 : await page.evaluate((top) => (window.scrollTo({ top, behavior: 'instant' }), top - window.scrollY), scrollTo);

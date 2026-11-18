@@ -1,6 +1,6 @@
 import { parseArgs } from 'node:util';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -15,6 +15,7 @@ export function parseUrls(text) {
   text.split('\n').forEach((line, i) => {
     const [slug, url, mode = 'persuade'] = line.trim().split(/\s+/);
     if (!slug || slug.startsWith('#')) return;
+    if (!url) throw new Error(`line ${i + 1}: missing url`);
     if (!Object.hasOwn(MODE_MIN_RATIO, mode)) throw new Error(`line ${i + 1}: unknown mode ${mode}`);
     if (refs.some((r) => r.slug === slug)) throw new Error(`line ${i + 1}: duplicate slug ${slug}`);
     refs.push({ slug, url, mode });
@@ -30,13 +31,15 @@ export function judgeSite({ dir, widths, exit, stderr = '' }) {
   if (exit === null) reasons.push('timeout');
   else if (exit !== 0 && exit !== 2) reasons.push(`run failed (exit ${exit}): ${stderr.trim().split('\n').pop()}`);
   for (const w of widths) {
-    const metricsFile = join(dir, String(w), 'metrics.json');
-    if (!existsSync(metricsFile)) {
+    let m, checks;
+    try {
+      m = JSON.parse(readFileSync(join(dir, String(w), 'metrics.json'), 'utf8'));
+      checks = JSON.parse(readFileSync(join(dir, String(w), 'checks.json'), 'utf8'));
+    } catch {
+      // a killed run can leave a width missing or half written
       reasons.push(`no metrics at ${w}`);
       continue;
     }
-    const m = JSON.parse(readFileSync(metricsFile, 'utf8'));
-    const checks = JSON.parse(readFileSync(join(dir, String(w), 'checks.json'), 'utf8'));
     for (const c of checks) {
       if (c.status === 'FAIL') reasons.push(`FAIL ${c.id} at ${w}`);
       if (c.status === 'WARN') warns.push(`${c.id} at ${w}`);
@@ -76,6 +79,10 @@ function main(argv) {
   const widths = v.widths ? v.widths.split(',').map(Number) : WIDTHS;
   const only = v.only?.split(',');
   const refs = parseUrls(readFileSync(v.urls ?? join(ROOT, 'docs/specs/2026-11-18-referencias/urls.txt'), 'utf8')).filter((r) => !only || only.includes(r.slug));
+  if (!refs.length) {
+    console.error('no reference selected');
+    return 1;
+  }
   const results = [];
   for (const { slug, url, mode } of refs) {
     const dir = join(out, slug);
