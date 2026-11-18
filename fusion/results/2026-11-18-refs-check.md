@@ -203,3 +203,66 @@ Antes de tratar os FAIL como resultado, conferi a medida nos seis sites, abrindo
   WARN: heading-ratio at 1440, measure at 1440, font-sizes at 1440, text-colors at 1440, photo-repeat at 1440, heading-ratio at 1024, measure at 1024, font-sizes at 1024, text-colors at 1024, photo-repeat at 1024, heading-ratio at 768, measure at 768, font-sizes at 768, text-colors at 768, photo-repeat at 768, font-sizes at 390, text-colors at 390, photo-repeat at 390
 refs-check: 17/23 PASS
 ```
+
+## Rodada da Task 5, correção: razão por largura
+
+- Decisão do controlador: a razão no celular é uma decisão de Claude dentro da Call 7, porque a regra de mobile da própria spec (h1 de 32 a 64px sobre corpo de 16px) já implica razão de 2,0. `heading-ratio` passa a ler `m.width`:
+  - de 1024px para cima nada muda: Persuade dá FAIL abaixo de 2,5 e WARN abaixo de 4,0;
+  - abaixo de 1024px, Persuade dá FAIL abaixo de 2,0 e WARN abaixo de 2,5;
+  - os outros modos dão FAIL abaixo de 0,8 vez o mínimo (`NARROW_RATIO_FACTOR`), sem WARN;
+  - métrica sem `width` conta como computador.
+- Mesma configuração da rodada anterior; 5 min 20 s; todas as saídas do `shoot` foram 0.
+- **23/23 PASS, zero FAIL.** Os seis sites que reprovavam agora dão `heading-ratio` WARN em 768 ou 390: orior (2,40 e 2,46), hoy (2,07 e 2,20), monocle (2,15 e 2,28), mobbin (2,30), parloa (2,25) e agenciadevalor (2,00).
+- WARN por checagem (sites com ao menos uma largura): `measure` 19, `button-styles` 19, `photo-repeat` 19, `text-colors` 12, `font-sizes` 11, `heading-ratio` 10, `spacing-grid` 6, `accent-count` 2 (bordo e framer), `display-weight` 0. Nenhum `NaN` em `checks.json`.
+
+```
+- framer (persuade): PASS
+  WARN: measure at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, accent-count at 1440, heading-ratio at 1024, button-styles at 1024, text-colors at 1024, font-sizes at 768, button-styles at 768, font-sizes at 390, button-styles at 390
+- bordo (persuade): PASS
+  WARN: measure at 1440, spacing-grid at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, accent-count at 1440, measure at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, accent-count at 1024, measure at 768, font-sizes at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, accent-count at 768, measure at 390, font-sizes at 390, button-styles at 390, text-colors at 390, photo-repeat at 390, accent-count at 390
+- shopify-editions (experience): PASS
+  WARN: measure at 1440, button-styles at 1440, photo-repeat at 1440, button-styles at 1024, photo-repeat at 1024, measure at 768, button-styles at 768, photo-repeat at 768, button-styles at 390, photo-repeat at 390
+  shotErrors: 1440/section-0: skipped: empty, 1024/section-0: skipped: empty, 768/section-0: skipped: empty, 390/section-0: skipped: empty
+- orior (persuade): PASS
+  WARN: heading-ratio at 1440, photo-repeat at 1440, heading-ratio at 1024, photo-repeat at 1024, heading-ratio at 768, photo-repeat at 768, heading-ratio at 390, photo-repeat at 390
+- interfere (persuade): PASS
+  WARN: measure at 1440, button-styles at 1440, photo-repeat at 1440, measure at 1024, button-styles at 1024, photo-repeat at 1024, measure at 768, button-styles at 768, photo-repeat at 768, measure at 390, button-styles at 390, photo-repeat at 390
+- aave (persuade): PASS
+  WARN: measure at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, button-styles at 390, text-colors at 390, photo-repeat at 390
+- aifont (persuade): PASS
+  WARN: measure at 1440, button-styles at 1440, photo-repeat at 1440, heading-ratio at 1024, measure at 1024, button-styles at 1024, photo-repeat at 1024, measure at 768, button-styles at 768, photo-repeat at 768, button-styles at 390, photo-repeat at 390
+- hoy (persuade): PASS
+  WARN: heading-ratio at 1440, measure at 1440, spacing-grid at 1440, button-styles at 1440, photo-repeat at 1440, heading-ratio at 1024, measure at 1024, spacing-grid at 1024, button-styles at 1024, photo-repeat at 1024, heading-ratio at 768, measure at 768, spacing-grid at 768, button-styles at 768, photo-repeat at 768, heading-ratio at 390, measure at 390, spacing-grid at 390, button-styles at 390, photo-repeat at 390
+- monocle (persuade): PASS
+  WARN: heading-ratio at 1440, measure at 1440, spacing-grid at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, heading-ratio at 1024, measure at 1024, spacing-grid at 1024, font-sizes at 1024, button-styles at 1024, text-colors at 1024, heading-ratio at 768, measure at 768, spacing-grid at 768, font-sizes at 768, button-styles at 768, text-colors at 768, heading-ratio at 390, measure at 390, spacing-grid at 390, button-styles at 390, text-colors at 390
+- billow (persuade): PASS
+  WARN: measure at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, font-sizes at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, font-sizes at 768, text-colors at 768, photo-repeat at 768, measure at 390, font-sizes at 390, text-colors at 390, photo-repeat at 390
+- melius (persuade): PASS
+  WARN: heading-ratio at 1440, button-styles at 1440, photo-repeat at 1440, heading-ratio at 1024, button-styles at 1024, photo-repeat at 1024, button-styles at 768, photo-repeat at 768, button-styles at 390, photo-repeat at 390
+- futureagi (persuade): PASS
+  WARN: measure at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, measure at 1024, font-sizes at 1024, button-styles at 1024, text-colors at 1024, measure at 768, font-sizes at 768, button-styles at 768, text-colors at 768, measure at 390, font-sizes at 390, button-styles at 390, text-colors at 390
+  shotErrors: 1440/section-1: skipped: hidden, 1024/section-1: skipped: hidden, 768/section-1: skipped: hidden, 390/section-1: skipped: hidden
+- onlines (experience): PASS
+  WARN: measure at 1440, spacing-grid at 1440, photo-repeat at 1440, measure at 1024, spacing-grid at 1024, photo-repeat at 1024, measure at 768, spacing-grid at 768, font-sizes at 768, photo-repeat at 768, spacing-grid at 390, font-sizes at 390, photo-repeat at 390
+- mobbin (persuade): PASS
+  WARN: button-styles at 1440, photo-repeat at 1440, heading-ratio at 1024, button-styles at 1024, photo-repeat at 1024, button-styles at 768, photo-repeat at 768, heading-ratio at 390, button-styles at 390, photo-repeat at 390
+- sol (persuade): PASS
+  WARN: measure at 1440, spacing-grid at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, spacing-grid at 1024, font-sizes at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, spacing-grid at 768, font-sizes at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, measure at 390, spacing-grid at 390, font-sizes at 390, button-styles at 390, text-colors at 390, photo-repeat at 390
+- audienceful (persuade): PASS
+  WARN: measure at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, font-sizes at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, font-sizes at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, button-styles at 390, text-colors at 390, photo-repeat at 390
+- patensify (persuade): PASS
+  WARN: measure at 1440, spacing-grid at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, spacing-grid at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, measure at 390, button-styles at 390, text-colors at 390, photo-repeat at 390
+- raycast-keyboard (persuade): PASS
+  WARN: heading-ratio at 1440, photo-repeat at 1440, heading-ratio at 1024, photo-repeat at 1024, photo-repeat at 768, photo-repeat at 390
+- parloa (persuade): PASS
+  WARN: heading-ratio at 1440, measure at 1440, button-styles at 1440, heading-ratio at 1024, measure at 1024, button-styles at 1024, measure at 768, button-styles at 768, heading-ratio at 390, button-styles at 390
+- accessgrid (persuade): PASS
+  WARN: measure at 1440, font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, measure at 1024, font-sizes at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, font-sizes at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, button-styles at 390, text-colors at 390, photo-repeat at 390
+- staycloud (persuade): PASS
+  WARN: font-sizes at 1440, button-styles at 1440, text-colors at 1440, photo-repeat at 1440, font-sizes at 1024, button-styles at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, font-sizes at 768, button-styles at 768, text-colors at 768, photo-repeat at 768, font-sizes at 390, button-styles at 390, text-colors at 390, photo-repeat at 390
+- vercel (persuade): PASS
+  WARN: button-styles at 1440, button-styles at 1024, measure at 768, button-styles at 768, measure at 390, button-styles at 390
+- agenciadevalor (persuade): PASS
+  WARN: heading-ratio at 1440, measure at 1440, font-sizes at 1440, text-colors at 1440, photo-repeat at 1440, heading-ratio at 1024, measure at 1024, font-sizes at 1024, text-colors at 1024, photo-repeat at 1024, measure at 768, font-sizes at 768, text-colors at 768, photo-repeat at 768, heading-ratio at 390, font-sizes at 390, text-colors at 390, photo-repeat at 390
+refs-check: 23/23 PASS
+```

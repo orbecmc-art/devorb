@@ -30,6 +30,21 @@ test('ratio 2.9 warns and 4.2 passes in persuade', () => {
   assert.equal(status(checkFloor(page(29, 10), 'persuade'), 'heading-ratio'), 'WARN');
   assert.equal(status(checkFloor(page(42, 10), 'persuade'), 'heading-ratio'), 'PASS');
 });
+test('below 1024 persuade fails under 2.0 and warns under 2.5; a page without a width is desktop', () => {
+  const ratio = (heading, width) => status(checkFloor(page(heading, 10, { width }), 'persuade'), 'heading-ratio');
+  assert.equal(ratio(22, 390), 'WARN');
+  assert.equal(ratio(19, 390), 'FAIL');
+  assert.equal(ratio(26, 390), 'PASS');
+  assert.equal(ratio(22, 1440), 'FAIL');
+  assert.equal(ratio(22, 1024), 'FAIL');
+  assert.equal(ratio(22, undefined), 'FAIL');
+});
+test('below 1024 the other modes fail under 0.8 of their minimum, with no warning', () => {
+  const ratio = (heading, width) => status(checkFloor(page(heading, 10, { width }), 'read'), 'heading-ratio');
+  assert.equal(ratio(17, 390), 'PASS');
+  assert.equal(ratio(15, 390), 'FAIL');
+  assert.equal(ratio(17, 1440), 'FAIL');
+});
 test('display-weight warns only on heavy, untracked display type', () => {
   const display = (fontSize, fontWeight, letterSpacing) => {
     const m = page(fontSize, 16);

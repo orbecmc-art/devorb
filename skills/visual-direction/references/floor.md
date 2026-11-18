@@ -65,6 +65,7 @@ If the plan matches a row the brief never asked for, change it and record what c
 `shoot.mjs` checks these at every width. The limits come from the 23 reference sites measured on 2026-11-18.
 
 - Headline over body (largest h1 or h2 over the body median): FAIL below 2.5 on Persuade (1.6 Operate, 2.0 Read and Experience); WARN below 4.0, the Persuade target.
+- Below 1024px wide the headline may shrink: Persuade fails below 2.0 and warns below 2.5; the other modes fail below 0.8 of their minimum.
 - Body median: FAIL below 13px on Persuade and Read; WARN from 13 to under 14px on Read.
 - Display weight: WARN when an h1 or h2 of 48px or more has weight 700 or more at tracking 0 or above.
 - Accents: WARN with more than 2 saturated hues across text, button fills and section backgrounds.

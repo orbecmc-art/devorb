@@ -1,5 +1,8 @@
 export const MODE_MIN_RATIO = { persuade: 2.5, operate: 1.6, read: 2.0, experience: 2.0 };
 export const MODE_TARGET_RATIO = { persuade: 4.0 };
+// below this width the headline shrinks and the body stays: h1 of 32px over a 16px body is a sound phone page
+export const DESKTOP_MIN_WIDTH = 1024;
+export const NARROW_RATIO_FACTOR = 0.8;
 
 const median = (xs) => {
   const s = [...xs].sort((a, b) => a - b);
@@ -45,8 +48,11 @@ export function accentHues(colors) {
 
 export function checkFloor(m, mode) {
   const ratio = headingRatio(m);
-  const min = MODE_MIN_RATIO[mode];
-  const target = MODE_TARGET_RATIO[mode];
+  // a page measured without a width counts as desktop
+  const narrow = m.width < DESKTOP_MIN_WIDTH;
+  const min = MODE_MIN_RATIO[mode] * (narrow ? NARROW_RATIO_FACTOR : 1);
+  // narrow, the warning sits at the desktop minimum: 2.0 to 2.5 warns on Persuade
+  const target = MODE_TARGET_RATIO[mode] && (narrow ? MODE_MIN_RATIO[mode] : MODE_TARGET_RATIO[mode]);
   const bodyMedian = median(sizes(m, 'body'));
   const wide = m.text.filter((t) => t.role === 'body' && t.lineChars > 75).length;
   const off = m.spacing.filter((s) => s % 4 !== 0).length;
@@ -54,7 +60,7 @@ export function checkFloor(m, mode) {
   const heavy = m.text.filter((t) => (t.role === 'h1' || t.role === 'h2') && t.fontSize >= 48 && t.fontWeight >= 700 && t.letterSpacing >= 0);
   const accents = accentHues([...m.textColors, ...(m.fills ?? []), ...m.sections.map((s) => s.bg)]);
   const check = (id, bad, level, detail) => ({ id, status: bad ? level : 'PASS', detail });
-  const ratioCheck = check('heading-ratio', !(ratio >= min), 'FAIL', `ratio ${ratio.toFixed(2)}, min ${min}${target ? `, target ${target}` : ''} for ${mode}`);
+  const ratioCheck = check('heading-ratio', !(ratio >= min), 'FAIL', `ratio ${ratio.toFixed(2)}, min ${+min.toFixed(2)}${target ? `, target ${target}` : ''} for ${mode}${narrow ? ` below ${DESKTOP_MIN_WIDTH}px` : ''}`);
   const bodyCheck = check('body-size', !(bodyMedian >= 13) && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`);
   return [
     ratioCheck.status === 'PASS' && ratio < target ? { ...ratioCheck, status: 'WARN' } : ratioCheck,
