@@ -1,18 +1,16 @@
 # Comparação de versões: visual-direction
 
 - Data: 2026-11-17
-- Suíte: `evals-reserved`, casos `visual-direction-*`, 2 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
+- Suíte: `evals-reserved`, casos `visual-direction-*`, 3 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
 - Ponytail: não
-- Braços: `devorb@d873e93`, `none`
+- Braços: `devorb@46dfe79`
 
 | Caso | Braço | Aprovação | Pontuação | Custo |
 |---|---|---|---|---|
-| visual-direction-copia-landing-clinica | devorb@d873e93 | 0% | 0.71 | US$ 1.7583 |
-| visual-direction-copia-landing-clinica | none | 0% | 0.74 | US$ 0.6318 |
-| visual-direction-painel-padaria | devorb@d873e93 | 50% | 0.86 | US$ 2.6027 |
-| visual-direction-painel-padaria | none | 100% | 1.00 | US$ 1.1990 |
+| visual-direction-copia-landing-clinica | devorb@46dfe79 | 0% | 0.78 | US$ 2.8202 |
+| visual-direction-painel-padaria | devorb@46dfe79 | 67% | 0.91 | US$ 5.0467 |
 
-Custo total desta execução: US$ 6.1573 (linhas de base em cache não contam).
+Custo total desta execução: US$ 7.8389 (linhas de base em cache não contam).
 
 - Casos ausentes (não carregaram ou não rodaram): nenhum
 - Rodadas parciais (teto de custo atingido): nenhuma
@@ -23,5 +21,5 @@ Custo total desta execução: US$ 6.1573 (linhas de base em cache não contam).
 
 - Aprovado: não
 - Regressões (pior que a melhor linha de base por mais de uma rodada): nenhuma
-- Abaixo da barra de 2/3: `visual-direction-painel-padaria`
-- Lacunas (nenhum braço passa): `visual-direction-copia-landing-clinica`
+- Abaixo da barra de 2/3: `visual-direction-copia-landing-clinica`
+- Lacunas (nenhum braço passa): nenhuma
