@@ -52,6 +52,8 @@ A skill foi escrita sem abrir `evals/ui-review-*`, `evals-reserved/` nem `fusion
 | Entrar pela borda de dados, só na sessão do navegador (`page.route`, cópia fora do projeto, texto trocado na sessão) | Emil (`break-ui`, regra 2), adaptado: sem alternador nem fixture no repositório, porque a skill relata e para |
 | Tabela de sintoma para causa, com "1 members" | Emil (`break-ui`, fase 4), só ideia, com linhas reescritas e menos colunas |
 | `overflow-wrap`: `anywhere` em dados, `break-word` em títulos | Conflito da Task D5 (Emil pede `anywhere`; gstack e o piso pedem `break-word` em títulos) |
+| `references/critique.md`, `## Tells of a generated page`: os 7 sinais, cada um com o que se vê no print e o que entra no lugar; régua de `finish` (10 é nenhum sinal; com um ou mais, 7 ou menos) e de `visual-moment` (ícone no lugar de UI real ou "Feature 1/2/3" como momento, 5 ou menos) | DevOrb: nossos estudos A e B (`docs/specs/2026-11-18-referencias/study-A.md`, "What separates these from AI-generated pages"; `study-B.md`, "Craft vs AI pages"), sínteses e palavras nossas, sem texto de site. O que entra no lugar cita os ids do cardápio da Task 7 e os checks `display-weight` e `accent-count` da Task 5 |
+| Autorizado é a exceção que `DESIGN.md` ou o contrato nomeia para esta página; token que só existe na tabela não autoriza, e um token usado como sinal continua sinal | DevOrb, decisão do controlador na Task 8 da Fase 2, para a regra de valores autorizados não anular os sinais |
 
 ## Conflitos resolvidos
 
@@ -159,6 +161,14 @@ Todos pela Task D5:
   - **Razão por largura.** A primeira rodada deu 17/23: os 6 FAIL eram `heading-ratio` em 768 ou 390 (orior, hoy, monocle, mobbin, parloa e agenciadevalor, razões de 2,0 a 2,46), com título e corpo conferidos como os de verdade. No celular e no tablet esses sites reduzem o título e mantêm o corpo, e a regra de mobile da própria spec (h1 de 32 a 64px sobre corpo de 16px) já dá 2,0. Decisão do controlador: `checkFloor` lê `m.width`, e abaixo de 1024px (`DESKTOP_MIN_WIDTH`) Persuade dá FAIL abaixo de 2,0 e WARN abaixo de 2,5; os outros modos dão FAIL abaixo de 0,8 vez o mínimo (`NARROW_RATIO_FACTOR`). Métrica sem `width` conta como computador. `MODE_MIN_RATIO` continua sendo a tabela do computador.
   - **Prova contra as referências.** Segunda rodada do `refs-check` em `fusion/results/2026-11-18-refs-check.md`: 23/23 PASS, zero FAIL; os seis sites acima ficam com WARN nas larguras estreitas.
 
+- 2026-11-18, Task 8 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: sinais de página gerada no crítico.
+  - **Problema.** A régua dava 10 em `finish` a uma página sem nada quebrado, mesmo com todos os vícios de página feita no automático: ícone no lugar do produto, tudo no centro, três cores de destaque, números genéricos, título pesado, mobile só empilhado e "Feature 1/2/3".
+  - **`references/critique.md`** ganha `## Tells of a generated page`, depois da régua: os 7 sinais da spec (Pilar B), cada um com o que se vê no print e o que entra no lugar, com os ids `hero:` e `section:` do cardápio da Task 7 para a linha de correção do revisor. Dois sinais apontam para os checks que os medem: destaque demais para `accent-count`, título em negrito com tracking normal para `display-weight`. Sinal passa só com frase do contrato que o crítico possa citar, como no §4 do `SKILL.md`.
+  - **Régua.** `finish`: o 10 é nenhum sinal visível; cada sinal visto vai no gap, e com um ou mais a nota fica em 7 ou menos. `visual-moment`: ícone no lugar de UI real ou "Feature 1/2/3" como momento da página dá 5 ou menos.
+  - **Autorizado.** Uma linha ao lado da regra "o que `DESIGN.md` ou o contrato autoriza nunca é gap": autorizado é a exceção nomeada para esta página, e um token declarado usado como sinal continua sinal. Decisão do controlador, porque o caso declara de propósito todos os valores no `DESIGN.md` (peso 800, roxo, rosa e verde-água) e a regra antiga deixava o crítico desculpar dois sinais.
+  - **`SKILL.md`** não muda: está em 9.982 bytes, perto do teto de tokens, e o texto todo fica em `critique.md`.
+  - **Caso novo** `evals-outside/ui-review-sinais-de-ia`: a landing do Lote com `DESIGN.md` que declara todos os valores usados e os sinais plantados. Graders: `tells` (llm na resposta, peso 3: `finish` abaixo de 8 e três dos sete sinais nomeados), `new-checks` (regex: `display-weight` e `accent-count` na resposta), `fresh` (cópia do de `ui-review-critica-em-breve`) e `no-edits-index`. Medido no `shoot.mjs`: só `display-weight` e `accent-count` dão WARN, nas quatro larguras, sem FAIL. Limite do coletor: `accent-count` só lê cor de h1 a h3, `p`, `li`, botões e fundos de seção; destaque só em `strong`, `span` ou ícone não conta. Por isso os títulos dos cartões levam as três cores.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.
@@ -184,6 +194,18 @@ GREEN da Task 5, 2026-11-17: Opus 5.5, 2 rodadas, fora do sandbox, com a skill e
 | `ui-review-critica-em-breve` | 0% (0,67), US$ 2,59 | 0% (0,56), US$ 0,72 |
 
 - `accepted: true`, e o caso ficou como lacuna (nenhum braço passa). As duas rodadas do DevOrb passaram em `fresh`, `no-edits-*`, `design-unchanged` e `token-pass`, e falharam em `critique`: o bloco virou tabela e as notas abaixo de 8 não viraram P1. Isso deu origem à regra própria acima, que foi escrita depois desta rodada e ainda não foi medida.
+
+### Fase 2, Task 8 (sinais de página gerada)
+
+RED em 2026-11-18, só a linha de base, fora do sandbox. Opus 5.5, 2 rodadas por caso, braço sem plugin. `fusion/results/2026-11-18-ui-review-outside-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `ui-review-sinais-de-ia` | 0% (0,17) | US$ 0,55 |
+| `ui-review-critica-em-breve` | 0% (0,56) | US$ 0,76 |
+
+- A rodada custou US$ 1,31 no total. O caso novo falha sem o plugin, então o RED está confirmado.
+- GREEN (`--arms devorb,none`) e o caso reservado ficam com o controlador e ainda não rodaram.
 
 ## Decisões por commit de fonte
 
