@@ -218,14 +218,23 @@ const rotator = () => {
   for (const p of phrases) p.parentElement = parent;
   return { parent, phrases };
 };
-test('__devorbReveal leaves aria-hidden slides and stacked rotator phrases alone', () => {
-  const slide = text('li', { opacity: '0' }, { closest: (sel) => (sel.includes('[aria-hidden=true]') ? {} : null) });
+// an aria-hidden element whose closest('[aria-hidden=true]') is itself, inside a parent holding the siblings given
+const ariaHidden = (siblings = []) => {
+  const e = text('li', { opacity: '0' }, { closest(sel) { return sel === '[aria-hidden=true]' ? this : null; } });
+  const parent = el('ul', 60, [...siblings, e]);
+  for (const c of parent.children) c.parentElement = parent;
+  return { e, parent };
+};
+test('__devorbReveal leaves aria-hidden slides beside a showing one and stacked rotator phrases alone', () => {
+  const slide = ariaHidden([text('li', {})]);
+  // decorative, beside only other aria-hidden layers (a veil that shows): a scroll reveal like any other
+  const panel = ariaHidden([text('div', {}, { getAttribute: (name) => (name === 'aria-hidden' ? 'true' : null) })]);
   const { parent, phrases } = rotator();
-  const page = fakePage({ content: [slide, parent] });
+  const page = fakePage({ content: [slide.parent, panel.parent, parent] });
   runCollector(page);
-  assert.equal(page.window.__devorbReveal(), 1);
-  assert.deepEqual([slide, ...phrases].map((e) => 'data-devorb-reveal' in e.attrs), [false, false, false, true]);
-  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1); // the fake never applies the reveal style: only the phrase apart counts
+  assert.equal(page.window.__devorbReveal(), 2);
+  assert.deepEqual([slide.e, panel.e, ...phrases].map((e) => 'data-devorb-reveal' in e.attrs), [false, true, false, false, true]);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 2); // the fake never applies the reveal style: the panel and the phrase apart count
 });
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);

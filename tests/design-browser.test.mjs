@@ -35,9 +35,9 @@ test('shootPage reveals observer and keyframe reveals, leaving no hidden content
   const m = (await shootPage(fixture('reveal.html'), out, { widths: [1440] }))[1440];
   assert.equal(m.sections.length, 6);
   assert.deepEqual(m.sections.map((s) => s.hiddenContent), [0, 0, 0, 0, 0, 0]);
-  // the autoAlpha paragraph and the one no script shows; the closed menu, the fixed bar, the rotator's
-  // stacked phrases and the carousel's aria-hidden slides stay as they are
-  assert.equal(m.revealed, 2);
+  // the autoAlpha paragraph, the one no script shows and the lone aria-hidden panel; the closed menu, the fixed bar,
+  // the rotator's stacked phrases and the carousel's aria-hidden slides stay as they are
+  assert.equal(m.revealed, 3);
 });
 
 test('capture writes a hero pack, then a re-capture keeps hand-written lines and drops stale shots', { skip }, () => {

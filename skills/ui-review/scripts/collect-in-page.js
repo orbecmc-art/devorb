@@ -93,25 +93,32 @@
     return spacing.map(Math.round).filter((s) => s > 0);
   };
 
-  // what a visitor sees once the page has revealed itself: closed menus, dialogs, fixed layers and
-  // the inactive states of carousels (aria-hidden) and rotators (stacked over a showing sibling) stay out
-  const OVERLAYS = '[role=dialog], [role=menu], [role=tooltip], [role=listbox], [aria-hidden=true]';
+  // what a visitor sees once the page has revealed itself: closed menus, dialogs, fixed layers and the inactive
+  // states of carousels (aria-hidden beside a showing slide) and rotators (stacked over a showing sibling) stay out
+  const OVERLAYS = '[role=dialog], [role=menu], [role=tooltip], [role=listbox]';
   const inFixedLayer = (el) => {
     for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) if (getComputedStyle(a).position === 'fixed') return true;
     return false;
   };
   const faded = (opacity, cs) => opacity < 0.1 || cs.visibility === 'hidden';
   const overlap = (a, b) => Math.max(0, Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y));
-  const stackedOverShowing = (el, r) => [...(el.parentElement?.children ?? [])].some((s) => {
+  const showingSiblings = (el) => [...(el.parentElement?.children ?? [])].filter((s) => {
     if (s === el) return false;
     const cs = getComputedStyle(s);
-    return !faded(px(cs.opacity), cs) && overlap(r, s.getBoundingClientRect()) >= 0.5 * r.width * r.height;
+    return !faded(px(cs.opacity), cs);
   });
+  const stackedOverShowing = (el, r) => showingSiblings(el).some((s) => overlap(r, s.getBoundingClientRect()) >= 0.5 * r.width * r.height);
+  // an inactive slide sits beside the active one, which is not aria-hidden; an aria-hidden panel among only
+  // other aria-hidden layers is decoration that fades in on scroll, so it is still revealed
+  const inactiveSlide = (el) => {
+    const slide = el.closest('[aria-hidden=true]');
+    return !!slide && showingSiblings(slide).some((s) => s.getAttribute('aria-hidden') !== 'true');
+  };
   // textContent, not innerText: innerText is empty under visibility: hidden
   const isContent = (el, cs) => {
     const r = el.getBoundingClientRect();
     return r.width > 0 && r.height > 0 && cs.position !== 'fixed' && !el.closest(OVERLAYS) && !!(el.textContent.trim() || el.querySelector('img, svg, video, canvas, picture'))
-      && !inFixedLayer(el) && !(cs.position === 'absolute' && stackedOverShowing(el, r));
+      && !inFixedLayer(el) && !inactiveSlide(el) && !(cs.position === 'absolute' && stackedOverShowing(el, r));
   };
   // content under an effective opacity (its own times its ancestors' down from the section) below 0.1, or hidden
   const hiddenIn = (el, opacity) => [...el.children].reduce((sum, c) => {

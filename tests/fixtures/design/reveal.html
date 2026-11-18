@@ -25,6 +25,9 @@
   .slides { display: grid; margin: 0; padding: 0; list-style: none; }
   .slides li { grid-area: 1 / 1; }
   .slides li[aria-hidden="true"] { visibility: hidden; }
+  /* a decorative panel that the page fades in on scroll, beside an aria-hidden veil that shows: a reveal */
+  .panel { opacity: 0; }
+  .veil { height: 8px; background: #eee; }
   /* GSAP autoAlpha: 0 leaves both */
   .auto-alpha { opacity: 0; visibility: hidden; }
   /* a fixed bar whose button fades in on scroll: it stays as the page left it */
@@ -62,6 +65,7 @@
       <li aria-hidden="true">"Worth the early queue." Ben</li>
       <li aria-hidden="true">"My Saturday ritual." Caro</li>
     </ul>
+    <div><div class="veil" aria-hidden="true"></div><div class="panel" aria-hidden="true">Rye · Spelt · Wheat</div></div>
   </section>
   <section>
     <h2>Find us</h2>
