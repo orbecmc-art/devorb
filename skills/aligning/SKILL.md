@@ -16,7 +16,7 @@ Otherwise, before building, in order: lay out the approaches in a message of the
 
 ## Facts are yours, decisions are theirs
 
-Never ask what the project answers, or reopen what they decided. In an existing project, or when they point at context (spec, files, handoff), dispatch a fresh subagent before your first message to report how the relevant parts work today and what the change would touch. Dispatch one for later facts too; only questions that depend on the fact wait on it. No subagent tool: look yourself. Decisions (what it does, for whom, which trade-off) are the user's: put each to them.
+Never ask what the project answers, or reopen what they decided. In an existing project, or when they point at context (spec, files, handoff), dispatch a fresh subagent before your first message to report how the relevant parts work today and what the change would touch. Dispatch one for later facts too; only questions that depend on the fact wait on it. No subagent tool: look yourself. Decisions (what it does, for whom, which trade-off) are the user's: put each to them and wait.
 
 **Code is not intent.** It records what the system does now, maybe by accident. A retention period, SLA, price or compliance duty you find in it is a guess about the business: write it as an assumption and have the user confirm it.
 
