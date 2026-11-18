@@ -26,6 +26,8 @@ export function staggerOf(delays) {
 }
 
 export function summarize(samples) {
+  // a 0ms transition is an instant change, not motion
+  samples = samples.filter((s) => s.duration > 0);
   const durations = samples.map((s) => s.duration);
   const counts = new Map();
   for (const s of samples) counts.set(s.easing, (counts.get(s.easing) ?? 0) + 1);

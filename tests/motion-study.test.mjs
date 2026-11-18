@@ -37,3 +37,20 @@ test('hoverTargets skips a cross-origin sheet and an invalid selector', () => {
   vm.runInNewContext(readFileSync(new URL('../tools/motion-in-page.js', import.meta.url), 'utf8'), { window, document });
   assert.deepEqual(JSON.parse(JSON.stringify(window.__devorbHoverTargets())), [{ x: 140, y: 220 }]);
 });
+
+test('summarize drops samples with no duration', () => {
+  const sample = (duration) => ({ source: 'hover', kind: 'transition', property: 'color', duration, delay: 0, easing: 'ease', target: 'a' });
+  const s = summarize([sample(0), sample(200)]);
+  assert.equal(s.count, 1);
+  assert.deepEqual(s.duration, { min: 200, median: 200, max: 200 });
+});
+
+test('__devorbMotion skips an animation with no effect', () => {
+  const effect = { getTiming: () => ({ duration: 200, delay: 0, easing: 'ease-out' }), getKeyframes: () => [], target: { tagName: 'DIV', id: '', classList: ['card'] } };
+  const document = { getAnimations: () => [{ effect: null }, { effect, transitionProperty: 'opacity' }] };
+  const window = {};
+  vm.runInNewContext(readFileSync(new URL('../tools/motion-in-page.js', import.meta.url), 'utf8'), { window, document });
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__devorbMotion('load'))), [
+    { source: 'load', kind: 'transition', property: 'opacity', duration: 200, delay: 0, easing: 'ease-out', target: 'div.card' }
+  ]);
+});

@@ -5,7 +5,7 @@
   const describe = (el) => (el ? `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}${[...el.classList].slice(0, 2).map((c) => `.${c}`).join('')}` : '');
 
   window.__devorbMotion = (source) =>
-    document.getAnimations().filter((a) => !seen.has(a) && seen.add(a)).map((a) => {
+    document.getAnimations().filter((a) => a.effect && !seen.has(a) && seen.add(a)).map((a) => {
       const t = a.effect.getTiming();
       const frames = a.effect.getKeyframes();
       const transition = 'transitionProperty' in a;
