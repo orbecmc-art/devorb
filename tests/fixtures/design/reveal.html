@@ -19,10 +19,16 @@
   .rise { animation: rise 1s 30s both; }
   @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
   .ghost { opacity: 0; }
+  /* GSAP autoAlpha: 0 leaves both */
+  .auto-alpha { opacity: 0; visibility: hidden; }
+  /* a fixed bar whose button fades in on scroll: it stays as the page left it */
+  .bar { position: fixed; top: 0; right: 0; padding: 8px 16px; }
+  .bar a { opacity: 0; }
   .menu { position: absolute; top: 96px; right: 32px; margin: 0; padding: 16px; background: #fff; visibility: hidden; list-style: none; }
 </style>
 </head>
 <body>
+<div class="bar"><a href="#order">Order now</a></div>
 <main>
   <section class="hero">
     <h1>Slow mornings, quick bread</h1>
@@ -37,6 +43,10 @@
   <section class="rise">
     <h2>Opening hours</h2>
     <p>Tuesday to Sunday, six until the shelves are empty.</p>
+  </section>
+  <section>
+    <h2>Delivery</h2>
+    <p class="auto-alpha">Bread by bike, before eight, within two miles.</p>
   </section>
   <section>
     <h2>Find us</h2>

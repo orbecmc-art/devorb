@@ -137,11 +137,14 @@ test('findScroller gives null when only the window scrolls or overflow is hidden
 
 // a fake element; style holds the computed values that differ from the page default
 const el = (tag, h, kids = [], extra = {}) => ({
-  tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h, style: {}, attrs: {},
+  tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h, style: {}, attrs: {}, textContent: '',
   getAttribute: () => null, setAttribute(name, value) { this.attrs[name] = value; }, closest: () => null, querySelector: () => null,
   getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], ...extra
 });
-const text = (tag, style, extra = {}) => el(tag, 20, [], { style, innerText: 'Plans', ...extra });
+// like Chromium, innerText is empty under visibility: hidden while textContent keeps the words
+const text = (tag, style, extra = {}) => Object.defineProperty(el(tag, 20, [], { style, textContent: 'Plans', ...extra }), 'innerText', { get() { return this.style.visibility === 'hidden' ? '' : 'Plans'; } });
+// a fixed layer (a header or a drawer) holding one element
+const fixedLayer = (child) => (child.parentElement = el('div', 100, [child], { style: { position: 'fixed' } }));
 const descendants = (e) => e.children.flatMap((c) => [c, ...descendants(c)]);
 // a page with two sections, a heading broken over lines and two signed copies of one photo, at a logged-in URL;
 // content goes in the first section, and animations are what document.getAnimations() gives
@@ -198,12 +201,24 @@ test('__devorbReveal finishes the transitions its own style starts', () => {
   page.window.__devorbReveal();
   assert.equal(finished, 1);
 });
-test('hiddenContent counts faded text in a section, not fixed overlays or menus', () => {
+test('__devorbReveal shows visibility-hidden text and skips content inside a fixed layer', () => {
+  const autoAlpha = text('p', { opacity: '0', visibility: 'hidden' });
+  const inDrawer = text('p', { opacity: '0' });
+  const page = fakePage({ content: [autoAlpha, fixedLayer(inDrawer)] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  assert.ok('data-devorb-reveal' in autoAlpha.attrs);
+  assert.deepEqual(inDrawer.attrs, {});
+});
+test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
-  const page = fakePage({ content: [text('p', { opacity: '0.05' }), text('div', { position: 'fixed', opacity: '0' }), text('div', { visibility: 'hidden' }, { closest: inMenu })] });
+  const page = fakePage({ content: [
+    text('p', { opacity: '0.05' }), text('p', { opacity: '0', visibility: 'hidden' }), text('p', { visibility: 'hidden' }), text('div', { position: 'fixed', opacity: '0' }),
+    fixedLayer(text('p', { opacity: '0' })), text('div', { visibility: 'hidden' }, { closest: inMenu })
+  ] });
   runCollector(page);
   const m = page.window.__devorbMetrics();
-  assert.equal(m.sections[0].hiddenContent, 1);
+  assert.equal(m.sections[0].hiddenContent, 3);
   assert.equal(m.sections[1].hiddenContent, 0);
   assert.equal(m.revealed, 0);
 });

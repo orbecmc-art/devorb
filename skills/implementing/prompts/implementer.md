@@ -138,8 +138,9 @@ Agent (general-purpose):
     (Claude in Chrome or the built-in browser) if you have one: at each
     width, resize the window, run `[UI_DIR]/scripts/collect-in-page.js`
     through its JavaScript tool, scroll to the bottom and back, run
-    `window.__devorbExpand()`, save the output of `window.__devorbMetrics()`
-    as `<tmp>/shots-<round>/<w>/metrics.json`, and screenshot the full page
+    `window.__devorbReveal()`, then `window.__devorbExpand()`, save the output
+    of `window.__devorbMetrics()` as `<tmp>/shots-<round>/<w>/metrics.json`,
+    and screenshot the full page
     and each section (at its `top` in the metrics). Write `checks.json` with
     `node --input-type=module -e "import { checkFloor } from '[UI_DIR]/scripts/rules.mjs'; import { readFileSync, writeFileSync } from 'node:fs'; const d = '<tmp>/shots-<round>/<w>'; writeFileSync(d + '/checks.json', JSON.stringify(checkFloor(JSON.parse(readFileSync(d + '/metrics.json', 'utf8')), '<mode>'), null, 2))"`,
     then steps 3 to 5 as usual. Only with no browser tool either, skip the

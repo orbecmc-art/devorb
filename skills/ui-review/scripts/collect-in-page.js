@@ -95,9 +95,14 @@
 
   // what a visitor sees once the page has revealed itself: closed menus, dialogs and fixed layers stay out
   const OVERLAYS = '[role=dialog], [role=menu], [role=tooltip], [role=listbox]';
+  const inFixedLayer = (el) => {
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) if (getComputedStyle(a).position === 'fixed') return true;
+    return false;
+  };
+  // textContent, not innerText: innerText is empty under visibility: hidden
   const isContent = (el, cs) => {
     const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0 && cs.position !== 'fixed' && !el.closest(OVERLAYS) && !!(el.innerText?.trim() || el.querySelector('img, svg, video, canvas, picture'));
+    return r.width > 0 && r.height > 0 && cs.position !== 'fixed' && !el.closest(OVERLAYS) && !!(el.textContent.trim() || el.querySelector('img, svg, video, canvas, picture')) && !inFixedLayer(el);
   };
   const faded = (opacity, cs) => opacity < 0.1 || cs.visibility === 'hidden';
   // content under an effective opacity (its own times its ancestors' down from the section) below 0.1, or hidden

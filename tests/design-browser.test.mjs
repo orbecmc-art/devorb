@@ -33,9 +33,9 @@ test('shootPage measures an app shell through its inner scroller', { skip }, asy
 test('shootPage reveals observer and keyframe reveals, leaving no hidden content', { skip }, async () => {
   const out = mkdtempSync(join(tmpdir(), 'devorb-shoot-'));
   const m = (await shootPage(fixture('reveal.html'), out, { widths: [1440] }))[1440];
-  assert.equal(m.sections.length, 4);
-  assert.deepEqual(m.sections.map((s) => s.hiddenContent), [0, 0, 0, 0]);
-  assert.equal(m.revealed, 1); // the paragraph no script shows; the closed menu stays closed
+  assert.equal(m.sections.length, 5);
+  assert.deepEqual(m.sections.map((s) => s.hiddenContent), [0, 0, 0, 0, 0]);
+  assert.equal(m.revealed, 2); // the autoAlpha paragraph and the one no script shows; the closed menu and the fixed bar stay as they are
 });
 
 test('capture writes a hero pack, then a re-capture keeps hand-written lines and drops stale shots', { skip }, () => {
