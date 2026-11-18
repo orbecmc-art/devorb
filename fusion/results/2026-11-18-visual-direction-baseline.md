@@ -7,11 +7,12 @@
 
 | Caso | Braço | Aprovação | Pontuação | Custo |
 |---|---|---|---|---|
-| visual-direction-arquitetura-clean | none | 0% | 0.18 | US$ 0.9641 |
-| visual-direction-clinica-serena | none | 0% | 0.75 | US$ 0.6685 |
-| visual-direction-receitas-landing | none | 0% | 0.25 | US$ 0.8770 |
+| visual-direction-arquitetura-clean | none | 0% | 0.18 | US$ 0.9241 |
+| visual-direction-clinica-serena | none | 0% | 0.69 | US$ 0.8777 |
+| visual-direction-guia-leigo | none | 0% | 0.00 | US$ 0.8920 |
+| visual-direction-receitas-landing | none | 0% | 0.25 | US$ 0.9868 |
 
-Custo total desta execução: US$ 2.4801 (linhas de base em cache não contam).
+Custo total desta execução: US$ 3.6451 (linhas de base em cache não contam).
 
 - Casos ausentes (não carregaram ou não rodaram): nenhum
 - Rodadas parciais (teto de custo atingido): nenhuma
