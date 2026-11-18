@@ -1,6 +1,6 @@
 framer https://www.framer.com/
 bordo https://bordo.framer.website/
-shopify-editions https://www.shopify.com/editions/winter2026
+shopify-editions https://www.shopify.com/editions/winter2026 experience
 orior https://www.oriorai.com/
 interfere https://interfere.com/
 aave https://aave.com/
@@ -10,7 +10,7 @@ monocle https://trymonocle.app/
 billow https://www.billow.so/
 melius https://www.melius.com/
 futureagi https://futureagi.com/
-onlines https://onlines.com.ar/
+onlines https://onlines.com.ar/ experience
 mobbin https://mobbin.com/
 sol https://hellosol.app/
 audienceful https://www.audienceful.com/
