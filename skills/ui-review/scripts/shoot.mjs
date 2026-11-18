@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { checkFloor, MODE_MIN_RATIO } from './rules.mjs';
 
 const COLLECTOR = fileURLToPath(new URL('./collect-in-page.js', import.meta.url));
+const REVEAL_INIT = fileURLToPath(new URL('./reveal-init.js', import.meta.url));
 const USAGE = 'usage: node shoot.mjs <url> <outDir> [--widths a,b] [--mode persuade|operate|read|experience] [--no-scroll] [--pw <dir>] (exit 2: a floor check FAILed, see <width>/checks.json)';
 const NEED = 'NEED: npm i --prefix <temp dir> playwright && npx --prefix <temp dir> playwright install chromium, then pass --pw <dir> with that folder (or, inside the project: npm i -D playwright && npx playwright install chromium)';
 
@@ -65,11 +66,13 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       const dir = join(outDir, String(width));
       mkdirSync(dir, { recursive: true });
       const context = await browser.newContext({ viewport: { width, height: 900 } });
+      await context.addInitScript({ path: REVEAL_INIT });
       const page = await context.newPage();
       await page.goto(url, { waitUntil: 'load' });
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {}); // pages that poll never go idle
       await page.addScriptTag({ path: COLLECTOR });
       if (scroll) await scrollThrough(page);
+      await page.evaluate(() => window.__devorbReveal());
       await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);

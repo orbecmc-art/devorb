@@ -93,6 +93,49 @@
     return spacing.map(Math.round).filter((s) => s > 0);
   };
 
+  // what a visitor sees once the page has revealed itself: closed menus, dialogs and fixed layers stay out
+  const OVERLAYS = '[role=dialog], [role=menu], [role=tooltip], [role=listbox]';
+  const isContent = (el, cs) => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && cs.position !== 'fixed' && !el.closest(OVERLAYS) && !!(el.innerText?.trim() || el.querySelector('img, svg, video, canvas, picture'));
+  };
+  const faded = (opacity, cs) => opacity < 0.1 || cs.visibility === 'hidden';
+  // content under an effective opacity (its own times its ancestors' down from the section) below 0.1, or hidden
+  const hiddenIn = (el, opacity) => [...el.children].reduce((sum, c) => {
+    const cs = getComputedStyle(c);
+    const own = opacity * px(cs.opacity);
+    return sum + (faded(own, cs) && isContent(c, cs) ? 1 : 0) + hiddenIn(c, own);
+  }, 0);
+
+  let revealed = 0;
+  let revealStyle;
+  // finishes each running animation once; an infinite one (marquee, spinner) throws InvalidStateError and keeps running
+  const finishAnimations = (done = []) => {
+    const all = document.getAnimations();
+    for (const a of all) {
+      if (done.includes(a)) continue;
+      try {
+        a.finish();
+      } catch {}
+    }
+    return all;
+  };
+  window.__devorbReveal = () => {
+    const done = finishAnimations();
+    const hidden = [...document.querySelectorAll('body *')].filter((el) => {
+      const cs = getComputedStyle(el);
+      return faded(px(cs.opacity), cs) && isContent(el, cs);
+    });
+    for (const el of hidden) el.setAttribute('data-devorb-reveal', '');
+    if (!revealStyle) {
+      revealStyle = document.createElement('style');
+      revealStyle.textContent = '[data-devorb-reveal]{opacity:1!important;visibility:visible!important}';
+      document.head.appendChild(revealStyle);
+    }
+    finishAnimations(done); // the reveal style starts opacity and visibility transitions, and a transition outranks !important
+    return (revealed = hidden.length);
+  };
+
   let scroller;
   const innerScroller = () => (scroller ??= findScroller(toNode(document.body))?.el ?? null);
 
@@ -119,12 +162,13 @@
         width: Math.round(n.rect.w),
         bg: bgOf(n.el),
         hidden: px(cs.opacity) < 0.1,
+        hiddenContent: hiddenIn(n.el, px(cs.opacity)),
         headings: [...n.el.querySelectorAll('h1, h2, h3')].map((h) => h.innerText.replace(/\s+/g, ' ').trim())
       };
     });
     // query and hash can carry a session token or a signed-URL key
     const bare = (url) => url.split(/[?#]/)[0];
     const images = [...document.images].filter((i) => i.getBoundingClientRect().width > 0).map((i) => bare(i.currentSrc || i.src));
-    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, ...collectText(), spacing: collectSpacing(nodes), images };
+    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, revealed, ...collectText(), spacing: collectSpacing(nodes), images };
   };
 })();

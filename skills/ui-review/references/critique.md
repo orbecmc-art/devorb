@@ -63,7 +63,7 @@ These show the depth wanted: the problem, where it is, why it matters, and the f
 
 A browser is Playwright through `shoot.mjs`, or, when Playwright is missing or has no install yes, a browser tool (Claude in Chrome or the built-in browser). With a browser tool, the reviewer makes the shots and metrics itself, at each width (1440, 1024, 768, 390):
 
-- Resize the window to the width, run `$UI_DIR/scripts/collect-in-page.js` through the JavaScript tool, scroll to the bottom and back so scroll reveals show, run `window.__devorbExpand()`, and save the output of `window.__devorbMetrics()` as `<tmp>/shots/<w>/metrics.json`.
+- Resize the window to the width, run `$UI_DIR/scripts/collect-in-page.js` through the JavaScript tool, scroll to the bottom and back, run `window.__devorbReveal()` so scroll reveals show, then `window.__devorbExpand()`, and save the output of `window.__devorbMetrics()` as `<tmp>/shots/<w>/metrics.json`.
 - Take a full-page screenshot and one per section (at each section's `top` in the metrics) into `<tmp>/shots/<w>/`.
 - Write the floor checks: `node --input-type=module -e "import { checkFloor } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync, writeFileSync } from 'node:fs'; const d = '<tmp>/shots/<w>'; writeFileSync(d + '/checks.json', JSON.stringify(checkFloor(JSON.parse(readFileSync(d + '/metrics.json', 'utf8')), '<mode>'), null, 2))"`.
 

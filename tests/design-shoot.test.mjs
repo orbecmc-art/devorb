@@ -98,7 +98,7 @@ test('the CLI exits 2 with one summary line naming the failed checks and widths'
       goto: async () => {}, waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {}, screenshot: async () => {},
       evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100)
     };
-    exports.chromium = { launch: async () => ({ newContext: async () => ({ newPage: async () => page, close: async () => {} }), close: async () => {} }) };`), '--widths', '1440,390');
+    exports.chromium = { launch: async () => ({ newContext: async () => ({ addInitScript: async () => {}, newPage: async () => page, close: async () => {} }), close: async () => {} }) };`), '--widths', '1440,390');
   assert.equal(r.status, 2, r.stderr);
   assert.equal(r.stdout, 'FAIL: heading-ratio, body-size at 1440, 390\n');
 });
@@ -135,22 +135,33 @@ test('findScroller gives null when only the window scrolls or overflow is hidden
   assert.equal(findScroller(appShell({ scrollHeight: 2400, overflowY: 'hidden' })), null);
 });
 
-// a page with two sections, a heading broken over lines and two signed copies of one photo, at a logged-in URL
-const fakePage = () => {
-  const style = { overflowY: 'visible', backgroundColor: 'rgb(1, 2, 3)', opacity: '1', paddingTop: '0', paddingBottom: '0' };
-  const el = (tag, h, kids = [], extra = {}) => ({
-    tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h,
-    getAttribute: () => null, getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], ...extra
-  });
+// a fake element; style holds the computed values that differ from the page default
+const el = (tag, h, kids = [], extra = {}) => ({
+  tagName: tag.toUpperCase(), children: kids, childNodes: [], parentElement: null, scrollHeight: h, clientHeight: h, style: {}, attrs: {},
+  getAttribute: () => null, setAttribute(name, value) { this.attrs[name] = value; }, closest: () => null, querySelector: () => null,
+  getBoundingClientRect: () => ({ x: 0, y: 0, width: 1200, height: h }), querySelectorAll: () => [], ...extra
+});
+const text = (tag, style, extra = {}) => el(tag, 20, [], { style, innerText: 'Plans', ...extra });
+const descendants = (e) => e.children.flatMap((c) => [c, ...descendants(c)]);
+// a page with two sections, a heading broken over lines and two signed copies of one photo, at a logged-in URL;
+// content goes in the first section, and animations are what document.getAnimations() gives
+const fakePage = ({ content = [], animations = [] } = {}) => {
+  const style = { overflowY: 'visible', backgroundColor: 'rgb(1, 2, 3)', opacity: '1', visibility: 'visible', position: 'static', paddingTop: '0', paddingBottom: '0', fontSize: '16px', lineHeight: '24px', fontWeight: '400', fontFamily: 'Georgia' };
   const heading = { innerText: '  Quiet tools\n    for loud work ' };
-  const body = el('body', 800, [el('main', 800, [el('section', 800, [], { querySelectorAll: () => [heading] }), el('section', 800)])]);
+  const body = el('body', 800, [el('main', 800, [el('section', 800, content, { querySelectorAll: () => [heading] }), el('section', 800)])]);
   const img = (src) => ({ currentSrc: src, src, getBoundingClientRect: () => ({ width: 100 }) });
+  const head = { appended: [], appendChild(node) { this.appended.push(node); } };
   return {
-    window: {}, getComputedStyle: () => style, innerWidth: 1200, scrollX: 0, scrollY: 0,
+    window: {}, getComputedStyle: (e) => ({ ...style, ...e.style }), innerWidth: 1200, scrollX: 0, scrollY: 0,
     location: { href: 'https://app.example/painel?token=x#y' },
-    document: { body, scrollingElement: body, querySelectorAll: () => [], images: [img('https://cdn.example/a.jpg?token=s1#z'), img('https://cdn.example/a.jpg?token=s2')] }
+    document: {
+      body, head, scrollingElement: body, getAnimations: () => [...animations], createElement: (tag) => ({ tagName: tag.toUpperCase() }),
+      querySelectorAll: (sel) => (sel === 'body *' ? descendants(body) : []),
+      images: [img('https://cdn.example/a.jpg?token=s1#z'), img('https://cdn.example/a.jpg?token=s2')]
+    }
   };
 };
+const runCollector = (page) => vm.runInNewContext(readFileSync(new URL('../skills/ui-review/scripts/collect-in-page.js', import.meta.url), 'utf8'), page);
 test('the collector strips query and hash from the page and image URLs, and collapses heading whitespace', () => {
   const page = fakePage();
   vm.runInNewContext(readFileSync(new URL('../skills/ui-review/scripts/collect-in-page.js', import.meta.url), 'utf8'), page);
@@ -159,4 +170,56 @@ test('the collector strips query and hash from the page and image URLs, and coll
   assert.equal(m.url, 'https://app.example/painel');
   assert.deepEqual([...m.sections[0].headings], ['Quiet tools for loud work']);
   assert.equal(checkFloor({ ...m, text: [{ role: 'h1', fontSize: 48 }, { role: 'body', fontSize: 16 }] }, 'operate').find((c) => c.id === 'photo-repeat').status, 'WARN');
+});
+
+test('__devorbReveal finishes animations, skips infinite ones and marks hidden content', () => {
+  let finished = 0;
+  const animations = [{ finish: () => finished++ }, { finish: () => { throw Object.assign(new Error('infinite'), { name: 'InvalidStateError' }); } }];
+  const faded = text('div', { opacity: '0' });
+  const page = fakePage({ content: [faded], animations });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  assert.equal(finished, 1);
+  assert.ok('data-devorb-reveal' in faded.attrs);
+  assert.deepEqual(page.document.head.appended.map((n) => n.tagName), ['STYLE']);
+  assert.match(page.document.head.appended[0].textContent, /\[data-devorb-reveal\]\{opacity:1!important;visibility:visible!important\}/);
+  assert.equal(page.window.__devorbMetrics().revealed, 1);
+  page.window.__devorbReveal();
+  assert.equal(page.document.head.appended.length, 1);
+});
+test('__devorbReveal finishes the transitions its own style starts', () => {
+  // a transition outranks !important, so the faded element would still be mid-fade when measured
+  let finished = 0;
+  const animations = [];
+  const page = fakePage({ content: [text('div', { opacity: '0' })], animations });
+  const append = page.document.head.appendChild;
+  page.document.head.appendChild = function (node) { animations.push({ finish: () => finished++ }); return append.call(this, node); };
+  runCollector(page);
+  page.window.__devorbReveal();
+  assert.equal(finished, 1);
+});
+test('hiddenContent counts faded text in a section, not fixed overlays or menus', () => {
+  const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
+  const page = fakePage({ content: [text('p', { opacity: '0.05' }), text('div', { position: 'fixed', opacity: '0' }), text('div', { visibility: 'hidden' }, { closest: inMenu })] });
+  runCollector(page);
+  const m = page.window.__devorbMetrics();
+  assert.equal(m.sections[0].hiddenContent, 1);
+  assert.equal(m.sections[1].hiddenContent, 0);
+  assert.equal(m.revealed, 0);
+});
+
+const revealInit = () => readFileSync(new URL('../skills/ui-review/scripts/reveal-init.js', import.meta.url), 'utf8');
+test('reveal-init reports every observed entry as visible', () => {
+  const window = { IntersectionObserver: class { constructor(cb) { this.cb = cb; } fire(e) { this.cb(e, this); } disconnect() {} } };
+  vm.runInNewContext(revealInit(), { window });
+  let got;
+  const obs = new window.IntersectionObserver((e) => (got = e));
+  obs.fire([{ target: 't', isIntersecting: false, intersectionRatio: 0, time: 5 }]);
+  assert.deepEqual(got.map((e) => ({ ...e })), [{ target: 't', isIntersecting: true, intersectionRatio: 1, time: 5 }]);
+  assert.equal(typeof obs.disconnect, 'function');
+});
+test('reveal-init does nothing without IntersectionObserver', () => {
+  const window = {};
+  vm.runInNewContext(revealInit(), { window });
+  assert.deepEqual(Object.keys(window), []);
 });

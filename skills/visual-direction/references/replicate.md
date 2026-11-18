@@ -19,7 +19,7 @@ The user asked to copy, clone, "deixar igual" or use a page as a base. Copying t
 
 ## 2. Write the pack notes
 
-- `secoes.md`: one line per section in order, with its pattern (hero with product mockup, dark band with one number, timeline, comparison table, card grid, closing call), its grid, its signature treatments (a two-tone headline, a floating product mockup over a dotted glow, one huge number on a dark band, initial-letter avatars on a timeline), the item count of each repeated group (6 cards, 4 people, 5 rows, 8 logos), its heading-to-body type ratio, and the movement you saw, in place of the `Movimento observado` line. A section marked `hidden` in `metrics.json` was a scroll reveal: read its content from the source and record the reveal as movement.
+- `secoes.md`: one line per section in order, with its pattern (hero with product mockup, dark band with one number, timeline, comparison table, card grid, closing call), its grid, its signature treatments (a two-tone headline, a floating product mockup over a dotted glow, one huge number on a dark band, initial-letter avatars on a timeline), the item count of each repeated group (6 cards, 4 people, 5 rows, 8 logos), its heading-to-body type ratio, and the movement you saw, in place of the `Movimento observado` line. `revealed` above 0 in `metrics.json` means the page reveals on scroll: record that as movement.
 - `notas.md`: under `## Levar` and `## Não levar`, what the user said to keep and to drop, in their words; otherwise the defaults of step 3.
 - Ask before committing the pack. When its content belongs to someone else, or it was captured behind a login, suggest adding `design/referencias/` to `.gitignore`. With nobody to ask, leave the pack uncommitted and say so.
 

@@ -125,6 +125,13 @@ Todos pela Task D5:
     - A ordem dos quatro fallbacks foi para o fim de `critique.md`, e o `SKILL.md` aponta para ela.
     - O prompt do caso ganhou um sim explícito para instalar: "Pode instalar o que precisar para renderizar a página."
 
+- 2026-11-18, Task 1 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: revelação forçada.
+  - **Problema.** Em 6 dos 23 sites de referência (monocle, parloa, sol, vercel, aave, hoy), seções inteiras saíam em branco no print, porque o conteúdo só aparece quando entra na tela ou depois de uma animação.
+  - **`scripts/reveal-init.js`**, novo, entra com `addInitScript` antes do `goto`: troca o `IntersectionObserver` por uma subclasse que entrega toda entrada como visível (`isIntersecting: true`, `intersectionRatio: 1`). Sem `IntersectionObserver`, não faz nada.
+  - **`window.__devorbReveal()`** em `collect-in-page.js`, depois da rolagem e antes de `__devorbExpand()`: termina cada animação com `finish()` (a infinita lança e fica como está), marca com `data-devorb-reveal` o conteúdo com opacidade abaixo de 0,1 ou `visibility: hidden` e injeta uma folha que o mostra com `!important`. Menus, diálogos, tooltips, listas e camadas `position: fixed` ficam de fora, para nada fechado ser pintado por cima das seções. Depois da folha, termina de novo as animações novas: a folha dispara transições de opacidade, e uma transição vence o `!important` (achado no monocle, onde 92 itens ainda saíam em opacidade 0).
+  - **`metrics.json`** ganha `revealed` (quantos elementos a revelação mostrou) e `hiddenContent` por seção (conteúdo com opacidade efetiva abaixo de 0,1, o produto das opacidades até a seção, ou escondido). `replicate.md` lê `revealed` acima de 0 como movimento ao rolar, e o caminho com ferramenta de navegador de `critique.md` roda `__devorbReveal()`.
+  - **Origem da ideia.** Trocar o `IntersectionObserver` e terminar as animações antes do print vem do `mirror.js` da skill `av-design-system` do dono. Só a ideia: o código e o texto são do DevOrb, sem trecho copiado.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reveal fixture</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Georgia, serif; color: #1a1a1a; background: #fafafa; }
+  section { position: relative; padding: 96px 32px; }
+  h1 { margin: 0 0 24px; font-size: 72px; line-height: 1.05; }
+  h2 { margin: 0 0 24px; font-size: 40px; line-height: 1.1; }
+  p { margin: 0 0 24px; max-width: 36em; font-size: 18px; line-height: 28px; }
+  .hero { min-height: 1000px; }
+  /* shown while on screen, hidden again once scrolled past: only the observer shim keeps them up */
+  .item { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .item.in { opacity: 1; transform: none; }
+  /* a keyframe reveal that would start long after the shot */
+  .rise { animation: rise 1s 30s both; }
+  @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
+  .ghost { opacity: 0; }
+  .menu { position: absolute; top: 96px; right: 32px; margin: 0; padding: 16px; background: #fff; visibility: hidden; list-style: none; }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Slow mornings, quick bread</h1>
+    <p>A neighbourhood bakery that opens at six and sells out by noon.</p>
+  </section>
+  <section>
+    <h2>What we bake</h2>
+    <p class="item">Sourdough loaves, shaped the night before.</p>
+    <p class="item">Rye with caraway, dense and dark.</p>
+    <p class="item">Cinnamon knots on Saturdays only.</p>
+  </section>
+  <section class="rise">
+    <h2>Opening hours</h2>
+    <p>Tuesday to Sunday, six until the shelves are empty.</p>
+  </section>
+  <section>
+    <h2>Find us</h2>
+    <p class="ghost">Twelve Mill Lane, behind the old station.</p>
+    <ul class="menu" role="menu">
+      <li role="menuitem">Directions</li>
+      <li role="menuitem">Parking</li>
+    </ul>
+  </section>
+</main>
+<script>
+  const observer = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('in', e.isIntersecting)));
+  document.querySelectorAll('.item').forEach((el) => observer.observe(el));
+</script>
+</body>
+</html>
