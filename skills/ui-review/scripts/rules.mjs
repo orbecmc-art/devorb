@@ -25,7 +25,9 @@ export function accentHues(colors) {
     const rgb = /^rgba?\(([^)]*)\)$/.exec(c);
     const lch = /^oklch\(\s*([\d.]+)%?\s+([\d.]+)(%?)\s+([\d.]+)(?:deg)?\s*(?:\/\s*([\d.]+)(%?))?\s*\)$/.exec(c);
     if (rgb) {
-      const [r, g, b, a = 1] = rgb[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+      const parts = rgb[1].split(/[\s,/]+/).filter(Boolean);
+      const [r, g, b] = parts.map(Number);
+      const a = parts[3] === undefined ? 1 : parseFloat(parts[3]) / (parts[3].endsWith('%') ? 100 : 1);
       if (!(a > 0.1)) continue;
       const [R, G, B] = [r / 255, g / 255, b / 255];
       const max = Math.max(R, G, B), min = Math.min(R, G, B), d = max - min, l = (max + min) / 2;
@@ -50,7 +52,7 @@ export function checkFloor(m, mode) {
   const ratio = headingRatio(m);
   // a page measured without a width counts as desktop
   const narrow = m.width < DESKTOP_MIN_WIDTH;
-  const min = MODE_MIN_RATIO[mode] * (narrow ? NARROW_RATIO_FACTOR : 1);
+  const min = +(MODE_MIN_RATIO[mode] * (narrow ? NARROW_RATIO_FACTOR : 1)).toFixed(2); // 1.6 * 0.8 is 1.2800000000000002
   // narrow, the warning sits at the desktop minimum: 2.0 to 2.5 warns on Persuade
   const target = MODE_TARGET_RATIO[mode] && (narrow ? MODE_MIN_RATIO[mode] : MODE_TARGET_RATIO[mode]);
   const bodyMedian = median(sizes(m, 'body'));
@@ -60,7 +62,7 @@ export function checkFloor(m, mode) {
   const heavy = m.text.filter((t) => (t.role === 'h1' || t.role === 'h2') && t.fontSize >= 48 && t.fontWeight >= 700 && t.letterSpacing >= 0);
   const accents = accentHues([...m.textColors, ...(m.fills ?? []), ...m.sections.map((s) => s.bg)]);
   const check = (id, bad, level, detail) => ({ id, status: bad ? level : 'PASS', detail });
-  const ratioCheck = check('heading-ratio', !(ratio >= min), 'FAIL', `ratio ${ratio.toFixed(2)}, min ${+min.toFixed(2)}${target ? `, target ${target}` : ''} for ${mode}${narrow ? ` below ${DESKTOP_MIN_WIDTH}px` : ''}`);
+  const ratioCheck = check('heading-ratio', !(ratio >= min), 'FAIL', `ratio ${ratio.toFixed(2)}, min ${min}${target ? `, target ${target}` : ''} for ${mode}${narrow ? ` below ${DESKTOP_MIN_WIDTH}px` : ''}`);
   const bodyCheck = check('body-size', !(bodyMedian >= 13) && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`);
   return [
     ratioCheck.status === 'PASS' && ratio < target ? { ...ratioCheck, status: 'WARN' } : ratioCheck,

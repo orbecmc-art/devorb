@@ -45,6 +45,10 @@ test('below 1024 the other modes fail under 0.8 of their minimum, with no warnin
   assert.equal(ratio(15, 390), 'FAIL');
   assert.equal(ratio(17, 1440), 'FAIL');
 });
+test('a ratio on the narrow minimum is not a FAIL', () => {
+  assert.equal(status(checkFloor(page(20, 10, { width: 390 }), 'persuade'), 'heading-ratio'), 'WARN');
+  assert.notEqual(status(checkFloor(page(12.8, 10, { width: 390 }), 'operate'), 'heading-ratio'), 'FAIL');
+});
 test('display-weight warns only on heavy, untracked display type', () => {
   const display = (fontSize, fontWeight, letterSpacing) => {
     const m = page(fontSize, 16);
@@ -69,6 +73,7 @@ test('accentHues groups across 0°, skips near-transparent and low-chroma colour
   assert.deepEqual(accentHues(['rgba(255, 0, 0, 0.1)', 'oklch(0.7 0.02 30)']), []);
   assert.equal(accentHues(['oklch(62% 0.19 260 / 0.5)', 'oklch(0.62 0.19 140)']).length, 2);
   assert.ok(accentHues(['oklch(0.62 0.19 260)', 'rgb(255, 0, 0)']).every(Number.isFinite));
+  assert.equal(accentHues(['rgb(255 0 0 / 50%)', 'rgb(0 0 255 / 5%)']).length, 1);
 });
 test('operate accepts a 2.0 ratio', () => {
   const ligare = checkFloor(load('metrics-ligare.json'), 'operate');
