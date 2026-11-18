@@ -233,6 +233,8 @@ const fakePage = ({ content = [], animations = [] } = {}) => {
   const style = { overflowY: 'visible', backgroundColor: 'rgb(1, 2, 3)', opacity: '1', visibility: 'visible', position: 'static', paddingTop: '0', paddingBottom: '0', fontSize: '16px', lineHeight: '24px', fontWeight: '400', fontFamily: 'Georgia' };
   const heading = { innerText: '  Quiet tools\n    for loud work ' };
   const body = el('body', 800, [el('main', 800, [el('section', 800, content, { querySelectorAll: () => [heading] }), el('section', 800)])]);
+  // an inline style write lands in the element's style, like CSSStyleDeclaration.setProperty, and is logged with its priority
+  for (const e of descendants(body)) e.style.setProperty = function (name, value, priority) { this[name] = value; (this.writes ??= []).push([name, value, priority]); };
   const img = (src) => ({ currentSrc: src, src, getBoundingClientRect: () => ({ width: 100 }) });
   const head = { appended: [], appendChild(node) { this.appended.push(node); } };
   return {
@@ -245,6 +247,8 @@ const fakePage = ({ content = [], animations = [] } = {}) => {
     }
   };
 };
+// a site script that wins over the reveal's inline writes (a transition, a later inline !important): the element stays as it is
+const stubborn = (...els) => els.forEach((e) => (e.style.setProperty = () => {}));
 const runCollector = (page) => vm.runInNewContext(readFileSync(new URL('../skills/ui-review/scripts/collect-in-page.js', import.meta.url), 'utf8'), page);
 test('the collector strips query and hash from the page and image URLs, and collapses heading whitespace', () => {
   const page = fakePage();
@@ -315,7 +319,7 @@ test('__devorbReveal leaves aria-hidden slides beside a showing one and stacked 
   runCollector(page);
   assert.equal(page.window.__devorbReveal(), 2);
   assert.deepEqual([slide.e, panel.e, ...phrases].map((e) => 'data-devorb-reveal' in e.attrs), [false, true, false, false, true]);
-  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 2); // the fake never applies the reveal style: the panel and the phrase apart count
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 0); // the inline writes show the panel and the phrase apart
 });
 test('hiddenContent leaves out what sits inside a stacked rotator phrase', () => {
   // a phrase that wraps its words in a span: the span is not faded itself, only through the phrase
@@ -324,6 +328,7 @@ test('hiddenContent leaves out what sits inside a stacked rotator phrase', () =>
   word.parentElement = phrases[1];
   phrases[1].children = [word];
   const page = fakePage({ content: [parent] });
+  stubborn(phrases[2]);
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1); // only the phrase apart, below
 });
@@ -341,17 +346,68 @@ test('hiddenContent leaves out a closed accordion and the slides nested in an in
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 0);
 });
+test('__devorbReveal writes opacity and visibility inline with !important on what it marks', () => {
+  // a site's own inline !important outranks the reveal style sheet, so the reveal writes inline too
+  const faded = text('div', { opacity: '0' });
+  const page = fakePage({ content: [faded] });
+  runCollector(page);
+  page.window.__devorbReveal();
+  assert.deepEqual(faded.style.writes, [['opacity', '1', 'important'], ['visibility', 'visible', 'important']]);
+});
+test('the reveal style lets content-visibility sections paint', () => {
+  const page = fakePage();
+  runCollector(page);
+  page.window.__devorbReveal();
+  assert.match(page.document.head.appended[0].textContent, /\*\{content-visibility:visible!important;contain-intrinsic-size:none!important\}/);
+});
+test('__devorbMetrics reveals again what a looping script hid after the reveal, and revealed counts every mark', () => {
+  const early = text('p', { opacity: '0' });
+  const late = text('p', {});
+  const page = fakePage({ content: [early, late] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  late.style.opacity = '0';
+  const m = page.window.__devorbMetrics();
+  assert.equal(m.sections[0].hiddenContent, 0);
+  assert.ok('data-devorb-reveal' in late.attrs);
+  assert.equal(m.revealed, 2);
+});
+test('hiddenContent counts each element by its own opacity, not the product with its ancestors', () => {
+  // a faded box counts once, not once per child; two half-faded layers are not hidden
+  const word = text('span', {});
+  const box = text('div', { opacity: '0' });
+  box.children = [word];
+  word.parentElement = box;
+  const inner = text('span', { opacity: '0.3' });
+  const half = text('div', { opacity: '0.3' });
+  half.children = [inner];
+  inner.parentElement = half;
+  const page = fakePage({ content: [box, half] });
+  stubborn(box);
+  runCollector(page);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1);
+});
+test('a faded popup inside a link or button is a hover state: neither revealed nor counted', () => {
+  const popup = text('div', { position: 'absolute', opacity: '0' });
+  const button = el('button', 40, [popup], { closest(sel) { return sel.split(', ').includes('button') ? this : null; } });
+  popup.parentElement = button;
+  const page = fakePage({ content: [button] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 0);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 0);
+});
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
+  const hidden = [text('p', { opacity: '0.05' }), text('p', { opacity: '0', visibility: 'hidden' }), text('p', { visibility: 'hidden' })];
   const page = fakePage({ content: [
-    text('p', { opacity: '0.05' }), text('p', { opacity: '0', visibility: 'hidden' }), text('p', { visibility: 'hidden' }), text('div', { position: 'fixed', opacity: '0' }),
-    fixedLayer(text('p', { opacity: '0' })), text('div', { visibility: 'hidden' }, { closest: inMenu })
+    ...hidden, text('div', { position: 'fixed', opacity: '0' }), fixedLayer(text('p', { opacity: '0' })), text('div', { visibility: 'hidden' }, { closest: inMenu })
   ] });
+  stubborn(...hidden);
   runCollector(page);
   const m = page.window.__devorbMetrics();
-  assert.equal(m.sections[0].hiddenContent, 3);
+  assert.equal(m.sections[0].hiddenContent, 3); // what the reveal marked and could not show
   assert.equal(m.sections[1].hiddenContent, 0);
-  assert.equal(m.revealed, 0);
+  assert.equal(m.revealed, 3);
 });
 
 const revealInit = () => readFileSync(new URL('../skills/ui-review/scripts/reveal-init.js', import.meta.url), 'utf8');

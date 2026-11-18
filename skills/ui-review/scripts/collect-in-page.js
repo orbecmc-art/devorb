@@ -129,8 +129,10 @@
     const slide = el.closest('[aria-hidden=true]');
     return !!slide && showingSiblings(slide).some((s) => s.getAttribute('aria-hidden') !== 'true');
   };
-  // a closed menu or dialog, a fixed layer, an inactive slide or a stacked rotator state
-  const leftHidden = (el, cs, r) => cs.position === 'fixed' || !!el.closest(OVERLAYS) || inFixedLayer(el) || inactiveSlide(el) || (cs.position === 'absolute' && stackedOverShowing(el, r));
+  const INTERACTIVE = 'a, button, [role=button], [tabindex], summary';
+  // a closed menu or dialog, a fixed layer, an inactive slide, a stacked rotator state or a hover popup
+  const leftHidden = (el, cs, r) => cs.position === 'fixed' || !!el.closest(OVERLAYS) || inFixedLayer(el) || inactiveSlide(el)
+    || (cs.position === 'absolute' && (stackedOverShowing(el, r) || !!el.parentElement?.closest(INTERACTIVE)));
   // textContent, not innerText: innerText is empty under visibility: hidden
   const isContent = (el, cs) => {
     const r = el.getBoundingClientRect();
@@ -138,17 +140,16 @@
   };
   // a closed accordion: no size, and its overflow clips the words away
   const collapsed = (cs, r) => (r.width === 0 || r.height === 0) && cs.overflow !== 'visible';
-  // content under an effective opacity (its own times its ancestors' down from the section) below 0.1, or hidden
-  const hiddenIn = (el, opacity) => [...el.children].reduce((sum, c) => {
+  // content whose own opacity is below 0.1, or hidden, the same test the reveal makes
+  const hiddenIn = (el) => [...el.children].reduce((sum, c) => {
     const cs = getComputedStyle(c);
-    const own = opacity * px(cs.opacity);
+    if (!faded(px(cs.opacity), cs)) return sum + hiddenIn(c);
     // what stays hidden on purpose takes its words with it
-    if (!faded(own, cs)) return sum + hiddenIn(c, own);
     const r = c.getBoundingClientRect();
-    return leftHidden(c, cs, r) || collapsed(cs, r) ? sum : sum + (isContent(c, cs) ? 1 : 0) + hiddenIn(c, own);
+    return leftHidden(c, cs, r) || collapsed(cs, r) ? sum : sum + (isContent(c, cs) ? 1 : 0) + hiddenIn(c);
   }, 0);
 
-  let revealed = 0;
+  const marked = new Set();
   let revealStyle;
   // finishes each running animation once; an infinite one (marquee, spinner) throws InvalidStateError and keeps running
   const finishAnimations = (done = []) => {
@@ -167,14 +168,21 @@
       const cs = getComputedStyle(el);
       return faded(px(cs.opacity), cs) && isContent(el, cs);
     });
-    for (const el of hidden) el.setAttribute('data-devorb-reveal', '');
+    for (const el of hidden) {
+      el.setAttribute('data-devorb-reveal', '');
+      // inline too: a site's own inline !important outranks the style sheet
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      marked.add(el);
+    }
     if (!revealStyle) {
       revealStyle = document.createElement('style');
-      revealStyle.textContent = '[data-devorb-reveal]{opacity:1!important;visibility:visible!important}';
+      // content-visibility: auto leaves a section unpainted outside the window, blank in a full-page shot
+      revealStyle.textContent = '[data-devorb-reveal]{opacity:1!important;visibility:visible!important}*{content-visibility:visible!important;contain-intrinsic-size:none!important}';
       document.head.appendChild(revealStyle);
     }
     finishAnimations(done); // the reveal style starts opacity and visibility transitions, and a transition outranks !important
-    return (revealed = hidden.length);
+    return hidden.length;
   };
 
   let scroller;
@@ -193,6 +201,8 @@
     }
   };
   window.__devorbMetrics = () => {
+    // a looping demo can hide content again after the reveal: reveal once more in the same tick as the measure
+    window.__devorbReveal();
     const { root, nodes } = findSections(toNode(document.body));
     const sections = nodes.map((n, index) => {
       const cs = getComputedStyle(n.el);
@@ -204,13 +214,13 @@
         width: Math.round(n.rect.w),
         bg: bgOf(n.el),
         hidden: px(cs.opacity) < 0.1,
-        hiddenContent: hiddenIn(n.el, px(cs.opacity)),
+        hiddenContent: hiddenIn(n.el),
         headings: [...n.el.querySelectorAll('h1, h2, h3')].map((h) => h.innerText.replace(/\s+/g, ' ').trim())
       };
     });
     // query and hash can carry a session token or a signed-URL key
     const bare = (url) => url.split(/[?#]/)[0];
     const images = [...document.images].filter((i) => i.getBoundingClientRect().width > 0).map((i) => bare(i.currentSrc || i.src));
-    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, revealed, ...collectText(), spacing: collectSpacing(nodes), images };
+    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, revealed: marked.size, ...collectText(), spacing: collectSpacing(nodes), images };
   };
 })();

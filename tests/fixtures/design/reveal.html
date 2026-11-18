@@ -33,6 +33,9 @@
   /* a fixed bar whose button fades in on scroll: it stays as the page left it */
   .bar { position: fixed; top: 0; right: 0; padding: 8px 16px; }
   .bar a { opacity: 0; }
+  /* a hover popup on a link: an inactive state, not a scroll reveal */
+  .tag { position: relative; }
+  .tag .pop { position: absolute; left: 0; top: 100%; opacity: 0; }
   .menu { position: absolute; top: 96px; right: 32px; margin: 0; padding: 16px; background: #fff; visibility: hidden; list-style: none; }
 </style>
 </head>
@@ -70,6 +73,7 @@
   <section>
     <h2>Find us</h2>
     <p class="ghost">Twelve Mill Lane, behind the old station.</p>
+    <p><a class="tag" href="#map">Map<span class="pop">Opens in a new tab</span></a></p>
     <ul class="menu" role="menu">
       <li role="menuitem">Directions</li>
       <li role="menuitem">Parking</li>
