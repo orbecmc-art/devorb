@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: design-system-escala-fluida
+description: >-
+  Site estático, sem build e sem rede, da landing do Lote, ferramenta fictícia
+  que junta e pesquisa os logs de deploy de times de desenvolvimento. O
+  `styles.css` só tem um `:root {}` vazio e não há `DESIGN.md`. A spec
+  aprovada já traz o contrato `## Direção visual` (modo Persuade, setor
+  devtools, Geist e Geist Mono, a direção em palavras, nenhum valor). O
+  usuário manda montar os tokens e o `DESIGN.md` a partir da spec e avisa que
+  não responde perguntas hoje. O agente grava uma escala de tipo fluida com
+  `clamp()` no `styles.css` e um `DESIGN.md` com os valores de referência de
+  uma landing de devtools: título grande, leve e com tracking negativo, corpo
+  e lead nos tamanhos de leitura, uma só cor de destaque, borda fina nos
+  cartões, seções com folga larga e raio pequeno.
+tags: [design-system]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    monta os tokens e o DESIGN.md dessa landing a partir da spec. Hoje não
+    respondo perguntas.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
