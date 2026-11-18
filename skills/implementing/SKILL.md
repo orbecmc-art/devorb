@@ -104,12 +104,12 @@ It runs on spec ❌, any Critical or Important finding, or a cannot-verify item 
 
 ### 5. Complete the task
 
-When the review is clean, or every open finding is parked with a ruling at the cap, append in the same message as your other bookkeeping:
+When the review is clean, or every open finding is parked with a ruling at the cap or, for a Critique finding, stated to the user, append in the same message as your other bookkeeping:
 
 - `Task <N>: complete (commits <base7>..<head7>, review clean)`
 - `Task <N>: complete (commits <base7>..<head7>, <K> parked)` after a tripped breaker
 
-Mark the todo complete and take the next task. Never move on with an open Critical or Important finding that is neither fixed nor parked at the cap.
+Mark the todo complete and take the next task. Never move on with an open Critical or Important finding that is neither fixed, parked at the cap, nor a Critique finding stated to the user.
 
 ## Final review and finish
 

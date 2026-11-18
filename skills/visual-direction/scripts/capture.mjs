@@ -83,6 +83,7 @@ async function main(argv) {
   const tmp = join(dir, '.shoot-tmp'); // shots land here, and replace 1440/ and 390/ only once all of them succeed
   try {
     // a FAIL in the floor checks is not an error here: the reference is data, not under review
+    rmSync(tmp, { recursive: true, force: true }); // a killed run can leave one behind
     const m = await shootPage(url, tmp, { widths: [1440, 390], pw: v.pw });
     for (const w of ['1440', '390']) {
       rmSync(join(dir, w), { recursive: true, force: true });

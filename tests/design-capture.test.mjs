@@ -125,3 +125,26 @@ test('a re-capture that fails mid-shoot leaves the old shots and no temp folder'
   assert.equal(readFileSync(join(dir, '1440', 'section-5.png'), 'utf8'), 'old');
   assert.deepEqual(readdirSync(dir).sort(), ['1440', 'notas.md', 'secoes.md', 'tokens.json', 'url.txt']);
 });
+test('a stale temp folder from a killed run never reaches the pack', () => {
+  const root = mkdtempSync(join(tmpdir(), 'devorb-cap-'));
+  assert.equal(cli('https://d.example/x', root, '--dry-run').status, 0);
+  const dir = join(root, 'design', 'referencias', 'd-x');
+  mkdirSync(join(dir, '.shoot-tmp', '1440'), { recursive: true });
+  writeFileSync(join(dir, '.shoot-tmp', '1440', 'section-7.png'), 'stale');
+  const pw = mkdtempSync(join(tmpdir(), 'devorb-pw-'));
+  mkdirSync(join(pw, 'node_modules', 'playwright'), { recursive: true });
+  writeFileSync(join(pw, 'node_modules', 'playwright', 'package.json'), '{"name":"playwright","main":"index.js"}');
+  // a fake page that shoots one section and passes every step
+  writeFileSync(join(pw, 'node_modules', 'playwright', 'index.js'), `
+    const metrics = { url: 'https://d.example/x', width: 1440, sections: [{ index: 0, hidden: false, x: 0, top: 0, width: 10, height: 10, bg: 'rgb(0, 0, 0)', headings: [] }],
+      text: [{ role: 'h1', fontSize: 48 }, { role: 'body', fontSize: 16 }], buttons: [], textColors: [], spacing: [], images: [] };
+    const page = {
+      goto: async () => {}, waitForLoadState: async () => {}, addScriptTag: async () => {}, waitForTimeout: async () => {},
+      evaluate: async (fn) => (String(fn).includes('__devorbMetrics') ? metrics : String(fn).includes('innerHeight') ? [0, 1] : 100),
+      screenshot: async ({ path }) => require('node:fs').writeFileSync(path, 'new')
+    };
+    exports.chromium = { launch: async () => ({ newContext: async () => ({ newPage: async () => page, close: async () => {} }), close: async () => {} }) };`);
+  const r = spawnSync(process.execPath, [CAPTURE, 'https://d.example/x', root], { encoding: 'utf8', cwd: root, env: { ...process.env, DEVORB_PLAYWRIGHT_DIR: pw } });
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(readdirSync(join(dir, '1440')).sort(), ['checks.json', 'full.png', 'metrics.json', 'section-0.png']);
+});

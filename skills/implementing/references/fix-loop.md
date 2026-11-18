@@ -10,6 +10,12 @@ fresh shoot and a fresh Critique. Three Critique rounds at most, the first
 included; the findings still open after the third are stated plainly to the
 user, never parked in silence.
 
+Critique rounds count inside the task's five fix rounds, and each one still
+gets the scoped code re-review. A Critique finding still open at its third
+round, or when the five-round breaker trips first, is stated to the user and
+completes the task with the ledger line
+`Task <N>: critique stated to user: <dimension> <score>/10`.
+
 ## Before the loop
 
 Two kinds of finding leave at once:
