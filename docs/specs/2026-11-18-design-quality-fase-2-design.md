@@ -73,7 +73,7 @@ Arquivos novos em `skills/visual-direction/references/` e `skills/design-system/
 
 - **Régua recalibrada** (`rules.mjs` e `floor.md`):
   - `body-size` deixa de reprovar entre 13 e 16px. FAIL só abaixo de 13px; WARN entre 13 e 14px em Read.
-  - A razão título/corpo mínima continua em 3,0 em Persuade, com **alvo de 4,0** (WARN entre 3,0 e 4,0).
+  - A razão título/corpo em Persuade dá FAIL abaixo de 2,5 e WARN entre 2,5 e 4,0, com **alvo de 4,0** (ver Call 7).
   - Checagem nova `display-weight`: WARN quando o título de 48px ou mais tem peso 700 ou mais e tracking igual ou maior que zero.
   - Checagem nova `accent-count`: WARN com mais de 2 matizes saturadas fora dos neutros.
   - `font-sizes` vai para 12 ou mais. Os sites usam de 6 a 26 tamanhos, então a checagem só avisa.
@@ -121,6 +121,11 @@ Arquivos novos em `skills/visual-direction/references/` e `skills/design-system/
 3. O teste das 23 referências roda sob demanda (`tools/refs-check.mjs`), fora do `npm test`, porque depende de rede e do Playwright.
 4. Ciclo de testes: completo em `visual-direction` (biblioteca e receitas) e `ui-review` (crítico com sinais de IA). Leve em `design-system` e `motion`. O mesmo critério de orçamento da Fase 1 vale, e cada rodada paga é confirmada antes.
 5. Os padrões são um cardápio, e o guia escolhe com histórico para não repetir. A ideia do sorteio vem da taste-skill.
+6. **Itens do Pilar 4 da Fase 1 que entram aqui:** o script de escalas fluidas no estilo Utopia, uma função pura que gera os tokens `clamp()` a partir de largura mínima, largura máxima e razão, com testes; a lista curta de pares de fontes gratuitas por categoria; e `reading: "browser"` em todas as galerias. O teste "a clean brief has a gallery it can read without a browser" muda junto. Mobbin e Refero pelo MCP, e Land-book primeiro, ficam para quando houver plano pago. O guia oferece primeiro as 23 referências e depois as páginas `byStyle` das galerias.
+7. **Régua contra as referências:** `heading-ratio` dá FAIL abaixo de 2,5 e WARN entre 2,5 e 4,0, com alvo de 4,0. O mínimo duro cai de 3,0 para 2,5 porque a referência da agência do dono mede 2,9; a página ruim da Ligare media 2,0 e continua reprovada. O `refs-check` exige zero FAIL nas 23 referências, só lista os WARN e trata a saída 2 do `shoot` como resultado, não como erro. Cada referência tem o seu modo em `urls.txt`; persuade é o padrão.
+8. **Etiquetas:** as referências usam as `styles` que já existem (clean, bold, animated, playful, ai, product), e o teste continua valendo. Um campo novo, `sectors` (saas, devtools, fintech, restaurante, agencia, portfolio, editorial, ecommerce), é o segundo eixo. O guia filtra primeiro pelo estilo e desempata pelo setor. `kind: "reference"` entra na lista de tipos permitidos. O Mobbin continua como entrada de telas e não é duplicado.
+9. **Estudo de movimento:** roda no Playwright sem tela, rolando a página e passando o mouse pelos elementos que têm `:hover`, e lê `document.getAnimations()` e as transições computadas. Usa o navegador do dono só se algum site bloquear. Assim roda sozinho.
+10. **Barra do `refs-check`:** os 23 sites capturam sem derrubar a execução, Melius e Audienceful incluídos. "Seção em branco" é medido na página: depois da revelação forçada, o coletor conta, por seção, os elementos com texto ou imagem que ainda têm opacidade efetiva abaixo de 0,1 ou `visibility: hidden` (`hiddenContent`). O `refs-check` exige zero em todos.
 
 ## Suposições a confirmar
 
