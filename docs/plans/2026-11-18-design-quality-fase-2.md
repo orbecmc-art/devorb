@@ -77,8 +77,8 @@ Sem `## Rollout`: não há migração de dados nem autenticação. O lançamento
     4. devolve quantos elementos marcou.
 
     Um elemento é candidato quando tem texto ou contém `img, svg, video, canvas, picture`, tem caixa com largura e altura, não é `position: fixed` e não está dentro de `[role=dialog], [role=menu], [role=tooltip], [role=listbox]`.
-  - `Metrics.revealed: number`: a contagem do último `__devorbReveal`, ou 0.
-  - `Section.hiddenContent: number`: candidatos dentro da seção cuja opacidade efetiva (o produto das opacidades até a seção) fica abaixo de 0.1, ou com `visibility: hidden`.
+  - `Metrics.revealed: number`: quantos elementos a revelação marcou desde o carregamento, ou 0. `__devorbMetrics()` roda `__devorbReveal()` de novo no mesmo tick antes de medir, e o `shoot` roda de novo antes de cada print.
+  - `Section.hiddenContent: number`: candidatos dentro da seção cuja opacidade própria fica abaixo de 0.1, ou com `visibility: hidden`, depois da revelação feita no momento da medida. A contagem para nas camadas que a revelação deixa escondidas de propósito e em acordeões fechados.
   - Ordem em `shootPage`:
     1. `context.addInitScript({ path: REVEAL_INIT })` antes do `goto`;
     2. `addScriptTag` do coletor;
