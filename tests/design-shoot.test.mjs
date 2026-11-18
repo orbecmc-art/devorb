@@ -317,6 +317,16 @@ test('__devorbReveal leaves aria-hidden slides beside a showing one and stacked 
   assert.deepEqual([slide.e, panel.e, ...phrases].map((e) => 'data-devorb-reveal' in e.attrs), [false, true, false, false, true]);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 2); // the fake never applies the reveal style: the panel and the phrase apart count
 });
+test('hiddenContent leaves out what sits inside a stacked rotator phrase', () => {
+  // a phrase that wraps its words in a span: the span is not faded itself, only through the phrase
+  const { parent, phrases } = rotator();
+  const word = text('span', {});
+  word.parentElement = phrases[1];
+  phrases[1].children = [word];
+  const page = fakePage({ content: [parent] });
+  runCollector(page);
+  assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1); // only the phrase apart, below
+});
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
   const page = fakePage({ content: [

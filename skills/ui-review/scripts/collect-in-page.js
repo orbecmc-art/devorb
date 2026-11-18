@@ -139,6 +139,8 @@
   const hiddenIn = (el, opacity) => [...el.children].reduce((sum, c) => {
     const cs = getComputedStyle(c);
     const own = opacity * px(cs.opacity);
+    // a rotator state stays hidden on purpose, and its words with it
+    if (faded(own, cs) && cs.position === 'absolute' && stackedOverShowing(c, c.getBoundingClientRect())) return sum;
     return sum + (faded(own, cs) && isContent(c, cs) ? 1 : 0) + hiddenIn(c, own);
   }, 0);
 
