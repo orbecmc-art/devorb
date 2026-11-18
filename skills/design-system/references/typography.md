@@ -33,7 +33,7 @@ Example, Persuade with a 15 to 16px body:
 --step-6: clamp(3.5763rem, 2.8983rem + 3.0133vw, 5.6102rem);
 ```
 
-Step 0 is the body (15 to 16px), step 1 the lead (about 19 to 21px), step 6 the title (about 57 to 90px). Rename the steps to the project's token names; keep the values.
+Step −1 is for captions and labels, never body. Step 0 is the body (15 to 16px), step 1 the lead (about 19 to 21px), step 6 the title (about 57 to 90px). Rename the steps to the project's token names; keep the values.
 
 ## Values per role (Persuade landings)
 
