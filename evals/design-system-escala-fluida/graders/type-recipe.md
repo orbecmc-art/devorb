@@ -14,4 +14,4 @@ Julgue só o texto deste `DESIGN.md`. Passa somente se as três condições vale
 2. **Corpo:** o texto corrido tem entre 14 e 16px.
 3. **Lead:** o parágrafo de abertura (lead, intro ou subtítulo do hero) tem entre 18 e 22px.
 
-Basta que cada valor esteja escrito no arquivo, em px, rem ou dentro de um `clamp()`. Não julgue nomes de token, a fonte nem as cores. Falha se algum dos três falta, se o título passa de 500 de peso ou fica com tracking zero ou positivo, ou se algum tamanho cai fora da faixa.
+Basta que cada valor esteja escrito no arquivo, em px, rem ou dentro de um `clamp()`, ligado ao seu papel (título, corpo ou lead); um número solto numa lista de tamanhos, sem papel, não conta. Não julgue nomes de token, a fonte nem as cores. Falha se algum dos três falta, se o título passa de 500 de peso ou fica com tracking zero ou positivo, ou se algum tamanho cai fora da faixa.

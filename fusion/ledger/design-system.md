@@ -91,6 +91,13 @@ As candidatas da spec **não entraram**: foco com `outline` por `forced-colors`,
   - `design-md.md`: o exemplo de frontmatter fazia uma cor apontar para outra, o que o formato proíbe; refeito com papéis semânticos e o primitivo na prosa.
 - 2026-11-13, Task M4 do plano mobile: `references/native.md` novo, só ideias, palavras próprias. Cor semântica da plataforma em superfície, texto e separador; marca em pares claro e escuro; cor dinâmica só a partir da API 31, com os esquemas do projeto como reserva, nunca no iOS; cor de plataforma não se interpola; nunca `allowFontScaling={false}`, com `maxFontSizeMultiplier` só como último recurso registrado. Fontes: Expo `expo-native-ui/SKILL.md` e `expo-design-system/SKILL.md` (`expo-skills@a9e5bd3fa00b4e61f632e43f85da73aee1942582`), Material 3 `skills/material-3/references/theming-and-dynamic-color.md` (`material-3-skill@14385f2bf3804d8779f8b4db2604211f1e70b4c1`), as duas MIT, `textReuse: false`. `SKILL.md` ganha uma linha que aponta para a referência (6.872 para 6.958 bytes).
 
+- 2026-11-18, Task 6 da Fase 2 de qualidade de design (`docs/specs/2026-11-18-design-quality-fase-2-design.md`, Pilar B e Call 6):
+  - `scripts/fluid-scale.mjs` é novo: a função pura `fluidScale` e uma CLI que imprime um `clamp()` por passo, entre 360 e 1440px. O método da escala fluida (tamanho mínimo e máximo por passo, interpolados pela largura e presos por `clamp()`) é do **Utopia** (utopia.fyi), **só a ideia**. Nenhum código, texto ou tabela do Utopia foi lido para escrever o script. As fórmulas vêm da brief da Task 6 e os testes estão em `tests/design-fluid.test.mjs`.
+  - `references/typography.md`, `color-finish.md` e `space-radius.md` são novos. Os números vêm de `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md`, medições nossas de 21 sites, escritas com palavras nossas. Nenhum texto dos sites entrou. As razões por modo vêm do Pilar 4 da spec da Fase 1. Cada arquivo diz que a direção fixa o que a spec fixa, e cada um traz um exemplo gerado: a escala e o padding de seção pela CLI, e a escada de opacidade pelo script de `contrast.md`. Onde uma receita toca um reflexo de `floor.md` (mono em rótulo, halo), ela pede a razão da página na linha `Floor:` do contrato.
+  - Pares de fontes: são 6, por categoria. Cada face foi conferida em 2026-11-18 por três checagens. A página `https://fonts.google.com/specimen/<Nome>` responde 200 (um nome falso dá 404). O `METADATA.pb` em `google/fonts/ofl/<nome>` diz `license: "OFL"`. A API `fonts.googleapis.com/css2` carrega os pesos 400 e 500 (um nome falso dá 400). As faces conferidas: Geist, Geist Mono, Inter, JetBrains Mono, Newsreader, Bricolage Grotesque, DM Sans, Cormorant Garamond, Manrope, IBM Plex Sans e IBM Plex Mono.
+  - `SKILL.md` ganhou uma frase em **Type**, uma em **Spacing and radius** e os arquivos novos em `Uses`. O arquivo foi de 6.958 para 7.355 bytes, cerca de 1.840 tokens, com teto de 2.500.
+  - O caso novo é `evals/design-system-escala-fluida`: a landing do Lote (devtools, Persuade, Geist e Geist Mono), com `:root {}` vazio e sem `DESIGN.md`. Os graders são `fluid`, `type-recipe` e `finish-recipe`. Depois do RED, os dois graders `llm` ganharam uma frase que só endurece: o valor precisa estar ligado ao seu papel ou uso, e um número solto numa escala não conta.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`). `fusion/results/2026-11-13-design-system*.md`.
@@ -103,6 +110,20 @@ Opus 5.5, nível leve, 2 rodadas. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`
 
 - `accepted: true`. O caso do tema padrão do shadcn passa em todos os braços e fica como guarda contra piora.
 - O grader de `DESIGN.md` intacto não carregava: o padrão começava com a linha `---` do próprio arquivo, que o leitor de cabeçalho tomou como fim do cabeçalho. Trocado por `-{3}`.
+
+### Fase 2, Task 6 (escala fluida e receitas)
+
+RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem plugin. O resultado está em `fusion/results/2026-11-18-design-system-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `design-system-escala-fluida` | 0% (0,20) | US$ 0,73 |
+| `design-system-cafe-moenda` | 0% (0,57) | US$ 1,31 |
+| `design-system-padaria-pedidos` | 0% (0,60) | US$ 0,64 |
+| `design-system-shadcn-padrao` | 100% | US$ 1,51 |
+
+- A rodada custou US$ 4,17 no total. O caso novo falha sem o plugin, então o RED está confirmado. Os três casos antigos repetem as notas de 2026-11-13.
+- GREEN (`--arms devorb,none`) fica com o controlador e ainda não rodou.
 
 ## Decisões por commit de fonte
 

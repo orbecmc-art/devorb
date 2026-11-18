@@ -14,4 +14,4 @@ Julgue só o texto deste `DESIGN.md`. Passa somente se as quatro condições val
 3. **Folga de seção:** o espaço vertical entre seções, na tela larga, fica entre 96 e 160px (ou o equivalente em rem, com 1rem = 16px).
 4. **Raio:** o raio dos cartões e botões fica entre 4 e 8px. Um raio cheio (pílula) só em etiqueta pequena não conta contra.
 
-Não julgue os nomes de token nem as cores escolhidas. Falha se há duas ou mais cores de destaque, se os cartões usam sombra no lugar da borda, se a folga de seção ou o raio não estão no arquivo ou caem fora da faixa.
+Cada valor precisa estar ligado ao seu uso (seção, cartão ou botão); um número solto numa escala, sem uso, não conta. Não julgue os nomes de token nem as cores escolhidas. Falha se há duas ou mais cores de destaque, se os cartões usam sombra no lugar da borda, se a folga de seção ou o raio não estão no arquivo ou caem fora da faixa.
