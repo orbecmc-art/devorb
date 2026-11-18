@@ -74,4 +74,4 @@ Opus 5.5, nível leve, 2 rodadas, fora do sandbox com `tools/eval-outside.mjs`, 
 - `spartan-toolkit@96b2c9d099f8507a95b9e43916f144594720a3c9:toolkit/skills/browser-qa/playwright-snippets.md` | adotado | só ideias: rolagem horizontal no celular, captura de `requestfailed`
 - `ecc@d2ef2680594f9a17526a6e1a2e18b3d242c5d17b:skills/browser-qa/SKILL.md` | adotado | só ideias: só leitura em produção, fluxo que muda dados só em staging com permissão e credencial de teste, sem imagem de base é inconclusivo
 - `ecc@d2ef2680594f9a17526a6e1a2e18b3d242c5d17b:skills/browser-qa/SKILL.md` | recusado | MCP de navegador, Core Web Vitals, axe-core, três breakpoints, modo escuro, veredito SHIP
-- 2026-11-17, Task 7 do plano de design (fase 1): com pacote de referência, a comparação visual passa a ser do `devorb:ui-review`; sem pacote segue inconclusiva. Coberto pelo caso `aligning-manda-ver-tela` e pelo `planning-tela-com-referencia` (ligação do contrato).
+- 2026-11-17, Task 7 do plano de design (fase 1): com pacote de referência, a comparação visual passa a ser do `devorb:ui-review`; sem pacote segue inconclusiva. Ligação sem caso próprio; só texto de ligação.
