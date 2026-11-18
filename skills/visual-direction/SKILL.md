@@ -57,14 +57,14 @@ Skip this for **Extend** and **Replicate**. Otherwise:
 
 1. Write the audience's real scene in one sentence (who, where, doing what), the page every competitor in this category already has, and the obvious contrarian answer to it. Neither is a direction.
 2. List four to six candidates from the audience's daily life: objects, places, printed matter, signs, habits, local visual traditions. Not the category's template, and on Operate or Read never a copy of the tool they use at work. For each, one line on what it would look like and one on where it would fail.
-3. Pick one, with its reason. Then the **mirror test:** hand this plan to a competitor in the same trade. Would it fit them just as well? Then it is not yet this client's: alter one choice and name it. Check it against the spent looks in `references/floor.md`.
+3. Pick one, with its reason. Then the **mirror test:** hand this plan to a competitor in the same trade. Would it fit them just as well? Then it is not yet this client's: alter one choice and name it. Check it against the spent looks in `references/floor.md`. Then pick the first screen and the sections from `references/hero-patterns.md` and `references/section-patterns.md`.
 4. Choose the type family from that world, by role (display, text, figures or code if needed). Before naming a face, confirm its exact name, that it has the weights you need, its license and where it loads from. A face you cannot confirm is not chosen: describe its role and mark it pending. Sizes and weights are `devorb:design-system`'s.
 
 What the spec fixes stays fixed: a named style, period, typeface or colour scheme is used as asked, spent look or not.
 
 ## 6. Write the contract
 
-Add `## Direção visual` to the spec you received, in the spec's language, and commit it. Short lines, no values. Read `references/contract.md` first: it lists every field, in order.
+Add `## Direção visual` to the spec you received, in the spec's language, and commit it. Short lines, no values. Read `references/contract.md` first: it lists every field, in order. `First screen:` and `Sections:` cite the pattern ids, never their measures.
 
 If the contract cannot be filled without a decision only the user can make, ask that one question.
 

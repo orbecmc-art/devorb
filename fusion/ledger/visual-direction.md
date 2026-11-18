@@ -126,6 +126,15 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
 
 - 2026-11-18, Task 5 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: `references/floor.md` ganha `## Measured`, com os números que `shoot.mjs` confere e o que é FAIL e o que é WARN, medidos nas 23 referências (Call 7 da spec `docs/specs/2026-11-18-design-quality-fase-2-design.md`). A razão mínima de Persuade cai de 3,0 para 2,5, com alvo de 4,0 (WARN entre os dois), e abaixo de 1024px de largura passa a 2,0, com WARN abaixo de 2,5; o corpo só reprova abaixo de 13px; entram `display-weight` e `accent-count` como WARN. O porquê de cada número está no ledger de `ui-review`, na mesma data.
 
+- 2026-11-18, Task 7 da Fase 2 de qualidade de design (`docs/plans/2026-11-18-design-quality-fase-2.md`), parte 1 do cardápio:
+  - `references/hero-patterns.md` (10 aberturas) e `references/section-patterns.md` (12 seções, mais `## Mobile recomposition`) são novos. Cada padrão tem `When:`, `Sketch:`, `Measures:` e `Mobile:`, sob o cabeçalho `` ### `<kind>:<id>` — <nome> ``. Os padrões e as faixas vêm das sínteses de `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md`, medições e descrições nossas, escritas com palavras nossas e sem nomear site. Nenhum texto, print ou cópia das páginas entrou.
+  - O topo de cada arquivo diz que é um cardápio, não um molde; que `Measures` são as faixas em que `devorb:design-system` escolhe os valores (com `typography.md`, `color-finish.md` e `space-radius.md` da Task 6) e que o contrato cita o id, nunca o número; que o padrão respeita `floor.md`; e que halo, rótulo em mono e número de seção só entram com a razão da página na linha `Floor:`.
+  - Onde a referência faz o que o Floor proíbe, o padrão traz a versão que respeita o Floor: script sobre caixa-alta vira uma face só em linhas inteiras (`hero:full-photo-display-type`); gradiente em meio título e peso 900 viram uma cor e peso moderado (`hero:copy-and-form-card`); palavra-chave em chip vira tom por frase inteira (`section:two-tone-statement`); chave em caixa-alta espaçada vira caixa normal (`section:mono-spec-table`); ponto colorido só com estado real (`section:stat-cards-mono`).
+  - `contract.md`: `First screen:` cita um id `hero:` e cada item de `Sections:` cita um id `section:` ou `custom`. `SKILL.md`: uma frase no §5 passo 3 aponta para os dois arquivos e uma no §6 diz que o contrato cita o id, nunca a medida. O arquivo foi de 7.128 para 7.321 bytes, cerca de 1.831 tokens, com teto de 2.500.
+  - A ideia de um cardápio de onde o guia escolhe, com sorteio, vem da taste-skill, **só como ideia**: nenhum texto, lista ou padrão dela entrou. O sorteio com histórico fica para a Task 11; aqui a escolha vem do material e da direção.
+  - O caso novo é `evals/visual-direction-receitas-landing`: a landing do Lote com a spec sem `## Direção visual`, três números do dono e a lista do que o produto faz, sem `DESIGN.md`. Graders: `patterns` (regex na spec: um `hero:` e três `section:`), `type-recipe`, `finish` e `mobile` (llm em `styles.css`) e `no-tells` (llm em `index.html`). O grader `mobile` julga a largura de 390px (regras de base mais as media queries que valem ali), e não só uma media query de até 640px, para não reprovar CSS que começa pelo celular ou só usa `clamp()`. Decisão do controlador: fica assim.
+  - `tests/design-patterns.test.mjs` confere os 22 ids, os quatro rótulos de cada bloco e o `## Mobile recomposition`.
+
 ## Resultados
 
 Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`). `fusion/results/2026-11-13-visual-direction*.md`.
@@ -150,6 +159,19 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 | Reservado `visual-direction-copia-landing-clinica` (`devorb@d873e93`, sem navegador) | 0% (0,71), US$ 1,76 | 0% (0,74), US$ 0,63 |
 
 - `fusion/results/2026-11-17-visual-direction-outside-baseline.md` e `fusion/results/2026-11-17-visual-direction-reserved.md`. No reservado, o DevOrb falhou em estrutura e escala de tipo: trocou seções sem fato do cliente (depoimentos, planos) por outras e largou o título bicolor. Daí a regra própria 2. Na mesma rodada, o reservado `visual-direction-painel-padaria` deu 50% (0,86) com o DevOrb contra 100% (1,00) sem plugin. A causa não foi conferida nesta tarefa. No GREEN de fora do sandbox (`fusion/results/2026-11-17-visual-direction-outside.md`), `accepted: true`, mas o caso é lacuna (nenhum braço passa): com a skill, tudo passou menos `structure`, porque o build cortou os 6 cards para 3 e as 4 pessoas para papéis. Daí a regra própria 3.
+
+### Fase 2, Task 7 (cardápio de padrões)
+
+RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem plugin. O resultado está em `fusion/results/2026-11-18-visual-direction-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `visual-direction-receitas-landing` | 0% (0,25) | US$ 0,88 |
+| `visual-direction-arquitetura-clean` | 0% (0,18) | US$ 0,96 |
+| `visual-direction-clinica-serena` | 0% (0,75) | US$ 0,67 |
+
+- A rodada custou US$ 2,48 no total. O caso novo falha sem o plugin, então o RED está confirmado. `patterns` falha em todo braço de base por construção e não conta como RED.
+- GREEN (`--arms devorb,none`) fica com o controlador e ainda não rodou.
 
 ## Decisões por commit de fonte
 
@@ -204,3 +226,5 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 - `av-design-system@sem-pin:mirror.js` | adotado | só a ideia de neutralizar revelações, do dono, origem e licença não confirmadas; sem texto nem código
 - `dembrandt@sem-pin:pacote npm 0.39.2, saída de --help` | adotado | comando opcional de tokens em página pública, MIT
 - registro em fusion/sources.json: decisão do dono
+- `taste-skill@sem-pin:ideia do cardápio de padrões com sorteio (citada na spec da Fase 2)` | adotado (só ideia) | um cardápio de padrões de onde o guia escolhe; texto, lista e padrões próprios, a partir dos estudos A e B; o sorteio com histórico fica para a Task 11
+- `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md` (nossos) | adotado | os 10 padrões de abertura, os 12 de seção, as faixas de `Measures` e a recomposição no celular
