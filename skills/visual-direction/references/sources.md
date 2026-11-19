@@ -1,6 +1,6 @@
 # Sources
 
-Read with `ui-sources.json`, before choosing a direction or building any component from scratch.
+Read with `ui-sources.json`, before choosing a direction and before the first line of UI code of any page, screen or component built or restyled.
 
 ## Opening an entry
 

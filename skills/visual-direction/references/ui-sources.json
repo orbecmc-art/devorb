@@ -1,7 +1,7 @@
 {
   "source": "Owner's list. Entries with from 'video' are the sources in the description of 'UI Libraries for Claude Code (Ban the AI Look)', Griffin Wooldridge, https://www.youtube.com/watch?v=zsCGS-Yzjnw, read on 2026-11-09, minus social and affiliate links. Entries with from 'gallery' are whole-site galleries Claude suggested and the owner approved on 2026-11-09. Entries with from 'owner' are sources the owner sent himself, on 2026-11-10. Styles, notes, reading checks and the rules' wording are Claude's calls; the owner changes this file by pull request.",
   "rules": [
-    "Look here first, before building a component from scratch or choosing a direction. Name in the answer which entries you consulted.",
+    "Look here first, before choosing a direction and before the first line of UI code of any page, screen or component built or restyled. Name in the answer which entries you consulted.",
     "Foundations and specialists serve every style. Match standouts, screens and galleries by the client's words in 'styles'; when an entry has 'byStyle', open those pages first.",
     "Galleries show whole sites: study layout, rhythm, type and how the first screen is built, then make it the client's own. Copy a site's form (structure and scale) when the user asks for it; never publish its text, photos or logo as the client's.",
     "Stack: one foundation, the specialist for each job it covers (toasts, drawers, command menus, animated numbers) instead of a hand-built version, and at most one standout component per page (the one-standout rule). On Operate surfaces (dashboards, admin, settings) use no standout at all: a system's identity lives in its details.",
