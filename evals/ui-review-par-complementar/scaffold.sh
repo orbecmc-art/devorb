@@ -3,12 +3,13 @@
 # online accounting service for Brazilian sole traders (MEI), already written
 # as index.html and styles.css, with DESIGN.md and the owner's approved spec
 # in docs/devorb/specs/. Mode: Persuade. The page text is in Portuguese.
-# The colour work is deliberate: light sections use navy (--accent) for
-# headline words and the CTA; one dark warm band (ground #1c100c) is where
-# orange (--complement) takes over for headline words, the big number and the
-# labels. Navy and orange sit about 200 degrees apart and never share a
-# block. Neither the spec nor DESIGN.md says anything that authorises a pair
-# or an exception: the reviewer must accept it on its own.
+# The colour work is not declared anywhere: light sections use navy (--accent)
+# for headline words and the CTA; one dark warm band (ground #1c100c) uses
+# orange (--complement) for headline words, the big number and the labels.
+# Navy and orange sit about 200 degrees apart and never share a block.
+# DESIGN.md lists both tokens with a neutral role and the spec says nothing
+# about colour, so nothing authorises the pair or says which section owns
+# which colour: the reviewer must accept it by the critique rule alone.
 # Planted real defect, in styles.css:48: .lead (the hero paragraph, "Cuidamos do
 # seu CNPJ...") is #9ca3af on the #ffffff section, about 2.5:1, below 4.5:1.
 # Everything else passes. Plain HTML and CSS, no build, no dependencies.
@@ -61,15 +62,10 @@ A landing existe para o visitante abrir a conta.
 ## Direção visual
 
 - Mode: Persuade. Invention level: New surface, same world.
-- Direction: a contabilidade que parece papel limpo, sem jargão; o marinho
-  carrega a confiança e o laranja carrega o que o dono ganha.
-- Cor: o marinho é o destaque das seções claras (palavras do título, botão,
-  links). O laranja é o complemento e é dono da faixa escura do plano
-  (palavras do título, número grande, rótulos). Cada seção tem uma só cor de
-  destaque; os dois nunca dividem o mesmo bloco.
+- Direction: a contabilidade que parece papel limpo, sem jargão.
 - First screen: título à esquerda, parágrafo, botão "Abrir minha conta".
-- Sections: hero (claro, marinho); faixa do plano (escura e quente, laranja);
-  rodapé claro com o botão de novo (marinho).
+- Sections: hero (claro); faixa do plano (escura e quente); rodapé claro com
+  o botão de novo.
 - Copy: botão "Abrir minha conta".
 __X__
 commit_at "2026-01-01T10:00:00-03:00" "docs: approved spec for the landing"
@@ -89,9 +85,9 @@ desvio.
 --surface: #f4f6fb;
 --text: #1f2937;
 --text-muted: #4b5563;
---accent: #1e3a8a;
+--accent: #1e3a8a; /* destaque */
 --accent-hover: #172e6e;
---complement: #f97316;
+--complement: #f97316; /* complemento */
 --ground-dark: #1c100c;
 --text-on-dark: #f3e7e1;
 --focus: #2563eb;
@@ -104,15 +100,6 @@ desvio.
 --text-small: 14px;
 --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 ```
-
-## Cor por seção
-
-- Seções claras (`--bg`, `--surface`): `--accent` marca as palavras do
-  título, o botão e os links. `--complement` não aparece nelas.
-- Faixa escura (`--ground-dark`): `--complement` marca as palavras do título,
-  o número grande e os rótulos. `--accent` não aparece nela.
-- O texto corrido usa `--text` ou `--text-muted` nas seções claras e
-  `--text-on-dark` na faixa escura.
 
 ## Foco
 
