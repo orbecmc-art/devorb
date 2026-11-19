@@ -207,7 +207,7 @@ GREEN em 2026-11-19, `devorb@4a966e3`, Opus 5.5, 2 rodadas, `--arms devorb,none`
 | `visual-direction-arquitetura-clean` | 0,36 (Fase 2) | 0,64, 0% de aprovação (não aprovado) | 0,18 | US$ 7,79 |
 
 - Diagnóstico de `arquitetura-clean`, 1 rodada só devorb: 0,73, abaixo da barra de 2/3, US$ 1,89. Passam 1, 2, 3 e 5; falham `4-sonner-dependency` e `6-newsletter-toast`. A pasta `.arms` é recriada a cada rodada, então o detalhe da rodada dupla se perdeu.
-- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
+- Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

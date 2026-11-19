@@ -135,7 +135,7 @@ RED em 2026-11-18, GREEN em 2026-11-19, Opus 5.5, 2 rodadas, `--arms devorb,none
 | `visual-direction-receitas-landing` | RED (`devorb@8dc3b2f`) | 0,75, `color-pair` falha 2/2 | 0,25, `color-pair` falha 2/2 | US$ 3,83 |
 | `visual-direction-receitas-landing` | GREEN (`devorb@4a966e3`) | 100% (1,00) | 0,30 | US$ 6,39 |
 
-- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
+- Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

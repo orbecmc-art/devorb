@@ -75,7 +75,7 @@ Todos pela Task D5:
 
 - **Tell 3 aceita o par por seção.** O sinal de página gerada que conta matizes aceita dois matizes complementares quando cada um tem as suas seções (regra do dono, 2026-11-18, ver `design-system` e `visual-direction`). Tocou `references/critique.md`; no `SKILL.md` só entrou a linha `Sources:` do contrato no prompt do crítico (§6). Sem caso RED: ver a lacuna abaixo.
 - **O crítico recebe a linha `Sources:` e anota quando o build ignorou as fontes.** Quando o despacho do implementador não trouxe as fontes de `ui-sources.json`, o crítico registra isso nos achados. Sem cenário próprio: `evals/implementing-fontes-ui` testa o implementador, não o crítico (ver `implementing`). Lacuna: nenhum caso mede que o crítico anote o build que ignorou as fontes.
-- **Lacuna:** o caso `evals/ui-review-par-complementar` serve só como guarda de regressão. Já passava antes da mudança (RED: devorb 1,00, `none` 0/2 por falhar nos rótulos P0 a P3, não no par), então a regra do crítico não tem caso RED que a justifique. Se a decisão for outra, a mudança no crítico fica sem cenário.
+- **Lacuna fechada (2026-11-19):** a regra do crítico (tell 3) agora tem caso RED. O caso `evals/ui-review-par-complementar` passava antes da mudança só por autorização, então o fixture mudou duas vezes na revisão final: (a) `DESIGN.md` e a spec deixam de declarar o par e qual seção é dona de qual cor (antes declaravam, e o caso passava pela autorização e não provava nada); (b) saem as palavras destacadas nos títulos (`.hl`) e os rótulos em maiúsculas espaçadas, porque quebram o piso e o revisor tirava pontos de cor por eles, o que o avaliador lia como acusação ao par (GREEN2 0/2, guardado em `fusion/results/2026-11-19-ui-review-par-green-confundido.md`). Com isso: RED2 (texto antigo do `main` 5534808, só o ajuste a) 0,50, 1 de 2 acusa o par, US$ 1,56; RED3 (texto antigo, ajustes a e b, `devorb@bf75520`) 0,50, 1 de 2 acusa o par, US$ 1,56; GREEN3 (`devorb@8232054`) 1,00 2/2, `none` 0,00, US$ 1,95. O caso deixa de ser só guarda de regressão. Arquivos: `fusion/results/2026-11-19-ui-review-par-red2.md`, `-red3.md` e `2026-11-19-ui-review-par.md`.
 
 ## Fora
 
@@ -217,8 +217,11 @@ Plano de regras de cor e referências, 2026-11-19, Opus 5.5, 2 rodadas, `--arms 
 |---|---|---|---|---|
 | `ui-review-par-complementar` | RED (`devorb@9b96a34`) | 1,00 (2/2, já passava) | 0,00 | US$ 2,09 |
 | `ui-review-par-complementar` | GREEN (`devorb@4a966e3`) | 100% (1,00) | 0,00 | US$ 2,06 |
+| `ui-review-par-complementar` | RED2 (texto antigo, fixture a) | 0,50 (1 de 2 acusa o par) | n/d | US$ 1,56 |
+| `ui-review-par-complementar` | RED3 (texto antigo, fixture a+b, `devorb@bf75520`) | 0,50 (1 de 2 acusa o par) | n/d | US$ 1,56 |
+| `ui-review-par-complementar` | GREEN3 (`devorb@8232054`) | 1,00 (2/2) | 0,00 | US$ 1,95 |
 
-- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
+- Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

@@ -109,7 +109,7 @@ Plano de regras de cor e referências, 2026-11-19, Opus 5.5, 2 rodadas, `--arms 
 |---|---|---|---|
 | `implementing-fontes-ui` | 0/2 em devorb e em none | 100% (1,00) | 0,00 |
 
-- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
+- Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 
