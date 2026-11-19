@@ -257,6 +257,8 @@ Uma skill só é aceita se não ficar pior que a linha de base em nenhum cenári
 
 Cobre a construção visual: como uma interface é decidida, escrita em tokens, posta em movimento e conferida depois de pronta. O processo é o mesmo da base: fundir, não colecionar. O caso real é fazer sites, landing pages e sistemas web que não pareçam gerados por IA. Esse caso é suposição de Claude a partir do que o dono descreveu.
 
+A Fase 2 do setor (qualidade de design contra 23 referências do dono) está em `docs/specs/2026-11-18-design-quality-fase-2-design.md`, implementada na versão 1.14.0.
+
 **Ordem:** a seleção, esta seção e o plano `docs/plans/2026-11-09-devorb-design.md` são feitos agora, neste PC, por recomendação de Claude que o dono seguiu. As fusões rodam no Mac, só depois do portão da Task 6 da base, porque ela calibra o processo e mede o custo real. Desinstalar o Superpowers não espera o design, porque ele não tem skills dessa etapa.
 
 ### Mapa de skills do design

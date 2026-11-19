@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.14.0
+
+- Design, Fase 2: o nível dos 23 sites de referência do dono vira meta mensurável. Pilar A: as ferramentas de captura (`shoot.mjs`, `capture.mjs`) aguentam as 23 referências: revelação forçada de conteúdo escondido com a contagem `hiddenContent`, páginas longas com `clip` e novas tentativas, `shotErrors` por seção, detecção de seções de reserva e `tools/refs-check.mjs`. Resultado: 23/23 sem queda, `hiddenContent` 0, pelo menos 2 seções em cada. Cena de rolagem fixada (hero do sol, parloa, hero do shopify) sai em branco: limite conhecido.
+- Pilar B: regras recalibradas pelas referências reais: `body-size` falha abaixo de 13px; `heading-ratio` depende da largura (a partir de 1024: FAIL abaixo de 2,5 e WARN abaixo de 4,0; abaixo de 1024: FAIL abaixo de 2,0 e WARN abaixo de 2,5); novas regras `display-weight` e `accent-count`. `refs-check`: 23/23 PASS. O `design-system` ganhou escala fluida e receitas com valores (`escala-fluida`: 50% com 0,90 contra 0% com 0,40; casos antigos sem regressão), a `visual-direction` ganhou o cardápio de padrões de hero e de seção (`receitas-landing`: 100% contra 0%) e o crítico da `ui-review` reconhece sinais de página gerada (fora do eval 50% contra 0%; caso reservado novo 100% contra 0%).
+- Pilar C: 22 referências novas em `ui-sources.json`, além do Mobbin que já existia.
+- Pilar D: estudo de movimento (`tools/motion-study.mjs`) e dial de intensidade na `motion` (`nivel-suave`: 100% contra 0%, depois de corrigir o tempo das entradas). A `visual-direction` ganhou o guia para quem não sabe pedir design: oferece as referências e sorteia padrões com histórico (`guia-leigo`: 50% com 0,83 contra 0% com 0,00).
+- Custo: US$ 70,5 de um teto de US$ 70 do dono, teto atingido. O caso reservado do guia (`evals-reserved/visual-direction-guia-restaurante`) está escrito e não foi rodado. Detalhes em `fusion/results/2026-11-18-design-quality-fase-2.md`.
+- Lacuna conhecida: `visual-direction-arquitetura-clean` caiu de 0,73 para 0,36, porque o caminho sem pessoa para responder pula as galerias e as fontes. Fica para o trabalho "regras-cor-e-referencias".
+
 ## 1.13.0
 
 - Design, Fase 1: o modo cópia na `visual-direction`. Quando a pessoa pede "igual a este site", a skill entra no nível Replicate (`references/replicate.md`), captura a referência num pacote em `design/referencias/<slug>/` com `scripts/capture.mjs`, mantém todas as seções, os tratamentos de assinatura e a contagem de itens, e nunca publica texto, foto ou logo de terceiros como se fossem do cliente. As regras de "nunca copiar" foram reescritas. Caso `visual-direction-copia-referencia` (fora do eval): sem o plugin 0% (0,63); com o DevOrb 0,67 contra 0,56, aceito com uma lacuna. As regras de preservar seções e contar itens saíram das rodadas reservada e GREEN.
