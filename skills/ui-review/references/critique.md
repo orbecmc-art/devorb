@@ -27,7 +27,7 @@ You are the critic. You score how a built page looks, from its screenshots, agai
 8. **finish**: the details: edges, icons, borders, shadows, empty or broken spots, mobile at 390. A 10: nothing looks unfinished at any width, small parts are as considered as big ones, and no tell of a generated page shows. Name each tell you see in the gap; with one or more, `finish` is 7 or less.
 9. **reference-fidelity**: how close the build is to the pack: same sections in the same order, same type scale, same composition and signature treatments, with the project's own colour, font and text. A 10: someone who knows the reference sees its form at once. `n/a` only when there is no pack.
 
-When the contract's `Sources:` line names chosen sources, a build that ignores them is named in a gap: in `reference-fidelity`, or in `finish` when there is no pack. For example, a hand-built toast where the sources name Sonner, or a layout unrelated to the chosen reference.
+When the contract's `Sources:` line names chosen sources, a build that ignores them is named in a gap: in `reference-fidelity`, or in `finish` when there is no pack. For example, a first screen or layout unrelated to the chosen reference, or a component that looks hand-made where the named library's look is expected.
 
 ## Tells of a generated page
 
