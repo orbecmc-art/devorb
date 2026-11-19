@@ -25,7 +25,8 @@ O dono viu a página do Pilot (fundo claro com azul-marinho no título em dois t
 - `skills/visual-direction/references/persuade.md` e `contract.md`: o contrato diz qual seção é de cada cor.
 - `skills/visual-direction/references/hero-patterns.md`: o halo "no matiz do único destaque" vira "no matiz do destaque daquela seção".
 - `skills/ui-review/references/critique.md`: o sinal "Too many highlights" e a nota 10 de `color-contrast` passam a aceitar o par dividido por seção; acrescenta-se a anotação de fontes ignoradas.
-- `skills/visual-direction/SKILL.md` §4 e `guide.md`: portão duro. `skills/implementing/SKILL.md` (regra de despacho de UI) e `prompts/implementer.md` (Mirror): o implementador lê `ui-sources.json` antes do primeiro arquivo de UI. `skills/ui-review/SKILL.md` §1/§6: lê a linha `Sources:` do contrato e o crítico recebe as fontes escolhidas.
+- `skills/visual-direction/SKILL.md` §4 e `guide.md`: portão duro. `skills/implementing/SKILL.md` (regra de despacho de UI) e `prompts/implementer.md` (Mirror): o implementador lê `ui-sources.json` antes do primeiro arquivo de UI. `skills/implementing/references/inline.md`: o caminho inline lê as fontes antes do primeiro arquivo de UI e registra `Sources:` ao lado de `Mirror:`. `skills/ui-review/SKILL.md` §6: o crítico recebe a linha `Sources:` do contrato (as referências escolhidas).
+- `skills/visual-direction/references/sources.md` e `ui-sources.json`: o escopo segue o portão (antes da primeira linha de código de UI) e entrada `reading: "browser"` sem navegador ganha uma só tentativa de web fetch simples antes de ser dada como pulada.
 - Teste unitário em `tests/design-rules.test.mjs`: paleta tipo Pilot (marinho + laranja + faixa escura quente) passa no `accent-count`; três matizes avisam.
 
 ## Testes (eval)
