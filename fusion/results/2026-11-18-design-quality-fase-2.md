@@ -12,12 +12,12 @@
 | 6 | RED, `design-system-escala-fluida` e casos antigos, braço `none` | 4,17 | 4,2 |
 | 6 | GREEN (f81f408), 4 casos de design-system | 13,40 | 17,6 |
 | 7 | RED, `visual-direction-receitas-landing`, `none` | 2,48 | 20,1 |
-| 7 | GREEN (35cdc27), 3 casos de visual-direction | 15,86 | 36,0 |
-| 8 | RED, `ui-review-sinais-de-ia`, `none` | 1,31 | 37,3 |
+| 7 | GREEN (35cdc27), 3 casos de visual-direction | 15,86 | 35,9 |
+| 8 | RED, `ui-review-sinais-de-ia`, `none` | 1,31 | 37,2 |
 | 8 | GREEN fora do eval (8d423d1), só DevOrb | 3,94 | 41,2 |
-| 8 | Caso reservado (b2e2c96), DevOrb e `none` | 3,87 | 45,1 |
-| 10 | RED, `motion-nivel-suave`, `none` | 0,98 | 46,1 |
-| 10 | GREEN antes da correção do dial (0195671) | 2,01 | 48,1 |
+| 8 | Caso reservado (b2e2c96), DevOrb e `none` | 3,87 | 45,0 |
+| 10 | RED, `motion-nivel-suave`, `none` | 0,98 | 46,0 |
+| 10 | GREEN antes da correção do dial (0195671) | 2,01 | 48,0 |
 | 10 | GREEN depois da correção (380e023) | 1,94 | 50,0 |
 | 11 | RED, `visual-direction-guia-leigo`, `none` | 3,65 | 53,6 |
 | 11 | GREEN (1126ff4), só DevOrb, 4 casos | 16,87 | 70,5 |

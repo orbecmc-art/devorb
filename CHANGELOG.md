@@ -8,6 +8,7 @@
 - Pilar D: estudo de movimento (`tools/motion-study.mjs`) e dial de intensidade na `motion` (`nivel-suave`: 100% contra 0%, depois de corrigir o tempo das entradas). A `visual-direction` ganhou o guia para quem não sabe pedir design: oferece as referências e sorteia padrões com histórico (`guia-leigo`: 50% com 0,83 contra 0% com 0,00).
 - Custo: US$ 70,5 de um teto de US$ 70 do dono, teto atingido. O caso reservado do guia (`evals-reserved/visual-direction-guia-restaurante`) está escrito e não foi rodado. Detalhes em `fusion/results/2026-11-18-design-quality-fase-2.md`.
 - Lacuna conhecida: `visual-direction-arquitetura-clean` caiu de 0,73 para 0,36, porque o caminho sem pessoa para responder pula as galerias e as fontes. Fica para o trabalho "regras-cor-e-referencias".
+- Lacuna conhecida: o caso reservado `ui-review-critica-painel-sem-navegador` caiu de 100% para 50% (0,79), com voto dividido; fica na lista de observação.
 
 ## 1.13.0
 
