@@ -4,7 +4,7 @@ Twelve ways to build a section after the first screen, taken from our study of r
 
 - **A menu, not a mould.** Pick by what the visitor needs at that point and by the material the page has. Leave out a pattern the page has no material for. Never repeat one layout in every section (`floor.md`, Reflexes).
 - **Measures are ranges.** `devorb:design-system` picks the values inside them, using its `references/typography.md`, `color-finish.md` and `space-radius.md`. The contract cites the id and never the numbers.
-- **The Floor holds.** Every pattern respects `floor.md`. Where a reference page did something the Floor forbids, such as one word set apart, spaced-out capitals or chains of dots, the pattern below gives the version that respects the Floor.
+- **The Floor holds.** Every pattern respects `floor.md`. Where a reference page did something the Floor forbids, such as one word in another face or style, spaced-out capitals or chains of dots, the pattern below gives the version that respects the Floor.
 - **Reflexes need a reason.** A halo, a monospace label or a section number enters only with this page's reason written in the contract's `Floor:` line.
 - **Only given numbers.** A number, logo or quote comes only from what the client gave. A pattern built on proof the page lacks does not go in.
 

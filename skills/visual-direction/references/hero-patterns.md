@@ -4,7 +4,7 @@ Ten ways to build the first screen, taken from our study of real landing pages i
 
 - **A menu, not a mould.** Pick the pattern that fits the page's material and direction. Leave out what the page has no material for, and bend the rest to the direction.
 - **Measures are ranges.** `devorb:design-system` picks the values inside them, using its `references/typography.md`, `color-finish.md` and `space-radius.md`. The contract cites the id (`hero:centred-product-halo`) and never the numbers.
-- **The Floor holds.** Every pattern respects `floor.md`. Where a reference page did something the Floor forbids, such as one word set apart, spaced-out capitals or chains of dots, the pattern below gives the version that respects the Floor.
+- **The Floor holds.** Every pattern respects `floor.md`. Where a reference page did something the Floor forbids, such as one word in another face or style, spaced-out capitals or chains of dots, the pattern below gives the version that respects the Floor.
 - **Reflexes need a reason.** A halo, a monospace label or a section number enters only with this page's reason written in the contract's `Floor:` line.
 - **Real product only.** A pattern that shows the product needs the real thing: a capture, or the product built in HTML with real controls and real data from the spec. It is never an icon, and never a drawn browser or OS window.
 

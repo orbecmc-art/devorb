@@ -6,7 +6,7 @@ Numbers measured on 21 reference landings in November 2026. They fill what the c
 
 - Neutrals carry the page: ground, surfaces, text and lines. All 21 measured references use one accent beyond them, or none. The owner's preference, recorded 2026-11-18, makes a complementary pair the default on Persuade. Operate and Read keep one accent or none. A colour fixed by the spec, the contract or `DESIGN.md` wins: a single fixed colour stays single.
 - Pick the complement by rotating the brand hue about 180° (150° to 210° away). Then move its lightness and chroma until every pair it joins passes `contrast.md` on the surfaces it sits on, in both themes.
-- Split the pair by section: each colour owns its own sections or bands. Example: the primary on the light sections, the complement on the contrasting dark band, where it takes whole headline lines, the big number, labels and rings. Both colours never share an element or a block.
+- Split the pair by section: each colour owns its own sections or bands. Example: the primary on the light sections, the complement on the contrasting dark band, where it takes whole headline lines or one key word of a headline (`floor.md`, Type), the big number, labels and rings. Both colours never share an element or a block.
 - Status colours (success, error, warning) appear only where a real state needs them. They are not an accent, and do not count as a third one.
 - More than 2 saturated hues across text, button fills and section backgrounds is what `ui-review`'s `accent-count` check warns about: a pair passes, a third hue does not.
 

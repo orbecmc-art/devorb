@@ -29,7 +29,7 @@ Above the floor the page belongs to the direction. Building it, no need to recit
 - No status the page cannot back: an "online" or "all systems operational" badge, a live dot, a version or build string, a "last synced" time with nothing measuring it.
 
 **Type**
-- No single word set apart inside a heading (italic, colour, weight or highlight on one word).
+- A heading may set one word or short phrase (up to three words) in its section's accent colour: the primary, or the complement in its band. Colour only, once per heading. No other treatment on one word: no italic, script face, weight change, gradient or highlighter.
 - Small text (nav, tags, column heads, captions, labels) is the text face slightly smaller, in sentence case, at normal letter-spacing; never spaced-out capitals.
 - Metadata is separated by line breaks or columns, not chains of middle dots ("A · B · C"). Links and buttons end with their words, no arrow appended. A coloured dot appears only when it reports a real state.
 

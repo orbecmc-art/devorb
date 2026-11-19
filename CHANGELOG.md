@@ -6,7 +6,8 @@
 - Fontes do dono antes de qualquer design: portão na `visual-direction` §4 e no guia, mesmo sem pessoa; entradas `browser` sem navegador ganham uma tentativa de fetch; despacho e caminho inline do `implementing`; o `task-reviewer` exige `Sources:`; o crítico recebe `Sources:`. `implementing-fontes-ui`: 0 para 1,00. `arquitetura-clean`: 0,36 para 0,64 (os graders de fontes voltaram a passar; segue 0% de aprovação porque os graders de Sonner/toast falham: lacuna conhecida).
 - Custo: US$ 43,09 de US$ 50 aprovados.
 - Lacuna conhecida: faixa vinho (~355°) com laranja (~25°) conta três matizes no `accent-count`.
-- Lacuna conhecida: decisão do dono em aberto sobre o piso "No single word set apart inside a heading" para o complemento.
+- Piso (decisão do dono, 2026-11-19): um título pode ter uma palavra ou trecho curto (até três palavras) na cor de destaque da seção, a primária ou o complemento na faixa dele; só a cor, uma vez por título. Itálico, troca de fonte ou de peso, gradiente e marca-texto em palavra solta seguem proibidos.
+- Lacuna conhecida: `arquitetura-clean` segue abaixo da barra (0,64; o agente não instala o Sonner e faz o aviso à mão). Aceito pelo dono por ora.
 
 ## 1.14.0
 
