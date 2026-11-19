@@ -1,9 +1,9 @@
 import { parseArgs } from 'node:util';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { parseUrls } from './refs-check.mjs';
+import { insideRepo, parseUrls } from './refs-check.mjs';
 import { resolvePlaywright } from '../skills/ui-review/scripts/shoot.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -99,8 +99,7 @@ async function main(argv) {
   const { values: v } = parseArgs({ args: argv, options: { only: { type: 'string' }, out: { type: 'string' }, pw: { type: 'string' } } });
   const out = resolve(v.out ?? join(tmpdir(), 'devorb-motion-study'));
   // studies of other people's sites never land in the repo
-  const rel = relative(ROOT, out);
-  if (rel === '' || !(rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel))) {
+  if (insideRepo(out)) {
     console.error(`OUT INSIDE REPO: ${out}`);
     return 1;
   }

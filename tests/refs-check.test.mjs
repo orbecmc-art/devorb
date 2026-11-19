@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -106,6 +106,18 @@ test('the CLI refuses an --out inside the repo', () => {
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
   assert.equal(existsSync(out), false);
+});
+test('the CLI refuses an --out that reaches the repo through a symlink', () => {
+  const link = join(mkdtempSync(join(tmpdir(), 'devorb-refs-')), 'repo');
+  symlinkSync(ROOT, link);
+  const r = spawnSync(process.execPath, [TOOL, '--out', join(link, `refs-out-${process.pid}`), '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
+});
+test('the CLI refuses an --out inside the repo spelled in another case on macOS', { skip: process.platform !== 'darwin' }, () => {
+  const r = spawnSync(process.execPath, [TOOL, '--out', join(ROOT.toUpperCase(), `refs-out-${process.pid}`), '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
 });
 test('the CLI exits 1 when --only selects no reference, before shooting anything', () => {
   const out = join(mkdtempSync(join(tmpdir(), 'devorb-refs-')), 'out');
