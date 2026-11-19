@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: ui-review-par-complementar
+description: >-
+  Landing do Prumo, contabilidade online fictícia para MEI, já pronta em
+  `index.html` e `styles.css`, modo Persuade, com um `DESIGN.md` de tokens e a
+  spec aprovada. A cor é deliberada: as seções claras usam o marinho
+  (`--accent`) nas palavras do título e no botão; uma faixa escura e quente
+  usa o laranja (`--complement`) nas palavras do título, no número grande e
+  nos rótulos; os dois nunca dividem o mesmo bloco. Nada na spec nem no
+  `DESIGN.md` autoriza "duas cores" por frase: o crítico precisa aceitar o par
+  por conta própria. Defeito plantado: o parágrafo `.lead` do hero é
+  `#9ca3af` sobre `#ffffff` (cerca de 2,5:1, abaixo de 4,5:1, `styles.css:48`).
+  O usuário pede a revisão da interface. O agente relata o contraste com
+  severidade de P0 a P3 e não acusa o par marinho e laranja de destaque demais.
+tags: [ui-review]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    revisa a interface dessa página (`index.html` com `styles.css`). Ela
+    segue a spec aprovada em `docs/devorb/specs/2026-01-01-prumo-landing-design.md`
+    e o `DESIGN.md`. Hoje não consigo responder perguntas, então decide
+    sozinho o que faltar.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

@@ -1,0 +1,9 @@
+---
+type: regex
+target: trace
+pattern: '^(?:(?!"name":"(?:Edit|Write|MultiEdit)","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"file_path":"[^"]*\.(?:html|css|tsx)"|(?:(?<![=-])>>?|\btee(?: -a)?) ?(?:\\?["''])?[^\s"''\\<>|;&]*\.(?:html|css|tsx)\b)[\s\S])*?(?:"name":"(?:Read|Grep)","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"(?:file_path|path)":"[^"]*ui-sources\.json"|"name":"Bash","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"command":"(?:[^"\\]|\\.)*?\b(?:cat|head|tail|sed|less|more|jq|grep|node|python3?)\b(?:[^"\\]|\\.)*?ui-sources\.json|"name":"(?:Agent|Task)","input":\{(?:"\w+":(?:"(?:[^"\\]|\\.)*"|true|false|null|-?\d+(?:\.\d+)?),\s*)*"\w+":"(?:[^"\\]|\\.)*?ui-sources\.json)'
+match: contains
+weight: 2
+---
+
+A lista fixa de fontes vem antes da interface, conferida pela ordem no trace inteiro (o juiz `llm` com `focus: trace` só recebe o começo e o fim de um trace longo). Passa se, antes do primeiro Edit, Write ou MultiEdit num arquivo `.html`, `.css` ou `.tsx` (ou de um `>`, `>>` ou `tee` para um arquivo desses), vale uma destas: o agente leu um arquivo cujo caminho termina em `ui-sources.json`, com Read ou Grep, ou no Bash com `cat`, `head`, `tail`, `sed`, `less`, `more`, `jq`, `grep`, `node` ou `python`; ou despachou um subagente (Agent ou Task) com `ui-sources.json` em qualquer campo de texto do pedido. A segunda saída existe porque as leituras do subagente implementador não aparecem no trace do agente principal: mandar o implementador ler a lista, nomeando o arquivo no prompt, é o jeito de cumprir a regra no despacho. Escrever a página primeiro e ler a lista depois, ou nunca ler nem mandar ler, falha. O projeto não tem `ui-sources.json`; a lista vem com a skill, então os braços de base devem falhar aqui.
