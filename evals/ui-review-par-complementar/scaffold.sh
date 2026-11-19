@@ -4,13 +4,13 @@
 # as index.html and styles.css, with DESIGN.md and the owner's approved spec
 # in docs/devorb/specs/. Mode: Persuade. The page text is in Portuguese.
 # The colour work is not declared anywhere: light sections use navy (--accent)
-# for headline words and the CTA; one dark warm band (ground #1c100c) uses
-# orange (--complement) for headline words, the big number and the labels.
+# for the CTA; one dark warm band (ground #1c100c) uses
+# orange (--complement) for the big number and the labels.
 # Navy and orange sit about 200 degrees apart and never share a block.
 # DESIGN.md lists both tokens with a neutral role and the spec says nothing
 # about colour, so nothing authorises the pair or says which section owns
 # which colour: the reviewer must accept it by the critique rule alone.
-# Planted real defect, in styles.css:48: .lead (the hero paragraph, "Cuidamos do
+# Planted real defect, in styles.css:47: .lead (the hero paragraph, "Cuidamos do
 # seu CNPJ...") is #9ca3af on the #ffffff section, about 2.5:1, below 4.5:1.
 # Everything else passes. Plain HTML and CSS, no build, no dependencies.
 # Self-contained, no network. Reproducible: fixed author, dates and git config.
@@ -125,7 +125,7 @@ cat > index.html <<'__X__'
     <section class="hero">
       <div class="wrap">
         <p class="eyebrow">Contabilidade para MEI</p>
-        <h1>Seu CNPJ em dia, <span class="hl">sem papelada</span></h1>
+        <h1>Seu CNPJ em dia, sem papelada</h1>
         <p class="lead">Cuidamos do seu CNPJ e da declaração anual para você tocar o negócio.</p>
         <a class="button" href="#abrir">Abrir minha conta</a>
       </div>
@@ -134,7 +134,7 @@ cat > index.html <<'__X__'
     <section class="plan">
       <div class="wrap">
         <p class="label">Plano único</p>
-        <h2>Um preço, <span class="hl">tudo incluído</span></h2>
+        <h2>Um preço, tudo incluído</h2>
         <p class="big">R$ 79<span class="per">/mês</span></p>
         <ul class="facts">
           <li><span class="label">Resposta</span> Primeira resposta em 1 dia útil</li>
@@ -145,7 +145,7 @@ cat > index.html <<'__X__'
 
     <section class="closing" id="abrir">
       <div class="wrap">
-        <h2>Pronto para <span class="hl">começar?</span></h2>
+        <h2>Pronto para começar?</h2>
         <p class="body">A abertura da conta leva poucos minutos.</p>
         <a class="button" href="#abrir">Abrir minha conta</a>
       </div>
@@ -202,7 +202,6 @@ p { margin: 0 0 var(--space-4); }
 .eyebrow { color: var(--text-muted); font-size: var(--text-small); }
 
 .hero { background: var(--bg); }
-.hero .hl { color: var(--accent); font-weight: 600; }
 .lead { color: #9ca3af; max-width: 34em; }
 
 .button {
@@ -219,19 +218,15 @@ p { margin: 0 0 var(--space-4); }
 .button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
 .plan { background: var(--ground-dark); color: var(--text-on-dark); }
-.plan .hl { color: var(--complement); font-weight: 600; }
 .plan .label {
   color: var(--complement);
   font-size: var(--text-small);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 .big { color: var(--complement); font-size: clamp(4rem, 14vw, 7rem); font-weight: 700; line-height: 1; }
 .per { font-size: 1.5rem; font-weight: 400; color: var(--text-on-dark); }
 .facts { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
 
 .closing { background: var(--surface); }
-.closing .hl { color: var(--accent); font-weight: 600; }
 .closing .body { color: var(--text-muted); }
 
 @media (prefers-reduced-motion: reduce) {

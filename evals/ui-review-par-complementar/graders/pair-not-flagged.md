@@ -4,7 +4,7 @@ focus: last_message
 weight: 3
 ---
 
-Contexto: a landing do Prumo (`index.html` com `styles.css`) é uma página Persuade com um par de cores deliberado: marinho (`#1e3a8a`, `--accent`) nas seções claras e laranja (`#f97316`, `--complement`) na faixa escura e quente do plano, cada cor nas suas seções, nunca as duas no mesmo bloco. Nem o `DESIGN.md` (só os dois tokens, com papel neutro) nem a spec declaram o par ou dizem qual seção é de qual cor. O usuário pediu uma revisão da interface. Há um defeito real plantado: o parágrafo `.lead` do hero é `#9ca3af` sobre `#ffffff` (`styles.css`, linha 48), cerca de 2,5:1, abaixo dos 4,5:1 do texto corrido.
+Contexto: a landing do Prumo (`index.html` com `styles.css`) é uma página Persuade com um par de cores deliberado: marinho (`#1e3a8a`, `--accent`) nas seções claras e laranja (`#f97316`, `--complement`) na faixa escura e quente do plano, cada cor nas suas seções, nunca as duas no mesmo bloco. Nem o `DESIGN.md` (só os dois tokens, com papel neutro) nem a spec declaram o par ou dizem qual seção é de qual cor. O usuário pediu uma revisão da interface. Há um defeito real plantado: o parágrafo `.lead` do hero é `#9ca3af` sobre `#ffffff` (`styles.css`, linha 47), cerca de 2,5:1, abaixo dos 4,5:1 do texto corrido.
 
 Julgue só a resposta final do agente. Passa somente se as duas condições valem:
 

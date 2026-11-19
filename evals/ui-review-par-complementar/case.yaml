@@ -3,8 +3,8 @@ name: ui-review-par-complementar
 description: >-
   Landing do Prumo, contabilidade online fictícia para MEI, já pronta em
   `index.html` e `styles.css`, modo Persuade, com um `DESIGN.md` de tokens e a
-  spec aprovada. As seções claras usam o marinho (`--accent`) nas palavras do título e no botão; uma faixa escura e quente usa o laranja (`--complement`) nas palavras do título, no número grande e nos rótulos; os dois nunca dividem o mesmo bloco. O `DESIGN.md` lista os dois tokens com um papel neutro e a spec não diz nada sobre cor: nada autoriza o par nem diz qual seção é de qual cor, então o crítico precisa aceitá-lo pela regra de crítica, não por declaração. Defeito plantado: o parágrafo `.lead` do hero é
-  `#9ca3af` sobre `#ffffff` (cerca de 2,5:1, abaixo de 4,5:1, `styles.css:48`).
+  spec aprovada. As seções claras usam o marinho (`--accent`) no botão; uma faixa escura e quente usa o laranja (`--complement`) no número grande e nos rótulos; os dois nunca dividem o mesmo bloco. O `DESIGN.md` lista os dois tokens com um papel neutro e a spec não diz nada sobre cor: nada autoriza o par nem diz qual seção é de qual cor, então o crítico precisa aceitá-lo pela regra de crítica, não por declaração. Defeito plantado: o parágrafo `.lead` do hero é
+  `#9ca3af` sobre `#ffffff` (cerca de 2,5:1, abaixo de 4,5:1, `styles.css:47`).
   O usuário pede a revisão da interface. O agente relata o contraste com
   severidade de P0 a P3 e não acusa o par marinho e laranja de destaque demais.
 tags: [ui-review]
