@@ -68,6 +68,12 @@ test('judgeSite gives timeout on a null exit and the last stderr line on a crash
   assert.deepEqual(judgeSite({ dir, widths: [1440], exit: null }).reasons, ['timeout']);
   assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr: 'at x\nTypeError: boom\n' }).reasons, ['run failed (exit 1): TypeError: boom']);
 });
+test("judgeSite names the error line, not Node's version trailer, on a crash", () => {
+  const dir = site({ 1440: good });
+  const stderr = 'file:///x/shoot.mjs:9\nTypeError: boom\n    at main (file:///x/shoot.mjs:9:3)\n\nNode.js v22.11.0\n';
+  assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr }).reasons, ['run failed (exit 1): TypeError: boom']);
+  assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr: 'killed\n' }).reasons, ['run failed (exit 1): killed']);
+});
 test('judgeSite reports a missing width folder', () => {
   const dir = site({ 1440: good });
   assert.deepEqual(judgeSite({ dir, widths: [1440, 390], exit: 0 }).reasons, ['no metrics at 390']);

@@ -29,7 +29,11 @@ export function judgeSite({ dir, widths, exit, stderr = '' }) {
   const warns = [];
   const shotErrors = [];
   if (exit === null) reasons.push('timeout');
-  else if (exit !== 0 && exit !== 2) reasons.push(`run failed (exit ${exit}): ${stderr.trim().split('\n').pop()}`);
+  else if (exit !== 0 && exit !== 2) {
+    // Node ends a crash with its version line: the error line is the one that says why
+    const lines = stderr.trim().split('\n');
+    reasons.push(`run failed (exit ${exit}): ${lines.find((l) => /Error/.test(l)) ?? lines.at(-1)}`);
+  }
   for (const w of widths) {
     let m, checks;
     try {
