@@ -18,7 +18,7 @@ What can still be missing, in this order:
 - One question per message. Never a list of questions, never a numbered menu.
 - Each question carries your recommendation and its reason, in plain words tied to this business and its visitors ("quem chega com dor quer ver logo como marcar"). No design jargon.
 - The person can answer in their own words, or just say yes to the recommendation.
-- Nobody to answer (the user said they will not reply, or the run has no person): take each recommendation yourself, and write it with its reason in the contract and in your final message. Then skip the browser, the board and the capture in section 3, and name the recommended reference under `Sources:`.
+- Nobody to answer (the user said they will not reply, or the run has no person): take each recommendation yourself, and write it with its reason in the contract and in your final message. Then skip the browser, the board and the capture in section 3, and name the recommended reference under `Sources:`. Skipping them never skips the sources: read `references/ui-sources.json`, and before writing code open the chosen style's `byStyle` gallery pages, when the style has any, as `references/sources.md` says for their `reading`. A page that will not open is named, with why, under `Sources:` and in your final message.
 
 ## 3. References with the eyes
 

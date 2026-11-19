@@ -68,5 +68,5 @@ If the plan matches a row the brief never asked for, change it and record what c
 - Below 1024px wide the headline may shrink: Persuade fails below 2.0 and warns below 2.5; the other modes fail below 0.8 of their minimum.
 - Body median: FAIL below 13px on Persuade and Read; WARN from 13 to under 14px on Persuade and Read.
 - Display weight: WARN when an h1 or h2 of 48px or more has weight 700 or more at tracking 0 or above.
-- Accents: WARN with more than 2 saturated hues across text, button fills and section backgrounds.
+- Accents: WARN with more than 2 saturated hues across text, button fills and section backgrounds. A complementary pair split by section passes (2 hues).
 - Also WARN: more than 12 font sizes, more than 3 button styles, more than 8 text colours, body lines over 75 characters, over 20% of spacings off the 4px grid, a repeated image.

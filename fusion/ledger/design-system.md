@@ -72,6 +72,7 @@ O trecho de contraste de `references/contrast.md` foi escrito aqui e rodado ante
 
 1. **Regra do dono: tema padrão do shadcn/ui.** Quando a fundação é o shadcn/ui, os valores das variáveis do tema padrão são trocados pelos tokens do projeto, nos dois temas, mantendo os nomes. Está no corpo do `SKILL.md`. Nenhuma fusão a tira. Cenário: o terceiro caso da Task D3 (projeto com shadcn/ui no tema padrão e spec com direção própria).
 2. **Contraste calculado por script.** Todo par, nos dois temas, passa pelo trecho de `references/contrast.md`, e o resultado vai para `DESIGN.md` e para a mensagem final. Cenário: o caso realista da Task D3 (contraste calculado em todos os pares, nos dois temas).
+3. **Regra do dono: par complementar dividido por seção.** Uma página pode usar dois matizes complementares (por exemplo marinho e laranja) quando cada um tem as suas seções: um domina as seções de uma família e o outro as de outra, nunca os dois no mesmo bloco. Dono, 2026-11-18, sobre a página do Pilot: "ficou melhor do que uma cor só, traz vida". Tocou `design-system/references/color-finish.md` e `color-roles.md` e, em `visual-direction`, `floor.md`, `hero-patterns.md`, `persuade.md` e `contract.md`. Cenário: `evals/visual-direction-receitas-landing`, grader `color-pair`. RED em `devorb@8dc3b2f`: `color-pair` falhava 2/2 no braço devorb e 2/2 no `none` (devorb 0,75, none 0,25). GREEN em `devorb@4a966e3`: 100% (1,00), `none` 0,30. Limite conhecido: a faixa vinho (~355°) com o laranja (~25°) conta como três matizes no `accent-count`; sem mudança no código, fica anotado. Em aberto, decisão do dono: o piso "No single word set apart inside a heading" deveria afrouxar para o complemento? Hoje não afrouxa; o complemento só ganha linhas inteiras do título, não uma palavra solta.
 
 As candidatas da spec **não entraram**: foco com `outline` por `forced-colors`, e texto grande como 24 px ou 18,66 px em negrito. A skill e `contrast.md` dizem "texto grande como o WCAG define", sem o número. Ficam em aberto até um cenário as justificar.
 
@@ -124,6 +125,17 @@ RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem
 
 - A rodada custou US$ 4,17 no total. O caso novo falha sem o plugin, então o RED está confirmado. Os três casos antigos repetem as notas de 2026-11-13.
 - GREEN (`--arms devorb,none`) fica com o controlador e ainda não rodou.
+
+### Plano de regras de cor e referências (2026-11-19)
+
+RED em 2026-11-18, GREEN em 2026-11-19, Opus 5.5, 2 rodadas, `--arms devorb,none`. `fusion/results/2026-11-18-visual-direction-receitas.md` (RED) e `fusion/results/2026-11-19-visual-direction-receitas.md` (GREEN).
+
+| Caso | Etapa | devorb | none | Custo |
+|---|---|---|---|---|
+| `visual-direction-receitas-landing` | RED (`devorb@8dc3b2f`) | 0,75, `color-pair` falha 2/2 | 0,25, `color-pair` falha 2/2 | US$ 3,83 |
+| `visual-direction-receitas-landing` | GREEN (`devorb@4a966e3`) | 100% (1,00) | 0,30 | US$ 6,39 |
+
+- Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

@@ -39,3 +39,4 @@ A mailing-list close on a page whose job is not subscribing is a reflex: end on 
 - A display face that nearly every generated page ships (the free editorial serifs and the geometric sans that models reach for by default) needs a reason written in the contract that only this brief supplies. A cliché of the trade ("a law firm wants a classic serif") is not a reason. The brief naming the face is.
 - Choose light or dark by picturing the reader: where they are and in what light.
 - Let one element be bold; everything else stays quiet and exact.
+- Colour defaults to a complementary pair split by section (`devorb:design-system`, `references/color-finish.md`), unless the spec or `DESIGN.md` fixes one colour. The `Sections:` line says which colour owns each section, such as the primary on the light sections and the complement on the proof band.

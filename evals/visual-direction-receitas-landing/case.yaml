@@ -9,10 +9,10 @@ description: >-
   `index.html` e `styles.css` e avisa que não responde perguntas hoje. O
   agente grava na spec um contrato que cita um padrão de abertura (`hero:`) e
   padrões de seção (`section:`) do cardápio, e a página segue as receitas:
-  título grande, leve e com tracking negativo sobre um corpo de leitura, um só
-  destaque, cartões com borda fina, um hero com UI construída em HTML, nenhum
-  número além dos três dados, e no celular o hero à esquerda, o CTA com a
-  largura toda e o h1 entre 32 e 64px.
+  título grande, leve e com tracking negativo sobre um corpo de leitura, um
+  par complementar dividido por seção, cartões com borda fina, um hero com UI
+  construída em HTML, nenhum número além dos três dados, e no celular o hero
+  à esquerda, o CTA com a largura toda e o h1 entre 32 e 64px.
 tags: [visual-direction]
 runs: 2
 context:

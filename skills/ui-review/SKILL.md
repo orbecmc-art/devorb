@@ -13,7 +13,7 @@ THE RENDER JUDGES, THE CODE LOCATES. UNMEASURED IS NOT PASSED.
 
 ## 1. Gather what was declared
 
-Read, in this order: `DESIGN.md` at the project root, the contract (`## Direção visual` in the spec), `references/floor.md` of `devorb:visual-direction`, and the references of `devorb:design-system` and `devorb:motion` when those skills are installed. These, plus WCAG 2.2 (`references/a11y.md`) and the mobile web floor (`references/mobile-web.md`), are the only rules. A value nobody declared is never a finding. For an app screen, read `references/native.md`.
+Read, in this order: `DESIGN.md` at the project root, the contract (`## Direção visual` in the spec), `references/floor.md` of `devorb:visual-direction`, and the references of `devorb:design-system` and `devorb:motion` when installed. These, plus WCAG 2.2 (`references/a11y.md`) and the mobile web floor (`references/mobile-web.md`), are the only rules. A value nobody declared is never a finding. For an app screen, read `references/native.md`.
 
 Whatever `DESIGN.md` or the contract authorizes is not a finding: that check is clear, with no finding and no recommendation.
 
@@ -27,7 +27,7 @@ Take the `devorb:browser-testing` run for this screen; if none exists, do it fir
 
 Render at 1280 x 800, at 375 x 812 with touch, and at 1920 when the floor's container rule applies.
 
-**No browser available:** the report's first line says "only code". Every check that needs the render ends as not checked, and code findings are marked inferred. A URL that was given but not measured never passes.
+**No browser:** the report's first line says "only code". Every check that needs the render ends as not checked, and code findings are marked inferred. A URL given but not measured never passes.
 
 ## 4. Measure computed against declared
 
@@ -39,7 +39,7 @@ In the rendered page, never in the source:
 - **Contrast:** compute from the painted colours and write the pair with its ratio.
 - **Displayed text:** read the rendered text, `alt`, `aria-label`, `title` and `placeholder`, never class names. Here live the AI tells (the floor's reflexes and spent looks) and broken plurals such as "1 members". A tell passes only when the contract names it in a sentence you quote; an atmosphere word in the contract ("editorial", "premium", "moderno") is no permission.
 
-Then locate each deviation in the code with `file:line`. When the screen shows data (names, counts, lists, dates), also run `references/worst-case.md`.
+Then locate each deviation in code with `file:line`. When the screen shows data (names, counts, lists, dates), also run `references/worst-case.md`.
 
 Classify every deviation:
 
@@ -63,10 +63,10 @@ A reviewer who never sees the code scores the look by `references/critique.md`. 
 3. **Reference pack** (the contract's `Reference pack:` or one the user names): without `1440/metrics.json` in it, shoot its URL or `source.html` into `<tmp>/ref` the same way. Then:
    `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`
    Each `reasons` item is a `[P1]` Conceptual mismatch; each `deviations` item a `[P2]`.
-4. **Fresh critic:** dispatch a new subagent (the Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`. Nothing else: no code (except in the no-browser fallback), no word on who built it. Never paste the rubric; if the critic cannot read that path, copy `critique.md` into `<tmp>` and name the copy.
+4. **Fresh critic:** dispatch a new subagent (Agent tool). Its prompt names, by absolute path, `$UI_DIR/references/critique.md`, the shots, the pack's notes and shots, and `DESIGN.md`, and quotes the contract's `## Direção visual`, its `Sources:` line (the chosen references) included. Nothing else: no code (except in the no-browser fallback), no word on who built it. Never paste the rubric; if the critic cannot read that path, copy `critique.md` into `<tmp>` and name the copy.
 5. **Copy** its block verbatim, in `critique.md`'s line format: never a table, never a summary. Every score below 8 gets its own `[P1]` line (§8), even when a measured finding covers it, unless its gap targets only what `DESIGN.md` or the contract authorizes, or a value nobody declared: then the score line stays and no P1 is added.
 
-No browser or no subagent tool: follow the fallbacks at the end of `critique.md`. Without a browser the report's first line says "only code" and no screenshot or measured value is claimed.
+No browser or no subagent tool: follow the fallbacks at the end of `critique.md`. Without a browser, the report's first line says "only code" and claims no screenshot or measured value.
 
 ## 7. Severity
 

@@ -2,7 +2,7 @@
 
 Read before naming any colour token. This file gives roles, never colours: the values come from the world in the direction contract.
 
-## Sixteen roles, in pairs
+## Sixteen roles, in pairs (eighteen with a complement)
 
 A surface is never defined alone. Each surface role has an ink role that sits on it, and the pair is checked as a pair.
 
@@ -13,6 +13,7 @@ A surface is never defined alone. Each surface role has an ink role that sits on
 | `primary` | `on-primary` | the main action and the current selection | 4.5:1 |
 | `secondary` | `on-secondary` | the second-rank action, quiet fills | 4.5:1 |
 | `accent` | `on-accent` | the one spot the direction wants noticed: a highlight, a hovered row | 4.5:1 |
+| `complement` | `on-complement` | Persuade with a complementary pair only: the second colour, owning its own sections or bands (`color-finish.md`) | 4.5:1 |
 | `muted` | `muted-foreground` | low-emphasis areas and their helper text, captions, placeholders | 4.5:1 |
 | `destructive` | `on-destructive` | delete, errors that block | 4.5:1 |
 
