@@ -66,7 +66,7 @@ export function checkFloor(m, mode) {
   const bodyCheck = check('body-size', !(bodyMedian >= 13) && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`);
   return [
     ratioCheck.status === 'PASS' && ratio < target ? { ...ratioCheck, status: 'WARN' } : ratioCheck,
-    bodyCheck.status === 'PASS' && mode === 'read' && bodyMedian < 14 ? { ...bodyCheck, status: 'WARN' } : bodyCheck,
+    bodyCheck.status === 'PASS' && (mode === 'read' || mode === 'persuade') && bodyMedian < 14 ? { ...bodyCheck, status: 'WARN' } : bodyCheck,
     check('measure', wide > 0, 'WARN', `${wide} body samples above 75 chars per line`),
     check('spacing-grid', off > 0.2 * m.spacing.length, 'WARN', `${off} of ${m.spacing.length} spacings off the 4px grid`),
     check('font-sizes', distinct(m.text.map((t) => t.fontSize)) > 12, 'WARN', `${distinct(m.text.map((t) => t.fontSize))} distinct font sizes`),

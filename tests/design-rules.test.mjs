@@ -12,10 +12,11 @@ test('Pilot warns on the persuade ratio target, Ligare fails the 2.5 floor', () 
   assert.equal(status(pilot, 'body-size'), 'PASS');
   const ligare = checkFloor(load('metrics-ligare.json'), 'persuade');
   assert.equal(status(ligare, 'heading-ratio'), 'FAIL');
-  assert.equal(status(ligare, 'body-size'), 'PASS');
+  assert.equal(status(ligare, 'body-size'), 'WARN');
 });
-test('read warns on a 13px body', () => {
+test('read and persuade warn on a 13px body', () => {
   assert.equal(status(checkFloor(load('metrics-ligare.json'), 'read'), 'body-size'), 'WARN');
+  assert.equal(status(checkFloor(load('metrics-ligare.json'), 'persuade'), 'body-size'), 'WARN');
 });
 // a page of one heading and three body samples
 const page = (heading, body, extra = {}) => {
