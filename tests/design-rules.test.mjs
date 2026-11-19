@@ -149,6 +149,12 @@ test('the second rule picks the level with most full-width blocks', () => {
   const tree = node('body', 0, 1440, 3600, [node('main', 0, 1440, 3600, [node('div', 0, 0, 0, blocks(4, 0)), node('div', 0, 0, 0, blocks(2, 4))])]);
   assert.equal(findSections(tree).nodes.length, 4);
 });
+test('the second rule measures full width from the page when main has no box', () => {
+  const node = (tag, y, w, h, children = []) => ({ tag, rect: { x: 0, y, w, h }, children });
+  const cards = Array.from({ length: 3 }, (_, i) => ({ tag: 'div', rect: { x: i * 480, y: 600, w: 400, h: 300 }, children: [] }));
+  const tree = node('body', 0, 1440, 1400, [node('main', 0, 0, 0, [node('div', 0, 0, 0, [node('section', 0, 1440, 600), node('section', 600, 1440, 800, cards)])])]);
+  assert.deepEqual(findSections(tree).nodes.map((n) => n.tag), ['section', 'section']);
+});
 test('the first rule wins when it already finds two or more', () => {
   const { root, nodes } = findSections(load('dom-app-shell.json'));
   assert.equal(root.tag, 'main');

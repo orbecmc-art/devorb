@@ -121,7 +121,7 @@ export function findSections(tree) {
   const start = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
   let best = { root: start, nodes: [] };
   const visit = (n) => {
-    const blocks = n.children.filter((c) => c.rect.w >= 0.9 * start.rect.w && c.rect.h >= 120);
+    const blocks = n.children.filter((c) => c.rect.w >= 0.9 * (start.rect.w || tree.rect.w) && c.rect.h >= 120);
     if (blocks.length > best.nodes.length) best = { root: n, nodes: blocks };
     n.children.forEach(visit);
   };
