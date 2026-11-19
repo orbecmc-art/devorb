@@ -15,7 +15,7 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 - **Hero:** split layout inside hairline rails 62px from each edge. Left: H1 64/-2.24 (ABC Diatype w500), 3 lines; body with a bold phrase; small CTAs (blue + grey, radius 5). Right: iPhone wallet card over a **dashed blueprint grid**. Floating pill nav.
 - **Sequence (12):** logo grid (10 hairline cells); 36px statement with blue phrases; 3 columns of mini-UIs (reader list, logos, chat); **dark band** carousel; 3 case studies; 5-step accordion + UI; logo strip; integrations hub; dotted globe + 4 stats; changelog (4); CTA; footer.
 - **Type:** Diatype for display, Inter for UI. Body 14, ratio 4.57.
-- **Color:** white with #F7F7F8 grey bands, one dark band, one blue accent (also used as the second line of the headline, "deliver outcomes").
+- **Color:** white with #F7F7F8 grey bands, one dark band, one blue accent (also used on the second line of the headline).
 - **Craft:** visible grid and dashed construction lines, 160px section padding, mini UIs in place of icons.
 - **Mobile:** the phone visual is dropped and the hero is text-only.
 - **Agent would get wrong:** losing the rail and hairline grid; using generic icon cards where it should build bespoke mini-UIs.
@@ -34,13 +34,13 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 - **Sequence (5):** featured (4x2 cards); by theme (5x2 collage cards); by style; how-it-works (3 numbered cards).
 - **Type:** Fraunces italic headings, Bricolage Grotesque UI, body 14. Ratio 5.55.
 - **Color:** warm #F7F6F2, crimson #9F1239 as the only accent. All white cards with soft shadows.
-- **Craft:** the content is the imagery, card meta is written as "tag · tag · tag", section headers carry a right-aligned "350 fontes →" link.
+- **Craft:** the content is the imagery, card meta is written as "tag · tag · tag", section headers carry a right-aligned link with the item count and an arrow.
 - **Mobile:** centred text over the tile wall.
 - **Agent would get wrong:** a flat grid in place of the perspective wall; a sans display face.
 
 ## billow (SaaS for service businesses, persuade)
 - **Hero:** centred. Announcement pill, H1 92/-4.6 (**-0.05em**, Lastik serif, w400), 2 lines; sub with a highlighted lead phrase; one electric-blue pill CTA + micro-caption. A full dashboard (radius ~12) floats on a **blurred blue cloud blob**, with a handwritten note and arrow.
-- **Sequence (~13):** 3 step cards with UI vignettes; statement; 4 feature rows (2-tone H2 left, body right, UI below); CRM; audience tabs (5); CTA card on cloud; FAQ (8); 3-column checklist with "Soon" badges; footer.
+- **Sequence (~13):** 3 step cards with UI vignettes; statement; 4 feature rows (2-tone H2 left, body right, UI below); CRM; audience tabs (5); CTA card on cloud; FAQ (8); 3-column checklist with coming-soon badges; footer.
 - **Type:** Lastik serif display, Open Runde/Inter UI, body 15. Ratio 6.13, the highest in this set.
 - **Color:** near-white, navy oklch(0.18 0.03 268) text, blue gradient atmosphere.
 - **Craft:** two-tone headlines (navy + slate), screenshots fade at the bottom edge, one handwritten annotation.
@@ -48,7 +48,7 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 - **Agent would get wrong:** tracking that is too loose on the serif; a generic purple gradient in place of the soft cloud.
 
 ## bordo (restaurant, Framer template)
-- **Hero:** full-bleed interior photo darkened ~40%. Gold script "Pure" overlaps the caps Melodrama H1 140 at **+0.04em**. Diamond divider, micro-caps tagline, address bottom-left, nav as menu / logo / booking.
+- **Hero:** full-bleed interior photo darkened ~40%. A gold script word overlaps the caps Melodrama H1 140 at **+0.04em**. Diamond divider, micro-caps tagline, address bottom-left, nav as menu / logo / booking.
 - **Sequence (8):** manifesto with ornament; philosophy (overlapping photos, script+caps H2, outline CTA); chef (mirrored); full-bleed quote; menus (4 split rows I–IV, caps word crossing the photo seam); cream cartouche note; 3 reviews in double hairline frames; footer.
 - **Type:** Melodrama caps display, Alex Brush script accent, Della Respira body 18. Ratio 4.89.
 - **Color:** burgundy-black #140304 / #2A0A0C, gold, cream. Fully dark throughout.
@@ -57,7 +57,7 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 - **Agent would get wrong:** script used as body text; rounded cards; bright reds; dense spacing.
 
 ## framer (SaaS builder, product)
-- **Hero:** left-aligned. H1 54/-2.16 (-0.04em, GT Walsheim w500), 2 lines; 18px grey sub; white CTA + icon chips; "New:" link right. Full-width product video below (radius ~16).
+- **Hero:** left-aligned. H1 54/-2.16 (-0.04em, GT Walsheim w500), 2 lines; 18px grey sub; white CTA + icon chips; a new-release link at right. Full-width product video below (radius ~16).
 - **Sequence (8):** logos (2x4); UI close-up + 3-column strip; agent rows with sticky chat panel; **bento** of 9 mixed tiles (vitals, CMS, 99.99%, analytics); site showcase collage; 4 story cards; marketplace browser mock.
 - **Type:** GT Walsheim headings, Inter body 13–15. Ratio 4.15.
 - **Color:** pure black throughout, white text, blue only inside the UI.
@@ -67,7 +67,7 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 
 ## futureagi (AI devtool, product)
 - **Hero:** centred. GitHub-stars pill; H1 Inter **w300** 96/-2.4 with **line 2 grey**; white + outline pills; product window with a 6-tab bar; starfield.
-- **Sequence (11):** proof grid (4x3 cells of logos, stats, quotes); 3 sticky tabs + accordions; use-case tabs (7); T-4…T-1 launch timeline; 6 metric cards ("SYS-01" labels); self-host terminal; 28 integration tiles; security orbit; FAQ (7).
+- **Sequence (11):** proof grid (4x3 cells of logos, stats, quotes); 3 sticky tabs + accordions; use-case tabs (7); T-4…T-1 launch timeline; 6 metric cards (system-code labels); self-host terminal; 28 integration tiles; security orbit; FAQ (7).
 - **Type:** Inter light display, JetBrains Mono eyebrows and labels. Body 14, ratio 6.86.
 - **Color:** #0A0A0A all the way. Green #22C55E status dot as the only accent.
 - **Craft:** bordered mono eyebrow with a status dot on every section, a faint 40px grid, one sustained mission-control metaphor.
@@ -105,7 +105,7 @@ Caveats: Aave s3 and Hoy s0 are scroll-pinned and captured mostly blank. Billow 
 **Hero patterns**
 1. **Centred + product shot below:** pill eyebrow, H1 72–96 on 2 lines, sub 18–20, 1–2 pill CTAs, micro-caption, then a full-width UI frame at radius 12–16 on a soft glow (aave, billow, futureagi).
 2. **Split header + bleeding UI:** H1 left, sub + CTA right, UI cropped at the right viewport edge (interfere).
-3. **Left H1 + video canvas:** left text, CTA + "New:" link on one row, full-width product video (framer).
+3. **Left H1 + video canvas:** left text, CTA + a new-release link on one row, full-width product video (framer).
 4. **Text left / device right over a blueprint grid:** dashed construction lines behind a phone mock (accessgrid).
 5. **Copy + form card:** dark photo collage, gradient keyword in the H1, 2-step form at right, proof ticker underneath (agenciadevalor).
 6. **Full-bleed photo + script-over-caps:** darkened photo, display 140 caps, script overlay, micro-caps tagline (bordo).
