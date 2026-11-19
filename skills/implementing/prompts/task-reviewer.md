@@ -89,7 +89,8 @@ Agent (general-purpose):
       problem solved.
 
     A task that builds or changes a user interface needs a `Mirror:` line
-    in the report; one missing, or `not run` without a reason, is Missing.
+    and a `Sources:` line in the report; either one missing, or `not run`
+    without a reason, is Missing.
 
     If the brief lists several files, each with its own change (a batched
     dispatch), check file by file: a listed file the diff never touches is

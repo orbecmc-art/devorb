@@ -64,7 +64,10 @@ compare:
 
 A task that builds or changes a user interface runs the Mirror section of
 `prompts/implementer.md` before its commit, and its ledger line carries the
-`Mirror:` line.
+`Mirror:` line. Before the first UI file, read the sources the contract's
+`Sources:` line names, then the foundation and specialists for the
+components, in `devorb:visual-direction`'s `references/ui-sources.json`;
+record `Sources:` beside `Mirror:` in the ledger.
 
 Commit as the plan's commit steps say. Several commits per task are fine; the
 range starts at BASE, never `HEAD~1`.
