@@ -48,6 +48,8 @@ Estimativa: RED cerca de US$ 20 (o RED do `arquitetura-clean` já existe na roda
 - O par é padrão em Persuade, não obrigação: a spec ou o `DESIGN.md` que fixa uma cor só vence.
 - Faixa escura vinho (matiz perto de 355°) com laranja (perto de 25°) conta como dois matizes no `accent-count` (distância 30°): limite conhecido, anotado no ledger, sem mudança no código.
 
+- O piso proíbe uma palavra destacada dentro de um título ("No single word set apart inside a heading", `floor.md`). O Pilot pinta palavras do título de laranja. O piso fica como está: o complemento ganha linhas inteiras do título na sua faixa. Afrouxar o piso é decisão do dono, levada a ele no fim.
+
 ## Com o construtor
 
 Texto das skills em inglês, ledgers em português; `npm test` verde; cada SKILL.md dentro do teto de `fusion/skills.json` (`ui-review` está em 2.496 de 2.500: o texto novo sai de references ou troca palavras).
