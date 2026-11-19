@@ -445,6 +445,14 @@ test('a faded block under a tabindex=-1 element is counted when the reveal canno
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1);
 });
+test('__devorbReveal leaves a closed dialog, tooltip and listbox hidden', () => {
+  const withRole = (role) => text('div', { opacity: '0' }, { closest(sel) { return sel.split(', ').includes(`[role=${role}]`) ? this : null; } });
+  const popups = ['dialog', 'tooltip', 'listbox'].map(withRole);
+  const page = fakePage({ content: [...popups, text('p', { opacity: '0' })] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  assert.deepEqual(popups.map((e) => e.attrs), [{}, {}, {}]);
+});
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);
   const hidden = [text('p', { opacity: '0.05' }), text('p', { opacity: '0', visibility: 'hidden' }), text('p', { visibility: 'hidden' })];
