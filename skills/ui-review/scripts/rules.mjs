@@ -74,7 +74,9 @@ export function checkFloor(m, mode) {
     check('text-colors', distinct(m.textColors) > 8, 'WARN', `${distinct(m.textColors)} text colors`),
     check('photo-repeat', dupes > 0, 'WARN', `${dupes} repeated image sources`),
     check('display-weight', heavy.length > 0, 'WARN', `h1 or h2 of 48px+ at weight 700+ and tracking 0+: ${[...new Set(heavy.map((t) => `${t.fontSize}px`))].join(', ') || 'none'}`),
-    check('accent-count', accents.length > 2, 'WARN', `saturated hues: ${accents.map(Math.round).join(', ') || 'none'}`)
+    check('accent-count', accents.length > 2, 'WARN', `saturated hues: ${accents.map(Math.round).join(', ') || 'none'}`),
+    // the shooter forces faded content visible, so a reveal that never fires on its own would still look complete
+    check('forced-reveal', m.revealed > 0, 'WARN', `${m.revealed ?? 0} elements were hidden until forced visible: confirm they appear on a real scroll`)
   ];
 }
 

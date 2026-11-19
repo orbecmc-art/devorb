@@ -82,7 +82,15 @@ test('operate accepts a 2.0 ratio', () => {
 });
 test('every check id is present once', () => {
   const ids = checkFloor(load('metrics-pilot.json'), 'persuade').map((c) => c.id);
-  assert.deepEqual(ids, ['heading-ratio', 'body-size', 'measure', 'spacing-grid', 'font-sizes', 'button-styles', 'text-colors', 'photo-repeat', 'display-weight', 'accent-count']);
+  assert.deepEqual(ids, ['heading-ratio', 'body-size', 'measure', 'spacing-grid', 'font-sizes', 'button-styles', 'text-colors', 'photo-repeat', 'display-weight', 'accent-count', 'forced-reveal']);
+});
+test('forced-reveal warns when the shooter had to force content visible', () => {
+  const forced = checkFloor(page(64, 16, { revealed: 3 }), 'persuade').find((c) => c.id === 'forced-reveal');
+  assert.equal(forced.status, 'WARN');
+  assert.match(forced.detail, /^3 elements /);
+  assert.match(forced.detail, /real scroll/);
+  assert.equal(status(checkFloor(page(64, 16, { revealed: 0 }), 'persuade'), 'forced-reveal'), 'PASS');
+  assert.equal(status(checkFloor(page(64, 16), 'persuade'), 'forced-reveal'), 'PASS');
 });
 test('Pilot passes every check in persuade except two warnings', () => {
   const warned = { 'heading-ratio': 'WARN', 'display-weight': 'WARN' };
