@@ -10,7 +10,7 @@
 - `Direction:` the world it comes from, the one idea, what the usual page in this category does that this one won't, and the mirror-test change. On Replicate, the reference is the direction: name it.
 - `Type:` families and roles, confirmed or pending.
 - `First screen:` the `hero:` id from `references/hero-patterns.md`, what sits where, and the primary action.
-- `Sections:` one item per section or region, in order, from the visitor's job: its pattern as a `section:` id from `references/section-patterns.md` (or `custom`, with what it does), where its text comes from, and its movement. The last item says how the page ends.
+- `Sections:` one item per section or region, in order, from the visitor's job: its pattern as a `section:` id from `references/section-patterns.md` (or `custom`, with what it does), where its text comes from, its movement, and, with a complementary pair, which colour owns it (primary or complement). The last item says how the page ends.
 - `Material:` given, to show, missing; where each gap shows.
 - `Copy:` the primary action's exact wording and the voice in one line.
 - `Platform:` (app screens only) each platform's own idiom (Apple's guidelines on iOS, Material 3 on Android), or the neutral treatment chosen and why.

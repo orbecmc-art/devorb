@@ -11,7 +11,7 @@ Ten ways to build the first screen, taken from our study of real landing pages i
 ### `hero:centred-product-halo` — Centred title over the product
 When: one calm promise, and a product whose main screen tells the story by itself.
 Sketch: a centred title on two lines, a lead under it, one or two actions, and a one-line caption under the actions. Below them sits a wide frame with the real product, on a soft halo that sits behind the frame only. A short line above the title is allowed only when it carries a fact the client gave, such as a release.
-Measures: title 72 to 96px at 1440, weight 400 to 500, tracking -0.04em to -0.05em. Lead 18 to 22px. Frame radius as the cards in `space-radius.md`. The halo is blurred past 100px in the one accent hue, and never sits behind text.
+Measures: title 72 to 96px at 1440, weight 400 to 500, tracking -0.04em to -0.05em. Lead 18 to 22px. Frame radius as the cards in `space-radius.md`. The halo is blurred past 100px in the hue of the accent that owns this section, and never sits behind text.
 Mobile: title and actions left-aligned, actions at full width. The frame is cropped to its most telling part.
 
 ### `hero:split-header-bleeding-ui` — Split header, product running off the edge
