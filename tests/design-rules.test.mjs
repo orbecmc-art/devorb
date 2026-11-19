@@ -79,8 +79,9 @@ test('accentHues groups across 0°, skips near-transparent and low-chroma colour
 test('accent-count passes a complementary pair split by band', () => {
   const navy = ['rgb(15, 42, 92)', 'rgb(30, 58, 138)'];
   const orange = ['rgb(249, 115, 22)', 'rgb(245, 158, 11)'];
-  const sections = [{ bg: 'rgb(255, 255, 255)' }, { bg: 'rgb(60, 20, 14)' }];
+  const sections = [{ bg: 'rgb(255, 255, 255)' }, { bg: 'rgb(110, 40, 20)' }];
   const pair = { textColors: [...navy, ...orange], fills: [navy[1], orange[0]], sections };
+  assert.equal(accentHues([sections[1].bg]).length, 1); // the warm band is a hue of its own
   assert.equal(accentHues([...pair.textColors, ...pair.fills, ...sections.map((s) => s.bg)]).length, 2);
   assert.equal(status(checkFloor(page(64, 16, pair), 'persuade'), 'accent-count'), 'PASS');
   const third = { ...pair, textColors: [...pair.textColors, 'rgb(22, 163, 74)'] };
