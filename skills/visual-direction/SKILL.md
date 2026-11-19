@@ -47,13 +47,13 @@ If the spec already says what exists, that is the inventory. If a person is in t
 
 ## 4. The owner's reference sources
 
-Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style. With a person to guide, follow `guide.md` §3 first.
+Gate: before choosing a direction and before the first line of UI code (a page, screen or component built or restyled), read `references/ui-sources.json` and follow its `rules`. It holds on every path: with nobody to answer, on Extend, and on Replicate, where the pack is the main reference and the foundation and specialists still apply. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style. With a person to guide, follow `guide.md` §3 first.
 
 - Read `references/sources.md` before opening entries or choosing a library: how each `reading` opens, and one library per job.
 - Galleries show how a whole site is built: study structure, rhythm, type and the first screen. Copy a site's form when the user asks for it; never publish someone else's text, photos or logo as the client's.
 - With DevOrb's design flow active, do not load frontend-design, taste-skill, Impeccable or ui-ux-pro-max; recommend uninstalling them once.
 
-Your final message to the user names the sources you consulted and the ones you skipped, with why.
+Your final message to the user names, entry by entry, the sources you consulted and the ones you skipped, with why; a page that would not open is named as such.
 
 ## 5. A direction from the audience's world
 
