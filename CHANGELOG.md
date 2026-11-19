@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.0
+
+- Cor: o par complementar passa a ser dividido por seção em Persuade (`color-finish`, `color-roles` com `complement`, `floor`, `hero-patterns`, `persuade`, `contract` e o tell 3 do crítico). `receitas-landing`: RED 0,75, GREEN 1,00. `ui-review-par-complementar`: RED 0,50, GREEN 1,00.
+- Fontes do dono antes de qualquer design: portão na `visual-direction` §4 e no guia, mesmo sem pessoa; entradas `browser` sem navegador ganham uma tentativa de fetch; despacho e caminho inline do `implementing`; o `task-reviewer` exige `Sources:`; o crítico recebe `Sources:`. `implementing-fontes-ui`: 0 para 1,00. `arquitetura-clean`: 0,36 para 0,64 (os graders de fontes voltaram a passar; segue 0% de aprovação porque os graders de Sonner/toast falham: lacuna conhecida).
+- Custo: US$ 43,09 de US$ 50 aprovados.
+- Lacuna conhecida: faixa vinho (~355°) com laranja (~25°) conta três matizes no `accent-count`.
+- Lacuna conhecida: decisão do dono em aberto sobre o piso "No single word set apart inside a heading" para o complemento.
+
 ## 1.14.0
 
 - Design, Fase 2: o nível dos 23 sites de referência do dono vira meta mensurável. Pilar A: as ferramentas de captura (`shoot.mjs`, `capture.mjs`) aguentam as 23 referências: revelação forçada de conteúdo escondido com a contagem `hiddenContent`, páginas longas com `clip` e novas tentativas, `shotErrors` por seção, detecção de seções de reserva e `tools/refs-check.mjs`. Resultado: 23/23 sem queda, `hiddenContent` 0, pelo menos 2 seções em cada. Cena de rolagem fixada (hero do sol, parloa, hero do shopify) sai em branco: limite conhecido.
