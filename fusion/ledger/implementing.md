@@ -72,6 +72,7 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 2. **Paralelo só com a marca do plano, e com merge verificado.** A marca de independência vem do plano, em palavras; a leitura do controlador não basta, e o pre-flight confere a marca (duas tasks "independentes" que tocam o mesmo arquivo rodam em sequência). Depois de cada merge na integração, roda a suíte; vermelho é uma rodada de correção. Conflito volta ao implementador da task, com re-revisão sobre `<ponta da integração>..<cabeça da task>`. Nenhuma fonte diz como revisar uma task que precisou de merge, e duas tasks verdes sozinhas podem quebrar juntas.
 3. **O revisor da task também cobra a regra do Karpathy.** A Task 13 põe a regra no prompt de quem implementa. O `task-reviewer.md` passou a contar como "Extra" a edição de código vizinho que a task não pedia (renomear, reformatar, reescrever comentário, apagar código morto que já existia), e o `re-reviewer.md` conta como quebra nova a mudança que os achados não pediam. Caso: o realista da Task 13, com código vizinho bagunçado. Sem a regra, a revisão por task só confere o que falta e o que sobra de funcionalidade, e a edição no vizinho passa.
 4. **Espelho do construtor em task de interface.** Uma task que constrói ou muda uma página, tela ou componente roda o espelho antes do commit: serve a página, roda `shoot.mjs` de `devorb:ui-review` no modo do contrato, compara com `compareStructure` quando o pacote tem `1440/metrics.json`, olha os prints contra o pacote ou o `floor.md`, corrige e repete, no máximo 3 rodadas. O relatório traz `Mirror: rounds <n>/3 · shots <dir> · checks FAIL <n> WARN <n> · vs reference: <grossFail yes/no>`. Sem navegador e sem o sim explícito do usuário para instalar, `Mirror: not run (<why>)` e DONE_WITH_CONCERNS, sem afirmar print nem medida. O despacho nomeia o contrato, o `DESIGN.md`, o pacote, o `floor.md` e a ordem do espelho. Caso: `evals-outside/implementing-espelho-em-breve` (Task 6 do plano de qualidade de design), em que a linha de base fez a página certa, mas nunca se olhou nem levou o pacote e o `floor.md` ao despacho. Task sem interface não muda: `implementing-resgate-extrato` segue igual.
+5. **Regra do dono: o implementador lê as fontes antes da UI.** O despacho de uma task de interface leva o caminho de `ui-sources.json` e a linha `Sources:`; o implementador lê as fontes antes do primeiro arquivo de UI e relata `Sources:` no relatório. Tocou `SKILL.md` e `prompts/implementer.md`. Cenário: `evals/implementing-fontes-ui`, grader `sources-before-ui`. RED em `devorb@91ce711`: falha 2/2 no devorb e 2/2 no `none`, US$ 7,66. GREEN em `devorb@4a966e3`: 100% (1,00), `none` 0,00, US$ 4,25. Resultados: `fusion/results/2026-11-19-implementing-fontes-red.md` e `fusion/results/2026-11-19-implementing-fontes.md`.
 
 ## Fora
 
@@ -101,6 +102,14 @@ Espelho do construtor (Task 6 do plano de qualidade de design), fora do sandbox,
 | `implementing-espelho-em-breve` (RED, 2 rodadas) | `none` | 0% | 0,56 |
 
 - RED: o braço `none` falha em `brief-carries`, `mirror-ran` e `report-field` e passa em `result` e `result-scale`. A página sai certa, mas ninguém a fotografa antes do commit. O GREEN fica para a comparação com `devorb,superpowers`.
+
+Plano de regras de cor e referências, 2026-11-19, Opus 5.5, 2 rodadas, `--arms devorb,none`:
+
+| Caso | RED | GREEN devorb | GREEN none |
+|---|---|---|---|
+| `implementing-fontes-ui` | 0/2 em devorb e em none | 100% (1,00) | 0,00 |
+
+- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

@@ -85,6 +85,10 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 3. **A composição inclui as contagens.** No Replicate, `secoes.md` registra quantos itens tem cada grupo repetido (cards, pessoas, linhas, logos), e o build mantém essa contagem, remodelando o conteúdo verdadeiro para preenchê-la (mais momentos do dia, mais etapas do fluxo real, papéis ou personas de exemplo marcadas como exemplo). Um item só sai quando nada verdadeiro o preenche, e cada um que sai é nomeado na entrega. A conferência antes da entrega compara as contagens por seção. Está em `references/replicate.md` (passos 2 a 5). Cenário: o GREEN de `visual-direction-copia-referencia` (2026-11-17, `devorb@66e054a`): a rodada com a skill manteve as 6 seções em ordem, o título bicolor e a marca, mas cortou os 6 cards de horário para 3 e trocou a linha do tempo de 4 pessoas por papéis, "porque só há três coisas verdadeiras para mostrar". Falhou só em `structure`.
 
+4. **Regra do dono: par complementar dividido por seção.** Uma página pode usar dois matizes complementares (por exemplo vinho e laranja) quando cada um tem as suas seções: um domina as seções de uma família e o outro as de outra, nunca os dois no mesmo bloco. Dono, 2026-11-18, sobre a página do Pilot: "ficou melhor do que uma cor só, traz vida". Tocou `design-system/references/color-finish.md` e `color-roles.md` e, em `visual-direction`, `floor.md`, `hero-patterns.md`, `persuade.md` e `contract.md`. Cenário: `evals/visual-direction-receitas-landing`, grader `color-pair`. RED em `devorb@8dc3b2f`: `color-pair` falhava 2/2 no braço devorb e 2/2 no `none` (devorb 0,75, none 0,25). GREEN em `devorb@4a966e3`: 100% (1,00), `none` 0,30. Limite conhecido: a faixa vinho (~355°) com o laranja (~25°) conta como três matizes no `accent-count`; sem mudança no código, fica anotado. Decisão aberta do dono: o piso "No single word set apart inside a heading" continua; o complemento ganha linhas inteiras do título, não uma palavra solta.
+
+5. **Regra do dono: fontes do dono antes de qualquer design.** O portão em §4 e no `guide.md` vale também quando não há pessoa para perguntar: antes de qualquer design a skill lê `references/ui-sources.json` e `sources.md`. Entrada com `reading: "browser"` sem ferramenta de navegador ganha uma tentativa de web fetch antes de ser dada como pulada, regra única em `sources.md` e no JSON (custa uma chamada de rede que deve bater num bloqueio de robô). Tocou `SKILL.md`, `guide.md`, `sources.md` e `ui-sources.json`. Cenário: `visual-direction-arquitetura-clean`. Depois da Fase 2 o caso caiu para 0,36. GREEN em `devorb@4a966e3`: 0,64 em 2 rodadas (`none` 0,18). Diagnóstico de 1 rodada só com devorb: 0,73, com os graders 1 a 3 (`sources-before-code`, `clean-gallery-before-code`, `names-sources`) e 5 (`one-standout`) passando e 4 e 6 falhando: o Sonner não entrou no `package.json` e o aviso foi feito à mão. Lacuna a anotar: nenhuma regra faz o Sonner entrar sem rede; fica em aberto.
+
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
 ## Fora
@@ -192,6 +196,18 @@ RED em 2026-11-18, só a linha de base, Opus 5.5, 2 rodadas, braço sem plugin. 
 
 - O caso novo falha sem o plugin, então o RED está confirmado.
 - GREEN (`--arms devorb,none`), o caso de cópia e o reservado ficam com o controlador e ainda não rodaram.
+
+### Plano de regras de cor e referências (2026-11-19)
+
+GREEN em 2026-11-19, `devorb@4a966e3`, Opus 5.5, 2 rodadas, `--arms devorb,none`. Arquivos: `fusion/results/2026-11-19-visual-direction-receitas.md`, `fusion/results/2026-11-19-visual-direction-arquitetura.md`, `fusion/results/2026-11-19-visual-direction-arquitetura-1rodada.md`. RED: `fusion/results/2026-11-18-visual-direction-receitas.md`.
+
+| Caso | RED | GREEN devorb | GREEN none | Custo GREEN |
+|---|---|---|---|---|
+| `visual-direction-receitas-landing` | devorb 0,75 / none 0,25 (`color-pair` falha 2/2 nos dois), US$ 3,83 | 100% (1,00) | 0,30 | US$ 6,39 |
+| `visual-direction-arquitetura-clean` | 0,36 (Fase 2) | 0,64 | 0,18 | US$ 7,79 |
+
+- Diagnóstico de `arquitetura-clean`, 1 rodada só devorb: 0,73, US$ 1,89. Passam 1, 2, 3 e 5; falham `4-sonner-dependency` e `6-newsletter-toast`. A pasta `.arms` é recriada a cada rodada, então o detalhe da rodada dupla se perdeu.
+- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

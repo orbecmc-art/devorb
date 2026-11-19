@@ -73,6 +73,10 @@ Todos pela Task D5:
 
   Cenário: o GREEN fora do sandbox de 2026-11-17 (`devorb@cbba161`, `fusion/results/2026-11-17-ui-review-outside.md`). O crítico acertou o conteúdo: hierarchy 3, visual-moment 1, reference-fidelity 1, e a razão medida de 2,0 contra 3,29. Mesmo assim, nas duas rodadas o revisor transformou o bloco numa tabela em markdown e não listou as notas baixas como P1, dizendo que "repetiam os achados medidos". O crítico também não conseguiu ler `critique.md` no caminho do plugin; o revisor copiou o arquivo para uma pasta temporária e rodou de novo.
 
+- **Tell 3 aceita o par por seção.** O sinal de página gerada que conta matizes aceita dois matizes complementares quando cada um tem as suas seções (regra do dono, 2026-11-18, ver `design-system` e `visual-direction`). Tocou `SKILL.md` e `references/critique.md`.
+- **O crítico recebe a linha `Sources:` e anota quando o build ignorou as fontes.** Quando o despacho do implementador não trouxe as fontes de `ui-sources.json`, o crítico registra isso nos achados. Cenário: `evals/implementing-fontes-ui` (ver `implementing`).
+- **Lacuna:** o caso `evals/ui-review-par-complementar` serve só como guarda de regressão. Já passava antes da mudança (RED: devorb 1,00, `none` 0/2 por falhar nos rótulos P0 a P3, não no par), então a regra do crítico não tem caso RED que a justifique. Se a decisão for outra, a mudança no crítico fica sem cenário.
+
 ## Fora
 
 - **Pela Task D5:** as personas (a usuária chata do `break-ui`, o engenheiro sênior do `mobile-native`), Nielsen, as notas e os subagentes isolados (os dois voltaram na Task 5 de 2026-11-17, só no bloco Critique), o código de `frontend-a11y` (ECC), `user-select: none` em todo link e `overscroll-behavior: none` na raiz.
@@ -206,6 +210,15 @@ RED em 2026-11-18, só a linha de base, fora do sandbox. Opus 5.5, 2 rodadas por
 
 - A rodada custou US$ 1,31 no total. O caso novo falha sem o plugin, então o RED está confirmado.
 - GREEN (`--arms devorb,none`) e o caso reservado ficam com o controlador e ainda não rodaram.
+
+Plano de regras de cor e referências, 2026-11-19, Opus 5.5, 2 rodadas, `--arms devorb,none`. Arquivos: `fusion/results/2026-11-19-ui-review-par-red.md` e `fusion/results/2026-11-19-ui-review-par.md`.
+
+| Caso | Etapa | devorb | none | Custo |
+|---|---|---|---|---|
+| `ui-review-par-complementar` | RED (`devorb@9b96a34`) | 1,00 (2/2, já passava) | 0,00 | US$ 2,09 |
+| `ui-review-par-complementar` | GREEN (`devorb@4a966e3`) | 100% (1,00) | 0,00 | US$ 2,06 |
+
+- Custo total do plano: US$ 35,96 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66; GREEN 6,39 + 7,79 + 2,06 + 4,25; diagnóstico 1,89).
 
 ## Decisões por commit de fonte
 

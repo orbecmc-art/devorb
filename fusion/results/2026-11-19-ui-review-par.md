@@ -3,14 +3,14 @@
 - Data: 2026-11-19
 - Suíte: `evals`, casos `ui-review-par-*`, 2 rodadas por caso, modelo `claude-opus-5-5`, ablação `none`
 - Ponytail: não
-- Braços: `devorb@9b96a34`, `none`
+- Braços: `devorb@4a966e3`, `none`
 
 | Caso | Braço | Aprovação | Pontuação | Custo |
 |---|---|---|---|---|
-| ui-review-par-complementar | devorb@9b96a34 | 100% | 1.00 | US$ 1.5762 |
-| ui-review-par-complementar | none | 0% | 0.00 | US$ 0.5183 |
+| ui-review-par-complementar | devorb@4a966e3 | 100% | 1.00 | US$ 1.5567 |
+| ui-review-par-complementar | none | 0% | 0.00 | US$ 0.5114 |
 
-Custo total desta execução: US$ 2.0885 (linhas de base em cache não contam).
+Custo total desta execução: US$ 2.0618 (linhas de base em cache não contam).
 
 - Casos ausentes (não carregaram ou não rodaram): nenhum
 - Rodadas parciais (teto de custo atingido): nenhuma
