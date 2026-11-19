@@ -58,7 +58,7 @@ Each check ends in exactly one of: **found** (with the finding), **clear**, or *
 
 A reviewer who never sees the code scores the look by `references/critique.md`. `UI_DIR` is this skill's folder, under the plugin's base directory; run its scripts by absolute path; `<tmp>` is a scratch folder outside the project. Installing Playwright or downloading a browser is the user's call, as in `devorb:browser-testing`: ask; only their explicit yes counts ("decide alone" is not one). Without it, use a browser tool (`critique.md`, Fallbacks); with none, go code-only. An install outside the project is passed as `--pw <dir>`.
 
-1. **Shoot:** `node "$UI_DIR/scripts/shoot.mjs" <url, or file:// plus the absolute path> <tmp>/shots --mode <the contract's main mode, lower case> [--pw <dir>]`. Per width: `full.png`, `section-<i>.png`, `metrics.json`, `checks.json`.
+1. **Shoot:** `node "$UI_DIR/scripts/shoot.mjs" <url, or file:// plus the absolute path> <tmp>/shots --mode <the contract's main mode, lower case> [--pw <dir>]`. Per width: `full.png`, `section-<i>[-<k>].png`, `metrics.json`, `checks.json`.
 2. **Floor checks:** each `checks.json` FAIL is a `[P1]` finding, each WARN a `[P2]`, with the check id as the rule.
 3. **Reference pack** (the contract's `Reference pack:` or one the user names): without `1440/metrics.json` in it, shoot its URL or `source.html` into `<tmp>/ref` the same way. Then:
    `node --input-type=module -e "import { compareStructure } from '$UI_DIR/scripts/rules.mjs'; import { readFileSync } from 'node:fs'; const m = (p) => JSON.parse(readFileSync(p, 'utf8')); console.log(JSON.stringify(compareStructure(m('<tmp>/shots/1440/metrics.json'), m('<ref 1440>/metrics.json'))))"`

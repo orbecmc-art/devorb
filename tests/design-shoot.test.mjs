@@ -28,10 +28,26 @@ test('planShots shoots only visible sections, by index', () => {
 const sec = (index, top, height) => ({ index, x: 0, top, height, width: 1440, bg: '', hidden: false, headings: [] });
 test('planShots keeps sections inside the 16000px image and scrolls to the rest', () => {
   const plan = planShots(40000, [sec(0, 1000, 800), sec(1, 15500, 2000), sec(2, 30000, 3000), sec(3, 31000, 0)]);
-  assert.deepEqual(plan.perSection[0], { index: 0, scrollTo: null, clip: { x: 0, y: 1000, width: 1440, height: 800 } });
-  assert.deepEqual(plan.perSection[1], { index: 1, scrollTo: 15500, clip: { x: 0, y: 0, width: 1440, height: 900 } });
-  assert.equal(plan.perSection[2].scrollTo, 30000);
+  assert.deepEqual(plan.perSection[0], { index: 0, shot: 'section-0', scrollTo: null, clip: { x: 0, y: 1000, width: 1440, height: 800 } });
+  assert.deepEqual(plan.perSection[1], { index: 1, shot: 'section-1', scrollTo: 15500, clip: { x: 0, y: 0, width: 1440, height: 900 } });
+  assert.equal(plan.perSection.find((p) => p.index === 2).scrollTo, 30000);
   assert.deepEqual(plan.skipped, [{ index: 3, reason: 'empty' }]);
+});
+test('planShots shoots a tall section past the full image in viewport-height slices', () => {
+  const plan = planShots(40000, [sec(1, 20000, 2000)]);
+  assert.deepEqual(plan.perSection, [
+    { index: 1, shot: 'section-1', scrollTo: 20000, clip: { x: 0, y: 0, width: 1440, height: 900 } },
+    { index: 1, shot: 'section-1-2', scrollTo: 20900, clip: { x: 0, y: 0, width: 1440, height: 900 } },
+    { index: 1, shot: 'section-1-3', scrollTo: 21800, clip: { x: 0, y: 0, width: 1440, height: 200 } }
+  ]);
+  assert.deepEqual(plan.truncated, []);
+});
+test('planShots stops at 8 slices and reports the rest as truncated', () => {
+  const plan = planShots(40000, [sec(4, 20000, 10000)]);
+  assert.equal(plan.perSection.length, 8);
+  assert.equal(plan.perSection.at(-1).shot, 'section-4-8');
+  assert.equal(plan.perSection.at(-1).scrollTo, 26300);
+  assert.deepEqual(plan.truncated, [{ shot: 'section-4', error: 'truncated: 7200px of 10000px' }]);
 });
 test('planShots clamps a clip to the page', () => {
   assert.equal(planShots(3000, [sec(0, 2500, 1000)]).perSection[0].clip.height, 500);
@@ -428,6 +444,14 @@ test('a faded block under a tabindex=-1 element is counted when the reveal canno
   stubborn(p);
   runCollector(page);
   assert.equal(page.window.__devorbMetrics().sections[0].hiddenContent, 1);
+});
+test('__devorbReveal leaves a closed dialog, tooltip and listbox hidden', () => {
+  const withRole = (role) => text('div', { opacity: '0' }, { closest(sel) { return sel.split(', ').includes(`[role=${role}]`) ? this : null; } });
+  const popups = ['dialog', 'tooltip', 'listbox'].map(withRole);
+  const page = fakePage({ content: [...popups, text('p', { opacity: '0' })] });
+  runCollector(page);
+  assert.equal(page.window.__devorbReveal(), 1);
+  assert.deepEqual(popups.map((e) => e.attrs), [{}, {}, {}]);
 });
 test('hiddenContent counts faded and visibility-hidden text in a section, not fixed overlays or menus', () => {
   const inMenu = (sel) => (sel.includes('[role=menu]') ? {} : null);

@@ -12,10 +12,11 @@ test('Pilot warns on the persuade ratio target, Ligare fails the 2.5 floor', () 
   assert.equal(status(pilot, 'body-size'), 'PASS');
   const ligare = checkFloor(load('metrics-ligare.json'), 'persuade');
   assert.equal(status(ligare, 'heading-ratio'), 'FAIL');
-  assert.equal(status(ligare, 'body-size'), 'PASS');
+  assert.equal(status(ligare, 'body-size'), 'WARN');
 });
-test('read warns on a 13px body', () => {
+test('read and persuade warn on a 13px body', () => {
   assert.equal(status(checkFloor(load('metrics-ligare.json'), 'read'), 'body-size'), 'WARN');
+  assert.equal(status(checkFloor(load('metrics-ligare.json'), 'persuade'), 'body-size'), 'WARN');
 });
 // a page of one heading and three body samples
 const page = (heading, body, extra = {}) => {
@@ -82,7 +83,15 @@ test('operate accepts a 2.0 ratio', () => {
 });
 test('every check id is present once', () => {
   const ids = checkFloor(load('metrics-pilot.json'), 'persuade').map((c) => c.id);
-  assert.deepEqual(ids, ['heading-ratio', 'body-size', 'measure', 'spacing-grid', 'font-sizes', 'button-styles', 'text-colors', 'photo-repeat', 'display-weight', 'accent-count']);
+  assert.deepEqual(ids, ['heading-ratio', 'body-size', 'measure', 'spacing-grid', 'font-sizes', 'button-styles', 'text-colors', 'photo-repeat', 'display-weight', 'accent-count', 'forced-reveal']);
+});
+test('forced-reveal warns when the shooter had to force content visible', () => {
+  const forced = checkFloor(page(64, 16, { revealed: 3 }), 'persuade').find((c) => c.id === 'forced-reveal');
+  assert.equal(forced.status, 'WARN');
+  assert.match(forced.detail, /^3 elements /);
+  assert.match(forced.detail, /real scroll/);
+  assert.equal(status(checkFloor(page(64, 16, { revealed: 0 }), 'persuade'), 'forced-reveal'), 'PASS');
+  assert.equal(status(checkFloor(page(64, 16), 'persuade'), 'forced-reveal'), 'PASS');
 });
 test('Pilot passes every check in persuade except two warnings', () => {
   const warned = { 'heading-ratio': 'WARN', 'display-weight': 'WARN' };
@@ -140,6 +149,12 @@ test('the second rule picks the level with most full-width blocks', () => {
   const blocks = (n, from) => Array.from({ length: n }, (_, i) => node('section', (from + i) * 600, 1440, 600));
   const tree = node('body', 0, 1440, 3600, [node('main', 0, 1440, 3600, [node('div', 0, 0, 0, blocks(4, 0)), node('div', 0, 0, 0, blocks(2, 4))])]);
   assert.equal(findSections(tree).nodes.length, 4);
+});
+test('the second rule measures full width from the page when main has no box', () => {
+  const node = (tag, y, w, h, children = []) => ({ tag, rect: { x: 0, y, w, h }, children });
+  const cards = Array.from({ length: 3 }, (_, i) => ({ tag: 'div', rect: { x: i * 480, y: 600, w: 400, h: 300 }, children: [] }));
+  const tree = node('body', 0, 1440, 1400, [node('main', 0, 0, 0, [node('div', 0, 0, 0, [node('section', 0, 1440, 600), node('section', 600, 1440, 800, cards)])])]);
+  assert.deepEqual(findSections(tree).nodes.map((n) => n.tag), ['section', 'section']);
 });
 test('the first rule wins when it already finds two or more', () => {
   const { root, nodes } = findSections(load('dom-app-shell.json'));

@@ -81,9 +81,9 @@ test('every reference is complete', () => {
   const styles = Object.keys(data.styles);
   for (const e of data.entries.filter((x) => x.kind === 'reference')) {
     assert.equal(e.reading, 'browser', e.name);
-    assert.ok(e.styles.some((s) => styles.includes(s)), `${e.name}: a style that exists`);
-    assert.ok(e.sectors.some((s) => SECTORS.includes(s)), `${e.name}: a known sector`);
-    assert.ok(e.uses.some((u) => USES.includes(u)), `${e.name}: a known use`);
+    assert.ok(e.styles.length > 0 && e.styles.every((s) => styles.includes(s)), `${e.name}: every style exists`);
+    assert.ok(e.sectors.length > 0 && e.sectors.every((s) => SECTORS.includes(s)), `${e.name}: every sector known`);
+    assert.ok(e.uses.length > 0 && e.uses.every((u) => USES.includes(u)), `${e.name}: every use known`);
     assert.ok(e.for, `${e.name}: for`);
     assert.equal(e.byStyle, undefined, `${e.name}: byStyle`);
   }

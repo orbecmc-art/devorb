@@ -1,8 +1,8 @@
 import { parseArgs } from 'node:util';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { MODE_MIN_RATIO } from '../skills/ui-review/scripts/rules.mjs';
 
@@ -23,13 +23,30 @@ export function parseUrls(text) {
   return refs;
 }
 
+// the real path of the nearest existing folder, so a symlink or a case-only spelling (macOS) cannot slip past
+export function insideRepo(out) {
+  const rest = [];
+  let base = resolve(out);
+  while (!existsSync(base)) {
+    rest.unshift(basename(base));
+    base = dirname(base);
+  }
+  const fold = (p) => (process.platform === 'darwin' ? p.toLowerCase() : p);
+  const rel = relative(fold(realpathSync(ROOT)), fold(join(realpathSync(base), ...rest)));
+  return rel === '' || !(rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel));
+}
+
 // exit 2 is a floor FAIL, a result to judge from checks.json, not a crash
 export function judgeSite({ dir, widths, exit, stderr = '' }) {
   const reasons = [];
   const warns = [];
   const shotErrors = [];
   if (exit === null) reasons.push('timeout');
-  else if (exit !== 0 && exit !== 2) reasons.push(`run failed (exit ${exit}): ${stderr.trim().split('\n').pop()}`);
+  else if (exit !== 0 && exit !== 2) {
+    // Node ends a crash with its version line: the error line is the one that says why
+    const lines = stderr.trim().split('\n');
+    reasons.push(`run failed (exit ${exit}): ${lines.find((l) => /Error/.test(l)) ?? lines.at(-1)}`);
+  }
   for (const w of widths) {
     let m, checks;
     try {
@@ -71,8 +88,7 @@ function main(argv) {
   });
   const out = resolve(v.out ?? join(tmpdir(), 'devorb-refs-check'));
   // shots and reports of other people's sites never land in the repo
-  const rel = relative(ROOT, out);
-  if (rel === '' || !(rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel))) {
+  if (insideRepo(out)) {
     console.error(`OUT INSIDE REPO: ${out}`);
     return 1;
   }

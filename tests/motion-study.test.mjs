@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import { staggerOf, summarize } from '../tools/motion-study.mjs';
 
@@ -53,4 +57,20 @@ test('__devorbMotion skips an animation with no effect', () => {
   assert.deepEqual(JSON.parse(JSON.stringify(window.__devorbMotion('load'))), [
     { source: 'load', kind: 'transition', property: 'opacity', duration: 200, delay: 0, easing: 'ease-out', target: 'div.card' }
   ]);
+});
+
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
+const TOOL = join(ROOT, 'tools', 'motion-study.mjs');
+const run = (out) => spawnSync(process.execPath, [TOOL, '--out', out, '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+test('the CLI refuses an --out that reaches the repo through a symlink', () => {
+  const link = join(mkdtempSync(join(tmpdir(), 'devorb-motion-')), 'repo');
+  symlinkSync(ROOT, link);
+  const r = run(join(link, `motion-out-${process.pid}`));
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
+});
+test('the CLI refuses an --out inside the repo spelled in another case on macOS', { skip: process.platform !== 'darwin' }, () => {
+  const r = run(join(ROOT.toUpperCase(), `motion-out-${process.pid}`));
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
 });

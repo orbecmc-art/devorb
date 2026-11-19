@@ -25,16 +25,25 @@ export function planShots(pageHeight, sections, viewportHeight = 900) {
   const fullClip = Math.min(pageHeight, 16000);
   const perSection = [];
   const skipped = [];
+  const truncated = [];
   for (const s of sections) {
     // a pinned or transformed section can start above the page or end below it: keep only the part on the page
     const y = Math.max(0, s.top);
     const height = Math.min(s.top + s.height, pageHeight) - y;
     if (s.hidden) skipped.push({ index: s.index, reason: 'hidden' });
     else if (s.width < 1 || height < 1) skipped.push({ index: s.index, reason: 'empty' });
-    else if (y + height <= fullClip) perSection.push({ index: s.index, scrollTo: null, clip: { x: s.x, y, width: s.width, height } });
-    else perSection.push({ index: s.index, scrollTo: y, clip: { x: s.x, y: 0, width: s.width, height: Math.min(height, viewportHeight) } });
+    else if (y + height <= fullClip) perSection.push({ index: s.index, shot: `section-${s.index}`, scrollTo: null, clip: { x: s.x, y, width: s.width, height } });
+    else {
+      // the window holds one viewport: a taller section is shot in slices, section-<i>.png first, then section-<i>-2.png and on
+      const slices = Math.min(Math.ceil(height / viewportHeight), 8);
+      for (let k = 1; k <= slices; k++) {
+        const top = (k - 1) * viewportHeight;
+        perSection.push({ index: s.index, shot: k === 1 ? `section-${s.index}` : `section-${s.index}-${k}`, scrollTo: y + top, clip: { x: s.x, y: 0, width: s.width, height: Math.min(height - top, viewportHeight) } });
+      }
+      if (height > slices * viewportHeight) truncated.push({ shot: `section-${s.index}`, error: `truncated: ${slices * viewportHeight}px of ${height}px` });
+    }
   }
-  return { fullClip, perSection, skipped };
+  return { fullClip, perSection, skipped, truncated };
 }
 
 // Node resolves a bare import next to the importing file, so look in the user's folders instead
@@ -88,8 +97,8 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
-      const { fullClip, perSection, skipped } = planShots(pageHeight, metrics.sections);
-      const shotErrors = skipped.map(({ index, reason }) => ({ shot: `section-${index}`, error: `skipped: ${reason}` }));
+      const { fullClip, perSection, skipped, truncated } = planShots(pageHeight, metrics.sections);
+      const shotErrors = [...skipped.map(({ index, reason }) => ({ shot: `section-${index}`, error: `skipped: ${reason}` })), ...truncated];
       // a heavy page can time out or fail once; a shot that fails twice is logged and the run goes on
       const shoot = async (shot, { scrollTo = null, clip, ...opts }) => {
         const attempt = async (extra) => {
@@ -107,7 +116,7 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
         }
       };
       await shoot('full', { fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
-      for (const { index, scrollTo, clip } of perSection) await shoot(`section-${index}`, { fullPage: scrollTo === null, scrollTo, clip });
+      for (const { shot, scrollTo, clip } of perSection) await shoot(shot, { fullPage: scrollTo === null, scrollTo, clip });
       metrics.shotErrors = shotErrors;
       writeFileSync(join(dir, 'metrics.json'), JSON.stringify(metrics, null, 2));
       writeFileSync(join(dir, 'checks.json'), JSON.stringify(checkFloor(metrics, mode), null, 2));

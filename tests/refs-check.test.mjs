@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -68,6 +68,12 @@ test('judgeSite gives timeout on a null exit and the last stderr line on a crash
   assert.deepEqual(judgeSite({ dir, widths: [1440], exit: null }).reasons, ['timeout']);
   assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr: 'at x\nTypeError: boom\n' }).reasons, ['run failed (exit 1): TypeError: boom']);
 });
+test("judgeSite names the error line, not Node's version trailer, on a crash", () => {
+  const dir = site({ 1440: good });
+  const stderr = 'file:///x/shoot.mjs:9\nTypeError: boom\n    at main (file:///x/shoot.mjs:9:3)\n\nNode.js v22.11.0\n';
+  assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr }).reasons, ['run failed (exit 1): TypeError: boom']);
+  assert.deepEqual(judgeSite({ dir, widths: [1440], exit: 1, stderr: 'killed\n' }).reasons, ['run failed (exit 1): killed']);
+});
 test('judgeSite reports a missing width folder', () => {
   const dir = site({ 1440: good });
   assert.deepEqual(judgeSite({ dir, widths: [1440, 390], exit: 0 }).reasons, ['no metrics at 390']);
@@ -100,6 +106,18 @@ test('the CLI refuses an --out inside the repo', () => {
   assert.equal(r.status, 1);
   assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
   assert.equal(existsSync(out), false);
+});
+test('the CLI refuses an --out that reaches the repo through a symlink', () => {
+  const link = join(mkdtempSync(join(tmpdir(), 'devorb-refs-')), 'repo');
+  symlinkSync(ROOT, link);
+  const r = spawnSync(process.execPath, [TOOL, '--out', join(link, `refs-out-${process.pid}`), '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
+});
+test('the CLI refuses an --out inside the repo spelled in another case on macOS', { skip: process.platform !== 'darwin' }, () => {
+  const r = spawnSync(process.execPath, [TOOL, '--out', join(ROOT.toUpperCase(), `refs-out-${process.pid}`), '--only', '__none__'], { encoding: 'utf8', timeout: 10000 });
+  assert.equal(r.status, 1);
+  assert.match(r.stdout + r.stderr, /OUT INSIDE REPO/);
 });
 test('the CLI exits 1 when --only selects no reference, before shooting anything', () => {
   const out = join(mkdtempSync(join(tmpdir(), 'devorb-refs-')), 'out');

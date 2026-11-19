@@ -66,7 +66,7 @@ export function checkFloor(m, mode) {
   const bodyCheck = check('body-size', !(bodyMedian >= 13) && (mode === 'persuade' || mode === 'read'), 'FAIL', `body median ${bodyMedian}px`);
   return [
     ratioCheck.status === 'PASS' && ratio < target ? { ...ratioCheck, status: 'WARN' } : ratioCheck,
-    bodyCheck.status === 'PASS' && mode === 'read' && bodyMedian < 14 ? { ...bodyCheck, status: 'WARN' } : bodyCheck,
+    bodyCheck.status === 'PASS' && (mode === 'read' || mode === 'persuade') && bodyMedian < 14 ? { ...bodyCheck, status: 'WARN' } : bodyCheck,
     check('measure', wide > 0, 'WARN', `${wide} body samples above 75 chars per line`),
     check('spacing-grid', off > 0.2 * m.spacing.length, 'WARN', `${off} of ${m.spacing.length} spacings off the 4px grid`),
     check('font-sizes', distinct(m.text.map((t) => t.fontSize)) > 12, 'WARN', `${distinct(m.text.map((t) => t.fontSize))} distinct font sizes`),
@@ -74,7 +74,9 @@ export function checkFloor(m, mode) {
     check('text-colors', distinct(m.textColors) > 8, 'WARN', `${distinct(m.textColors)} text colors`),
     check('photo-repeat', dupes > 0, 'WARN', `${dupes} repeated image sources`),
     check('display-weight', heavy.length > 0, 'WARN', `h1 or h2 of 48px+ at weight 700+ and tracking 0+: ${[...new Set(heavy.map((t) => `${t.fontSize}px`))].join(', ') || 'none'}`),
-    check('accent-count', accents.length > 2, 'WARN', `saturated hues: ${accents.map(Math.round).join(', ') || 'none'}`)
+    check('accent-count', accents.length > 2, 'WARN', `saturated hues: ${accents.map(Math.round).join(', ') || 'none'}`),
+    // the shooter forces faded content visible, so a reveal that never fires on its own would still look complete
+    check('forced-reveal', m.revealed > 0, 'WARN', `${m.revealed ?? 0} elements were hidden until forced visible: confirm they appear on a real scroll`)
   ];
 }
 
@@ -119,7 +121,7 @@ export function findSections(tree) {
   const start = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
   let best = { root: start, nodes: [] };
   const visit = (n) => {
-    const blocks = n.children.filter((c) => c.rect.w >= 0.9 * start.rect.w && c.rect.h >= 120);
+    const blocks = n.children.filter((c) => c.rect.w >= 0.9 * (start.rect.w || tree.rect.w) && c.rect.h >= 120);
     if (blocks.length > best.nodes.length) best = { root: n, nodes: blocks };
     n.children.forEach(visit);
   };
