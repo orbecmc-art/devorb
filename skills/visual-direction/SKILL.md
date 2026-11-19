@@ -7,6 +7,10 @@ description: Use when a web page, screen or UI component is about to be built, r
 
 A generated page looks generated because nothing was decided: the category's usual page got filled in. This skill makes the decisions before any UI code and writes them into the spec as a contract, so the builder, `devorb:design-system` and the later review all hold the same one. It decides words, never values: no colours, sizes or spacing here.
 
+## 0. Guide
+
+Read `references/guide.md` and follow it; it starts before step 1. It begins from what is known and asks only what is missing, one question at a time, each with your recommendation and why; it offers 4 to 6 references to open and pick from, sets the motion level from `devorb:motion`'s dial, and draws the patterns with `scripts/draw.mjs` so pages do not repeat.
+
 ## 1. What is already true
 
 Read the spec you received, `DESIGN.md`, the project's styles, components, fonts and `package.json`, and the running product if one exists. An identity visible in the code counts even without `DESIGN.md`. Then pick how much to invent, and say which:
@@ -43,7 +47,7 @@ If the spec already says what exists, that is the inventory. If a person is in t
 
 ## 4. The owner's reference sources
 
-Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style.
+Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style. With a person to guide, follow `guide.md` §3 first.
 
 - Read `references/sources.md` before opening entries or choosing a library: how each `reading` opens, and one library per job.
 - Galleries show how a whole site is built: study structure, rhythm, type and the first screen. Copy a site's form when the user asks for it; never publish someone else's text, photos or logo as the client's.
@@ -57,14 +61,14 @@ Skip this for **Extend** and **Replicate**. Otherwise:
 
 1. Write the audience's real scene in one sentence (who, where, doing what), the page every competitor in this category already has, and the obvious contrarian answer to it. Neither is a direction.
 2. List four to six candidates from the audience's daily life: objects, places, printed matter, signs, habits, local visual traditions. Not the category's template, and on Operate or Read never a copy of the tool they use at work. For each, one line on what it would look like and one on where it would fail.
-3. Pick one, with its reason. Then the **mirror test:** hand this plan to a competitor in the same trade. Would it fit them just as well? Then it is not yet this client's: alter one choice and name it. Check it against the spent looks in `references/floor.md`.
+3. Pick one, with its reason. Then the **mirror test:** hand this plan to a competitor in the same trade. Would it fit them just as well? Then it is not yet this client's: alter one choice and name it. Check it against the spent looks in `references/floor.md`. Then pick the first screen and the sections from `references/hero-patterns.md` and `references/section-patterns.md`.
 4. Choose the type family from that world, by role (display, text, figures or code if needed). Before naming a face, confirm its exact name, that it has the weights you need, its license and where it loads from. A face you cannot confirm is not chosen: describe its role and mark it pending. Sizes and weights are `devorb:design-system`'s.
 
 What the spec fixes stays fixed: a named style, period, typeface or colour scheme is used as asked, spent look or not.
 
 ## 6. Write the contract
 
-Add `## Direção visual` to the spec you received, in the spec's language, and commit it. Short lines, no values. Read `references/contract.md` first: it lists every field, in order.
+Add `## Direção visual` to the spec you received, in the spec's language, and commit it. Short lines, no values. Read `references/contract.md` first: it lists every field, in order. `First screen:` and `Sections:` cite the pattern ids, never their measures.
 
 If the contract cannot be filled without a decision only the user can make, ask that one question.
 
@@ -75,5 +79,5 @@ Invoke `devorb:design-system` with the spec: it turns the contract into tokens a
 ## Connects to
 
 - **Receives:** the approved spec from `devorb:aligning`, or a request to build or restyle a page, screen or component.
-- **Uses:** `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, `references/replicate.md` with `capture.mjs` and `devorb:ui-review`'s scripts, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
+- **Uses:** `references/guide.md` with `scripts/draw.mjs` and `devorb:motion`'s `references/dial.md`, `references/ui-sources.json` (the owner's list) with `references/sources.md`, `references/contract.md`, `references/replicate.md` with `capture.mjs` and `devorb:ui-review`'s scripts, the mode files, `references/copy.md` and `references/floor.md`; a browser tool when a source needs one.
 - **Hands off to:** `devorb:design-system`, with `## Direção visual` in the spec. Later in the flow, `devorb:motion` decides anything that moves and `devorb:ui-review` checks the build against this contract.

@@ -52,6 +52,8 @@ A skill foi escrita sem abrir `evals/ui-review-*`, `evals-reserved/` nem `fusion
 | Entrar pela borda de dados, só na sessão do navegador (`page.route`, cópia fora do projeto, texto trocado na sessão) | Emil (`break-ui`, regra 2), adaptado: sem alternador nem fixture no repositório, porque a skill relata e para |
 | Tabela de sintoma para causa, com "1 members" | Emil (`break-ui`, fase 4), só ideia, com linhas reescritas e menos colunas |
 | `overflow-wrap`: `anywhere` em dados, `break-word` em títulos | Conflito da Task D5 (Emil pede `anywhere`; gstack e o piso pedem `break-word` em títulos) |
+| `references/critique.md`, `## Tells of a generated page`: os 7 sinais, cada um com o que se vê no print e o que entra no lugar; régua de `finish` (10 é nenhum sinal; com um ou mais, 7 ou menos) e de `visual-moment` (ícone no lugar de UI real ou "Feature 1/2/3" como momento, 5 ou menos) | DevOrb: nossos estudos A e B (`docs/specs/2026-11-18-referencias/study-A.md`, "What separates these from AI-generated pages"; `study-B.md`, "Craft vs AI pages"), sínteses e palavras nossas, sem texto de site. O que entra no lugar cita os ids do cardápio da Task 7 e os checks `display-weight` e `accent-count` da Task 5 |
+| Autorizado é a exceção que `DESIGN.md` ou o contrato nomeia para esta página; token que só existe na tabela não autoriza, e um token usado como sinal continua sinal | DevOrb, decisão do controlador na Task 8 da Fase 2, para a regra de valores autorizados não anular os sinais |
 
 ## Conflitos resolvidos
 
@@ -125,6 +127,48 @@ Todos pela Task D5:
     - A ordem dos quatro fallbacks foi para o fim de `critique.md`, e o `SKILL.md` aponta para ela.
     - O prompt do caso ganhou um sim explícito para instalar: "Pode instalar o que precisar para renderizar a página."
 
+- 2026-11-18, Task 1 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: revelação forçada.
+  - **Problema.** Em 6 dos 23 sites de referência (monocle, parloa, sol, vercel, aave, hoy), seções inteiras saíam em branco no print, porque o conteúdo só aparece quando entra na tela ou depois de uma animação.
+  - **`scripts/reveal-init.js`**, novo, entra com `addInitScript` antes do `goto`: troca o `IntersectionObserver` por uma subclasse que entrega toda entrada como visível (`isIntersecting: true`, `intersectionRatio: 1`). Sem `IntersectionObserver`, não faz nada.
+  - **`window.__devorbReveal()`** em `collect-in-page.js`, depois da rolagem e antes de `__devorbExpand()`: termina cada animação com `finish()` (a infinita lança e fica como está), marca com `data-devorb-reveal` o conteúdo com opacidade abaixo de 0,1 ou `visibility: hidden` e injeta uma folha que o mostra com `!important`. Menus, diálogos, tooltips, listas e camadas `position: fixed` ficam de fora, para nada fechado ser pintado por cima das seções. Depois da folha, termina de novo as animações novas: a folha dispara transições de opacidade, e uma transição vence o `!important` (achado no monocle, onde 92 itens ainda saíam em opacidade 0).
+  - **`metrics.json`** ganha `revealed` (quantos elementos a revelação marcou) e `hiddenContent` por seção (conteúdo com opacidade própria abaixo de 0,1, ou escondido, depois da revelação). `__devorbMetrics()` refaz a revelação no mesmo tick antes de medir, e o `shoot` a refaz antes de cada print.
+  - **Barra de zero `hiddenContent`** certifica que a revelação funciona no momento da medida e do print. Print em branco de cena de rolagem fixada é limite conhecido e registrado, não item da barra. `replicate.md` lê `revealed` acima de 0 como movimento ao rolar, e o caminho com ferramenta de navegador de `critique.md` roda `__devorbReveal()`.
+  - **Origem da ideia.** Trocar o `IntersectionObserver` e terminar as animações antes do print vem do `mirror.js` da skill `av-design-system` do dono. Só a ideia: o código e o texto são do DevOrb, sem trecho copiado.
+
+- 2026-11-18, Task 2 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: página longa e site pesado.
+  - **Problema.** Quatro sites de referência derrubavam o `shoot.mjs` inteiro por um print só. Shopify Editions e Patensify, com páginas acima de 16.000px, paravam em "Clipped area is either empty or outside the resulting image"; Audienceful e Melius, em "Timeout 30000ms exceeded".
+  - **`planShots(pageHeight, sections, viewportHeight = 900)`** devolve `fullClip`, `perSection` e `skipped`. A seção que cabe na imagem de página inteira (16.000px) sai recortada dela; a que passa disso sai sozinha, com `fullPage: false`, depois de rolar a janela até o topo dela. O recorte fica só na parte da seção que está dentro da página: uma seção fixada ou deslocada que começa acima do topo perde o trecho de fora. Seção escondida, com largura abaixo de 1px ou sem nenhum trecho dentro da página é pulada, com o motivo.
+  - **Rolagem no fim da página.** A janela para antes do topo de uma seção curta no fim da página (o rodapé). `shootPage` desloca o recorte pelo que a janela não conseguiu rolar, para o print não pegar a seção de cima.
+  - **Print que falha.** Todo `page.screenshot` usa `animations: 'disabled'` e `timeout: 60000`. A rolagem até a seção faz parte de cada tentativa. Na falha, tenta mais uma vez com `caret: 'hide'`; na segunda falha, a primeira linha da mensagem entra em `shotErrors` e a execução segue. As seções puladas também entram, como `skipped: hidden` ou `skipped: empty`.
+  - **`metrics.json`** ganha `shotErrors: { shot, error }[]`, com `shot` igual a `full` ou `section-<i>`.
+  - **`goto`** espera `domcontentloaded` em vez de `load`, seguido da espera de rede ociosa de 5s que já existia: sites que nunca terminam de carregar deixam de travar a captura.
+
+- 2026-11-18, Task 3 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: segundo critério de seções.
+  - **Problema.** A Billow dava 0 seções. Sem `main`, o primeiro critério desce por `body` e dois `div` de página inteira até o rodapé, porque os blocos de conteúdo ficam atrás de um wrapper sem caixa (0×0, `display: contents`) e o cabeçalho tem 79px.
+  - **`findSections(tree)`** devolve `{ root, nodes }`. Usa o primeiro critério quando ele dá 2 seções ou mais. Senão, a partir de `main` (ou da árvore), escolhe o nó com mais filhos de largura de pelo menos 90% da largura de partida e altura de 120px ou mais, o primeiro em pré-ordem no empate; com 2 ou mais, esse nó e esses filhos são as seções. `findSectionsRoot`, `sectionNodes` e `findScroller` não mudam.
+  - **Coletor.** `__devorbMetrics` usa a cópia `__devorbFindSections`, e `root` passa a ser a tag do nó escolhido. `__devorbTree()` devolve a árvore medida, para depurar.
+  - **Billow medida.** 5 seções a 1440 e a 390. O estudo A contou cerca de 13: os três blocos que têm cada um o seu próprio wrapper sem caixa e o rodapé ficam de fora, porque o critério só conta filhos diretos.
+
+- 2026-11-18, Task 5 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: régua recalibrada contra as 23 referências (Call 7 e Pilar B da spec `docs/specs/2026-11-18-design-quality-fase-2-design.md`).
+  - **Problema.** Na última rodada do `refs-check` (`fusion/results/2026-11-18-refs-check.md`), 19 das 23 referências davam FAIL, todas por `body-size` (corpo abaixo de 16px) ou `heading-ratio` (razão abaixo de 3,0). Os sites bons usam corpo de 13 a 15px, e a régua reprovava o que a gente quer copiar.
+  - **`heading-ratio`.** FAIL abaixo do mínimo do modo e, em Persuade, WARN abaixo do alvo (`MODE_TARGET_RATIO = { persuade: 4.0 }`). O mínimo de Persuade cai de 3,0 para 2,5: a referência da agência do dono mede 2,9 no computador, e a Ligare, a página ruim, mede 2,0 e continua reprovada. O alvo de 4,0 vem da faixa típica das referências, de 4,2 a 5,5. Operate, Read e Experience não mudam (1,6, 2,0 e 2,0).
+  - **`body-size`.** FAIL só com mediana abaixo de 13px, em Persuade e Read; sem amostra de corpo, continua FAIL. Em Read, de 13 até menos de 14px dá WARN. O estudo mediu corpo de 13 a 18px, com mediana de 14 a 15px.
+  - **`font-sizes`.** WARN acima de 12 tamanhos distintos (antes 8): as referências usam de 6 a 26.
+  - **`display-weight`, nova.** WARN quando uma amostra `h1` ou `h2` tem 48px ou mais, peso 700 ou mais e tracking de 0 ou mais. As referências usam título de peso 400 a 500 com tracking negativo, e título em negrito com tracking normal é um dos sinais de página feita por IA da spec.
+  - **`accent-count`, nova.** WARN com mais de 2 matizes saturadas somando as cores de texto, os fundos de botão (`fills`, novo em `metrics.json`) e os fundos das seções. 9 de cada 10 referências usam uma cor de destaque. `accentHues` lê `rgb()`, `rgba()` (alfa até 0,1 fica de fora) e `oklch()` (com `%` e `/ alfa`); conta como saturada a cor `rgb` com saturação HSL de 0,35 ou mais e luminosidade de 0,15 a 0,9, e a `oklch` com croma de 0,08 ou mais; junta matizes a menos de 30° em grupos, também através do 0°; formato desconhecido é ignorado, sem `NaN`. Atalho registrado no código: a matiz HSL e a OKLCH ficam alguns graus fora uma da outra.
+  - **Textos.** `references/critique.md`, dimensão `typography`: o corpo confortável passa de "cerca de 16px ou mais" para 14 a 16px, com lead de 18 a 22px. `skills/visual-direction/references/floor.md` ganha `## Measured`, com os limites que o `shoot.mjs` confere.
+  - **Graders.** `grep -rnE '16 ?px|body-size' evals-outside/*/graders evals/*/graders` não acha grader que dependa do FAIL de corpo de 16px. `ui-review-critica-em-breve` continua com sentido: a página mede 26/13 = 2,0, FAIL em `heading-ratio`.
+  - **Razão por largura.** A primeira rodada deu 17/23: os 6 FAIL eram `heading-ratio` em 768 ou 390 (orior, hoy, monocle, mobbin, parloa e agenciadevalor, razões de 2,0 a 2,46), com título e corpo conferidos como os de verdade. No celular e no tablet esses sites reduzem o título e mantêm o corpo, e a regra de mobile da própria spec (h1 de 32 a 64px sobre corpo de 16px) já dá 2,0. Decisão do controlador: `checkFloor` lê `m.width`, e abaixo de 1024px (`DESKTOP_MIN_WIDTH`) Persuade dá FAIL abaixo de 2,0 e WARN abaixo de 2,5; os outros modos dão FAIL abaixo de 0,8 vez o mínimo (`NARROW_RATIO_FACTOR`). Métrica sem `width` conta como computador. `MODE_MIN_RATIO` continua sendo a tabela do computador.
+  - **Prova contra as referências.** Segunda rodada do `refs-check` em `fusion/results/2026-11-18-refs-check.md`: 23/23 PASS, zero FAIL; os seis sites acima ficam com WARN nas larguras estreitas.
+
+- 2026-11-18, Task 8 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: sinais de página gerada no crítico.
+  - **Problema.** A régua dava 10 em `finish` a uma página sem nada quebrado, mesmo com todos os vícios de página feita no automático: ícone no lugar do produto, tudo no centro, três cores de destaque, números genéricos, título pesado, mobile só empilhado e "Feature 1/2/3".
+  - **`references/critique.md`** ganha `## Tells of a generated page`, depois da régua: os 7 sinais da spec (Pilar B), cada um com o que se vê no print e o que entra no lugar, com os ids `hero:` e `section:` do cardápio da Task 7 para a linha de correção do revisor. Dois sinais apontam para os checks que os medem: destaque demais para `accent-count`, título em negrito com tracking normal para `display-weight`. Sinal passa só com frase do contrato que o crítico possa citar, como no §4 do `SKILL.md`.
+  - **Régua.** `finish`: o 10 é nenhum sinal visível; cada sinal visto vai no gap, e com um ou mais a nota fica em 7 ou menos. `visual-moment`: ícone no lugar de UI real ou "Feature 1/2/3" como momento da página dá 5 ou menos.
+  - **Autorizado.** Uma linha ao lado da regra "o que `DESIGN.md` ou o contrato autoriza nunca é gap": autorizado é a exceção nomeada para esta página, e um token declarado usado como sinal continua sinal. Decisão do controlador, porque o caso declara de propósito todos os valores no `DESIGN.md` (peso 800, roxo, rosa e verde-água) e a regra antiga deixava o crítico desculpar dois sinais.
+  - **`SKILL.md`** não muda: está em 9.982 bytes, perto do teto de tokens, e o texto todo fica em `critique.md`.
+  - **Caso novo** `evals-outside/ui-review-sinais-de-ia`: a landing do Lote com `DESIGN.md` que declara todos os valores usados e os sinais plantados. Graders: `tells` (llm na resposta, peso 3: `finish` abaixo de 8 e três dos sete sinais nomeados), `new-checks` (regex: `display-weight` e `accent-count` na resposta), `fresh` (cópia do de `ui-review-critica-em-breve`) e `no-edits-index`. Medido no `shoot.mjs`: só `display-weight` e `accent-count` dão WARN, nas quatro larguras, sem FAIL. Limite do coletor: `accent-count` só lê cor de h1 a h3, `p`, `li`, botões e fundos de seção; destaque só em `strong`, `span` ou ícone não conta. Por isso os títulos dos cartões levam as três cores.
+
 ## Resultados
 
 Opus 5.5, nível leve, 2 rodadas. Braço: sem plugin. `fusion/results/2026-11-13-ui-review*.md`.
@@ -150,6 +194,18 @@ GREEN da Task 5, 2026-11-17: Opus 5.5, 2 rodadas, fora do sandbox, com a skill e
 | `ui-review-critica-em-breve` | 0% (0,67), US$ 2,59 | 0% (0,56), US$ 0,72 |
 
 - `accepted: true`, e o caso ficou como lacuna (nenhum braço passa). As duas rodadas do DevOrb passaram em `fresh`, `no-edits-*`, `design-unchanged` e `token-pass`, e falharam em `critique`: o bloco virou tabela e as notas abaixo de 8 não viraram P1. Isso deu origem à regra própria acima, que foi escrita depois desta rodada e ainda não foi medida.
+
+### Fase 2, Task 8 (sinais de página gerada)
+
+RED em 2026-11-18, só a linha de base, fora do sandbox. Opus 5.5, 2 rodadas por caso, braço sem plugin. `fusion/results/2026-11-18-ui-review-outside-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `ui-review-sinais-de-ia` | 0% (0,17) | US$ 0,55 |
+| `ui-review-critica-em-breve` | 0% (0,56) | US$ 0,76 |
+
+- A rodada custou US$ 1,31 no total. O caso novo falha sem o plugin, então o RED está confirmado.
+- GREEN (`--arms devorb,none`) e o caso reservado ficam com o controlador e ainda não rodaram.
 
 ## Decisões por commit de fonte
 

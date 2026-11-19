@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: ui-review-sinais-sem-navegador
+description: >-
+  Landing page de um escritório de contabilidade em HTML e CSS puros, limpa nos
+  tokens do DESIGN.md mas com sete sinais de página feita por IA legíveis no
+  código (ícones no lugar de UI, tudo centralizado, cinco cores de destaque,
+  números genéricos, título em negrito com tracking zero, mobile só empilhado,
+  textos "Benefício 1/2/3"). Sem navegador no ambiente. O agente revisa a
+  interface, nomeia os sinais, deixa-os limitar finish e visual-moment (abaixo
+  de 8, com P1), diz que não renderizou e não altera arquivo.
+tags: [ui-review]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Revisa a interface da landing do escritório (index.html e styles.css, o
+    contrato visual está no DESIGN.md). Hoje não vou conseguir responder
+    perguntas, então me entrega a revisão completa numa resposta só, com o que
+    precisa mudar. Não mexe nos arquivos, só revisa.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Bash, Skill, Agent]

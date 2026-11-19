@@ -124,6 +124,26 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
   - **Razão título/texto 2.0 em Read e Experience:** a spec fixa só 3.0 em Persuade e 1.6 em Operate. Para Read e Experience, o construtor escolheu 2.0 (Task 1, `MODE_MIN_RATIO` em `skills/ui-review/scripts/rules.mjs`): leitura e vitrine precisam de hierarquia clara, mas não do título de vitrine de venda, e 2.0 é a razão medida na Ligare, uma tela real de app (`progress.md` da Task 1). Fica para o dono confirmar.
 - **2026-11-18, decisão do dono: o modo cópia pede antes de instalar.** `references/replicate.md` segue a regra de pedir antes: instalar Playwright ou um navegador, em qualquer lugar, e rodar `npx -y dembrandt@…` exigem o sim explícito do usuário ("decide sozinho" ou "não consigo responder" não é sim). Sem o sim, nada se instala: usa-se uma instalação que já existe por `--pw`, ou uma ferramenta de navegador (Claude in Chrome ou o navegador embutido) com `collect-in-page.js` pela ferramenta de JavaScript e prints do navegador, ou, sem navegador nenhum, `--dry-run` e a leitura do código da referência à mão. Sai a frase que mandava instalar numa pasta temporária sem o sim. Os graders `login-fallback` e `pack` de `evals-outside/visual-direction-copia-referencia` foram conferidos com as mesmas checagens sintéticas: `login-fallback` passa na leitura do `replicate.md`; `pack` falha nessa leitura sozinha e passa num comando com `capture.mjs` e num caminho real de `secoes.md`.
 
+- 2026-11-18, Task 5 do plano `docs/plans/2026-11-18-design-quality-fase-2.md`: `references/floor.md` ganha `## Measured`, com os números que `shoot.mjs` confere e o que é FAIL e o que é WARN, medidos nas 23 referências (Call 7 da spec `docs/specs/2026-11-18-design-quality-fase-2-design.md`). A razão mínima de Persuade cai de 3,0 para 2,5, com alvo de 4,0 (WARN entre os dois), e abaixo de 1024px de largura passa a 2,0, com WARN abaixo de 2,5; o corpo só reprova abaixo de 13px; entram `display-weight` e `accent-count` como WARN. O porquê de cada número está no ledger de `ui-review`, na mesma data.
+
+- 2026-11-18, Task 7 da Fase 2 de qualidade de design (`docs/plans/2026-11-18-design-quality-fase-2.md`), parte 1 do cardápio:
+  - `references/hero-patterns.md` (10 aberturas) e `references/section-patterns.md` (12 seções, mais `## Mobile recomposition`) são novos. Cada padrão tem `When:`, `Sketch:`, `Measures:` e `Mobile:`, sob o cabeçalho `` ### `<kind>:<id>` — <nome> ``. Os padrões e as faixas vêm das sínteses de `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md`, medições e descrições nossas, escritas com palavras nossas e sem nomear site. Nenhum texto, print ou cópia das páginas entrou.
+  - O topo de cada arquivo diz que é um cardápio, não um molde; que `Measures` são as faixas em que `devorb:design-system` escolhe os valores (com `typography.md`, `color-finish.md` e `space-radius.md` da Task 6) e que o contrato cita o id, nunca o número; que o padrão respeita `floor.md`; e que halo, rótulo em mono e número de seção só entram com a razão da página na linha `Floor:`.
+  - Onde a referência faz o que o Floor proíbe, o padrão traz a versão que respeita o Floor: script sobre caixa-alta vira uma face só em linhas inteiras (`hero:full-photo-display-type`); gradiente em meio título e peso 900 viram uma cor e peso moderado (`hero:copy-and-form-card`); palavra-chave em chip vira tom por frase inteira (`section:two-tone-statement`); chave em caixa-alta espaçada vira caixa normal (`section:mono-spec-table`); ponto colorido só com estado real (`section:stat-cards-mono`).
+  - `contract.md`: `First screen:` cita um id `hero:` e cada item de `Sections:` cita um id `section:` ou `custom`. `SKILL.md`: uma frase no §5 passo 3 aponta para os dois arquivos e uma no §6 diz que o contrato cita o id, nunca a medida. O arquivo foi de 7.128 para 7.321 bytes, cerca de 1.831 tokens, com teto de 2.500.
+  - A ideia de um cardápio de onde o guia escolhe, com sorteio, vem da taste-skill, **só como ideia**: nenhum texto, lista ou padrão dela entrou. O sorteio com histórico fica para a Task 11; aqui a escolha vem do material e da direção.
+  - O caso novo é `evals/visual-direction-receitas-landing`: a landing do Lote com a spec sem `## Direção visual`, três números do dono e a lista do que o produto faz, sem `DESIGN.md`. Graders: `patterns` (regex na spec: um `hero:` e três `section:`), `type-recipe`, `finish` e `mobile` (llm em `styles.css`) e `no-tells` (llm em `index.html`). O grader `mobile` julga a largura de 390px (regras de base mais as media queries que valem ali), e não só uma media query de até 640px, para não reprovar CSS que começa pelo celular ou só usa `clamp()`. Decisão do controlador: fica assim.
+  - `tests/design-patterns.test.mjs` confere os 22 ids, os quatro rótulos de cada bloco e o `## Mobile recomposition`.
+
+- 2026-11-18, Task 11 da Fase 2 de qualidade de design (`docs/plans/2026-11-18-design-quality-fase-2.md`), o guia e o sorteio com histórico:
+  - `references/guide.md` é novo e vira o passo `## 0. Guide` do `SKILL.md`, com três linhas que apontam para ele. A ordem vem do Pilar D da spec da Fase 2 e do guia do Pilar 4 da spec da Fase 1: começar pelo que já se sabe; perguntar só o que falta, uma pergunta por mensagem, sempre com recomendação e o porquê em palavras simples; sem pessoa na conversa, decidir pela recomendação e registrar no contrato, sem navegador, quadro nem captura.
+  - Referências com os olhos: de 4 a 6 entradas `kind: "reference"` de `ui-sources.json`, filtradas pelo estilo e desempatadas pelo setor, oferecidas pelo nome com a recomendação, e o pedido para abrir o navegador na mesma pergunta. Com o sim, `shoot.mjs --widths 1440,390` numa pasta temporária (instalar Playwright pede outro sim, como em `replicate.md`; sem ele, o Chrome do usuário ou o navegador embutido), um `board.html` local e nunca commitado, e a escolhida (ou o link do usuário) vira pacote com `capture.mjs`. Nenhuma serve: as páginas `byStyle` das galerias; Godly e Recent só para ver.
+  - O nível de movimento é perguntado como recomendação pelo `dial.md` de `devorb:motion` (Task 10).
+  - `scripts/draw.mjs` é novo: `patternIds`, `usedIds` e `draw` (Fisher-Yates nos não usados, depois os usados do mais antigo para o mais recente) e a CLI `--fits <ids> --count <n> [--specs <dir>]`, que lê as specs de `docs/devorb/specs` como histórico, sem arquivo de memória novo (decisão do planejador). Id fora dos arquivos de padrões sai com 1 e `UNKNOWN: <id>`. Testes em `tests/design-draw.test.mjs`.
+  - O sorteio com histórico vem da taste-skill, **só como ideia**: nenhum texto, código ou lista dela entrou.
+  - `SKILL.md` foi de 7.321 para 7.841 bytes.
+  - O caso novo é `evals/visual-direction-guia-leigo`: a spec aprovada da landing da Movimenta Fisioterapia, sem `## Direção visual`, sem `DESIGN.md` e sem material, e a usuária diz que não entende nada de design. Graders: `one-question` (llm na última mensagem, peso 2), `offers-refs` (llm na última mensagem, peso 3) e `no-build` (regex no rastro: nenhum `Write` em `.html` ou `.css`).
+
 ## Resultados
 
 Opus 5.5, nível completo, 3 rodadas, `--ablation none`. Braços: sem plugin e UI UX Pro Max (`4f2dbb6`). `fusion/results/2026-11-13-visual-direction*.md`.
@@ -148,6 +168,30 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 | Reservado `visual-direction-copia-landing-clinica` (`devorb@d873e93`, sem navegador) | 0% (0,71), US$ 1,76 | 0% (0,74), US$ 0,63 |
 
 - `fusion/results/2026-11-17-visual-direction-outside-baseline.md` e `fusion/results/2026-11-17-visual-direction-reserved.md`. No reservado, o DevOrb falhou em estrutura e escala de tipo: trocou seções sem fato do cliente (depoimentos, planos) por outras e largou o título bicolor. Daí a regra própria 2. Na mesma rodada, o reservado `visual-direction-painel-padaria` deu 50% (0,86) com o DevOrb contra 100% (1,00) sem plugin. A causa não foi conferida nesta tarefa. No GREEN de fora do sandbox (`fusion/results/2026-11-17-visual-direction-outside.md`), `accepted: true`, mas o caso é lacuna (nenhum braço passa): com a skill, tudo passou menos `structure`, porque o build cortou os 6 cards para 3 e as 4 pessoas para papéis. Daí a regra própria 3.
+
+### Fase 2, Task 7 (cardápio de padrões)
+
+RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem plugin. O resultado está em `fusion/results/2026-11-18-visual-direction-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `visual-direction-receitas-landing` | 0% (0,25) | US$ 0,88 |
+| `visual-direction-arquitetura-clean` | 0% (0,18) | US$ 0,96 |
+| `visual-direction-clinica-serena` | 0% (0,75) | US$ 0,67 |
+
+- A rodada custou US$ 2,48 no total. O caso novo falha sem o plugin, então o RED está confirmado. `patterns` falha em todo braço de base por construção e não conta como RED.
+- GREEN (`--arms devorb,none`) fica com o controlador e ainda não rodou.
+
+### Fase 2, Task 11 (guia e sorteio com histórico)
+
+RED em 2026-11-18, só a linha de base, Opus 5.5, 2 rodadas, braço sem plugin. O resultado está em `fusion/results/2026-11-18-visual-direction-baseline.md`.
+
+| Caso | Sem plugin | Custo |
+|---|---|---|
+| `visual-direction-guia-leigo` | 0% (0,00) | US$ 3,65 |
+
+- O caso novo falha sem o plugin, então o RED está confirmado.
+- GREEN (`--arms devorb,none`), o caso de cópia e o reservado ficam com o controlador e ainda não rodaram.
 
 ## Decisões por commit de fonte
 
@@ -202,3 +246,8 @@ Modo cópia, 2026-11-17, `evals-outside/visual-direction-copia-referencia` (`--o
 - `av-design-system@sem-pin:mirror.js` | adotado | só a ideia de neutralizar revelações, do dono, origem e licença não confirmadas; sem texto nem código
 - `dembrandt@sem-pin:pacote npm 0.39.2, saída de --help` | adotado | comando opcional de tokens em página pública, MIT
 - registro em fusion/sources.json: decisão do dono
+- `taste-skill@sem-pin:ideia do cardápio de padrões com sorteio (citada na spec da Fase 2)` | adotado (só ideia) | um cardápio de padrões de onde o guia escolhe; texto, lista e padrões próprios, a partir dos estudos A e B; o sorteio com histórico fica para a Task 11
+- `docs/specs/2026-11-18-referencias/study-A.md` e `study-B.md` (nossos) | adotado | os 10 padrões de abertura, os 12 de seção, as faixas de `Measures` e a recomposição no celular
+- `docs/specs/2026-11-18-referencias/urls.txt` (lista do dono, 23 sites, termos não conferidos por decisão do dono, Suposição 1) | adotado | 22 entradas `reference` na biblioteca (a Mobbin segue como `screens`), só URL, etiquetas e descrição nossa; Melius e Audienceful etiquetados pelos prints do `refs-check`
+- `taste-skill@sem-pin:ideia do sorteio com histórico (citada na spec da Fase 2, Call 5)` | adotado (só ideia) | o guia sorteia os padrões que cabem e deixa por último os usados nas specs recentes; `draw.mjs` e o texto do guia são próprios
+- Pilar D da spec da Fase 2 e Pilar 4 da spec da Fase 1 (nossos) | adotado | a ordem do guia: o que já se sabe, uma pergunta por vez com recomendação, referências com os olhos, o pacote, o nível de movimento

@@ -30,6 +30,37 @@ test('shootPage measures an app shell through its inner scroller', { skip }, asy
   assert.deepEqual(m.sections.map((s) => s.hidden), [false, false, false, false]);
 });
 
+test('shootPage reveals observer and keyframe reveals, leaving no hidden content', { skip }, async () => {
+  const out = mkdtempSync(join(tmpdir(), 'devorb-shoot-'));
+  const m = (await shootPage(fixture('reveal.html'), out, { widths: [1440] }))[1440];
+  assert.equal(m.sections.length, 6);
+  assert.deepEqual(m.sections.map((s) => s.hiddenContent), [0, 0, 0, 0, 0, 0]);
+  // the autoAlpha paragraph, the one no script shows and the lone aria-hidden panel; the closed menu, the fixed bar,
+  // the rotator's stacked phrases, the carousel's aria-hidden slides and the link's hover popup stay as they are
+  assert.equal(m.revealed, 3);
+});
+
+test('shootPage shoots a 24000px page without failing', { skip }, async () => {
+  const out = mkdtempSync(join(tmpdir(), 'devorb-shoot-'));
+  const page = join(out, 'long.html');
+  const sections = Array.from({ length: 24 }, (_, i) => `<section style="height:1000px;background:hsl(${i * 15} 60% 85%)"><h2>Section ${i}</h2></section>`).join('');
+  writeFileSync(page, `<!doctype html><html><body style="margin:0"><main>${sections}</main></body></html>`);
+  const m = (await shootPage(`file://${page}`, out, { widths: [1440] }))[1440];
+  assert.deepEqual(m.shotErrors, []);
+  assert.ok(existsSync(join(out, '1440', 'full.png')));
+  assert.ok(existsSync(join(out, '1440', 'section-23.png')));
+});
+
+test('shootPage shoots the sections past 16000px of a smooth-scrolling page in place', { skip }, async () => {
+  // with scroll-behavior: smooth, a plain scrollTo has not moved yet when the clip is placed
+  const out = mkdtempSync(join(tmpdir(), 'devorb-shoot-'));
+  const page = join(out, 'smooth.html');
+  const sections = Array.from({ length: 24 }, (_, i) => `<section style="height:1000px;background:hsl(${i * 15} 60% 85%)"><h2>Section ${i}</h2></section>`).join('');
+  writeFileSync(page, `<!doctype html><html style="scroll-behavior:smooth"><body style="margin:0"><main>${sections}</main></body></html>`);
+  const m = (await shootPage(`file://${page}`, out, { widths: [390] }))[390];
+  assert.deepEqual(m.shotErrors, []);
+});
+
 test('capture writes a hero pack, then a re-capture keeps hand-written lines and drops stale shots', { skip }, () => {
   const root = mkdtempSync(join(tmpdir(), 'devorb-cap-'));
   const dir = join(root, 'design', 'referencias', 'hero');

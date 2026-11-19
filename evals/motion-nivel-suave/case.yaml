@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: motion-nivel-suave
+description: >-
+  Landing estática e pronta da Quintal, revista de ensaios curtos, com todo o
+  CSS em `styles.css`, sem nada que se mova, e a spec aprovada cujo contrato
+  de direção visual diz `Motion level: Suave`. O usuário pede para animar a
+  entrada das seções conforme a spec e avisa que não responde perguntas. O
+  agente faz cada entrada como um fade com deslocamento de 4 a 12 px, sem
+  escala, rotação, parallax nem cena presa, com entradas de até cerca de
+  300 ms e cascata de total abaixo de 300 ms, e trata
+  `prefers-reduced-motion`.
+tags: [motion]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    anima a entrada das seções dessa página conforme a spec. Hoje não respondo
+    perguntas.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

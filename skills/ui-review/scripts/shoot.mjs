@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { checkFloor, MODE_MIN_RATIO } from './rules.mjs';
 
 const COLLECTOR = fileURLToPath(new URL('./collect-in-page.js', import.meta.url));
+const REVEAL_INIT = fileURLToPath(new URL('./reveal-init.js', import.meta.url));
 const USAGE = 'usage: node shoot.mjs <url> <outDir> [--widths a,b] [--mode persuade|operate|read|experience] [--no-scroll] [--pw <dir>] (exit 2: a floor check FAILed, see <width>/checks.json)';
 const NEED = 'NEED: npm i --prefix <temp dir> playwright && npx --prefix <temp dir> playwright install chromium, then pass --pw <dir> with that folder (or, inside the project: npm i -D playwright && npx playwright install chromium)';
 
@@ -19,9 +20,30 @@ export function parseArgs(argv) {
   return { url, out, widths, mode: v.mode ?? 'persuade', scroll: !v['no-scroll'], pw: v.pw };
 }
 
-// Chromium cannot encode a PNG taller than about 16384px
-export function planShots(pageHeight, sections) {
-  return { fullClip: Math.min(pageHeight, 16000), perSection: sections.filter((s) => !s.hidden).map((s) => s.index) };
+// Chromium cannot encode a PNG taller than about 16384px: a section below the full-page image is shot alone, scrolled into the window
+export function planShots(pageHeight, sections, viewportHeight = 900) {
+  const fullClip = Math.min(pageHeight, 16000);
+  const perSection = [];
+  const skipped = [];
+  const truncated = [];
+  for (const s of sections) {
+    // a pinned or transformed section can start above the page or end below it: keep only the part on the page
+    const y = Math.max(0, s.top);
+    const height = Math.min(s.top + s.height, pageHeight) - y;
+    if (s.hidden) skipped.push({ index: s.index, reason: 'hidden' });
+    else if (s.width < 1 || height < 1) skipped.push({ index: s.index, reason: 'empty' });
+    else if (y + height <= fullClip) perSection.push({ index: s.index, shot: `section-${s.index}`, scrollTo: null, clip: { x: s.x, y, width: s.width, height } });
+    else {
+      // the window holds one viewport: a taller section is shot in slices, section-<i>.png first, then section-<i>-2.png and on
+      const slices = Math.min(Math.ceil(height / viewportHeight), 8);
+      for (let k = 1; k <= slices; k++) {
+        const top = (k - 1) * viewportHeight;
+        perSection.push({ index: s.index, shot: k === 1 ? `section-${s.index}` : `section-${s.index}-${k}`, scrollTo: y + top, clip: { x: s.x, y: 0, width: s.width, height: Math.min(height - top, viewportHeight) } });
+      }
+      if (height > slices * viewportHeight) truncated.push({ shot: `section-${s.index}`, error: `truncated: ${slices * viewportHeight}px of ${height}px` });
+    }
+  }
+  return { fullClip, perSection, skipped, truncated };
 }
 
 // Node resolves a bare import next to the importing file, so look in the user's folders instead
@@ -65,20 +87,37 @@ export async function shootPage(url, outDir, { widths = [1440, 1024, 768, 390], 
       const dir = join(outDir, String(width));
       mkdirSync(dir, { recursive: true });
       const context = await browser.newContext({ viewport: { width, height: 900 } });
+      await context.addInitScript({ path: REVEAL_INIT });
       const page = await context.newPage();
-      await page.goto(url, { waitUntil: 'load' });
+      await page.goto(url, { waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {}); // pages that poll never go idle
       await page.addScriptTag({ path: COLLECTOR });
       if (scroll) await scrollThrough(page);
+      await page.evaluate(() => window.__devorbReveal());
       await page.evaluate(() => window.__devorbExpand());
       const metrics = await page.evaluate(() => window.__devorbMetrics());
       const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
-      const { fullClip, perSection } = planShots(pageHeight, metrics.sections);
-      await page.screenshot({ path: join(dir, 'full.png'), fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
-      for (const i of perSection) {
-        const s = metrics.sections[i];
-        await page.screenshot({ path: join(dir, `section-${i}.png`), fullPage: true, clip: { x: s.x, y: s.top, width: s.width, height: Math.min(s.height, 16000) } });
-      }
+      const { fullClip, perSection, skipped, truncated } = planShots(pageHeight, metrics.sections);
+      const shotErrors = [...skipped.map(({ index, reason }) => ({ shot: `section-${index}`, error: `skipped: ${reason}` })), ...truncated];
+      // a heavy page can time out or fail once; a shot that fails twice is logged and the run goes on
+      const shoot = async (shot, { scrollTo = null, clip, ...opts }) => {
+        const attempt = async (extra) => {
+          // a looping script can hide content again between the measure and the shot
+          await page.evaluate(() => window.__devorbReveal());
+          // the window stops short of a section near the page end, so shift the clip by what it could not scroll;
+          // instant, as a smooth-scrolling page has not moved yet when the clip is placed
+          const offset = scrollTo === null ? 0 : await page.evaluate((top) => (window.scrollTo({ top, behavior: 'instant' }), top - window.scrollY), scrollTo);
+          await page.screenshot({ path: join(dir, `${shot}.png`), animations: 'disabled', timeout: 60000, ...opts, clip: { ...clip, y: clip.y + offset }, ...extra });
+        };
+        try {
+          await attempt({});
+        } catch {
+          await attempt({ caret: 'hide' }).catch((e) => shotErrors.push({ shot, error: e.message.split('\n')[0] }));
+        }
+      };
+      await shoot('full', { fullPage: true, clip: { x: 0, y: 0, width, height: fullClip } });
+      for (const { shot, scrollTo, clip } of perSection) await shoot(shot, { fullPage: scrollTo === null, scrollTo, clip });
+      metrics.shotErrors = shotErrors;
       writeFileSync(join(dir, 'metrics.json'), JSON.stringify(metrics, null, 2));
       writeFileSync(join(dir, 'checks.json'), JSON.stringify(checkFloor(metrics, mode), null, 2));
       all[width] = metrics;
@@ -110,5 +149,7 @@ async function main(argv) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  process.exitCode = await main(process.argv.slice(2));
+  const code = await main(process.argv.slice(2));
+  // system Chrome leaves helpers (updater, crash handler) holding the browser's stderr pipe, which keeps node alive for minutes: exit once stdout is flushed
+  process.stdout.write('', () => process.exit(code));
 }

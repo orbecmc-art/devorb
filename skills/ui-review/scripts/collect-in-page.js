@@ -1,6 +1,6 @@
 // Browser script with no imports: shoot.mjs injects it with page.addScriptTag.
 (() => {
-  // Copy of findSectionsRoot and sectionNodes from rules.mjs; tests/design-shoot.test.mjs keeps them equal.
+  // Copy of findSectionsRoot, sectionNodes and findSections from rules.mjs; tests/design-shoot.test.mjs keeps them equal.
   const find = (n, pred) => (pred(n) ? n : n.children.reduce((hit, c) => hit || find(c, pred), null));
   const findSectionsRoot = (tree) => {
     let node = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
@@ -9,6 +9,21 @@
     return node;
   };
   const sectionNodes = (root) => root.children.filter((c) => c.rect.w >= 0.5 * root.rect.w && c.rect.h >= 120);
+  const findSections = (tree) => {
+    const root = findSectionsRoot(tree);
+    const nodes = sectionNodes(root);
+    if (nodes.length >= 2) return { root, nodes };
+    // wrappers with no box (display: contents) hide the sections: take the level with most full-width blocks, first on a tie
+    const start = find(tree, (n) => n.tag === 'main' || n.role === 'main') || tree;
+    let best = { root: start, nodes: [] };
+    const visit = (n) => {
+      const blocks = n.children.filter((c) => c.rect.w >= 0.9 * (start.rect.w || tree.rect.w) && c.rect.h >= 120);
+      if (blocks.length > best.nodes.length) best = { root: n, nodes: blocks };
+      n.children.forEach(visit);
+    };
+    visit(start);
+    return best.nodes.length >= 2 ? best : { root, nodes };
+  };
 
   const visible = (n) => n.rect.w > 0 && n.rect.h > 0;
   const pathTo = (n, target) => {
@@ -62,6 +77,7 @@
     const text = [];
     const buttons = [];
     const textColors = new Set();
+    const fills = new Set();
     for (const el of document.querySelectorAll('body *')) {
       const r = el.getBoundingClientRect();
       const words = el.innerText?.trim();
@@ -74,9 +90,12 @@
       const lines = Math.max(1, Math.round(r.height / lineHeight));
       text.push({ role, fontSize, lineHeight, fontWeight: Number(cs.fontWeight), letterSpacing: px(cs.letterSpacing), fontFamily: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), lineChars: Math.round(words.length / lines) });
       textColors.add(cs.color);
-      if (role === 'button') buttons.push([fontSize, lineHeight, cs.fontWeight, cs.color, cs.backgroundColor, cs.borderTopLeftRadius].join('|'));
+      if (role === 'button') {
+        fills.add(cs.backgroundColor);
+        buttons.push([fontSize, lineHeight, cs.fontWeight, cs.color, cs.backgroundColor, cs.borderTopLeftRadius].join('|'));
+      }
     }
-    return { text, buttons, textColors: [...textColors] };
+    return { text, buttons, textColors: [...textColors], fills: [...fills] };
   };
 
   // Vertical paddings of each section and gaps between its children, below single-child wrappers.
@@ -93,12 +112,100 @@
     return spacing.map(Math.round).filter((s) => s > 0);
   };
 
+  // what a visitor sees once the page has revealed itself: closed menus, dialogs, fixed layers and the inactive
+  // states of carousels (aria-hidden beside a showing slide) and rotators (stacked over a showing sibling) stay out
+  const OVERLAYS = '[role=dialog], [role=menu], [role=tooltip], [role=listbox]';
+  const inFixedLayer = (el) => {
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) if (getComputedStyle(a).position === 'fixed') return true;
+    return false;
+  };
+  const faded = (opacity, cs) => opacity < 0.1 || cs.visibility === 'hidden';
+  const overlap = (a, b) => Math.max(0, Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y));
+  const showingSiblings = (el) => [...(el.parentElement?.children ?? [])].filter((s) => {
+    if (s === el) return false;
+    const cs = getComputedStyle(s);
+    return !faded(px(cs.opacity), cs);
+  });
+  const stackedOverShowing = (el, r) => showingSiblings(el).some((s) => overlap(r, s.getBoundingClientRect()) >= 0.5 * r.width * r.height);
+  // an inactive slide sits beside the active one, which is not aria-hidden; an aria-hidden panel among only
+  // other aria-hidden layers is decoration that fades in on scroll, so it is still revealed
+  const inactiveSlide = (el) => {
+    const slide = el.closest('[aria-hidden=true]');
+    return !!slide && showingSiblings(slide).some((s) => s.getAttribute('aria-hidden') !== 'true');
+  };
+  // tabindex=-1 marks a focus target (a skip link's main), not a control
+  const INTERACTIVE = 'a, button, [role=button], [tabindex]:not([tabindex="-1"]), summary';
+  // the sections and their root, found once per reveal: a control that is or holds one wraps the page, it owns no popup
+  let sectionEls = [];
+  const popupOwner = (el) => {
+    const owner = el.parentElement?.closest(INTERACTIVE);
+    return !!owner && !sectionEls.some((s) => owner.contains(s));
+  };
+  // a closed menu or dialog, a fixed layer, an inactive slide, a stacked rotator state or a hover popup
+  const leftHidden = (el, cs, r) => cs.position === 'fixed' || !!el.closest(OVERLAYS) || inFixedLayer(el) || inactiveSlide(el)
+    || (cs.position === 'absolute' && (stackedOverShowing(el, r) || popupOwner(el)));
+  // textContent, not innerText: innerText is empty under visibility: hidden
+  const isContent = (el, cs) => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 && !!(el.textContent.trim() || el.querySelector('img, svg, video, canvas, picture')) && !leftHidden(el, cs, r);
+  };
+  // a closed accordion: no size, and its overflow clips the words away
+  const collapsed = (cs, r) => (r.width === 0 || r.height === 0) && cs.overflow !== 'visible';
+  // content whose own opacity is below 0.1, or hidden, the same test the reveal makes
+  const hiddenIn = (el) => [...el.children].reduce((sum, c) => {
+    const cs = getComputedStyle(c);
+    if (!faded(px(cs.opacity), cs)) return sum + hiddenIn(c);
+    // what stays hidden on purpose takes its words with it
+    const r = c.getBoundingClientRect();
+    return leftHidden(c, cs, r) || collapsed(cs, r) ? sum : sum + (isContent(c, cs) ? 1 : 0) + hiddenIn(c);
+  }, 0);
+
+  const marked = new Set();
+  let revealStyle;
+  // finishes each running animation once; an infinite one (marquee, spinner) throws InvalidStateError and keeps running
+  const finishAnimations = (done = []) => {
+    const all = document.getAnimations();
+    for (const a of all) {
+      if (done.includes(a)) continue;
+      try {
+        a.finish();
+      } catch {}
+    }
+    return all;
+  };
+  window.__devorbReveal = () => {
+    const { root, nodes } = findSections(toNode(document.body));
+    sectionEls = [root.el, ...nodes.map((n) => n.el)];
+    const done = finishAnimations();
+    const hidden = [...document.querySelectorAll('body *')].filter((el) => {
+      const cs = getComputedStyle(el);
+      return faded(px(cs.opacity), cs) && isContent(el, cs);
+    });
+    for (const el of hidden) {
+      el.setAttribute('data-devorb-reveal', '');
+      // inline too: a site's own inline !important outranks the style sheet
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      marked.add(el);
+    }
+    if (!revealStyle) {
+      revealStyle = document.createElement('style');
+      // content-visibility: auto leaves a section unpainted outside the window, blank in a full-page shot
+      revealStyle.textContent = '[data-devorb-reveal]{opacity:1!important;visibility:visible!important}*{content-visibility:visible!important;contain-intrinsic-size:none!important}';
+      document.head.appendChild(revealStyle);
+    }
+    finishAnimations(done); // the reveal style starts opacity and visibility transitions, and a transition outranks !important
+    return hidden.length;
+  };
+
   let scroller;
   const innerScroller = () => (scroller ??= findScroller(toNode(document.body))?.el ?? null);
 
   window.__devorbFindSectionsRoot = findSectionsRoot;
   window.__devorbSectionNodes = sectionNodes;
+  window.__devorbFindSections = findSections;
   window.__devorbFindScroller = findScroller;
+  window.__devorbTree = () => toNode(document.body);
   window.__devorbScroller = () => innerScroller() ?? document.scrollingElement;
   // let the document carry the inner scroller's full height, so tops are page-relative and fullPage shots see everything
   window.__devorbExpand = () => {
@@ -107,8 +214,9 @@
     }
   };
   window.__devorbMetrics = () => {
-    const root = findSectionsRoot(toNode(document.body));
-    const nodes = sectionNodes(root);
+    // a looping demo can hide content again after the reveal: reveal once more in the same tick as the measure
+    window.__devorbReveal();
+    const { root, nodes } = findSections(toNode(document.body));
     const sections = nodes.map((n, index) => {
       const cs = getComputedStyle(n.el);
       return {
@@ -119,12 +227,13 @@
         width: Math.round(n.rect.w),
         bg: bgOf(n.el),
         hidden: px(cs.opacity) < 0.1,
+        hiddenContent: hiddenIn(n.el),
         headings: [...n.el.querySelectorAll('h1, h2, h3')].map((h) => h.innerText.replace(/\s+/g, ' ').trim())
       };
     });
     // query and hash can carry a session token or a signed-URL key
     const bare = (url) => url.split(/[?#]/)[0];
     const images = [...document.images].filter((i) => i.getBoundingClientRect().width > 0).map((i) => bare(i.currentSrc || i.src));
-    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, ...collectText(), spacing: collectSpacing(nodes), images };
+    return { url: bare(location.href), width: innerWidth, root: root.tag, sections, revealed: marked.size, ...collectText(), spacing: collectSpacing(nodes), images };
   };
 })();

@@ -28,8 +28,8 @@ Colours come from the direction: each one traces to something in the world the c
 
 What else the system sets:
 
-- **Type:** families come from the contract; this skill sets sizes, weights, leading and tracking. Body size follows the mode: dense on Operate, generous on Read and Persuade. There is no single minimum. Large display sizes get negative tracking, and leading tightens as size grows: each step of the scale fixes size, weight, leading and tracking at once.
-- **Spacing and radius:** one scale each. On Operate screens, text in a list row keeps at least 8 px from the row's edge, rows' texts sit 16 px apart, and text after a list starts 12 px below it.
+- **Type:** families come from the contract; this skill sets sizes, weights, leading and tracking. Body size follows the mode: dense on Operate, generous on Read and Persuade. Persuade and Read fail below 13px (`floor.md`); Operate has no single minimum. Large display sizes get negative tracking, and leading tightens as size grows: each step of the scale fixes size, weight, leading and tracking at once. Build the scale fluid with `scripts/fluid-scale.mjs` and take the values, pairs and finish (accent, text tones, lines, halo) from `references/typography.md` and `references/color-finish.md`.
+- **Spacing and radius:** one scale each. On Operate screens, text in a list row keeps at least 8 px from the row's edge, rows' texts sit 16 px apart, and text after a list starts 12 px below it. Scales, section padding and radius by category are in `references/space-radius.md`.
 - **Borders and states:** a control's border keeps the same width in every state; focus is drawn as a ring outside it, never by thickening the border. Disabled is shown through at least three cues together (fill, text colour, cursor or icon, `aria-disabled`), never by opacity or colour alone. Each component's states (hover, active, focus, disabled, error, selected where used) get their own tokens.
 - **Translucent surfaces,** if the contract wants any, have an opaque fallback under `prefers-reduced-transparency: reduce` and `prefers-contrast: more`.
 - **Motion values** are `devorb:motion`'s. Store them as tokens only if that skill decided them.
@@ -71,5 +71,5 @@ Your final message names: the files where the tokens live, whether `DESIGN.md` w
 ## Connects to
 
 - **Receives:** the spec with `## Direção visual` from `devorb:visual-direction`, or a request to set up or extend a project's tokens or theme.
-- **Uses:** `references/color-roles.md`, `references/contrast.md` (its script, run on every pair), `references/design-md.md` and, for an app, `references/native.md`.
+- **Uses:** `references/color-roles.md`, `references/contrast.md` (its script, run on every pair), `references/typography.md`, `references/color-finish.md` and `references/space-radius.md` with `scripts/fluid-scale.mjs`, `references/design-md.md` and, for an app, `references/native.md`.
 - **Hands off to:** `devorb:planning` and `devorb:implementing`, which cite the tokens; `devorb:ui-review`, which measures the build against them.

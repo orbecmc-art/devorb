@@ -1,0 +1,21 @@
+schema_version: "1.0"
+name: visual-direction-guia-leigo
+description: >-
+  Pasta quase vazia com a spec aprovada da landing page da Movimenta
+  Fisioterapia, em Curitiba, sem `## Direção visual`, sem `DESIGN.md` e sem
+  nenhum material da cliente. A usuária quer o visual e avisa que não entende
+  nada de design. O agente conduz: faz uma pergunta só, com recomendação e o
+  porquê, e oferece abrir de 4 a 6 sites de referência pelo nome para ela
+  escolher, pedindo licença para abrir o navegador ou já mostrando os prints.
+  Não escreve HTML nem CSS antes da escolha.
+tags: [visual-direction]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    a spec da landing está aprovada; agora quero o visual. Não entendo nada de
+    design.
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, WebFetch]
