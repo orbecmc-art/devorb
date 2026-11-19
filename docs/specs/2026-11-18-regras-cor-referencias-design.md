@@ -34,11 +34,13 @@ O dono viu a página do Pilot (fundo claro com azul-marinho no título em dois t
 - Regra 1, crítico: caso novo leve `ui-review-par-complementar` (landing estática com par marinho/laranja dividido por seção, sem navegador): o relatório não acusa o par como destaque demais nem tira ponto de `color-contrast` por ele.
 - Regra 2: caso novo leve `implementing-fontes-ui` (plano aprovado com uma tarefa de UI e contrato pronto): regex no trace exige ler `ui-sources.json`, ou despachar o implementador com `ui-sources.json` no prompt, antes do primeiro Edit/Write em `.html`, `.css` ou `.tsx`. Mesmo padrão do `visual-direction-arquitetura-clean`.
 
+- Regra 2, regressão: `visual-direction-arquitetura-clean` caiu de 0,73 para 0,36 na última rodada GREEN da Fase 2 (devorb@1126ff4), porque o caminho "ninguém para responder" do `guide.md` §2 pula galerias e fontes. O portão vale também nesse caminho: sem pessoa, o agente pula o quadro e a captura, mas não a leitura das fontes nem a galeria do estilo. O caso já existente serve de RED (falha hoje) e de GREEN.
+
 RED antes de editar as skills: rodar os três casos no braço `devorb` na versão atual e nos de base, só esses casos (`--skill <prefixo do caso>`).
 
 ## Orçamento
 
-Estimativa: RED cerca de US$ 20, GREEN cerca de US$ 25. Teto proposto: US$ 50 no total; custo real relatado depois de cada rodada.
+Estimativa: RED cerca de US$ 20 (o RED do `arquitetura-clean` já existe na rodada da Fase 2), GREEN cerca de US$ 30 com o `arquitetura-clean` (uns US$ 4 por rodada). Teto proposto: US$ 50 no total; custo real relatado depois de cada rodada.
 
 ## Hipóteses (decididas por mim, corrigíveis)
 
