@@ -8,7 +8,7 @@ Read the request, the spec, the project, the brand and any reference first. Each
 
 What can still be missing, in this order:
 
-1. The look: which reference, from section 2 below.
+1. The look: which reference, from section 3 below.
 2. What the visitor must do or believe by the end, when the spec does not say it.
 3. The real material (photos, numbers, logo, a named quote), as in step 3 of `SKILL.md`.
 4. The motion level, from section 4 below.
@@ -25,7 +25,7 @@ What can still be missing, in this order:
 When the look is missing, the first question offers references.
 
 1. Pick the style from the user's words against `styles` in `references/ui-sources.json`. With no words to match, recommend the style from the audience's scene and say why.
-2. From the entries with `kind: "reference"`, take 4 to 6 whose `styles` hold that style; break ties with `sectors` closest to the business. Read each entry's `for` line.
+2. From the entries with `kind: "reference"`, take 4 to 6 whose `styles` hold that style; break ties with `sectors` closest to the business. Fewer than 4 references for that style: fill with the nearest style and say so. Read each entry's `for` line.
 3. In one message: name the 4 to 6 sites, say which one you recommend and why, and ask to open them in the browser so the person can see them and pick one. That permission and the pick are the same question.
 4. With the yes, shoot each one into a scratch folder outside the project: `node "$UI_DIR/scripts/shoot.mjs" <url> <tmp>/refs/<slug> --widths 1440,390 [--pw <dir>]`. Installing Playwright needs its own yes, as in `references/replicate.md`. Without Playwright, open each site in the user's Chrome or the built-in browser and take the screenshots there.
 5. Write `<tmp>/refs/board.html`: per site, its name, its 1440 shot (`1440/full.png`, shown cropped to the first screen and linked to the whole image) and one line on what to look at, with your recommendation on top. Open it in the browser. The board never goes into the project or a commit.

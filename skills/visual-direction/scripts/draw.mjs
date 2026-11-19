@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const USAGE = 'usage: node draw.mjs --fits <id,…> --count <n> [--specs <dir>]';
 const REFS = fileURLToPath(new URL('../references/', import.meta.url));
 const HEADER = /^### `(hero|section):([a-z0-9-]+)`/gm;
-const ID = /(hero|section):[a-z0-9-]+/g;
+const ID = /\b(hero|section):[a-z0-9-]+/g;
 
 export const patternIds = (markdown) => [...markdown.matchAll(HEADER)].map((m) => `${m[1]}:${m[2]}`);
 

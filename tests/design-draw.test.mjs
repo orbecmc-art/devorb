@@ -24,6 +24,10 @@ test('usedIds orders ids by their last appearance', () => {
   assert.deepEqual(usedIds(['… hero:a … section:b', '… hero:a']), ['section:b', 'hero:a']);
 });
 
+test('usedIds skips a prefix inside a longer word', () => {
+  assert.deepEqual(usedIds(['superhero:x and hero:y']), ['hero:y']);
+});
+
 test('draw leaves out a used id while unused ones fill the count', () => {
   const got = draw(['hero:a', 'hero:b', 'hero:c'], ['hero:b'], 2, () => 0);
   assert.equal(got.length, 2);

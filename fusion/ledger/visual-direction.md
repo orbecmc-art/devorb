@@ -141,7 +141,7 @@ A candidata da spec (a fonte escolhida tem os acentos do português) **não entr
   - O nível de movimento é perguntado como recomendação pelo `dial.md` de `devorb:motion` (Task 10).
   - `scripts/draw.mjs` é novo: `patternIds`, `usedIds` e `draw` (Fisher-Yates nos não usados, depois os usados do mais antigo para o mais recente) e a CLI `--fits <ids> --count <n> [--specs <dir>]`, que lê as specs de `docs/devorb/specs` como histórico, sem arquivo de memória novo (decisão do planejador). Id fora dos arquivos de padrões sai com 1 e `UNKNOWN: <id>`. Testes em `tests/design-draw.test.mjs`.
   - O sorteio com histórico vem da taste-skill, **só como ideia**: nenhum texto, código ou lista dela entrou.
-  - `SKILL.md` foi de 7.321 para 7.777 bytes.
+  - `SKILL.md` foi de 7.321 para 7.841 bytes.
   - O caso novo é `evals/visual-direction-guia-leigo`: a spec aprovada da landing da Movimenta Fisioterapia, sem `## Direção visual`, sem `DESIGN.md` e sem material, e a usuária diz que não entende nada de design. Graders: `one-question` (llm na última mensagem, peso 2), `offers-refs` (llm na última mensagem, peso 3) e `no-build` (regex no rastro: nenhum `Write` em `.html` ou `.css`).
 
 ## Resultados
@@ -184,7 +184,7 @@ RED em 2026-11-18, só a linha de base. Opus 5.5, 2 rodadas por caso, braço sem
 
 ### Fase 2, Task 11 (guia e sorteio com histórico)
 
-RED em 2026-11-18, só a linha de base, Opus 5.5, 2 rodadas, braço sem plugin.
+RED em 2026-11-18, só a linha de base, Opus 5.5, 2 rodadas, braço sem plugin. O resultado está em `fusion/results/2026-11-18-visual-direction-baseline.md`.
 
 | Caso | Sem plugin | Custo |
 |---|---|---|

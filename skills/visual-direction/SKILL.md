@@ -9,7 +9,7 @@ A generated page looks generated because nothing was decided: the category's usu
 
 ## 0. Guide
 
-Read `references/guide.md` and follow it before step 1. It starts from what is known and asks only what is missing, one question at a time, each with your recommendation and why; it offers 4 to 6 references to open and pick from, sets the motion level from `devorb:motion`'s dial, and draws the patterns with `scripts/draw.mjs` so pages do not repeat.
+Read `references/guide.md` and follow it; it starts before step 1. It begins from what is known and asks only what is missing, one question at a time, each with your recommendation and why; it offers 4 to 6 references to open and pick from, sets the motion level from `devorb:motion`'s dial, and draws the patterns with `scripts/draw.mjs` so pages do not repeat.
 
 ## 1. What is already true
 
@@ -47,7 +47,7 @@ If the spec already says what exists, that is the inventory. If a person is in t
 
 ## 4. The owner's reference sources
 
-Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style.
+Before choosing a direction, and before building any component from scratch, read `references/ui-sources.json` and follow its `rules`. Match the client's own words against its `styles`, open the matching entries (their `byStyle` pages first), and take the foundation and the specialists whatever the style. With a person to guide, follow `guide.md` §3 first.
 
 - Read `references/sources.md` before opening entries or choosing a library: how each `reading` opens, and one library per job.
 - Galleries show how a whole site is built: study structure, rhythm, type and the first screen. Copy a site's form when the user asks for it; never publish someone else's text, photos or logo as the client's.
