@@ -108,6 +108,8 @@ Opus 5.5, 2 rodadas por caso, `--ablation none`, braços `devorb` e `none`.
 | `performance-painel-pedidos` (reservado) | Reservado | `devorb@ca964e8` | 50% (0,75) | 0% (0,50) | US$ 1,59 | `fusion/results/2026-11-20-performance-reserved-1.md` |
 | `performance-busca-planilha` | GREEN, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,33) | US$ 1,92 | `fusion/results/2026-11-20-performance-green-4.md` |
 | `performance-painel-pedidos` (reservado) | Reservado, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,50) | US$ 1,73 | `fusion/results/2026-11-20-performance-reserved-2.md` |
+| `performance-busca-planilha` | GREEN, texto de fecho | `devorb@6195aa6` | 100% (1,00) | 0% (0,33) | US$ 2,01 | `fusion/results/2026-11-20-performance.md` |
+| `performance-painel-pedidos` (reservado) | Reservado, texto de fecho | `devorb@6195aa6` | 100% (1,00) | 0% (0,50) | US$ 1,63 | `fusion/results/2026-11-20-performance-reserved.md` |
 
 - RED, por grader, nas 4 rodadas: `measures-before-edit` passa, `search-in-database` falha (3 de 3 votos), `reports-medians` falha (3 de 3 votos).
 - GREEN 1: `reports-medians` passa nas 2 rodadas; `search-in-database` falha nas 2 só na terceira condição (as 85 colunas voltam). A ferramenta imprimiu `accepted: true` porque 0% nos dois braços conta como lacuna; não valeu como GREEN.
@@ -116,7 +118,9 @@ Opus 5.5, 2 rodadas por caso, `--ablation none`, braços `devorb` e `none`.
 - Custo do caso: US$ 7,12 (RED mais três GREEN).
 - Reservado: **abaixo da barra** (1 de 2 rodadas; com 2 rodadas a barra de 2/3 pede as duas). `accepted: false`. Nas duas rodadas do DevOrb passam `leitura-no-banco` e `mede-antes-de-editar`; `numeros-no-volume-real` passa em uma e falha na outra. No braço sem plugin esse grader falha nas duas. Lacuna registrada: a skill melhora o relato dos números no volume real, mas não o garante. Quem escreveu a skill não abriu o caso reservado nem os graders, e a falha não foi consertada lendo o caso; a decisão do que fazer é do dono.
 - Depois da revisão final da branch o texto da skill mudou (commit `df9379a`), então o caso principal e o reservado rodaram de novo, uma vez cada, no texto final (`devorb@be1df8a`): os dois com 100% e `accepted: true`. No reservado, somando as duas rodadas pagas, o DevOrb passa em 3 de 4 execuções e o braço sem plugin em 0 de 4; com 2 execuções por rodada, a diferença entre 50% e 100% pode ser ruído. A primeira rodada do reservado fica registrada acima como abaixo da barra.
-- Custo da frente A em evals: US$ 19,71 de um teto de US$ 40 (treze chamadas da `compare.mjs`; os outros dois casos estão nos ledgers de `aligning` e `reviewing`).
+- Depois da segunda e da terceira ondas de correção (commits `10736e0` a `16d814d`: menores abertos da revisão final, receitas de Postgres rodadas no PostgreSQL 17, graders apertados, a frase do seed), os casos rodaram mais uma vez no texto de fecho (`devorb@6195aa6`): os dois acima com 100% e `accepted: true`. Reservado, somando as três rodadas pagas: DevOrb passa em 5 de 6 execuções, o braço sem plugin em 0 de 6. O grader `mede-antes-de-editar` do reservado foi apertado por um agente novo antes dessa última rodada (commit `0d4e168`); quem escreveu a skill continua sem ter aberto o caso.
+- Regressão das skills que tiveram texto cortado, só braço `devorb`, 2 rodadas: `using-devorb` 17 de 17 casos em 100% em `devorb@6d16011` (US$ 9,10, `fusion/results/2026-11-20-using-devorb.md`); `aligning` em `devorb@1791bc0` (US$ 2,46, `fusion/results/2026-11-20-aligning.md`): `aligning-manda-ver-tela` 100%, `aligning-agendamento` 0% (0,60), igual ao relatório de 2026-11-17, anterior a esta branch, e `aligning-volume-de-dados` 50%, que levou à frase do seed e depois a 100% em `devorb@6195aa6`.
+- Custo da frente A em evals: US$ 37,41 de um teto de US$ 40 (dezenove chamadas da `compare.mjs`).
 
 ## Decisões por commit de fonte
 

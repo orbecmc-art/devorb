@@ -68,7 +68,7 @@ Regras próprias só saem com decisão explícita do dono.
   - Red Flags: "These thoughts mean STOP, you're rationalizing:" virou "STOP, you're rationalizing:".
   - References: "`references/phase-boundaries.md`: at a phase boundary, to choose how to go on." virou "`references/phase-boundaries.md`: at a phase boundary."
 
-  O plano previa um terceiro corte, "even a small feature" para "even small", e a linha da rota com ", listed". O corte não entrou: `tests/bootstrap.test.mjs:106` fixa a frase "New work, even a small feature, enters through", posta pelo commit `3c6be1b` para o caso `flow-small-feature`. Os bytes saíram da linha nova, que perdeu ", listed". `SKILL.md` foi de 3.494 para 3.499 bytes. Os 17 casos existentes da skill não foram rodados de novo (decisão do dono, 2026-11-20): o risco de regressão desses cortes fica sem medição.
+  O plano previa um terceiro corte, "even a small feature" para "even small", e a linha da rota com ", listed". O corte não entrou: `tests/bootstrap.test.mjs:106` fixa a frase "New work, even a small feature, enters through", posta pelo commit `3c6be1b` para o caso `flow-small-feature`. Os bytes saíram da linha nova, que perdeu ", listed". `SKILL.md` foi de 3.494 para 3.499 bytes. Os 17 casos existentes da skill não foram rodados de novo (decisão do dono, 2026-11-20): o risco de regressão desses cortes fica sem medição. Depois, a pedido do dono (2026-11-20), a suíte rodou: 17 de 17 casos em 100% em `devorb@6d16011`, só braço `devorb`, 2 rodadas, US$ 9,10 (`fusion/results/2026-11-20-using-devorb.md`).
 
 ## Resultados (2026-11-11, Task 6)
 
