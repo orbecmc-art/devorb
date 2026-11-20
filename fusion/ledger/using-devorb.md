@@ -23,6 +23,7 @@ Os casos da skill são `evals/using-devorb-triggers-feature` ("adiciona exporta�
 | Ler a skill antes de descrevê-la ou de pulá-la | Matt (`ask-matt`) |
 | Invocar pelo nome mesmo fora da lista de skills | Regra própria 2 |
 | Linha `devorb:browser-testing` | Plano, Task 23 (commits `742a020` e `7af9f5e`) |
+| Linha `devorb:performance` | Plano de performance, Task 2 (2026-11-20). Ver Revisões |
 | Skills manuais: sugerir, nunca começar | Spec e decisão da Task 3. `devorb:security-audit` entrou na lista na Task 24, quando ficou `done` |
 | Sinais de alerta | Superpowers (12 linhas viraram 8) |
 | Sinal de alerta "It's urgent" ou "tests later", com `devorb:tdd` primeiro em mudança de código | Regra própria 5 |
@@ -62,6 +63,12 @@ Regras próprias só saem com decisão explícita do dono.
 ## Revisões
 
 - **2026-11-12, Task 24.** `devorb:security-audit` entrou no fim da lista de skills manuais (26 bytes), porque `tests/bootstrap.test.mjs` passa a exigi-la quando a skill está `done`. Para caber em 3.500 bytes, a redação de cinco linhas dos sinais de alerta encolheu 28 bytes, sem tirar regra nem linha: "Check for skills" virou "Check skills"; "The skill check comes BEFORE clarifying questions" virou "Check skills BEFORE clarifying questions"; "Skills tell you HOW to explore" virou "Skills say HOW to explore"; "Simple things become complex" virou "Simple things grow complex"; e "That's when the flow helps most" virou "Then the flow helps most". Os testes não exigem nenhuma dessas frases. `SKILL.md` foi de 3.498 para 3.496 bytes. Sem comparação paga nesta mudança.
+
+- **2026-11-20, Task 2 do plano de performance.** Rota nova na tabela, depois da linha da `devorb:verifying`: `| Data read or searched | \`devorb:performance\` |` (48 bytes). `tests/bootstrap.test.mjs` exige a skill citada assim que ela é registrada como `done`. Para caber em 3.500 bytes, dois cortes tiraram 43 bytes, sem tirar regra nem linha:
+  - Red Flags: "These thoughts mean STOP, you're rationalizing:" virou "STOP, you're rationalizing:".
+  - References: "`references/phase-boundaries.md`: at a phase boundary, to choose how to go on." virou "`references/phase-boundaries.md`: at a phase boundary."
+
+  O plano previa um terceiro corte, "even a small feature" para "even small", e a linha da rota com ", listed". O corte não entrou: `tests/bootstrap.test.mjs:106` fixa a frase "New work, even a small feature, enters through", posta pelo commit `3c6be1b` para o caso `flow-small-feature`. Os bytes saíram da linha nova, que perdeu ", listed". `SKILL.md` foi de 3.494 para 3.499 bytes. Os 17 casos existentes da skill não foram rodados de novo (decisão do dono, 2026-11-20): o risco de regressão desses cortes fica sem medição.
 
 ## Resultados (2026-11-11, Task 6)
 
