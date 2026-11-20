@@ -29,10 +29,13 @@ limit 51;
 - The client gets the cursor as an opaque string and sends it back unchanged.
 - A cursor page has no total. Show "load more"; count only when the screen needs the number.
 
-## Only the displayed columns
+## Only the columns a list row needs
 
-- Name the columns the screen shows. A column nobody sees costs disk reads, memory and bytes on the wire for every row.
-- A wide table (dozens of columns): the list carries the columns that identify a row, and the full row loads by id when the user opens it.
+- Name the columns. A column nobody reads costs disk reads, memory and bytes on the wire for every row.
+- **Wide table** (more than about 12 columns): the list query returns the id and the few columns that tell a person which record this is, such as a name, a code, a place, a date. On 20,000 rows × 84 columns, a page of 50 rows was 82 KB with every column and 5 KB with three columns plus the matched text.
+- An existing screen that draws every column does not decide the query: change the screen to the list columns, and open the full row on a click.
+- The full row is one read by primary key (`select * from orders where id = $1` is fine here: one row), behind its own route.
+- With no one to ask, choose the list columns from the data: the first columns of the table, and the ones whose values read as names, codes and dates. Say which you chose in the report: it is the change a user sees first.
 
 ## N+1: one query per row
 

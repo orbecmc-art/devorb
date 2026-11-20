@@ -10,7 +10,7 @@ A page of 50 rows from the server needs no virtualization. Paginate the read (`r
 
 Only the visible rows are in the DOM, plus a few above and below.
 
-- Use the virtualizer the project already has (the data grid's own, TanStack Virtual, react-window). Without a framework and with simple rows, CSS `content-visibility: auto` with `contain-intrinsic-size` on each row is the light option.
+- Use the virtualizer the project already has (the data grid's own, TanStack Virtual, react-window).
 - The scroll container keeps the full height: a spacer sized to row count × row height, with the visible rows positioned inside it. Fixed row height is the cheap case; variable height needs measuring.
 - A wide table virtualizes columns too: 85 columns × 30 visible rows is 2,550 cells, before any off-screen row.
 - Long data arrives in pages as the user scrolls (the cursor of `reads.md`), never all at once.
