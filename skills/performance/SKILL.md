@@ -11,7 +11,7 @@ Fixing something slow? Time it now, before your first edit: step 5 needs that nu
 
 ## 1. Volume and budget
 
-For each table or list the work reads, write down rows and columns today and in a year, and the acceptable time. They come from the spec. With no number there, count the data that exists, or assume one, and record which you did.
+For each table or list the work reads, write down rows and columns today and in a year, and the acceptable time. They come from the spec. With no number there, count the real data when you can reach it (a development seed or fixture is sample rows, not the volume); otherwise assume both numbers, and record which you did.
 
 With no budget in the request, the default applies: search under 200 ms at the server's p95; response to typing under 100 ms; INP under 200 ms.
 
