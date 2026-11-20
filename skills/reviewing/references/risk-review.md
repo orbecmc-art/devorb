@@ -53,8 +53,24 @@ A small diff can still be the dangerous one. For each triggered change:
    each as Important (Critical if it hides a real failure) and mark it
    USER DECIDES: restore or keep. One cause behind many hunks is one
    finding.
+9. Data volume. On each changed read, look for: a query with no limit; a
+   query per row inside a loop (N+1); a filter or sort with no index; a
+   list with neither pagination nor virtualization. For the index, read
+   the schema or the migrations: the diff may not show it. Each is
+   Important, Critical when the table is known to be large or the path
+   runs per request. Tables grow after merge, so a spec silent on volume
+   makes it a finding, not Needs checking.
+   A limit answers only the no-limit signal. One read by key outside a
+   loop, a write, and a list whose source is a set the code or schema
+   fixes (statuses, countries) are none of the four. Where the spec or
+   the task's `**Performance budget:**` states that a list stays under
+   about 1,000 rows in a year, it needs only its limit: no index,
+   pagination or virtualization finding.
+   Fix: a limit and a cursor; a join or one batched load; an index on the
+   filtered or sorted columns; pagination or virtualization.
 
-For each finding, tell the abuse as a short story: the entry point, the
+Item 9 findings need no abuse story; state the growth that triggers them.
+For every other finding, tell the abuse as a short story: the entry point, the
 steps, the result, and what the actor needs beforehand. If you can't build
 that story, name the condition under which it would happen and put it under
 Needs checking; only leads tied to a cited line go there. Never invent an

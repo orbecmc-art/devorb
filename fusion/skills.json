@@ -41,6 +41,12 @@
     "ceilingTokens": 2500,
     "status": "done"
   },
+  "performance": {
+    "invocation": "auto",
+    "level": "full",
+    "ceilingTokens": 2500,
+    "status": "done"
+  },
   "browser-testing": {
     "invocation": "auto",
     "level": "light",

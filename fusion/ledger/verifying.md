@@ -64,6 +64,7 @@ O caso que justifica a regra própria é o caso realista da Task 8, como o plano
 Regras próprias só saem com decisão explícita do dono.
 
 1. **Nota, sessão anterior e mensagem de commit também são alegação. Quando a execução contradiz o relato, a execução vence: citar o teste que falha e as contagens, e nunca repetir o sucesso do relato.** Caso: o caso realista da Task 8, em que um agente anterior deixou "tudo passou" e um teste falha. O Superpowers só fala de agente que relata sucesso e manda checar o diff. A regra estende isso a relatos deixados no repositório e diz o que fazer quando eles mentem, que é o comportamento que o grader do caso exige. Ainda não há resultado que mostre se a regra muda o comportamento.
+2. **Medir com o volume real da spec.** O `skills/verifying/references/performance.md` ganha, em "Before you measure", o item **Real volume:** semear o armazenamento no volume que a spec declara antes de qualquer rodada, porque número tirado de uma semente de poucas linhas não diz nada sobre produção. Caso: um sistema entregue, com tabela de 20 mil linhas × 85 colunas, cuja busca demora; 20 mil linhas é pouco e a busca certa responde em menos de 100 ms. A regra existe para que o número venha do volume que a spec declara. Sem medição própria: o brief do dono não definiu caso de eval para este gancho.
 
 ## Fora
 
@@ -85,6 +86,7 @@ Regras próprias só saem com decisão explícita do dono.
   - **Ambiente implantado:** checagem que altera dados exige permissão explícita e credencial de teste; afirmação sobre produção que só uma alteração de dados provaria fica como **not done**, com o motivo; logs citados ocultam segredos e dados pessoais. O parágrafo foi reordenado em lista própria (alcance, segurança, linha do relatório, logs), para não seguir a ordem das frases do ECC.
   - **Menores:** "tests pass" exige a suíte inteira, e a lista de peças faltando ("database, key or binary") virou exemplos próprios (contêiner, conta, ferramenta de linha de comando).
 - 2026-11-13, Task D7 do plano de design e Task M4 do plano mobile: ligação aos setores de design e mobile. Mudança de UI vai para `devorb:ui-review` depois de `devorb:browser-testing`; em app, `devorb:device-testing` roda no lugar de `browser-testing`, antes de `ui-review`. Uma frase depois da tabela e a linha `Uses`. Nenhuma regra muda. `SKILL.md` foi de 7.247 para 7.525 bytes.
+- **Segunda onda da revisão final, 2026-11-20.** `references/performance.md`, item "Real volume": quando a spec não declara volume, dizer isso e relatar o volume em que a medição foi feita. O item não tinha saída para esse caso.
 
 ## Resultados
 

@@ -1,0 +1,20 @@
+schema_version: "1.0"
+name: performance-busca-planilha
+description: >-
+  App em Node sobre a planilha de um cliente (SQLite, 20 mil linhas, 84
+  colunas). A busca carrega a tabela inteira com SELECT *, filtra todas as
+  colunas em JS e a tela pede a busca a cada tecla e desenha todas as linhas.
+  O cliente reclama que está lenta. O agente mede antes de mexer, leva a busca
+  para o banco com limite e colunas nomeadas e relata a mediana de antes e
+  depois.
+tags: [performance]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O cliente reclama que a busca da planilha demora. Resolve. Hoje não consigo
+    responder perguntas.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]

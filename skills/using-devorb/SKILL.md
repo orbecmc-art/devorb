@@ -37,6 +37,7 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 | While building: test first | `devorb:tdd` |
 | Anything fails or surprises you | `devorb:debugging` |
 | Before claiming it works | `devorb:verifying` |
+| Data read or searched | `devorb:performance` |
 | Building or changing a UI | `devorb:visual-direction`, `devorb:design-system`, `devorb:motion`, `devorb:ui-review` |
 | Mobile app screen | `devorb:native-app`, `devorb:device-testing` |
 | Changed a web UI | `devorb:browser-testing` |
@@ -56,7 +57,7 @@ New work, even a small feature, enters through `devorb:aligning`, which sizes it
 
 ## Red Flags
 
-These thoughts mean STOP, you're rationalizing:
+STOP, you're rationalizing:
 
 | Thought | Reality |
 |---|---|
@@ -69,7 +70,7 @@ These thoughts mean STOP, you're rationalizing:
 In this skill's folder; invoke `devorb:using-devorb` for its path.
 
 - `references/legacy-names.md`: for instructions citing skills of plugins DevOrb replaced.
-- `references/phase-boundaries.md`: at a phase boundary, to choose how to go on.
+- `references/phase-boundaries.md`: at a phase boundary.
 - `references/claude-code-tools.md`: Claude Code notes.
 
 ## Connects to
