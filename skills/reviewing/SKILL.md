@@ -37,6 +37,7 @@ Read the changed paths and the removed lines. A risk review runs too when the di
 - removes or loosens a validation, check, limit or redaction, or adds a check whose error path lets the request through;
 - adds an operation that may run twice: send, charge, publish, migrate;
 - changes dependencies or a lockfile;
+- adds or changes a query over stored rows, a loop that queries, or a list screen: its data-volume defects (item 9 of `references/risk-review.md`) are Important at least, even when the spec is silent on volume;
 - changes tests, CI or config in a way that could hide a failure.
 
 No trigger, no risk review. Name the trigger in the report when one fires.
