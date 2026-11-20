@@ -65,6 +65,8 @@ exactly: three hashes, `Task`, the number from 1 with no gaps, a colon, the name
 
 **Seam:** [the public interface this task's tests go through]
 
+**Performance budget:** [only for a task that reads stored data: the volume it must hold and the time it must answer in, from the spec; default budget in `devorb:performance`]
+
 **Interfaces:**
 - Consumes: [what this task uses from earlier tasks, exact signatures]
 - Produces: [what later tasks rely on: exact function names, parameter and

@@ -7,6 +7,7 @@ Use this before saying a change is faster, slower, lighter or "no slowdown", and
 - **Baseline first.** Measure the current code before changing it. Without a baseline there is nothing to compare.
 - **Write the claim down first:** what you measure, in which unit, and which way you expect it to move. Read the benchmark code to see where the clock starts and stops, so setup or teardown does not slip into the number.
 - **Match both sides.** Old and new get the same input and data volume, the same compiler or bundler settings, the same library versions, and a cache in the same state (both warm or both cold). Timing a release build against a dev build measures the build settings, and says nothing about your change.
+- **Real volume.** Seed the data store to the volume the spec states before any run. A number taken on a dev seed of a few rows says nothing about production.
 - **One idea per variant.** A variant that changes three things at once can't tell you which one helped.
 - **Tests first.** Every variant runs the test suite before it is timed. A red variant is out, whatever its number.
 

@@ -110,6 +110,11 @@ Agent (general-purpose):
       interface; units understandable and testable on their own; the plan's
       file structure followed; new files already large, or files this change
       grew significantly (not pre-existing size).
+    - **Data:** on each changed read, each of these is Important (blocking):
+      a query with no limit; a query per row inside a loop (N+1); a filter or
+      sort with no index; a list with neither pagination nor virtualization.
+      One read by key outside a loop, a write, or a list the code or schema
+      keeps small are none of these. Fix: `devorb:performance`.
 
     Point at evidence: file:line for every finding and for any check you'd
     otherwise answer with a bare "yes".
