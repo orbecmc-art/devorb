@@ -91,8 +91,15 @@ Opus 5.5, 2 rodadas por caso, `--ablation none`, braços `devorb` e `none`.
 | Caso | Fase | Commit | DevOrb | Sem plugin | Custo | Relatório |
 |---|---|---|---|---|---|---|
 | `performance-busca-planilha` | RED | `devorb@182823b` | 0% (0,33) | 0% (0,33) | US$ 1,65 | `fusion/results/2026-11-20-performance-red.md` |
+| `performance-busca-planilha` | GREEN 1 | `devorb@cfb95e2` | 0% (0,50) | 0% (0,33) | US$ 1,66 | `fusion/results/2026-11-20-performance-green-1.md` |
+| `performance-busca-planilha` | GREEN 2 | `devorb@b5c0ea0` | 50% (0,75) | 0% (0,33) | US$ 1,79 | `fusion/results/2026-11-20-performance-green-2.md` |
+| `performance-busca-planilha` | GREEN 3 | `devorb@301bf5e` | 100% (1,00) | 0% (0,33) | US$ 2,02 | `fusion/results/2026-11-20-performance.md` |
 
 - RED, por grader, nas 4 rodadas: `measures-before-edit` passa, `search-in-database` falha (3 de 3 votos), `reports-medians` falha (3 de 3 votos).
+- GREEN 1: `reports-medians` passa nas 2 rodadas; `search-in-database` falha nas 2 só na terceira condição (as 85 colunas voltam). A ferramenta imprimiu `accepted: true` porque 0% nos dois braços conta como lacuna; não valeu como GREEN.
+- GREEN 2: uma rodada passa nos três graders; a outra devolve colunas enxutas, mas relê as 85 colunas de cada linha, uma consulta por id.
+- GREEN 3: as 2 rodadas passam nos três graders, `accepted: true`.
+- Custo do caso: US$ 7,12 (RED mais três GREEN).
 
 ## Decisões por commit de fonte
 
