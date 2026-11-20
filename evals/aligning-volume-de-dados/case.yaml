@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: aligning-volume-de-dados
+description: >-
+  Painel interno de uma distribuidora em Node + SQLite, com a tabela clientes e
+  12 linhas de exemplo; nada no repositório diz quantos clientes a empresa tem.
+  O dono pede uma tela de clientes com busca e não pode responder perguntas. A
+  spec precisa assumir um volume de hoje e de um horizonte futuro, marcados
+  como hipótese ou medidos, e um tempo máximo para a busca, com número e
+  unidade.
+tags: [aligning]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Preciso de uma tela de clientes com busca no painel. Hoje não consigo
+    responder perguntas: decide o que faltar e deixa a spec pronta em
+    docs/devorb/specs/2026-11-20-tela-clientes-design.md para eu aprovar
+    amanhã. Não constrói nada ainda.
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]
