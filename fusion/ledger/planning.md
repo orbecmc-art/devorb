@@ -58,7 +58,7 @@ O Superpowers não tem cenários de pressão para `writing-plans` no caminho lid
 
 ## Regras próprias
 
-1. **Task que lê dados guarda o orçamento de desempenho.** O modelo de task em `skills/planning/references/task-template.md` ganha o campo `**Performance budget:**` depois de `**Seam:**`: só para task que lê dados guardados, com o volume que ela deve suportar e o tempo de resposta, vindos da spec, e o orçamento padrão em `devorb:performance`. Caso: um sistema entregue, com tabela de 20 mil linhas × 85 colunas, cuja busca era lenta porque nenhum plano trazia o volume. Sem medição própria (teto da frente A).
+1. **Task que lê dados guarda o orçamento de desempenho.** O modelo de task em `skills/planning/references/task-template.md` ganha o campo `**Performance budget:**` depois de `**Seam:**`: só para task que lê dados guardados, com o volume que ela deve suportar e o tempo de resposta, vindos da spec, e o orçamento padrão em `devorb:performance`. Caso: um sistema entregue, com tabela de 20 mil linhas × 85 colunas, cuja busca demora; 20 mil linhas é pouco e a busca certa responde em menos de 100 ms. A regra existe para que o volume venha da spec. Sem medição própria (teto da frente A).
 
 Duas partes existem só no DevOrb e não são regras próprias, e sim ligação com o fluxo: a linha `**Seam:**` em cada task do modelo e a exigência de que os itens de `## Rollout` venham da spec ou do usuário, nunca de palpite. As mudanças além das fontes vêm das decisões da Task 11, da decisão da Task 7 sobre seams ou da ligação com as outras skills do DevOrb (ver conflitos).
 
