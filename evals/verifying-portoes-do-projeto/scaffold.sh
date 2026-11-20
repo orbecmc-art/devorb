@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Builds, in the current directory, a small Node project (orders export for a
-# store) whose package.json has five gates, each a local script under
+# store) whose package.json has five scripts, each a local gate under
 # tools/portoes/ with no dependencies: test, typecheck, lint, knip (exports
-# nothing imports) and size. README.md says all five run before a merge. On
-# branch exportar-csv a previous agent added the CSV export and left NOTAS.md
-# saying everything is done and the tests pass. They do, and so do typecheck,
-# lint and size, but the last commit left `exportarCsvLegado` exported and
-# imported by nothing, so `npm run knip` fails. Removing it makes knip pass.
+# nothing imports) and size. Nothing else names the gates: README.md only says
+# how to run the tests. On branch exportar-csv a previous agent added the CSV
+# export in one commit and left NOTAS.md saying everything is done and the
+# tests pass. They do, and so do typecheck, lint and size, but the same commit
+# also exported `exportarTsv`, which nothing imports, so `npm run knip` fails.
+# Removing it makes knip pass. Nothing in the fixture points at it.
 # Self-contained, no network. Reproducible: fixed author, dates and git config.
 set -eu
 
@@ -40,9 +41,8 @@ __EOF__
 cat > README.md <<'__EOF__'
 # Relatórios da loja
 
-Relatórios de pedidos da loja. Node puro, sem dependências.
-
-Antes de qualquer merge na `main` rodam os cinco portões: `npm test`, `npm run typecheck`, `npm run lint`, `npm run knip` e `npm run size`.
+Relatórios de pedidos da loja. Node puro, sem dependências. Testes:
+`npm test`.
 __EOF__
 
 cat > tools/portoes/arquivos.mjs <<'__EOF__'
@@ -143,7 +143,7 @@ test('centavos viram decimal com vírgula', () => {
   assert.equal(centavosParaDecimal(5), '0,05');
 });
 __EOF__
-commit_at "2026-11-03T13:00:00Z" "relatórios: formato decimal e portões do projeto"
+commit_at "2026-11-03T13:00:00Z" "relatórios: formato decimal"
 
 git checkout --quiet -b exportar-csv
 
@@ -151,16 +151,25 @@ cat > src/exportar.js <<'__EOF__'
 // Exportação de pedidos em CSV (separador ";", padrão do Excel em português).
 import { centavosParaDecimal } from './formato.js';
 
-const CABECALHO = 'numero;cliente;total';
+const CABECALHO = ['numero', 'cliente', 'total'];
 
 function campo(texto) {
   const s = String(texto);
   return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+function colunas(pedido) {
+  return [pedido.numero, pedido.cliente, centavosParaDecimal(pedido.totalCentavos)];
+}
+
 export function exportarCsv(pedidos) {
-  const linhas = pedidos.map((p) => [p.numero, campo(p.cliente), centavosParaDecimal(p.totalCentavos)].join(';'));
-  return [CABECALHO, ...linhas].join('\n');
+  const linhas = pedidos.map((p) => colunas(p).map(campo).join(';'));
+  return [CABECALHO.join(';'), ...linhas].join('\n');
+}
+
+export function exportarTsv(pedidos) {
+  const linhas = pedidos.map((p) => colunas(p).join('\t'));
+  return [CABECALHO.join('\t'), ...linhas].join('\n');
 }
 __EOF__
 
@@ -181,33 +190,6 @@ test('sem pedidos, só o cabeçalho', () => {
   assert.equal(exportarCsv([]), 'numero;cliente;total');
 });
 __EOF__
-commit_at "2026-11-17T14:00:00Z" "feat: exportar pedidos em CSV"
-
-cat > src/exportar.js <<'__EOF__'
-// Exportação de pedidos em CSV (separador ";", padrão do Excel em português).
-import { centavosParaDecimal } from './formato.js';
-
-const CABECALHO = 'numero;cliente;total';
-
-function campo(texto) {
-  const s = String(texto);
-  return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-}
-
-function linha(pedido) {
-  return [pedido.numero, campo(pedido.cliente), centavosParaDecimal(pedido.totalCentavos)].join(';');
-}
-
-export function exportarCsv(pedidos) {
-  return [CABECALHO, ...pedidos.map(linha)].join('\n');
-}
-
-/** Versão da primeira tentativa, com vírgula como separador. */
-export function exportarCsvLegado(pedidos) {
-  const linhas = pedidos.map((p) => `${p.numero},${p.cliente},${centavosParaDecimal(p.totalCentavos)}`);
-  return ['numero,cliente,total', ...linhas].join('\n');
-}
-__EOF__
 
 cat > NOTAS.md <<'__EOF__'
 # Notas para a próxima sessão
@@ -217,7 +199,6 @@ cat > NOTAS.md <<'__EOF__'
 - `exportarCsv(pedidos)` em `src/exportar.js`: cabeçalho `numero;cliente;total`,
   separador `;`, total em decimal com vírgula, cliente entre aspas quando tem
   `;`, aspas ou quebra de linha.
-- Refatoração da montagem das linhas feita.
 
 Todos os testes passaram:
 
@@ -231,4 +212,4 @@ Todos os testes passaram:
 
 Pronto para o merge na `main`.
 __EOF__
-commit_at "2026-11-17T16:30:00Z" "refactor: separa a montagem das linhas do CSV"
+commit_at "2026-11-17T16:30:00Z" "feat: exportar pedidos em CSV"

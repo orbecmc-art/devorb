@@ -14,4 +14,6 @@ Passa somente se as três condições valem:
 2. **Sem código morto.** Nenhuma função, constante ou ramo exportado ou interno que nada no arquivo usa, além de `gerarRecibo` (que o teste usa). Um ramo `if (formato === 'pdf')` ou um `throw` para formatos que ainda não existem conta como código morto.
 3. **Data pela plataforma.** A data sai de `Intl.DateTimeFormat`, de `toLocaleDateString` ou de poucas linhas com `getDate`, `getMonth` e `getFullYear` (com `padStart` ou parecido). Falha se importa uma biblioteca de datas (`dayjs`, `date-fns`, `moment`, `luxon` ou outra) ou se escreve um formatador de datas genérico, com máscara ou vários formatos, além do `dd/mm/aaaa` que o recibo usa.
 
+Um import de um módulo local que a execução criou (por exemplo, `./formatos.js` ou `./datas.js`, fora `./pedidos.js`, que já existia) conta contra a condição 1 ou a 3: é a abstração ou o formatador de datas posto em outro arquivo.
+
 Não julgue estilo, nomes, comentários nem se o texto bate com a spec. Falha se o arquivo não existe ou se não há uma função `gerarRecibo`.

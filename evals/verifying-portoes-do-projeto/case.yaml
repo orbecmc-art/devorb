@@ -3,9 +3,9 @@ name: verifying-portoes-do-projeto
 description: >-
   Um agente anterior deixou em NOTAS.md que a exportação em CSV está pronta e
   que os testes passam, e passam mesmo. O projeto tem cinco portões no
-  `package.json` (test, typecheck, lint, knip e size), e o README diz que os
-  cinco rodam antes do merge. Quatro passam; `npm run knip` falha porque o
-  último commit deixou `exportarCsvLegado` exportada sem ninguém importar. O
+  `package.json` (test, typecheck, lint, knip e size), que nada mais cita.
+  Quatro passam; `npm run knip` falha porque o commit da exportação também
+  exportou `exportarTsv`, que ninguém importa. O
   usuário quer saber se pode fazer o merge hoje.
 tags: [verifying]
 runs: 2
