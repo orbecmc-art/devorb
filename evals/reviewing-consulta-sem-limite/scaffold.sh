@@ -22,7 +22,7 @@ commit_at() { # date, message
 }
 
 git init --quiet -b main
-mkdir -p src test
+mkdir -p src test apoio
 
 cat > package.json <<'__EOF__'
 { "name": "loja-pedidos", "private": true, "type": "module", "scripts": { "test": "node --test" } }
@@ -61,7 +61,7 @@ export function buscarPedido(db, id) {
   `).get(id);
 }
 __EOF__
-cat > test/semente.js <<'__EOF__'
+cat > apoio/semente.js <<'__EOF__'
 import { abrirBanco } from '../src/banco.js';
 
 export function bancoComPedidos() {
@@ -82,7 +82,7 @@ cat > test/pedidos.test.js <<'__EOF__'
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buscarPedido } from '../src/pedidos.js';
-import { bancoComPedidos } from './semente.js';
+import { bancoComPedidos } from '../apoio/semente.js';
 
 test('pedido vem com o nome do cliente', () => {
   const pedido = buscarPedido(bancoComPedidos(), 2);
@@ -142,7 +142,7 @@ cat > test/relatorio.test.js <<'__EOF__'
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { listarPedidos } from '../src/relatorio.js';
-import { bancoComPedidos } from './semente.js';
+import { bancoComPedidos } from '../apoio/semente.js';
 
 test('lista do mais novo para o mais antigo, com o nome do cliente', () => {
   const linhas = listarPedidos(bancoComPedidos());

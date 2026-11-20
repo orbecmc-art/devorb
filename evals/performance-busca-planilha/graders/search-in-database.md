@@ -10,7 +10,7 @@ Contexto: este é o arquivo `src/planilha.js` no fim do trabalho. No começo, `b
 
 Passa somente se as três condições valem:
 
-1. **A busca acontece no banco.** O termo é comparado pelo próprio SQLite: um `MATCH` numa tabela FTS5, ou uma comparação contra uma coluna de busca indexada (por exemplo, uma coluna com o texto normalizado de todas as colunas e um índice sobre ela). Falha se o código ainda carrega linhas e filtra o termo em JS, ou se a consulta usa `LIKE` sobre as 84 colunas, uma a uma.
+1. **A busca acontece no banco.** O termo é comparado pelo próprio SQLite: um `MATCH` numa tabela FTS5, ou uma comparação contra uma coluna de busca indexada (por exemplo, uma coluna com o texto normalizado de todas as colunas e um índice sobre ela). Um `LIKE` com curinga no começo (`LIKE '%termo%'`) só conta contra um índice trigram ou FTS (por exemplo, uma tabela FTS5 com `tokenize='trigram'`), nunca contra um índice comum, que esse `LIKE` não usa: a consulta varre a tabela. Falha se o código ainda carrega linhas e filtra o termo em JS, ou se a consulta usa `LIKE` sobre as 84 colunas, uma a uma.
 2. **A consulta tem limite.** O `SELECT` da busca tem `LIMIT`, ou pagina por chave ou cursor (keyset). Falha se a busca pode devolver todas as linhas que casam.
 3. **Colunas nomeadas.** O `SELECT` que devolve o resultado nomeia as colunas que traz e não devolve as 85. Falha com `SELECT *` ou com uma lista que traz todas as 85 colunas.
 
