@@ -157,4 +157,6 @@ Nothing else in the grader changes: the frontmatter, the context paragraph, cond
 
 ## Outcome
 
+Owner's decision, 2026-11-20: item 1 is accepted as it stands, with grader 6 loosened and `accepted: false`. It is an acceptance, not a GREEN by the house rule.
+
 Round 2 at `devorb@2502b5c` approved 2 of 3 (67%) and `compare.mjs` printed `accepted: false`, because one run hit the case's 1200 s timeout. Paid total: US$ 37.67 of 50. Open items are in `fusion/ledger/visual-direction.md`. Stopped before the merge.
