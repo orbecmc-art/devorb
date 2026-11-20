@@ -42,7 +42,7 @@ O aviso que informa o resultado de uma ação vira toast por regra na skill. A a
 
 ## Fora
 
-- Mudar a fixture, o prompt ou os graders do caso. O caso fica como está e serve de RED.
+- Mudar a fixture ou o prompt do caso. Dos graders, só o 6 muda, por decisão do dono (abaixo).
 - Os outros itens da frente C (tabela densa no `operate.md`, ciclo visual no `implementing`, o reservado `visual-direction-guia-restaurante`).
 - Subir a versão e registrar no `CHANGELOG.md`: o brief põe isso depois do merge.
 - Rodar a suíte inteira da `visual-direction` ou o reservado para procurar regressão: não cabe no teto. Fica dito no relatório final como não conferido.
@@ -67,6 +67,16 @@ Uma regra que passa no grader e piora o produto: toast para erro de campo, ou to
 ## Orçamento
 
 Teto pago da frente: US$ 50. Gasto até aqui: US$ 9,47 (US$ 6,19 da rodada de diagnóstico inteira, cuja estimativa era US$ 2 e que usou 14 subagentes, e US$ 3,28 das três rodadas cortadas). Previsto: US$ 3,30 por volta do laço cortado e perto de US$ 20 pela rodada GREEN de 3 com `none`. Cabe uma rodada GREEN cheia, não duas. Se ela falhar, paro e relato. Custo real informado depois de cada rodada.
+
+## Segunda rodada: três ajustes (decisão do dono, 2026-11-20)
+
+A rodada cheia em `devorb@31f827d` aprovou 1 de 3 (33%), US$ 8,63, abaixo da barra. A regra fez o que mirava (grader 4 em 2 de 3, antes 0 de 9; primeira aprovação do caso), e sobraram três lacunas, descritas no ledger. O dono aprovou os três ajustes e mais uma rodada cheia:
+
+1. **Grader 6 aceita o envio feito por uma função importada.** Na rodada 2 o build estava certo (`toast.success` do Sonner depois da resposta, `<Toaster />` no layout, `sonner` no `package.json`), mas o `fetch` estava em `lib/newsletter.ts`, separado para ser testado sem navegador, como a `devorb:tdd` pede. O grader lê só o formulário e exigia o `fetch` nele. Um grader `llm` lê um arquivo só, então ele não passa a ler o módulo: a condição 2 passa a aceitar a chamada, com `await`, a uma função importada que faz o envio. Limite: o juiz confia nessa função sem vê-la. A condição 1 (aviso do Sonner, nada feito à mão) não muda.
+2. **A mensagem final de um trabalho de interface nomeia as fontes.** Em 2 de 3 rodadas a mensagem final não nomeou as fontes (grader 3). A regra está na `visual-direction` §4, mas a mensagem final sai muitos turnos depois, por caminhos diferentes: uma rodada passou pelo `implementing`, a outra só pelo `verifying`. A linha entra nos dois moldes de mensagem final: no `implementing/SKILL.md`, junto das três listas, e no `verifying/SKILL.md`, em "Hand-off". Ao dono eu tinha dito só `implementing`; o trace mostrou que uma das duas rodadas que falharam nunca carregou essa skill.
+3. **A regra 6 diz onde o aviso não fica.** Na rodada 3 o agente leu a regra e escreveu "o aviso da newsletter é inline". O texto ganha uma oração: o aviso de resultado usa o especialista e nunca é uma linha de status montada no formulário ou na página.
+
+RED dos três: as rodadas 2 e 3 de `devorb@31f827d`, com as frases e os arquivos citados no ledger. GREEN: uma rodada cheia, a mesma linha de comando, mais a conferência do grader 6 novo contra dois arquivos guardados (o build certo da rodada 2 tem de passar; o aviso feito à mão da rodada 3 tem de falhar). Previsão: perto de US$ 9, total perto de US$ 31.
 
 ## Hipóteses (decididas por mim, corrigíveis)
 

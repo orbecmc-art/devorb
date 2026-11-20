@@ -14,7 +14,7 @@
 
 - Skill text in English; ledger in Portuguese.
 - RED before any skill text. It exists: 9 full runs fail graders 4 and 6, and 3 of 3 capped runs at `devorb@d7dc0a1` write a contract with no specialist (quotes in the spec).
-- The eval case stays as it is: no change to its fixture, prompt or graders.
+- The eval case keeps its fixture and prompt. Of its graders only `6-newsletter-toast` changes, in Task 3, by the owner's decision of 2026-11-20.
 - The eval model stays `claude-opus-5-5`. `fusion/eval-config.json` is not edited.
 - Done means the `devorb` arm approves 2 of 3 runs or more on `visual-direction-arquitetura-clean`. `accepted: true` alone is not enough: a 0% versus 0% gap also prints it.
 - Paid ceiling US$ 50. Spent before this plan: US$ 9.47. One full GREEN round fits, not two. Report the real cost after every paid run.
@@ -82,3 +82,75 @@
 - [ ] **Step 4: Ledger.** In rule 5, replace "nenhuma regra faz o Sonner entrar sem rede" with what the traces show (the agent never chose Sonner; it kept the notice in the form). Add rule 6, "Regra do dono: aviso de resultado de ação é trabalho de toast", with the owner's decision of 2026-11-20, the case, the three baseline sentences and the limit (field validation stays at the field). Add the 2026-11-20 results: diagnostic round, capped baseline, capped GREEN, full GREEN, each with its cost, the total, and what was not re-run.
 
 - [ ] **Step 5: `npm test`,** then commit `test(visual-direction): GREEN for the action-result toast rule` with the ledger and both result files.
+
+---
+
+## Second round (owner's decision, 2026-11-20)
+
+Task 2 ended at its Step 3: 1 of 3 approved at `devorb@31f827d`, US$ 8.63, paid total US$ 21.51. The owner approved three adjustments and one more full round. The spec's section "Segunda rodada" has the reasons; the RED for each is a run of that round, quoted in `fusion/ledger/visual-direction.md`.
+
+### Task 3: Three adjustments
+
+**Files:**
+- Modify: `skills/visual-direction/references/sources.md:14`
+- Modify: `skills/implementing/SKILL.md:118`
+- Modify: `skills/verifying/SKILL.md` (section "Hand-off")
+- Modify: `evals/visual-direction-arquitetura-clean/graders/6-newsletter-toast.md` (condition 2 only)
+
+**Seam:** the six graders of `visual-direction-arquitetura-clean` in a full run; for the grader edit, a judge reading the new grader text against two kept files.
+
+**Interfaces:**
+- Consumes: nothing from earlier tasks beyond the files as they are at `65f3c82`.
+- Produces: the commit whose short sha names the `devorb@<sha>` arm Task 4 runs.
+
+- [ ] **Step 1: `sources.md`.** Replace the bullet that starts "Name each job by what happens on screen" with:
+
+```markdown
+- Name each job by what happens on screen, whatever word the spec uses. A notice that reports the result of an action (saved, subscribed, sent, failed on the server) is the toast job: it uses the list's specialist and is never a status line built into the form or the page. A field's validation error stays at the field.
+```
+
+- [ ] **Step 2: `implementing/SKILL.md`.** In the paragraph that starts "Your final message has three lists, each exhaustive.", add this sentence at the end of the paragraph:
+
+```markdown
+When the plan built or changed a user interface, the message also names the sources: the entries the spec's `Sources:` line lists as consulted and as skipped, by name.
+```
+
+- [ ] **Step 3: `verifying/SKILL.md`.** In the section "## Hand-off", add this sentence at the end of its paragraph:
+
+```markdown
+For a built or changed interface, the report also names the sources: the entries the spec's `Sources:` line lists as consulted and as skipped, by name.
+```
+
+- [ ] **Step 4: Grader 6.** In `6-newsletter-toast.md`, replace the whole item that starts "2. **Sucesso só com resposta de verdade.**" with:
+
+```markdown
+2. **Sucesso só com resposta de verdade.** O formulário envia o e-mail para `/api/newsletter` com `POST`, por `fetch` no próprio arquivo ou por uma função importada que ele chama com `await` (por exemplo `await subscribe(email)`, de `@/lib/newsletter`), e só mostra o aviso de sucesso depois de a resposta, ou o resultado dessa função, indicar sucesso. A função importada não aparece neste arquivo: aceite a chamada. Falha se mostra sucesso sem chamar a rota nem uma função de envio, ou antes de ter a resposta.
+```
+
+Nothing else in the grader changes: the frontmatter, the context paragraph, condition 1 and the last paragraph stay.
+
+- [ ] **Step 5: `npm test`.** Expected: all tests pass. It also checks each `SKILL.md` against its token ceiling (`implementing` 5,000, `verifying` 2,500).
+
+- [ ] **Step 6: Commit.** `fix(design): toast rule names where the notice does not go; final message names the sources; grader 6 accepts a helper`.
+
+### Task 4: Second full round and the ledger
+
+**Files:**
+- Modify: `fusion/ledger/visual-direction.md` (results block of 2026-11-20; rule 6), `fusion/ledger/implementing.md` and `fusion/ledger/verifying.md` (the sources sentence, as an own rule with its case)
+- Rewrite: `fusion/results/2026-11-20-visual-direction-arquitetura.md` (written by `tools/compare.mjs`); keep the first round's report as `fusion/results/2026-11-20-visual-direction-arquitetura-rodada-1.md`
+
+**Seam:** the same command as Task 2, through the `--keep-temp` wrapper.
+
+**Interfaces:**
+- Consumes: Task 3's commit.
+- Produces: the report, the per-grader results and the ledger entries.
+
+- [ ] **Step 1: Judge check of the new grader 6,** before paying: a judge given the new grader text and the kept `components/newsletter-form.tsx` of round 1 run 2 (Sonner toast after `await subscribe(email)`) answers PASS; given the kept file of run 3 (hand-built `role="status"` line) it answers FAIL.
+
+- [ ] **Step 2: Rename the first round's report** to `…-arquitetura-rodada-1.md`, then run `node tools/compare.mjs --skill visual-direction-arquitetura --arms devorb,none --runs 3`. Expected: `accepted: true` and the `devorb` row at 67% or 100%. Report the cost and the running total.
+
+- [ ] **Step 3: Check the kept build of each run** as in Task 2 Step 2.
+
+- [ ] **Step 4: Ledgers,** in Portuguese: both rounds, each grader per run, the costs, what closed and what stayed open. Below the bar again: write the evidence and stop; no third full round without the owner.
+
+- [ ] **Step 5: `npm test`,** then commit `test(visual-direction): second full round for the toast rule`.
