@@ -318,10 +318,12 @@ Por execução (P passa, F falha; graders 1 a 6 em ordem):
 
 Custo do item 2: US$ 6,31 (RED 2,56 + GREEN 3,75). As linhas "Custo total desta execução" que o `compare.mjs` imprime (US$ 2,49 e US$ 3,65) deixam o custo do juiz de fora, por isso ficam abaixo de 2,56 e 3,75. Custo total da frente C: US$ 43,98 dos US$ 50 (item 1: 37,67).
 
+**Decisão do dono (2026-11-20): a linha do teclado (regra 7) e o caso `visual-direction-tabela-operacao` ficam como estão.** O dono decidiu sabendo que o caso não separa os braços e que a linha se apoia em uma falha em duas rodadas. Os outros itens abaixo continuam em aberto.
+
 Em aberto:
 
-- O caso não separa os braços: o `none` empatou com o `devorb` nas duas rodadas e passou o grader 5 nas 5 execuções dele. Serve de guarda de regressão para telas de Operate; não prova a regra 7 e não detecta a regra 7 regredindo. Em 67%, uma falha de ruído imprime `accepted: false`. O dono decide: manter como está, endurecer ou tirar.
-- A regra 7 se apoia em uma falha em duas rodadas. `skills/writing-skills/SKILL.md` diz "single samples lie". O dono decide: manter a linha ou tirar.
+- O caso não separa os braços: o `none` empatou com o `devorb` nas duas rodadas e passou o grader 5 nas 5 execuções dele. Serve de guarda de regressão para telas de Operate; não prova a regra 7 e não detecta a regra 7 regredindo. Em 67%, uma falha de ruído imprime `accepted: false`. O dono decidiu manter como está (2026-11-20).
+- A regra 7 se apoia em uma falha em duas rodadas. `skills/writing-skills/SKILL.md` diz "single samples lie". O dono decidiu manter a linha (2026-11-20).
 - O grader 2 lê de dois jeitos: a cláusula de aprovação aceita um mecanismo que limita o que é "carregado ou desenhado", e a de reprovação rejeita uma tabela que "carrega e desenha todos". Um contrato com páginas sobre uma lista que "vem em uma resposta só" recebeu três votos de reprovação, na única falha do `devorb` no GREEN. A fixture diz que `GET /api/pedidos` "devolve os pedidos", o que convida esse contrato. Não foi mudado: os graders ficam como as rodadas os usaram.
 - O grader 5 passa com uma tecla nomeada, e a regra 7 pede cada tecla (chegar, abrir, agir).
 - A regra 7 diz "o contrato nomeia cada tecla" e o `contract.md` não tem campo para teclas.

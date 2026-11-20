@@ -39,6 +39,8 @@ Texto que ninguém pediu por uma falha: cada tópico da seção nova entra só s
 
 `devorb@e440b20` aprovou 2 de 3 e o `none` aprovou 2 de 3, com `accepted: true` e US$ 3,75 com o juiz. O caso não separa os braços. Objetivo 1 entregue como uma linha. Objetivo 2 ("nenhuma tela mostra todos os campos") não está no texto da skill, e só o grader 1 o confere. Objetivo 3 cumprido como escrito.
 
+Em 2026-11-20 o dono decidiu manter a linha do teclado e o caso como estão.
+
 ## Orçamento
 
 Teto da frente: US$ 50. Gasto no item 1: US$ 37,67. Saldo: US$ 12,33. Estimativa do item 2: RED de US$ 3 a 5, GREEN de US$ 4 a 6. Rodadas em `--concurrency 1`. Não sobra para segunda tentativa de GREEN: se falhar, paro e relato. Custo real informado depois de cada rodada.

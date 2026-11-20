@@ -91,6 +91,8 @@ A table with more fields than the screen holds is designed from what the user do
 
 ## Outcome
 
+Owner's decision, 2026-11-20: the keyboard bullet and the new case stay as they are.
+
 - RED at `devorb@2916598`: devorb 1 of 2, none 1 of 2, US$ 2.56.
 - One bullet written (`e440b20`).
 - GREEN at `devorb@e440b20`: devorb 2 of 3, none 2 of 3, `accepted: true`, US$ 3.75.
