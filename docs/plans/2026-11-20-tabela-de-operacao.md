@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use devorb:implementing to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Teach `devorb:visual-direction` to decide what a dense table shows and how its user works in it, proven on a new Operate eval case.
+**Goal:** Teach `devorb:visual-direction` to decide what a dense table shows and how its user works in it, proven on a new Operate eval case. After the RED only one bullet about the keyboard was written (see "RED result" in Task 2).
 
-**Architecture:** One new section in `skills/visual-direction/references/operate.md`, holding only the topics the RED run shows the agent missing. One new eval case whose agent writes the direction contract and stops, so a run costs about US$ 1. No `SKILL.md` change.
+**Architecture:** One new section in `skills/visual-direction/references/operate.md`, holding only the topics the RED run shows the agent missing. One new eval case whose agent writes the direction contract and stops, so a run costs about US$ 1. No `SKILL.md` change. After the RED only one bullet about the keyboard was written, not a section (see "RED result" in Task 2).
 
 **Tech Stack:** Markdown skills, `tools/compare.mjs` (`claude plugin eval`, model `claude-opus-5-5`), Node 22 `node:test` through `npm test`.
 
@@ -25,7 +25,7 @@
 ## Review Focus
 
 - **A grader that a correct contract fails.** Each grader has a hard cut (15 columns, a named key, both outcomes of a status change). Task 1's review reads each one for a fair pass path.
-- **The `none` arm passing.** If the plain model already passes, the case does not measure the skill: Task 1 Step 4 handles it.
+- **The `none` arm passing.** If the plain model already passes, the case does not measure the skill: Task 1 Step 4 handles it. Step 4 only covered `devorb` passing everything; `none` tying `devorb` is recorded in the ledger as open.
 - **The rule read as layout control.** `operate.md` says the direction does not touch layout, navigation and controls; the new section must read as content decisions for the contract, not as a new widget set.
 - **Overlap with front A.** The section says what the user sees; it gives no query, index or virtualization recipe.
 - **Other `visual-direction` cases and the reserved one:** not re-run. Said in the final report.
@@ -84,7 +84,17 @@ A table with more fields than the screen holds is designed from what the user do
 - **Keyboard:** a daily user reaches a row, opens it and runs the most frequent action without the mouse. Name the keys.
 ```
 
-- [ ] **Step 2: `npm test`,** then commit `feat(visual-direction): dense tables on Operate screens`.
+- [ ] **Step 2: `npm test`,** then commit `feat(visual-direction): dense tables on Operate screens` (real commit: `e440b20 feat(visual-direction): the contract names the keys on an Operate screen`).
 - [ ] **Step 3: GREEN.** Run the seam command. Expected: `accepted: true`, the `devorb` row at 67% or 100%. Report the cost and the running total. Below the bar or `accepted: false`: read the failing grader's evidence, write it in the ledger and stop; no second attempt.
 - [ ] **Step 4: Ledger,** in Portuguese: own rule 7 with the case and the RED sentences, both rounds per grader, the costs, what was not checked.
-- [ ] **Step 5: `npm test`,** then commit `test(visual-direction): GREEN for dense tables` with the ledger and both result files.
+- [ ] **Step 5: `npm test`,** then commit `test(visual-direction): GREEN for dense tables` (real commit: `65ec2e7 test(visual-direction): GREEN for the keys on an Operate screen`) with the ledger and both result files.
+
+## Outcome
+
+- RED at `devorb@2916598`: devorb 1 of 2, none 1 of 2, US$ 2.56.
+- One bullet written (`e440b20`).
+- GREEN at `devorb@e440b20`: devorb 2 of 3, none 2 of 3, `accepted: true`, US$ 3.75.
+- Item 2 cost US$ 6.31; front total US$ 43.98 of 50.
+- The dense-table section of the brief was not written.
+- Open items are in the ledger.
+- Stopped before the merge.

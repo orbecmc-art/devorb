@@ -33,7 +33,11 @@ Texto que ninguém pediu por uma falha: cada tópico da seção nova entra só s
 
 ## Resultado do RED (2026-11-20)
 
-`devorb@2916598`, 2 rodadas por braço, US$ 2,56 com o juiz. O `devorb` atual aprovou 1 de 2: os graders 1, 2, 3, 4 e 6 passaram nas duas rodadas, e o 5 (teclado) falhou numa, com o contrato dizendo "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla. O `none` aprovou 1 de 2 e falhou uma vez no volume e nos estados. Ou seja: a skill de hoje já decide colunas padrão, lugar para o resto, paginação, estados da tabela, campos da busca e os dois desfechos da mudança de status. Pelo anti-objetivo, a seção "tabela densa" que o brief descreve não entra: entra uma linha sobre teclado. O objetivo 1 fica reduzido a essa linha, e isso é desvio do brief, relatado ao dono.
+`devorb@2916598`, 2 rodadas por braço, US$ 2,56 com o juiz. O `devorb` atual aprovou 1 de 2: os graders 1, 2, 3, 4 e 6 passaram nas duas rodadas, e o 5 (teclado) falhou numa, com o contrato dizendo "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla. O `none` aprovou 1 de 2 e falhou uma vez no volume e nos estados. Medido, e a skill de hoje passou: colunas padrão com lugar para os outros campos (grader 1), estados da tabela (grader 3), campos da busca (grader 4) e os dois desfechos da mudança de status (grader 6), 5 de 5 rodadas do `devorb` cada; volume (grader 2), 4 de 5; teclado (grader 5), 4 de 5, e a falha foi o RED. Nenhum grader mediu colunas fixas, visões salvas, filtros, o esqueleto como exigência (o grader 3 só o dá como exemplo) nem a atualização otimista como tal, então sobre esses não se sabe nada: ficaram fora por falta de medida, não porque uma rodada tenha mostrado o agente acertando. Pelo anti-objetivo, a seção "tabela densa" que o brief descreve não entra: entra uma linha sobre teclado. O objetivo 1 fica reduzido a essa linha, e isso é desvio do brief, relatado ao dono.
+
+## Resultado do GREEN (2026-11-20)
+
+`devorb@e440b20` aprovou 2 de 3 e o `none` aprovou 2 de 3, com `accepted: true` e US$ 3,75 com o juiz. O caso não separa os braços. Objetivo 1 entregue como uma linha. Objetivo 2 ("nenhuma tela mostra todos os campos") não está no texto da skill, e só o grader 1 o confere. Objetivo 3 cumprido como escrito.
 
 ## Orçamento
 

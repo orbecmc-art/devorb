@@ -91,7 +91,7 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 6. **Regra do dono: aviso de resultado de ação é trabalho de toast.** Decisão do dono em 2026-11-20. Em `sources.md`, o trabalho é nomeado pelo que acontece na tela, não pela palavra da spec: o aviso que informa o resultado de uma ação (salvou, inscreveu, enviou, falhou no servidor) é o trabalho de toast, usa o especialista da lista e nunca é uma linha de status montada no formulário ou na página; o erro de validação de um campo continua junto do campo. Cenário: `visual-direction-arquitetura-clean`, graders `4-sonner-dependency` e `6-newsletter-toast`, que falharam em todas as rodadas gravadas até `devorb@d7dc0a1`. A spec da fixture diz "a página confirma com um aviso na tela", e na sessão inteira o agente escolhia, por gosto, uma mensagem no formulário, com o que a regra do especialista deixava de se aplicar. RED no caso cortado em 20 turnos (logo depois do contrato), 3 de 3 sem especialista: "Especialista: nenhum; o aviso da newsletter fica junto do formulário, em texto com `aria-live`, porque um toast some antes de ser lido e o Sonner não está instalado"; "o aviso da newsletter é uma mensagem na própria linha do formulário (aria-live), não um toast, então Sonner fica de fora"; "O aviso da newsletter fica junto do campo e não vira toast, então o Sonner fica de fora". A alternativa recusada pelo dono era reescrever a spec da fixture para dizer "toast": o caso passaria e as specs reais, que dizem "aviso", continuariam com o aviso feito à mão. Limite conhecido: seis subagentes novos, só com a spec e os arquivos da skill, já escolhiam o Sonner em 6 de 6 antes da regra; a falha só aparece na sessão inteira, então teste com subagente não serve de RED para esta regra. A oração "nunca é uma linha de status" entrou na segunda rodada, depois de uma rodada inteira em que o agente leu a regra e escreveu "o aviso da newsletter é inline". Resultado e o que ficou aberto: "Resultados", 2026-11-20.
 
-7. **O contrato nomeia as teclas numa tela de operação.** Em `operate.md`, "The screen": quem trabalha na tela o dia inteiro chega a uma linha, abre e faz a ação mais comum sem o mouse, e o contrato nomeia cada tecla. Cenário: `visual-direction-tabela-operacao`, grader `5-keyboard`. RED em `devorb@2916598`: numa de duas rodadas o contrato dizia "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla nenhuma. GREEN em `devorb@e440b20`: 3 de 3 nomeiam as teclas. Evidência fraca, e dita assim: uma rodada falhou antes, o braço `none` passou nesse grader nas 5 rodadas dele, e não dá para dizer que a linha foi a causa. É o que sobrou do item 2 da frente C: o brief pedia uma seção inteira de tabela densa, e o RED mostrou que a skill de hoje já decide o resto ("Resultados", 2026-11-20, tabela densa).
+7. **O contrato nomeia as teclas numa tela de operação.** Em `operate.md`, "The screen": quem trabalha na tela o dia inteiro chega a uma linha, abre e faz a ação mais comum sem o mouse, e o contrato nomeia cada tecla. Cenário: `visual-direction-tabela-operacao`, grader `5-keyboard`. RED em `devorb@2916598`: numa de duas rodadas o contrato dizia "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla nenhuma. GREEN em `devorb@e440b20`: 3 de 3 nomeiam as teclas. Evidência fraca, e dita assim: uma rodada falhou antes, o braço `none` passou nesse grader nas 5 rodadas dele, e não dá para dizer que a linha foi a causa. É o que sobrou do item 2 da frente C: o brief pedia uma seção inteira de tabela densa, e só o teclado teve uma falha gravada. Medido, e a skill de hoje passou: colunas padrão com lugar para os outros campos, estados da tabela, campos da busca e os dois desfechos da mudança de status, 5 de 5 rodadas do `devorb` cada; volume, 4 de 5. Nenhum grader mediu colunas fixas, visões salvas, filtros, o esqueleto como exigência nem a atualização otimista como tal: sobre esses não se sabe nada ("Resultados", 2026-11-20, tabela densa).
 
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
@@ -291,7 +291,7 @@ Não conferido: os outros casos da `visual-direction`, do `implementing` e do `v
 
 ### Tabela densa em tela de operação (2026-11-20)
 
-Plano `docs/plans/2026-11-20-tabela-de-operacao.md`, regra 7, item 2 da frente C. Opus 5.5 (`claude-opus-5-5`), caso novo `visual-direction-tabela-operacao`, o primeiro da skill em tela de operação: spec aprovada de uma tela com 20.134 pedidos e 85 campos, sem direção visual; o agente escreve só o contrato. Seis graders `llm` na spec depois do trabalho: 1 colunas padrão e lugar para o resto, 2 volume, 3 estados da tabela, 4 busca, 5 teclado, 6 mudança de status. Os três primeiros são os do brief. Uma rodada por vez (`--concurrency 1`). Arquivos: `fusion/results/2026-11-20-visual-direction-tabela-red.md` e `fusion/results/2026-11-20-visual-direction-tabela.md`.
+Plano `docs/plans/2026-11-20-tabela-de-operacao.md`, regra 7, item 2 da frente C. Opus 5.5 (`claude-opus-5-5`), caso novo `visual-direction-tabela-operacao`, o primeiro em `evals/` em tela de operação (existe um caso reservado de Operate, que o revisor chamou de `visual-direction-painel-padaria`, e ele não rodou): spec aprovada de uma tela com 20.134 pedidos e 85 campos, sem direção visual; o agente escreve só o contrato. Seis graders `llm` na spec depois do trabalho: 1 colunas padrão e lugar para o resto, 2 volume, 3 estados da tabela, 4 busca, 5 teclado, 6 mudança de status. Os três primeiros são os do brief. Uma rodada por vez (`--concurrency 1`). Arquivos: `fusion/results/2026-11-20-visual-direction-tabela-red.md` e `fusion/results/2026-11-20-visual-direction-tabela.md`.
 
 | Rodada | Braço | Aprovação | Pontuação | Falhas por grader | Custo com o juiz |
 |---|---|---|---|---|---|
@@ -300,16 +300,35 @@ Plano `docs/plans/2026-11-20-tabela-de-operacao.md`, regra 7, item 2 da frente C
 | GREEN, 3 rodadas | `devorb@e440b20` | 67% (2 de 3) | 0,93 | 2 (volume) numa rodada | US$ 2,33 |
 | GREEN, 3 rodadas | `none` | 67% (2 de 3) | 0,93 | 3 (estados) numa rodada | US$ 1,42 |
 
+Por execução (P passa, F falha; graders 1 a 6 em ordem):
+
+| Rodada | Braço | Execução 1 | Execução 2 | Execução 3 |
+|---|---|---|---|---|
+| RED | `devorb@2916598` | P P P P F P | P P P P P P | não rodou |
+| RED | `none` | P F F P P P | P P P P P P | não rodou |
+| GREEN | `devorb@e440b20` | P F P P P P | P P P P P P | P P P P P P |
+| GREEN | `none` | P P P P P P | P P P P P P | P P F P P P |
+
 - GREEN: `accepted: true`, sem regressão, na barra de 2/3.
-- **O caso não separa o DevOrb do modelo sem plugin.** Os dois braços aprovaram o mesmo número de rodadas no RED e no GREEN. Com a spec dizendo 85 campos e 20 mil pedidos, o modelo já escolhe poucas colunas pelo nome, manda o resto para um painel, pagina, descreve esqueleto, vazio de busca e erro, nomeia os campos da busca e trata os dois desfechos da mudança de status. O DevOrb passou nos graders 1, 3, 4 e 6 nas 5 rodadas dele.
-- **A seção "tabela densa" que o brief descreve não foi escrita.** Só o teclado teve uma falha gravada no RED, e a regra da casa não aceita texto sem falha. Entrou uma linha (regra 7). A seção candidata, com colunas, volume, busca e filtros, estados e edição na linha, está no plano como considerada e não escrita.
+- **O caso não separa o DevOrb do modelo sem plugin.** Os dois braços aprovaram o mesmo número de rodadas no RED e no GREEN. O DevOrb passou nos graders 1, 3, 4 e 6 nas 5 rodadas dele, e o `none` passou o grader 5 (teclado) nas 5 dele.
+- **A seção "tabela densa" que o brief descreve não foi escrita.** Um tópico teve uma rodada com falha (teclado, grader 5); cinco foram medidos e passaram: colunas padrão com lugar para os outros campos, estados da tabela, campos da busca e os dois desfechos da mudança de status, 5 de 5 rodadas do `devorb` cada, e volume, 4 de 5. O resto da lista do brief nunca foi medido por grader nenhum: colunas fixas, visões salvas, filtros, o esqueleto como exigência (o grader 3 só o dá como exemplo) e a atualização otimista como tal. Esses tópicos ficaram fora por falta de medida, não porque uma rodada tenha mostrado o agente acertando. A regra da casa não aceita texto sem falha, então entrou uma linha (regra 7). A seção candidata está no plano como considerada e não escrita.
 - A falha do `devorb` no GREEN foi no grader 2: o contrato punha a página na URL e dizia "a tela termina na paginação da tabela", mas também dizia "a lista vem em uma resposta só"; os três votos do juiz reprovaram. É um caso de fronteira, não um contrato sem paginação.
 - O caso que motivou o brief (um sistema entregue com 85 colunas na tela) não foi reproduzido aqui. Este caso mede o contrato, com o volume e os campos escritos na spec. Não mede uma spec que cala sobre o volume, nem se a tela construída segue o contrato.
 - Antes da primeira rodada paga, uma revisão do caso achou que a fixture entregava respostas (a API "aceita página" e o formato da recusa) e que um grader julgava três coisas de uma vez. Foi corrigido antes de pagar.
 
-Custo do item 2: US$ 6,31 (RED 2,56 + GREEN 3,75). Custo total da frente C: US$ 43,98 dos US$ 50 (item 1: 37,67).
+Custo do item 2: US$ 6,31 (RED 2,56 + GREEN 3,75). As linhas "Custo total desta execução" que o `compare.mjs` imprime (US$ 2,49 e US$ 3,65) deixam o custo do juiz de fora, por isso ficam abaixo de 2,56 e 3,75. Custo total da frente C: US$ 43,98 dos US$ 50 (item 1: 37,67).
 
-Não conferido: nenhuma rodada `--reserved`; os outros casos da `visual-direction` não rodaram com a linha nova; o ponteiro para `devorb:performance` (frente A, ainda fora da `main`) não foi escrito.
+Em aberto:
+
+- O caso não separa os braços: o `none` empatou com o `devorb` nas duas rodadas e passou o grader 5 nas 5 execuções dele. Serve de guarda de regressão para telas de Operate; não prova a regra 7 e não detecta a regra 7 regredindo. Em 67%, uma falha de ruído imprime `accepted: false`. O dono decide: manter como está, endurecer ou tirar.
+- A regra 7 se apoia em uma falha em duas rodadas. `skills/writing-skills/SKILL.md` diz "single samples lie". O dono decide: manter a linha ou tirar.
+- O grader 2 lê de dois jeitos: a cláusula de aprovação aceita um mecanismo que limita o que é "carregado ou desenhado", e a de reprovação rejeita uma tabela que "carrega e desenha todos". Um contrato com páginas sobre uma lista que "vem em uma resposta só" recebeu três votos de reprovação, na única falha do `devorb` no GREEN. A fixture diz que `GET /api/pedidos` "devolve os pedidos", o que convida esse contrato. Não foi mudado: os graders ficam como as rodadas os usaram.
+- O grader 5 passa com uma tecla nomeada, e a regra 7 pede cada tecla (chegar, abrir, agir).
+- A regra 7 diz "o contrato nomeia cada tecla" e o `contract.md` não tem campo para teclas.
+- Nenhuma rodada `--reserved` rodou, contra `skills/writing-skills/references/devorb.md` ("Level `full` runs again with `--reserved`"). Motivo: o saldo do teto. O dono decide.
+- O ponteiro do `operate.md` para `devorb:performance` espera o merge da frente A.
+
+Não conferido: os outros casos da `visual-direction` não rodaram com a linha nova.
 
 ## Decisões por commit de fonte
 
