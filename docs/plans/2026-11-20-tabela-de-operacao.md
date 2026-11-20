@@ -51,7 +51,7 @@
 ### Task 2: The section, GREEN and the ledger
 
 **Files:**
-- Modify: `skills/visual-direction/references/operate.md` (new section "## Dense tables", after "## The screen")
+- Modify: `skills/visual-direction/references/operate.md` (one bullet in "## The screen"; see the RED result below)
 - Modify: `fusion/ledger/visual-direction.md` (own rule 7 with its case; results of 2026-11-20, item 2)
 - Create: `fusion/results/2026-11-20-visual-direction-tabela.md` (written by `tools/compare.mjs`)
 
@@ -61,7 +61,15 @@
 - Consumes: Task 1's failures.
 - Produces: the report and the ledger entry.
 
-- [ ] **Step 1: Write the section,** keeping from the candidate below only the bullets whose topic failed in the RED, plus the opening sentence:
+**RED result (2026-11-20, `devorb@2916598`, 2 runs per arm, US$ 2.56 with the judge).** `devorb`: 1 of 2 approved; graders 1, 2, 3, 4 and 6 passed in both runs, grader 5 (keyboard) failed once: the contract said "Atalho de teclado para voltar ao campo, mostrado ao lado dele" and named no key. `none`: 1 of 2 approved; graders 2 and 3 failed once. So the current skill already decides default columns, the home of the other fields, paging, the table's states, the search fields and both outcomes of a status change. Only the keyboard has a recorded failure. By the spec's anti-goal, Step 1 writes one bullet, in "## The screen", and no new section:
+
+```markdown
+- **Keyboard:** someone who works here all day reaches a row, opens it and runs the most frequent action without the mouse. The contract names each key.
+```
+
+It goes right after the bullet that starts "**A destructive action**". The candidate section below stays in the plan as what was considered and not written.
+
+- [ ] **Step 1 (superseded by the RED result above): Write the section,** keeping from the candidate below only the bullets whose topic failed in the RED, plus the opening sentence:
 
 ```markdown
 ## Dense tables

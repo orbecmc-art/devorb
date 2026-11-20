@@ -31,6 +31,10 @@ Texto que ninguém pediu por uma falha: cada tópico da seção nova entra só s
 - GREEN: a mesma linha com `--runs 3`. Passa com `devorb` em 2/3 ou mais e `accepted: true`.
 - `npm test` verde.
 
+## Resultado do RED (2026-11-20)
+
+`devorb@2916598`, 2 rodadas por braço, US$ 2,56 com o juiz. O `devorb` atual aprovou 1 de 2: os graders 1, 2, 3, 4 e 6 passaram nas duas rodadas, e o 5 (teclado) falhou numa, com o contrato dizendo "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla. O `none` aprovou 1 de 2 e falhou uma vez no volume e nos estados. Ou seja: a skill de hoje já decide colunas padrão, lugar para o resto, paginação, estados da tabela, campos da busca e os dois desfechos da mudança de status. Pelo anti-objetivo, a seção "tabela densa" que o brief descreve não entra: entra uma linha sobre teclado. O objetivo 1 fica reduzido a essa linha, e isso é desvio do brief, relatado ao dono.
+
 ## Orçamento
 
 Teto da frente: US$ 50. Gasto no item 1: US$ 37,67. Saldo: US$ 12,33. Estimativa do item 2: RED de US$ 3 a 5, GREEN de US$ 4 a 6. Rodadas em `--concurrency 1`. Não sobra para segunda tentativa de GREEN: se falhar, paro e relato. Custo real informado depois de cada rodada.
