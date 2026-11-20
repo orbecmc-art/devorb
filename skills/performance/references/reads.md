@@ -33,11 +33,14 @@ limit 51;
 ## Only the columns a list row needs
 
 - Name the columns. A column nobody reads costs disk reads, memory and bytes on the wire for every row.
-- **Wide table** (more than about 12 columns): the list query returns the id and the few columns that tell a person which record this is, such as a name, a code, a place, a date. On 20,000 rows × 84 columns, a page of 50 rows was 82 KB with every column and under 4 KB with three.
-- One query returns the page: the filter or the index match, the order, the limit and those columns, joined when the match lives in an index table. Ids first and then a read per id is the N+1 below, however fast one read by key is: a page of 50 becomes 51 round trips.
-- An existing screen that draws every column does not decide the query: change the screen to the list columns, and open the full row on a click.
-- The full row is one read by primary key (`select * from orders where id = $1` is fine here: one row), behind its own route.
-- With no one to ask, choose the list columns from the data: the first columns of the table, and the ones whose values read as names, codes and dates. Say which you chose in the report: it is the change a user sees first.
+
+For the wide table of `SKILL.md`:
+
+- On 20,000 rows × 84 columns, a page of 50 rows was 82 KB with every column and under 4 KB with three.
+- The list columns are ones such as a name, a code, a place, a date. With no one to ask, take the first columns of the table and the ones whose values read as names, codes and dates.
+- The page's query joins when the match lives in an index table. Ids first and then a read per id is the N+1 below, however fast one read by key is: a page of 50 becomes 51 round trips.
+- A screen that draws every column of the wide table changes with the query: it draws the list columns, and opens the full row on a click.
+- The full row has its own route: one read by primary key (`select * from orders where id = ?` is fine here: one row).
 
 ## N+1: one query per row
 
@@ -48,7 +51,7 @@ A loop that runs a query for each row of an earlier query. 50 rows become 51 que
 
 ## An index for every filter and every sort
 
-- A column in a `where`, a `join` or an `order by` of a list query has an index. A filter plus a sort takes one composite index: filter columns first, then the sort columns, in the query's order.
+- A column in a `where`, a `join` or an `order by` of a list query has an index. A filter plus a sort takes one composite index: the columns filtered by equality first, then the sort columns, in the query's order.
 - Read the plan before and after. Postgres: `explain (analyze, buffers)`, and no `Seq Scan` on the big table. SQLite: `explain query plan`, and `SEARCH ... USING INDEX` where it said `SCAN`, with no `USE TEMP B-TREE FOR ORDER BY`.
 - An index costs on every write. Add the ones a query uses, and no others.
 - Postgres in production: `create index concurrently`.

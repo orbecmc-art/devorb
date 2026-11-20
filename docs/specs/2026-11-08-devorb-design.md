@@ -128,7 +128,7 @@ Itens que só o Matt tem e que entram na primeira versão, por decisão do dono:
 | `handoff` | `handoff`, com uma ideia de `context-save` | Manual |
 | `retro` | `retro` | Manual |
 
-"A base" são as 19 skills destas duas tabelas. A `security-audit` entrou depois das outras 18 e só aparece em `using-devorb` quando estiver pronta. `GLOSSARY.md` e `docs/adr/` são mantidos por `domain-modeling`.
+"A base" são as 19 skills destas duas tabelas. A skill `performance` entrou na base em 2026-11-20, como a vigésima (`docs/specs/2026-11-20-performance-design.md`). A `security-audit` entrou depois das outras 18 e só aparece em `using-devorb` quando estiver pronta. `GLOSSARY.md` e `docs/adr/` são mantidos por `domain-modeling`.
 
 O restante fica de fora até haver um caso real: `triage`, `wayfinder`, `teach`, `to-questionnaire`, `wizard`, `research`, `wait-what`, `diagnosing-superpowers`, `setup-matt-pocock-skills` e as pastas `misc` e `in-progress` do Matt.
 

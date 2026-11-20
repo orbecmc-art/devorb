@@ -113,6 +113,8 @@ Agent (general-purpose):
     - **Data:** on each changed read, each of these is Important (blocking):
       a query with no limit; a query per row inside a loop (N+1); a filter or
       sort with no index; a list with neither pagination nor virtualization.
+      For the index, read the schema or the migrations: the diff may not
+      show it.
       A limit answers only the no-limit signal. One read by key outside a
       loop, a write, and a list whose source is a set the code or schema
       fixes (statuses, countries) are none of the four. Where the spec or
@@ -121,7 +123,9 @@ Agent (general-purpose):
       pagination or virtualization finding.
       A brief with a `**Performance budget:**` needs the measured number
       against it in the report: a missing number is Important too.
-      Fix: `devorb:performance`.
+      Fix: a limit and a cursor; a join or one batched load; an index on the
+      filtered or sorted columns; pagination or virtualization (the recipes
+      are in `devorb:performance`).
 
     Point at evidence: file:line for every finding and for any check you'd
     otherwise answer with a bare "yes".

@@ -2,7 +2,7 @@
 
 Skill de entrada, injetada pelo hook de início de sessão. Foi escrita na Task 3, sem passar pelo processo de fusão, fundindo `using-superpowers` (Superpowers) com `ask-matt` (Matt Pocock), e este ledger a registra na Task 6. Pinos lidos: Superpowers em `22f0b463e7a5e579904dd6211a520321035526f7`, igual à `main` dele em 2026-11-11, e Matt em `4ae2317ddb22b046e26455e4f9c9b3aaaf62212d`.
 
-`SKILL.md` tem 3.496 bytes (eram 3.499 antes da regra própria 5 e 3.498 antes da Task 24), contra o limite de 3.500 do teste de bootstrap (teto de 875 tokens). Qualquer acréscimo precisa tirar algo. São 305 bytes acima da fonte, cerca de 76 tokens a mais por sessão, e a Task 6 mede se isso se paga.
+`SKILL.md` tem 3.499 bytes desde 2026-11-20 (eram 3.496 depois da Task 24, 3.498 antes dela e 3.499 antes da regra própria 5), contra o limite de 3.500 do teste de bootstrap (teto de 875 tokens). Qualquer acréscimo precisa tirar algo. São 308 bytes acima da fonte, cerca de 77 tokens a mais por sessão, e a Task 6 mede se isso se paga.
 
 Os casos da skill são `evals/using-devorb-triggers-feature` ("adiciona exportação em CSV" dispara `devorb:aligning`), `evals/using-devorb-triggers-bug` ("esse teste está falhando" dispara `devorb:debugging`) e `evals/using-devorb-legacy-names` ("usa o superpowers:brainstorming para isso" dispara `devorb:aligning`).
 

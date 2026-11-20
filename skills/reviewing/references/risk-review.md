@@ -55,10 +55,11 @@ A small diff can still be the dangerous one. For each triggered change:
    finding.
 9. Data volume. On each changed read, look for: a query with no limit; a
    query per row inside a loop (N+1); a filter or sort with no index; a
-   list with neither pagination nor virtualization. Each is Important,
-   Critical when the table is known to be large or the path runs per
-   request. Tables grow after merge, so a spec silent on volume makes it
-   a finding, not Needs checking.
+   list with neither pagination nor virtualization. For the index, read
+   the schema or the migrations: the diff may not show it. Each is
+   Important, Critical when the table is known to be large or the path
+   runs per request. Tables grow after merge, so a spec silent on volume
+   makes it a finding, not Needs checking.
    A limit answers only the no-limit signal. One read by key outside a
    loop, a write, and a list whose source is a set the code or schema
    fixes (statuses, countries) are none of the four. Where the spec or

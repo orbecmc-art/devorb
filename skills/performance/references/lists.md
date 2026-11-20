@@ -12,7 +12,7 @@ Only the visible rows are in the DOM, plus a few above and below.
 
 - Use the virtualizer the project already has (the data grid's own, TanStack Virtual, react-window).
 - The scroll container keeps the full height: a spacer sized to row count × row height, with the visible rows positioned inside it. Fixed row height is the cheap case; variable height needs measuring.
-- A wide table virtualizes columns too: 85 columns × 30 visible rows is 2,550 cells, before any off-screen row.
+- Cells count, not rows: 85 columns × 30 visible rows is 2,550 cells. A wide table draws its list columns (`SKILL.md`), not every column.
 - Long data arrives in pages as the user scrolls (the cursor of `reads.md`), never all at once.
 - Row keys are the row ids, so a scrolled row is reused and not rebuilt.
 
