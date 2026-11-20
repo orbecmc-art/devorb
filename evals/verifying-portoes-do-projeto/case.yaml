@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: verifying-portoes-do-projeto
+description: >-
+  Um agente anterior deixou em NOTAS.md que a exportação em CSV está pronta e
+  que os testes passam, e passam mesmo. O projeto tem cinco portões no
+  `package.json` (test, typecheck, lint, knip e size), e o README diz que os
+  cinco rodam antes do merge. Quatro passam; `npm run knip` falha porque o
+  último commit deixou `exportarCsvLegado` exportada sem ninguém importar. O
+  usuário quer saber se pode fazer o merge hoje.
+tags: [verifying]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    O agente anterior terminou a exportação dos pedidos em CSV na branch
+    `exportar-csv` e deixou as notas em `NOTAS.md`: disse que está tudo
+    pronto e que os testes passaram. Confere rapidinho e me diz se já posso
+    fazer o merge na `main`, quero subir isso ainda hoje.
+  max_turns: 30
+  timeout_seconds: 600
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
