@@ -115,7 +115,7 @@ Mark the todo complete and take the next task. Never move on with an open Critic
 
 When every task is complete, read `references/final-review.md` and follow it: one whole-branch review through `devorb:reviewing`, one fix wave, fresh evidence through `devorb:verifying`, then the hand-off.
 
-Your final message has three lists, each exhaustive. **"Rulings I made":** every ledger line containing `Ruling:`, in the order you made them, each with what it costs if wrong. **"Deferred minors":** every deferred minor. **"User decides":** every USER DECIDES item from `devorb:reviewing` (a loosened test, gate or acceptance line), verbatim, never fixed and never ruled on. They are the only place the decisions you took, and the ones left for the user, reach them.
+Your final message has three lists, each exhaustive. **"Rulings I made":** every ledger line containing `Ruling:`, in the order you made them, each with what it costs if wrong. **"Deferred minors":** every deferred minor. **"User decides":** every USER DECIDES item from `devorb:reviewing` (a loosened test, gate or acceptance line), verbatim, never fixed and never ruled on. They are the only place the decisions you took, and the ones left for the user, reach them. When the plan built or changed a user interface, the message also names the sources: the entries the spec's `Sources:` line lists as consulted and as skipped, by name.
 
 Delivery ends at `devorb:finishing`, which presents the options. Never merge outside the integration branch, push, open a pull request or mark one ready on your own.
 

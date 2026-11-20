@@ -103,7 +103,7 @@ Also stop before committing, pushing, opening a PR, moving to the next task or d
 
 ## Hand-off
 
-Report each claim with its command and the result you saw (counts, exit code), what stays unverified and why, and the deployed line when it applies.
+Report each claim with its command and the result you saw (counts, exit code), what stays unverified and why, and the deployed line when it applies. For a built or changed interface, the report also names the sources: the entries the spec's `Sources:` line lists as consulted and as skipped, by name.
 
 ## Connects to
 
