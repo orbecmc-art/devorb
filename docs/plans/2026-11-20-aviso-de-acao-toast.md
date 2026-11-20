@@ -17,7 +17,7 @@
 - The eval case keeps its fixture and prompt. Of its graders only `6-newsletter-toast` changes, in Task 3, by the owner's decision of 2026-11-20.
 - The eval model stays `claude-opus-5-5`. `fusion/eval-config.json` is not edited.
 - Done means the `devorb` arm approves 2 of 3 runs or more on `visual-direction-arquitetura-clean`. `accepted: true` alone is not enough: a 0% versus 0% gap also prints it.
-- Paid ceiling US$ 50. Spent before this plan: US$ 9.47. One full GREEN round fits, not two. That was the first estimate only: the first round cost US$ 8.66, and the owner approved a second. Report the real cost after every paid run.
+- Paid ceiling US$ 50. Spent before this plan: US$ 9.48, judge cost included. One full GREEN round fits, not two. That was the first estimate only: the first round cost US$ 8.66, and the owner approved a second. Report the real cost after every paid run.
 - One `tools/compare.mjs` per HEAD at a time.
 - A field's validation error stays at the field. A rule that sends it to a toast fails the plan.
 - `npm test` green. No version bump and no `CHANGELOG.md` entry: the brief puts both after the owner's merge.
@@ -87,7 +87,7 @@
 
 ## Second round (owner's decision, 2026-11-20)
 
-Task 2 ended at its Step 3: 1 of 3 approved at `devorb@31f827d`, US$ 8.63, paid total US$ 21.51. The owner approved three adjustments and one more full round. The spec's section "Segunda rodada" has the reasons; the RED for each is a run of that round, quoted in `fusion/ledger/visual-direction.md`.
+Task 2 ended at its Step 3: 1 of 3 approved at `devorb@31f827d`, US$ 8.66, paid total US$ 21.54. The owner approved three adjustments and one more full round. The spec's section "Segunda rodada" has the reasons; the RED for each is a run of that round, quoted in `fusion/ledger/visual-direction.md`.
 
 ### Task 3: Three adjustments
 
@@ -137,7 +137,7 @@ Nothing else in the grader changes: the frontmatter, the context paragraph, cond
 
 **Files:**
 - Modify: `fusion/ledger/visual-direction.md` (results block of 2026-11-20; rule 6), `fusion/ledger/implementing.md` and `fusion/ledger/verifying.md` (the sources sentence, as an own rule with its case)
-- Rewrite: `fusion/results/2026-11-20-visual-direction-arquitetura.md` (written by `tools/compare.mjs`); keep the first round's report as `fusion/results/2026-11-20-visual-direction-arquitetura-rodada-1.md`
+- Rewrite: `fusion/results/2026-11-20-visual-direction-arquitetura.md` (written by `tools/compare.mjs`); keep the first round's report as `fusion/results/2026-11-20-visual-direction-arquitetura-primeira-rodada.md`
 
 **Seam:** the same command as Task 2, through the `--keep-temp` wrapper.
 
@@ -147,7 +147,7 @@ Nothing else in the grader changes: the frontmatter, the context paragraph, cond
 
 - [ ] **Step 1: Judge check of the new grader 6,** before paying: a judge given the new grader text and the kept `components/newsletter-form.tsx` of round 1 run 2 (Sonner toast after `await subscribe(email)`) answers PASS; given the kept file of run 3 (hand-built `role="status"` line) it answers FAIL.
 
-- [ ] **Step 2: Rename the first round's report** to `…-arquitetura-rodada-1.md`, then run `node tools/compare.mjs --skill visual-direction-arquitetura --arms devorb,none --runs 3`. Expected: `accepted: true` and the `devorb` row at 67% or 100%. Report the cost and the running total.
+- [ ] **Step 2: Rename the first round's report** to `…-arquitetura-primeira-rodada.md`, then run `node tools/compare.mjs --skill visual-direction-arquitetura --arms devorb,none --runs 3`. Expected: `accepted: true` and the `devorb` row at 67% or 100%. Report the cost and the running total.
 
 - [ ] **Step 3: Check the kept build of each run** as in Task 2 Step 2.
 

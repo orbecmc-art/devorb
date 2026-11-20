@@ -213,7 +213,7 @@ GREEN em 2026-11-19, `devorb@4a966e3`, Opus 5.5, 2 rodadas, `--arms devorb,none`
 
 ### Aviso de resultado de ação (2026-11-20)
 
-Plano `docs/plans/2026-11-20-aviso-de-acao-toast.md`, regra 6. Opus 5.5 (`claude-opus-5-5`), caso `visual-direction-arquitetura-clean`. Arquivos: `fusion/results/2026-11-20-visual-direction-arquitetura-1rodada.md` (diagnóstico), `fusion/results/2026-11-20-visual-direction-arquitetura-rodada-1.md` (primeira rodada inteira) e `fusion/results/2026-11-20-visual-direction-arquitetura.md` (segunda).
+Plano `docs/plans/2026-11-20-aviso-de-acao-toast.md`, regra 6. Opus 5.5 (`claude-opus-5-5`), caso `visual-direction-arquitetura-clean`. Arquivos: `fusion/results/2026-11-20-visual-direction-arquitetura-1rodada.md` (diagnóstico), `fusion/results/2026-11-20-visual-direction-arquitetura-primeira-rodada.md` (primeira rodada inteira) e `fusion/results/2026-11-20-visual-direction-arquitetura.md` (segunda).
 
 | Rodada | Braço | Resultado | Custo |
 |---|---|---|---|
@@ -263,11 +263,11 @@ Segunda rodada inteira, com os três ajustes:
 - O limite de tempo virou a lacuna do caso: o fluxo inteiro do `implementing` (subagente por task, revisão do branch, onda de correção) leva de 11 a 20 minutos aqui, e duas das três rodadas ficaram em cima dos 1200 s. As rodadas correram 3 de cada vez (`--concurrency 3`) na mesma credencial, com outra sessão rodando evals; isso pode ter alongado o tempo. A rodada de diagnóstico, sozinha, levou 973 s.
 - O grader 3 passou nas duas rodadas que chegaram à mensagem final. São duas rodadas: não dá para dizer que a frase nova foi a causa.
 
-Custo total: US$ 37,67 dos US$ 50 do teto da frente (6,20 + 3,28 + 3,40 + 8,66 + 16,13), contando o custo do juiz. A linha "Custo total desta execução" que a `compare.mjs` imprime (US$ 8,63 e US$ 16,10) deixa o custo do juiz de fora. O saldo não paga outra rodada cheia de 3.
+Custo total: US$ 37,67 dos US$ 50 do teto da frente (6,20 + 3,28 + 3,40 + 8,66 + 16,13), contando o custo do juiz. As duas linhas da segunda rodada somam 16,14 porque cada uma foi arredondada; o valor antes de arredondar é 16,13. A linha "Custo total desta execução" que a `compare.mjs` imprime (US$ 8,63 e US$ 16,10) deixa o custo do juiz de fora. O saldo não paga outra rodada cheia de 3.
 
 Em aberto:
 
-- A regra 6 se lê de dois jeitos para um erro que o servidor devolve sobre um campo: "falhou no servidor" (toast) e "erro de validação de um campo" (campo). Visto na rodada 2, rodada 3 (acima). A hipótese da spec ("a falha que vem do servidor depois do envio" é resultado da ação) diz uma coisa e o Review Focus do plano diz outra. Uma redação que resolveria: o erro do campo fica junto do campo também quando o servidor o devolve. Não aplicado: qualquer mudança na regra pede nova rodada paga.
+- A regra 6 se lê de dois jeitos para um erro que o servidor devolve sobre um campo: "falhou no servidor" (toast) e "erro de validação de um campo" (campo). Visto na execução 3 da segunda rodada inteira (acima). A hipótese da spec ("a falha que vem do servidor depois do envio" é resultado da ação) diz uma coisa e o Review Focus do plano diz outra. Uma redação que resolveria: o erro do campo fica junto do campo também quando o servidor o devolve. Não aplicado: qualquer mudança na regra pede nova rodada paga.
 - A regra 6 diz "usa o especialista da lista", e o bullet seguinte de `sources.md` diz que o que já está instalado e faz o trabalho fica. Com outra biblioteca de toast já no `package.json`, os dois podem ser lidos um contra o outro. Nenhuma rodada exercitou isso.
 - A frase que manda nomear as fontes mora em duas skills (`implementing/SKILL.md` e `verifying/SKILL.md`), ao lado da original em `visual-direction/SKILL.md` §4: três lugares que podem divergir. Ela também supõe que a spec tem uma linha `Sources:`; um ajuste de interface sem contrato não tem. A evidência é 2 de 2 rodadas, e o grader 3 já tinha passado sem ela (1 de 1 em `devorb@d7dc0a1`, 1 de 3 em `devorb@31f827d`).
 - Grader 6, condição 2, afrouxada (dono aprovou, 2026-11-20): nenhum grader vê mais o `POST`. Se ficar assim, falta uma conferência que veja a requisição fora do formulário.
@@ -275,6 +275,13 @@ Em aberto:
 - Nenhuma rodada `--reserved` correu, e nenhum caso `implementing-*` ou `verifying-*` correu, embora três skills tenham mudado. `skills/writing-skills/references/devorb.md` pede os dois.
 - A segunda rodada custou o dobro da primeira no braço `devorb`, e duas das três rodadas ficaram nos 1200 s do limite: as três passaram pelo fluxo inteiro do `implementing`, enquanto as da primeira rodada tomaram caminhos mais curtos. Não se investigou se as frases novas têm parte nisso.
 - O laço com teto (o caso real parado em 20 turnos) é um script fora do repositório; os resultados dele existem só neste ledger.
+
+Pendências menores das revisões (2026-11-20). O dono pediu para resolvê-las e deixar o branch pronto. As três que pediam mexer em texto de skill foram fechadas sem mudança, por decisão do agente, com o motivo de cada uma; o dono pode mandar editar:
+
+- "the list's specialist" sem antecedente dentro da frase da regra 6: fica como está. `sources.md` já chama `ui-sources.json` de "the list" no bullet seguinte ("the list's specialist over a hand-built version", "When the list has nothing for the job"), e o revisor da task recomendou não mexer.
+- Confirmação de ação destrutiva não citada na regra 6: não entra. Nenhuma rodada mostrou um agente tratando "confirma apagar?" como aviso de resultado, e a `writing-skills` só aceita texto com uma falha gravada por trás.
+- No `implementing/SKILL.md`, a frase das fontes vem depois de "three lists, each exhaustive" e não é uma lista: fica como está. O revisor julgou aceitável; mover a frase é editar um `SKILL.md` depois da rodada paga, e só uma rodada cheia mede a mensagem final.
+- Corrigidas nos registros: os valores sem o custo do juiz que restavam na spec e no plano (6,19, 8,63, 9,47 e 21,51 viraram 6,20, 8,66, 9,48 e 21,54), a frase "rodada 2, rodada 3", e o nome do relatório da primeira rodada inteira, que passou de `-rodada-1.md` para `-primeira-rodada.md` para não se confundir com o `-1rodada.md` do diagnóstico.
 
 Não conferido: os outros casos da `visual-direction`, do `implementing` e do `verifying` e o reservado `visual-direction-guia-restaurante` não rodaram com estas mudanças; nenhuma rodada mede a regra 6 numa tela de operação.
 
