@@ -89,7 +89,7 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 5. **Regra do dono: fontes do dono antes de qualquer design.** O portão em §4 e no `guide.md` vale também quando não há pessoa para perguntar: antes de qualquer design a skill lê `references/ui-sources.json` e `sources.md`. Entrada com `reading: "browser"` sem ferramenta de navegador ganha uma tentativa de web fetch antes de ser dada como pulada, regra única em `sources.md` e no JSON (custa uma chamada de rede que deve bater num bloqueio de robô). Tocou `SKILL.md`, `guide.md`, `sources.md` e `ui-sources.json`. Cenário: `visual-direction-arquitetura-clean`. Depois da Fase 2 o caso caiu para 0,36. GREEN em `devorb@4a966e3`: 0,64 em 2 rodadas (`none` 0,18). Diagnóstico de 1 rodada só com devorb: 0,73, com os graders 1 a 3 (`sources-before-code`, `clean-gallery-before-code`, `names-sources`) e 5 (`one-standout`) passando e 4 e 6 falhando: o Sonner não entrou no `package.json` e o aviso foi feito à mão. O caso continua sem aprovação: 0% de aprovação, listado em "Lacunas (nenhum braço passa)", e o diagnóstico de 1 rodada ficou abaixo da barra de 2/3. Este GREEN não está aprovado. Lacuna anotada em 2026-11-19 como "nenhuma regra faz o Sonner entrar sem rede". Os traces de 2026-11-20 mostram outra coisa: o agente nunca chegou a escolher o Sonner, porque decidiu que o aviso da newsletter ficava dentro do formulário (regra 6). O `README.md` da fixture já diz que dependência nova entra no `package.json` e no código, e nas rodadas em que o Sonner foi escolhido ele entrou no `package.json` sem rede.
 
-6. **Regra do dono: aviso de resultado de ação é trabalho de toast.** Decisão do dono em 2026-11-20. Em `sources.md`, o trabalho é nomeado pelo que acontece na tela, não pela palavra da spec: o aviso que informa o resultado de uma ação (salvou, inscreveu, enviou, falhou no servidor) é o trabalho de toast e usa o especialista da lista; o erro de validação de um campo continua junto do campo. Cenário: `visual-direction-arquitetura-clean`, graders `4-sonner-dependency` e `6-newsletter-toast`, que falharam em todas as rodadas gravadas até `devorb@d7dc0a1`. A spec da fixture diz "a página confirma com um aviso na tela", e na sessão inteira o agente escolhia, por gosto, uma mensagem no formulário, com o que a regra do especialista deixava de se aplicar. RED no caso cortado em 20 turnos (logo depois do contrato), 3 de 3 sem especialista: "Especialista: nenhum; o aviso da newsletter fica junto do formulário, em texto com `aria-live`, porque um toast some antes de ser lido e o Sonner não está instalado"; "o aviso da newsletter é uma mensagem na própria linha do formulário (aria-live), não um toast, então Sonner fica de fora"; "O aviso da newsletter fica junto do campo e não vira toast, então o Sonner fica de fora". A alternativa recusada pelo dono era reescrever a spec da fixture para dizer "toast": o caso passaria e as specs reais, que dizem "aviso", continuariam com o aviso feito à mão. Limite conhecido: seis subagentes novos, só com a spec e os arquivos da skill, já escolhiam o Sonner em 6 de 6 antes da regra; a falha só aparece na sessão inteira, então teste com subagente não serve de RED para esta regra. Resultado e lacunas que sobraram: "Resultados", 2026-11-20.
+6. **Regra do dono: aviso de resultado de ação é trabalho de toast.** Decisão do dono em 2026-11-20. Em `sources.md`, o trabalho é nomeado pelo que acontece na tela, não pela palavra da spec: o aviso que informa o resultado de uma ação (salvou, inscreveu, enviou, falhou no servidor) é o trabalho de toast, usa o especialista da lista e nunca é uma linha de status montada no formulário ou na página; o erro de validação de um campo continua junto do campo. Cenário: `visual-direction-arquitetura-clean`, graders `4-sonner-dependency` e `6-newsletter-toast`, que falharam em todas as rodadas gravadas até `devorb@d7dc0a1`. A spec da fixture diz "a página confirma com um aviso na tela", e na sessão inteira o agente escolhia, por gosto, uma mensagem no formulário, com o que a regra do especialista deixava de se aplicar. RED no caso cortado em 20 turnos (logo depois do contrato), 3 de 3 sem especialista: "Especialista: nenhum; o aviso da newsletter fica junto do formulário, em texto com `aria-live`, porque um toast some antes de ser lido e o Sonner não está instalado"; "o aviso da newsletter é uma mensagem na própria linha do formulário (aria-live), não um toast, então Sonner fica de fora"; "O aviso da newsletter fica junto do campo e não vira toast, então o Sonner fica de fora". A alternativa recusada pelo dono era reescrever a spec da fixture para dizer "toast": o caso passaria e as specs reais, que dizem "aviso", continuariam com o aviso feito à mão. Limite conhecido: seis subagentes novos, só com a spec e os arquivos da skill, já escolhiam o Sonner em 6 de 6 antes da regra; a falha só aparece na sessão inteira, então teste com subagente não serve de RED para esta regra. A oração "nunca é uma linha de status" entrou na segunda rodada, depois de uma rodada inteira em que o agente leu a regra e escreveu "o aviso da newsletter é inline". Resultado e o que ficou aberto: "Resultados", 2026-11-20.
 
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
@@ -213,19 +213,19 @@ GREEN em 2026-11-19, `devorb@4a966e3`, Opus 5.5, 2 rodadas, `--arms devorb,none`
 
 ### Aviso de resultado de ação (2026-11-20)
 
-Plano `docs/plans/2026-11-20-aviso-de-acao-toast.md`, regra 6. Opus 5.5 (`claude-opus-5-5`), caso `visual-direction-arquitetura-clean`. Arquivos: `fusion/results/2026-11-20-visual-direction-arquitetura-1rodada.md` (diagnóstico) e `fusion/results/2026-11-20-visual-direction-arquitetura.md` (GREEN).
+Plano `docs/plans/2026-11-20-aviso-de-acao-toast.md`, regra 6. Opus 5.5 (`claude-opus-5-5`), caso `visual-direction-arquitetura-clean`. Arquivos: `fusion/results/2026-11-20-visual-direction-arquitetura-1rodada.md` (diagnóstico), `fusion/results/2026-11-20-visual-direction-arquitetura-rodada-1.md` (primeira rodada inteira) e `fusion/results/2026-11-20-visual-direction-arquitetura.md` (segunda).
 
 | Rodada | Braço | Resultado | Custo |
 |---|---|---|---|
 | Diagnóstico, 1 rodada inteira, trace guardado | `devorb@d7dc0a1` | 0,73, 0% de aprovação; falham 4 e 6 | US$ 6,19 |
 | RED, caso cortado em 20 turnos, 3 rodadas | `devorb@d7dc0a1` | contrato sem especialista em 3 de 3 | US$ 3,28 |
 | GREEN, caso cortado em 20 turnos, 3 rodadas | `devorb@31f827d` | contrato com Sonner em 3 de 3; erro 400 junto do campo em 3 de 3 | US$ 3,40 |
-| GREEN, 3 rodadas inteiras | `devorb@31f827d` | 33% de aprovação (1 de 3), 0,73 | US$ 7,27 |
-| GREEN, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,36 |
+| GREEN 1, 3 rodadas inteiras | `devorb@31f827d` | 33% de aprovação (1 de 3), 0,73 | US$ 7,27 |
+| GREEN 1, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,36 |
 
-Custo total: US$ 21,51 dos US$ 50 do teto da frente. `accepted: false`: o caso ficou abaixo da barra de 2/3. **Este GREEN não está aprovado.**
+Primeira rodada inteira: `accepted: false`, abaixo da barra de 2/3.
 
-O que a regra mudou: o grader `4-sonner-dependency` passou em 2 de 3 rodadas inteiras (antes, 0 em 9), e uma rodada passou nos seis graders, a primeira aprovação do caso. Somando o caso cortado e as rodadas inteiras, o contrato nomeou o Sonner em 5 de 6.
+O que a regra mudou na primeira rodada: o grader `4-sonner-dependency` passou em 2 de 3 rodadas inteiras (antes, 0 em 9), e uma rodada passou nos seis graders, a primeira aprovação do caso. Somando o caso cortado e as rodadas inteiras, o contrato nomeou o Sonner em 5 de 6.
 
 Rodada por rodada, `devorb@31f827d`:
 
@@ -235,13 +235,33 @@ Rodada por rodada, `devorb@31f827d`:
 | 2 | passa | passa | falha | passa | passa | falha | build igual ao da rodada 1, mas o `fetch` está em `lib/newsletter.ts`, e a mensagem final não nomeia as fontes |
 | 3 | passa | passa | falha | falha | passa | falha | o contrato voltou a dizer "o aviso da newsletter é inline"; a mensagem final não nomeia as fontes |
 
-Lacunas que sobraram, três, e nenhuma se fecha só com esta regra:
+Três lacunas saíram dessa rodada, e o dono aprovou um ajuste para cada uma (2026-11-20, `devorb@2502b5c`):
 
-- **O grader 6 reprova um build correto.** Na rodada 2 o formulário chama `toast.success` do Sonner depois de `subscribe()` responder ok, e `subscribe()` faz o `POST /api/newsletter` em `lib/newsletter.ts`, separado para ser testado sem navegador (com testes passando). O grader lê só `components/newsletter-form.tsx` e a condição 2 exige o `fetch` no formulário, então reprova. O juiz guarda só os votos; o motivo é dedução a partir da condição e do arquivo. A separação é o que a `devorb:tdd` pede, e apareceu em 3 das 4 rodadas inteiras de hoje. Mudar o grader é decisão do dono.
-- **A mensagem final sem as fontes (grader 3)** em 2 de 3. A regra está na `visual-direction` §4, mas no fluxo inteiro a mensagem final sai do `implementing` e do `finishing`, muitos turnos depois. Não é efeito da regra 6: o grader já tinha falhado em `devorb@1126ff4`.
-- **A regra 6 vazou em 1 de 6.** Na rodada 3 o agente leu `sources.md` e ainda escreveu "nenhum job deles aqui: o aviso da newsletter é inline". O texto atual diz o que o aviso é; não diz onde ele não fica.
+- **O grader 6 reprovava um build correto.** Na rodada 2 o formulário chama `toast.success` do Sonner depois de `subscribe()` responder ok, e `subscribe()` faz o `POST /api/newsletter` em `lib/newsletter.ts`, separado para ser testado sem navegador, como a `devorb:tdd` pede. O grader lê só `components/newsletter-form.tsx` e a condição 2 exigia o `fetch` no formulário. O juiz guarda só os votos; o motivo é dedução a partir da condição e do arquivo. Ajuste: a condição 2 aceita o envio por uma função importada chamada com `await`. É um grader afrouxado: um grader `llm` lê um arquivo só, então o juiz confia na função sem vê-la, e deixa de pegar uma função que não faça o `POST` (rota errada, `GET` ou um stub). A condição 1 não mudou. Conferência antes de pagar, com o texto novo e os arquivos guardados: `fetch` no formulário passa, `await subscribe(email)` passa, aviso feito à mão com `role="status"` falha.
+- **A mensagem final sem as fontes (grader 3)** em 2 de 3. A regra está na `visual-direction` §4, mas no fluxo inteiro a mensagem final sai muitos turnos depois, por caminhos diferentes: uma rodada terminou pelo `implementing`, a outra só pelo `verifying`. Não é efeito da regra 6: o grader já tinha falhado em `devorb@1126ff4`. Ajuste: a frase que manda nomear as fontes entrou no `implementing/SKILL.md` e no `verifying/SKILL.md` (ledgers dessas skills).
+- **A regra 6 vazou em 1 de 6.** Ajuste: a oração "nunca é uma linha de status montada no formulário ou na página".
 
-Não conferido: os outros casos da `visual-direction` e o reservado `visual-direction-guia-restaurante` não rodaram com a regra 6; nenhuma rodada mede a regra numa tela de operação.
+Segunda rodada inteira, com os três ajustes:
+
+| Rodada | Braço | Resultado | Custo |
+|---|---|---|---|
+| GREEN 2, 3 rodadas inteiras | `devorb@2502b5c` | 67% de aprovação (2 de 3), 0,94 | US$ 15,02 |
+| GREEN 2, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,08 |
+
+| Rodada | 1 | 2 | 3 | 4 | 5 | 6 | O que aconteceu |
+|---|---|---|---|---|---|---|---|
+| 1 | passa | passa | falha | passa | passa | passa | estourou o tempo do caso (1200 s) no meio da onda de correção da revisão final; sem mensagem final, o grader 3 falha |
+| 2 | passa | passa | passa | passa | passa | passa | 1177 s, a 23 s do limite |
+| 3 | passa | passa | passa | passa | passa | passa | 659 s |
+
+- A barra de 2/3 foi atingida: 67%. Os graders 4 e 6 passaram em 3 de 3 (antes da regra, 0 em 9). Nos três builds guardados: `sonner` no `package.json`, `toast.success` depois do `await` da função de envio, `<Toaster />` montado e o erro do campo ligado por `aria-describedby`.
+- **A `compare.mjs` imprimiu `accepted: false`**, com o motivo "rodadas com erro da ferramenta": a rodada que estourou os 1200 s conta como erro da ferramenta e bloqueia o `accepted`. Pela regra da casa (GREEN é `accepted: true`), **este GREEN não está aprovado**, embora a barra de aprovação tenha sido atingida. A decisão é do dono.
+- O limite de tempo virou a lacuna do caso: o fluxo inteiro do `implementing` (subagente por task, revisão do branch, onda de correção) leva de 11 a 20 minutos aqui, e duas das três rodadas ficaram em cima dos 1200 s. As rodadas correram 3 de cada vez (`--concurrency 3`) na mesma credencial, com outra sessão rodando evals; isso pode ter alongado o tempo. A rodada de diagnóstico, sozinha, levou 973 s.
+- O grader 3 passou nas duas rodadas que chegaram à mensagem final. São duas rodadas: não dá para dizer que a frase nova foi a causa.
+
+Custo total: US$ 37,61 dos US$ 50 do teto da frente (6,19 + 3,28 + 3,40 + 8,63 + 16,10). O saldo não paga outra rodada cheia de 3.
+
+Não conferido: os outros casos da `visual-direction`, do `implementing` e do `verifying` e o reservado `visual-direction-guia-restaurante` não rodaram com estas mudanças; nenhuma rodada mede a regra 6 numa tela de operação.
 
 ## Decisões por commit de fonte
 
