@@ -91,6 +91,8 @@ A skill foi escrita sem abrir `evals/visual-direction-*`, `evals-reserved/` nem 
 
 6. **Regra do dono: aviso de resultado de ação é trabalho de toast.** Decisão do dono em 2026-11-20. Em `sources.md`, o trabalho é nomeado pelo que acontece na tela, não pela palavra da spec: o aviso que informa o resultado de uma ação (salvou, inscreveu, enviou, falhou no servidor) é o trabalho de toast, usa o especialista da lista e nunca é uma linha de status montada no formulário ou na página; o erro de validação de um campo continua junto do campo. Cenário: `visual-direction-arquitetura-clean`, graders `4-sonner-dependency` e `6-newsletter-toast`, que falharam em todas as rodadas gravadas até `devorb@d7dc0a1`. A spec da fixture diz "a página confirma com um aviso na tela", e na sessão inteira o agente escolhia, por gosto, uma mensagem no formulário, com o que a regra do especialista deixava de se aplicar. RED no caso cortado em 20 turnos (logo depois do contrato), 3 de 3 sem especialista: "Especialista: nenhum; o aviso da newsletter fica junto do formulário, em texto com `aria-live`, porque um toast some antes de ser lido e o Sonner não está instalado"; "o aviso da newsletter é uma mensagem na própria linha do formulário (aria-live), não um toast, então Sonner fica de fora"; "O aviso da newsletter fica junto do campo e não vira toast, então o Sonner fica de fora". A alternativa recusada pelo dono era reescrever a spec da fixture para dizer "toast": o caso passaria e as specs reais, que dizem "aviso", continuariam com o aviso feito à mão. Limite conhecido: seis subagentes novos, só com a spec e os arquivos da skill, já escolhiam o Sonner em 6 de 6 antes da regra; a falha só aparece na sessão inteira, então teste com subagente não serve de RED para esta regra. A oração "nunca é uma linha de status" entrou na segunda rodada, depois de uma rodada inteira em que o agente leu a regra e escreveu "o aviso da newsletter é inline". Resultado e o que ficou aberto: "Resultados", 2026-11-20.
 
+7. **O contrato nomeia as teclas numa tela de operação.** Em `operate.md`, "The screen": quem trabalha na tela o dia inteiro chega a uma linha, abre e faz a ação mais comum sem o mouse, e o contrato nomeia cada tecla. Cenário: `visual-direction-tabela-operacao`, grader `5-keyboard`. RED em `devorb@2916598`: numa de duas rodadas o contrato dizia "Atalho de teclado para voltar ao campo, mostrado ao lado dele", sem tecla nenhuma. GREEN em `devorb@e440b20`: 3 de 3 nomeiam as teclas. Evidência fraca, e dita assim: uma rodada falhou antes, o braço `none` passou nesse grader nas 5 rodadas dele, e não dá para dizer que a linha foi a causa. É o que sobrou do item 2 da frente C: o brief pedia uma seção inteira de tabela densa, e o RED mostrou que a skill de hoje já decide o resto ("Resultados", 2026-11-20, tabela densa).
+
 A candidata da spec (a fonte escolhida tem os acentos do português) **não entrou**: a Task D2 manda esperar um cenário que a justifique, e nenhum caso conhecido mede os glifos da fonte. Fica em aberto para a revisão do dono.
 
 ## Fora
@@ -286,6 +288,28 @@ Pendências menores das revisões (2026-11-20). O dono pediu para resolvê-las e
 - Corrigidas nos registros: os valores sem o custo do juiz que restavam na spec e no plano (6,19, 8,63, 9,47 e 21,51 viraram 6,20, 8,66, 9,48 e 21,54), a frase "rodada 2, rodada 3", e o nome do relatório da primeira rodada inteira, que passou de `-rodada-1.md` para `-primeira-rodada.md` para não se confundir com o `-1rodada.md` do diagnóstico.
 
 Não conferido: os outros casos da `visual-direction`, do `implementing` e do `verifying` e o reservado `visual-direction-guia-restaurante` não rodaram com estas mudanças; nenhuma rodada mede a regra 6 numa tela de operação.
+
+### Tabela densa em tela de operação (2026-11-20)
+
+Plano `docs/plans/2026-11-20-tabela-de-operacao.md`, regra 7, item 2 da frente C. Opus 5.5 (`claude-opus-5-5`), caso novo `visual-direction-tabela-operacao`, o primeiro da skill em tela de operação: spec aprovada de uma tela com 20.134 pedidos e 85 campos, sem direção visual; o agente escreve só o contrato. Seis graders `llm` na spec depois do trabalho: 1 colunas padrão e lugar para o resto, 2 volume, 3 estados da tabela, 4 busca, 5 teclado, 6 mudança de status. Os três primeiros são os do brief. Uma rodada por vez (`--concurrency 1`). Arquivos: `fusion/results/2026-11-20-visual-direction-tabela-red.md` e `fusion/results/2026-11-20-visual-direction-tabela.md`.
+
+| Rodada | Braço | Aprovação | Pontuação | Falhas por grader | Custo com o juiz |
+|---|---|---|---|---|---|
+| RED, 2 rodadas | `devorb@2916598` | 50% (1 de 2) | 0,95 | 5 (teclado) numa rodada | US$ 1,74 |
+| RED, 2 rodadas | `none` | 50% (1 de 2) | 0,80 | 2 (volume) e 3 (estados) numa rodada | US$ 0,82 |
+| GREEN, 3 rodadas | `devorb@e440b20` | 67% (2 de 3) | 0,93 | 2 (volume) numa rodada | US$ 2,33 |
+| GREEN, 3 rodadas | `none` | 67% (2 de 3) | 0,93 | 3 (estados) numa rodada | US$ 1,42 |
+
+- GREEN: `accepted: true`, sem regressão, na barra de 2/3.
+- **O caso não separa o DevOrb do modelo sem plugin.** Os dois braços aprovaram o mesmo número de rodadas no RED e no GREEN. Com a spec dizendo 85 campos e 20 mil pedidos, o modelo já escolhe poucas colunas pelo nome, manda o resto para um painel, pagina, descreve esqueleto, vazio de busca e erro, nomeia os campos da busca e trata os dois desfechos da mudança de status. O DevOrb passou nos graders 1, 3, 4 e 6 nas 5 rodadas dele.
+- **A seção "tabela densa" que o brief descreve não foi escrita.** Só o teclado teve uma falha gravada no RED, e a regra da casa não aceita texto sem falha. Entrou uma linha (regra 7). A seção candidata, com colunas, volume, busca e filtros, estados e edição na linha, está no plano como considerada e não escrita.
+- A falha do `devorb` no GREEN foi no grader 2: o contrato punha a página na URL e dizia "a tela termina na paginação da tabela", mas também dizia "a lista vem em uma resposta só"; os três votos do juiz reprovaram. É um caso de fronteira, não um contrato sem paginação.
+- O caso que motivou o brief (um sistema entregue com 85 colunas na tela) não foi reproduzido aqui. Este caso mede o contrato, com o volume e os campos escritos na spec. Não mede uma spec que cala sobre o volume, nem se a tela construída segue o contrato.
+- Antes da primeira rodada paga, uma revisão do caso achou que a fixture entregava respostas (a API "aceita página" e o formato da recusa) e que um grader julgava três coisas de uma vez. Foi corrigido antes de pagar.
+
+Custo do item 2: US$ 6,31 (RED 2,56 + GREEN 3,75). Custo total da frente C: US$ 43,98 dos US$ 50 (item 1: 37,67).
+
+Não conferido: nenhuma rodada `--reserved`; os outros casos da `visual-direction` não rodaram com a linha nova; o ponteiro para `devorb:performance` (frente A, ainda fora da `main`) não foi escrito.
 
 ## Decisões por commit de fonte
 
