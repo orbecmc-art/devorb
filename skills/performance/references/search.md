@@ -39,7 +39,22 @@ limit 50;
 ```
 
 - Escape `\`, `%` and `_` in the term before the `like`, each with a `\` in front and the backslash first. An unescaped `\` at the end of a term escapes the closing `%`.
-- Whole words and prefixes instead of substrings: a generated `tsvector` column (`to_tsvector('simple', ...)` over the same unaccented text), a GIN index on it, and `from customers, to_tsquery('simple', f_unaccent($1)) q where search_tsv @@ q order by ts_rank(search_tsv, q) desc, id`. Ordered by id alone, the planner walks the primary key and filters: on 100,000 rows, a term with 2 matches read every row. `to_tsquery` reads its input as query syntax, so build `$1`: split the term into runs of letters and digits, put `:*` (prefix match) after each and join them with ` & `, so `dama silv` becomes `dama:* & silv:*`. `websearch_to_tsquery` takes raw text but has no prefix match.
+- Whole words and prefixes instead of substrings: a generated column `search_tsv`, `to_tsvector('simple', f_unaccent(...))` over the same text, a GIN index on it, and the term built into query syntax inside the query (`dama silv` becomes `dama:* & silv:*`). Unaccent before the split: unaccented after it, `x½y:*` becomes `x 1/2y:*`, a syntax error. `websearch_to_tsquery` takes raw text but has no prefix match.
+
+```sql
+select id, name, city, code, ts_rank(search_tsv, q) as rank
+from customers, to_tsquery('simple', (
+  select string_agg(w || ':*', ' & ')
+  from regexp_split_to_table(lower(f_unaccent($1)), '[^[:alnum:]]+') w
+  where length(w) >= 3)) q
+where search_tsv @@ q
+order by rank desc, id desc
+limit 50;
+```
+
+- Words under 3 characters drop out, as for trigram: ask for 3 characters on the screen. A one-letter prefix ranks every row it matches, a cost that grows with the table. A term with no word left matches nothing, without an error.
+- The rank sort has no index, and needs none: it sorts only the rows the GIN index matched, bounded by the minimum length, then stops at the limit. Ordered by id alone, the planner walks the primary key and filters: on 100,000 rows, a term with 2 matches read every row.
+- Next page: add `and (ts_rank(search_tsv, q), id) < ($2, $3)`, with the last row's `rank` and `id` sent back unchanged. The rank of a row is the same for the same term and data, so `(rank, id)` is the cursor, not an offset or `id > $last`.
 - On a table in production, build with `create index concurrently`, outside a transaction block: it fails inside one, so turn off the migration tool's transaction for that migration. `add column ... stored` rewrites the whole table under an `ACCESS EXCLUSIVE` lock, and reads and writes wait until it ends: there, skip the column and index the expression itself, `using gin ((lower(f_unaccent(...))) gin_trgm_ops)` or `using gin (to_tsvector('simple', f_unaccent(...)))`, with that expression in place of the column in the query.
 - Confirm with `explain (analyze, buffers)` on a rare term: a `Bitmap Index Scan` on the new index, no `Seq Scan`. The substring query may walk the primary key for a common term and stop at the limit.
 

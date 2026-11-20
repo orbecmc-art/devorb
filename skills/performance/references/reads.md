@@ -54,4 +54,4 @@ A loop that runs a query for each row of an earlier query. 50 rows become 51 que
 - A column in a `where`, a `join` or an `order by` of a list query has an index. A filter plus a sort takes one composite index: the columns filtered by equality first, then the sort columns, in the query's order.
 - Read the plan before and after. Postgres: `explain (analyze, buffers)`, and no `Seq Scan` on the big table. SQLite: `explain query plan`, and `SEARCH ... USING INDEX` where it said `SCAN`, with no `USE TEMP B-TREE FOR ORDER BY`.
 - An index costs on every write. Add the ones a query uses, and no others.
-- Postgres in production: `create index concurrently`.
+- Postgres in production: `create index concurrently`, outside a transaction block (it fails inside one).
