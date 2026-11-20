@@ -106,8 +106,8 @@ Opus 5.5, 2 rodadas por caso, `--ablation none`, braços `devorb` e `none`.
 | `performance-busca-planilha` | GREEN 2 | `devorb@b5c0ea0` | 50% (0,75) | 0% (0,33) | US$ 1,79 | `fusion/results/2026-11-20-performance-green-2.md` |
 | `performance-busca-planilha` | GREEN 3 | `devorb@301bf5e` | 100% (1,00) | 0% (0,33) | US$ 2,02 | `fusion/results/2026-11-20-performance-green-3.md` |
 | `performance-painel-pedidos` (reservado) | Reservado | `devorb@ca964e8` | 50% (0,75) | 0% (0,50) | US$ 1,59 | `fusion/results/2026-11-20-performance-reserved-1.md` |
-| `performance-busca-planilha` | GREEN, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,33) | US$ 1,92 | `fusion/results/2026-11-20-performance.md` |
-| `performance-painel-pedidos` (reservado) | Reservado, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,50) | US$ 1,73 | `fusion/results/2026-11-20-performance-reserved.md` |
+| `performance-busca-planilha` | GREEN, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,33) | US$ 1,92 | `fusion/results/2026-11-20-performance-green-4.md` |
+| `performance-painel-pedidos` (reservado) | Reservado, texto final | `devorb@be1df8a` | 100% (1,00) | 0% (0,50) | US$ 1,73 | `fusion/results/2026-11-20-performance-reserved-2.md` |
 
 - RED, por grader, nas 4 rodadas: `measures-before-edit` passa, `search-in-database` falha (3 de 3 votos), `reports-medians` falha (3 de 3 votos).
 - GREEN 1: `reports-medians` passa nas 2 rodadas; `search-in-database` falha nas 2 só na terceira condição (as 85 colunas voltam). A ferramenta imprimiu `accepted: true` porque 0% nos dois braços conta como lacuna; não valeu como GREEN.
