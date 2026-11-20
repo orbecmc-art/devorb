@@ -64,6 +64,7 @@ Nenhuma. As mudanças além das fontes vêm de decisões da Task 10 ou da spec (
    - Receives, antes: "new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard; ..." Depois: "new work from `devorb:using-devorb`; ...".
    - Uses, antes: "`references/` for the grilling round, sizing and red flags, the reviewer prompt and the companion." Depois: "`references/`."
    Os 2 casos já existentes de `aligning` não foram rodados de novo (decisão do dono, 2026-11-20).
+   GREEN em `devorb@d77659a`: 100% (1,00), `none` 0% (0,00), US$ 1,41, `accepted: true`. As duas specs registram clientes hoje e em um ano como suposição e o orçamento da busca em ms. Resultado: `fusion/results/2026-11-20-aligning-volume.md`.
 
 ## Fora
 
