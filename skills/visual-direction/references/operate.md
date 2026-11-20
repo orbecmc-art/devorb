@@ -17,6 +17,7 @@ Plan the first screen as a map of regions: how the user moves around, what each 
 - **Tables before cards** for anything people compare, sort or scan. Cards suit items that each have their own actions, or that differ in kind from their neighbours.
 - **Filters, tabs and pagination live in the URL,** so a view can be shared and survives a reload.
 - **A destructive action** is undone, or confirmed in words that name what will be lost. Prefer editing in place or expanding a row; open a modal only when neither works.
+- **Keyboard:** someone who works here all day reaches a row, opens it and runs the most frequent action without the mouse. The contract names each key.
 - **Metrics** show the value and what it measures. Decoration around them (icon badges, gradients, up or down arrows with no measured change behind them) goes.
 - **Motion reports state** (opening, saving, selecting), never decoration. `devorb:motion` decides how.
 - **No standout component** from the owner's list: a system's identity lives in its details.
