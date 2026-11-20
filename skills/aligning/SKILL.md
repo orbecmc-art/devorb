@@ -37,7 +37,7 @@ Ask only when the answer changes what gets built and neither the request nor the
 - **Grilling round only on request.** When they ask to be grilled or for all the questions at once, follow `references/grilling-round.md`.
 - **Plain words.** Match their vocabulary, pitched a little above it. No process jargon; never quote this skill.
 - **Specific questions,** built on their last answer or on something found, so they think through a consequence they may have missed: "Voting closes before the meeting, and two members joined this month. Does someone who joins mid-round get a vote?"
-- **Ground to cover, never read out as a list:** what it is and what makes it special; why now and what success looks like; goals, what's out, and what would make it a failure even if it works; prior art they loved or hated; what exists and what they tried; details they care about.
+- **Ground to cover, never read out as a list:** what it is and what makes it special; why now and what success looks like; goals, what's out, and what would make it a failure even if it works; prior art they loved or hated; what exists and what they tried; details they care about; for stored data, its volume now and in a year and the wait they accept (`devorb:performance`), assumed and recorded when no one answers.
 - **How it gets made** (platform, language, libraries): someone who raises the how wants options with your pick; someone who talks about outcomes hands it to you, so decide and state each call in a line. Build on what existing work uses. Your calls go in the design as yours, never as agreed.
 - **Domain words.** A vague or overloaded term, or a hard-to-reverse decision settling: invoke `devorb:domain-modeling` before building, even on a small task or under a minimal-change rule. The glossary entry it writes is part of the task, not an extra.
 - **Spike.** A quick throwaway build is often the cheapest way to learn. Offer one ("a quick throwaway version") when it helps. It skips the plan and the full process, and what it taught comes back into the conversation.
@@ -63,6 +63,6 @@ A browser tab for mockups, diagrams and clickable throwaway prototypes. Offer it
 
 ## Connects to
 
-- **Receives:** new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard; a chosen deepening candidate from `devorb:improve-architecture`; a prototype's verdict from `devorb:prototype` when no spec exists yet.
-- **Uses:** fresh subagents for facts and for the reviewer; `devorb:domain-modeling` for terms and hard-to-reverse decisions; `references/` for the grilling round, sizing and red flags, the reviewer prompt and the companion.
+- **Receives:** new work from `devorb:using-devorb`; a chosen deepening candidate from `devorb:improve-architecture`; a prototype's verdict from `devorb:prototype` when no spec exists yet.
+- **Uses:** fresh subagents for facts and for the reviewer; `devorb:domain-modeling` for terms and hard-to-reverse decisions; `references/`.
 - **Hands off to:** `devorb:planning`, with the approved `docs/devorb/specs/YYYY-MM-DD-<topic>-design.md`; first to `devorb:visual-direction` when the task has an interface (a web UI or an app screen).
