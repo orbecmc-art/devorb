@@ -265,7 +265,7 @@ Segunda rodada inteira, com os três ajustes:
 
 Custo total: US$ 37,67 dos US$ 50 do teto da frente (6,20 + 3,28 + 3,40 + 8,66 + 16,13), contando o custo do juiz. As duas linhas da segunda rodada somam 16,14 porque cada uma foi arredondada; o valor antes de arredondar é 16,13. A linha "Custo total desta execução" que a `compare.mjs` imprime (US$ 8,63 e US$ 16,10) deixa o custo do juiz de fora. O saldo não paga outra rodada cheia de 3.
 
-**Decisão do dono (2026-11-20): o item 1 fica aceito como está.** O grader 6 continua com a condição 2 afrouxada, e a segunda rodada vale com `accepted: false` (2 de 3 aprovadas; a que não passou estourou os 1200 s do caso). Isto é uma aceitação do dono, não um GREEN pela regra da casa: a `compare.mjs` não imprimiu `accepted: true` em nenhuma rodada deste plano. A lista abaixo continua em aberto, e a frase das fontes no `verifying` continua à espera do dono.
+**Decisão do dono (2026-11-20): o item 1 fica aceito como está.** O grader 6 continua com a condição 2 afrouxada, e a segunda rodada vale com `accepted: false` (2 de 3 aprovadas; a que não passou estourou os 1200 s do caso). Isto é uma aceitação do dono, não um GREEN pela regra da casa: a `compare.mjs` não imprimiu `accepted: true` em nenhuma rodada deste plano. No mesmo dia o dono confirmou que a frase das fontes fica também no `verifying`. A lista abaixo continua em aberto.
 
 Em aberto:
 
