@@ -113,8 +113,15 @@ Agent (general-purpose):
     - **Data:** on each changed read, each of these is Important (blocking):
       a query with no limit; a query per row inside a loop (N+1); a filter or
       sort with no index; a list with neither pagination nor virtualization.
-      One read by key outside a loop, a write, or a list the code or schema
-      keeps small are none of these. Fix: `devorb:performance`.
+      A limit answers only the no-limit signal. One read by key outside a
+      loop, a write, and a list whose source is a set the code or schema
+      fixes (statuses, countries) are none of the four. Where the spec or
+      the task's `**Performance budget:**` states that a list stays under
+      about 1,000 rows in a year, it needs only its limit: no index,
+      pagination or virtualization finding.
+      A brief with a `**Performance budget:**` needs the measured number
+      against it in the report: a missing number is Important too.
+      Fix: `devorb:performance`.
 
     Point at evidence: file:line for every finding and for any check you'd
     otherwise answer with a bare "yes".

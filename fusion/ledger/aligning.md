@@ -58,7 +58,7 @@ O Superpowers não tem cenários de pressão em `tests/brainstorming`, então n�
 
 ## Regras próprias
 
-Nenhuma. As mudanças além das fontes vêm de decisões da Task 10 ou da spec (ver conflitos).
+As mudanças além das fontes que não estão na lista abaixo vêm de decisões da Task 10 ou da spec (ver conflitos).
 
 1. **Volume de dados e espera aceita no design doc.** Quando o trabalho lê dados guardados, o "Ground to cover" inclui o volume agora e daqui a um ano e a espera que o usuário aceita (`devorb:performance`), assumidos e registrados quando ninguém responde. Tocou `skills/aligning/SKILL.md`. Cenário: `evals/aligning-volume-de-dados`, grader `volume-and-budget`. RED em `devorb@182823b`: devorb 0% (0,00), `none` 0% (0,00), US$ 1,14; sem o gancho, o spec assumiu o volume de forma vaga ("centenas a poucos milhares", "no máximo alguns milhares") e não deu orçamento de tempo para a busca. Resultado: `fusion/results/2026-11-20-aligning-volume-red.md`. Para caber nos 10.000 bytes do teto (9.990 antes), dois cortes em `## Connects to`:
    - Receives, antes: "new work from `devorb:using-devorb`: an idea, feature or change, or a plan to question hard; ..." Depois: "new work from `devorb:using-devorb`; ...".

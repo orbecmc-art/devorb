@@ -19,13 +19,14 @@ limit 51;
 
 -- next page: the cursor is the last row's (created_at, id)
 select id, name, created_at from orders
-where (created_at, id) < ($1, $2)
+where (created_at, id) < (?, ?)
 order by created_at desc, id desc
 limit 51;
 ```
 
 - Ask for one row more than the page: the extra row says a next page exists, and it is not sent.
-- The sort key ends in a unique column (the id), so no row is skipped or repeated when two rows share a value.
+- The sort key ends in a unique column (the id), so no row is skipped or repeated when two rows share a value. Every column in it is `not null`: a comparison with a null is never true, so rows go missing from every page after the first.
+- `?` is SQLite's placeholder; Postgres writes `$1, $2`.
 - The client gets the cursor as an opaque string and sends it back unchanged.
 - A cursor page has no total. Show "load more"; count only when the screen needs the number.
 

@@ -58,10 +58,14 @@ A small diff can still be the dangerous one. For each triggered change:
    list with neither pagination nor virtualization. Each is Important,
    Critical when the table is known to be large or the path runs per
    request. Tables grow after merge, so a spec silent on volume makes it
-   a finding, not Needs checking. A query with a limit, one read by key
-   outside a loop, and a list the code or schema keeps small (statuses,
-   countries) are none of these. Fix: a
-   limit and a cursor; a join or one batched load; an index on the
+   a finding, not Needs checking.
+   A limit answers only the no-limit signal. One read by key outside a
+   loop, a write, and a list whose source is a set the code or schema
+   fixes (statuses, countries) are none of the four. Where the spec or
+   the task's `**Performance budget:**` states that a list stays under
+   about 1,000 rows in a year, it needs only its limit: no index,
+   pagination or virtualization finding.
+   Fix: a limit and a cursor; a join or one batched load; an index on the
    filtered or sorted columns; pagination or virtualization.
 
 Item 9 findings need no abuse story; state the growth that triggers them.

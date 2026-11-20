@@ -37,9 +37,9 @@ order by id
 limit 50;
 ```
 
-- Escape `%` and `_` in the term before the `like`.
-- Whole words instead of substrings: a generated `tsvector` column (`to_tsvector('simple', ...)` over the same unaccented text), a GIN index on it, and `websearch_to_tsquery('simple', ...)` for the term.
-- On a table in production, build with `create index concurrently`.
+- Escape `\`, `%` and `_` in the term before the `like`, each with a `\` in front and the backslash first. An unescaped `\` at the end of a term escapes the closing `%`.
+- Whole words and prefixes instead of substrings: a generated `tsvector` column (`to_tsvector('simple', ...)` over the same unaccented text), a GIN index on it, and `to_tsquery('simple', ...)` for the term. `to_tsquery` reads its input as query syntax, so build it: split the term into runs of letters and digits, put `:*` (prefix match) after each and join them with ` & `, so `dama silv` becomes `dama:* & silv:*`. `websearch_to_tsquery` takes raw text but has no prefix match.
+- On a table in production, build with `create index concurrently`. `add column ... stored` rewrites the whole table under an `ACCESS EXCLUSIVE` lock, and reads and writes wait until it ends: there, skip the column and index the expression itself, `using gin ((lower(f_unaccent(...))) gin_trgm_ops)`, with the same expression in the `where`.
 - Confirm with `explain (analyze, buffers)`: a `Bitmap Index Scan` on the new index, no `Seq Scan`.
 
 ## SQLite: FTS5
