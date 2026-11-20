@@ -1,5 +1,5 @@
 schema_version: "1.0"
-name: implementing-enxuto
+name: implementing-enxuto-recibo
 description: >-
   API pequena em Node de uma loja, sem dependências, numa branch de feature
   com spec e plano aprovados de uma task só: criar `src/recibo.js` com
