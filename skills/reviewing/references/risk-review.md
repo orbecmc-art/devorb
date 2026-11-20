@@ -58,12 +58,14 @@ A small diff can still be the dangerous one. For each triggered change:
    list with neither pagination nor virtualization. Each is Important,
    Critical when the table is known to be large or the path runs per
    request. Tables grow after merge, so a spec silent on volume makes it
-   a finding, not Needs checking. A query with a limit, a read by key and
-   a list the code fixes (statuses, settings) are none of these. Fix: a
+   a finding, not Needs checking. A query with a limit, one read by key
+   outside a loop, and a list the code or schema keeps small (statuses,
+   countries) are none of these. Fix: a
    limit and a cursor; a join or one batched load; an index on the
    filtered or sorted columns; pagination or virtualization.
 
-For each finding, tell the abuse as a short story: the entry point, the
+Item 9 findings need no abuse story; state the growth that triggers them.
+For every other finding, tell the abuse as a short story: the entry point, the
 steps, the result, and what the actor needs beforehand. If you can't build
 that story, name the condition under which it would happen and put it under
 Needs checking; only leads tied to a cited line go there. Never invent an
