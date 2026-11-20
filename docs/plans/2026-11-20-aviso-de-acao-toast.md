@@ -4,7 +4,7 @@
 
 **Goal:** Make `devorb:visual-direction` classify a notice that reports the result of an action as the toast job, so the list's specialist (Sonner) is used instead of a hand-built notice, and close the eval gap `visual-direction-arquitetura-clean` (graders 4 and 6).
 
-**Architecture:** One sentence of rule text in a `visual-direction` reference file, proven first on a cheap cut of the real eval case and then on one full `tools/compare.mjs` round. The ledger gets the corrected diagnosis, the owner's rule and the costs. No code, no eval file and no `SKILL.md` changes.
+**Architecture:** One sentence of rule text in a `visual-direction` reference file, proven first on a cheap cut of the real eval case and then on one full `tools/compare.mjs` round. The ledger gets the corrected diagnosis, the owner's rule and the costs. No code, no eval file and no `SKILL.md` changes in Tasks 1 and 2; the second round (Tasks 3 and 4) changes one grader and two `SKILL.md`.
 
 **Tech Stack:** Markdown skills, `tools/compare.mjs` (`claude plugin eval`, model `claude-opus-5-5` from `fusion/eval-config.json`), Node 22 `node:test` through `npm test`.
 
@@ -17,7 +17,7 @@
 - The eval case keeps its fixture and prompt. Of its graders only `6-newsletter-toast` changes, in Task 3, by the owner's decision of 2026-11-20.
 - The eval model stays `claude-opus-5-5`. `fusion/eval-config.json` is not edited.
 - Done means the `devorb` arm approves 2 of 3 runs or more on `visual-direction-arquitetura-clean`. `accepted: true` alone is not enough: a 0% versus 0% gap also prints it.
-- Paid ceiling US$ 50. Spent before this plan: US$ 9.47. One full GREEN round fits, not two. Report the real cost after every paid run.
+- Paid ceiling US$ 50. Spent before this plan: US$ 9.47. One full GREEN round fits, not two. That was the first estimate only: the first round cost US$ 8.66, and the owner approved a second. Report the real cost after every paid run.
 - One `tools/compare.mjs` per HEAD at a time.
 - A field's validation error stays at the field. A rule that sends it to a toast fails the plan.
 - `npm test` green. No version bump and no `CHANGELOG.md` entry: the brief puts both after the owner's merge.
@@ -154,3 +154,7 @@ Nothing else in the grader changes: the frontmatter, the context paragraph, cond
 - [ ] **Step 4: Ledgers,** in Portuguese: both rounds, each grader per run, the costs, what closed and what stayed open. Below the bar again: write the evidence and stop; no third full round without the owner.
 
 - [ ] **Step 5: `npm test`,** then commit `test(visual-direction): second full round for the toast rule`.
+
+## Outcome
+
+Round 2 at `devorb@2502b5c` approved 2 of 3 (67%) and `compare.mjs` printed `accepted: false`, because one run hit the case's 1200 s timeout. Paid total: US$ 37.67 of 50. Open items are in `fusion/ledger/visual-direction.md`. Stopped before the merge.

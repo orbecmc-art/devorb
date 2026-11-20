@@ -55,7 +55,7 @@ Uma regra que passa no grader e piora o produto: toast para erro de campo, ou to
 
 - `skills/visual-direction/references/sources.md`, seção "Choosing libraries, per job": o texto mínimo que faz o agente classificar o aviso de resultado de ação como trabalho de toast. Se o laço cortado mostrar que o agente decide antes, pela lista, o mesmo sentido entra na regra de stack do `ui-sources.json` ou na descrição da entrada Sonner. Um lugar só, o que o teste mostrar que funciona.
 - `fusion/ledger/visual-direction.md`: corrigir o diagnóstico da regra 5, registrar a regra nova como regra do dono com o caso que a justifica, e a linha de resultado com o custo.
-- Nenhum `SKILL.md` muda, a não ser que o laço cortado mostre que o texto em `references/` não é lido a tempo. A `visual-direction` está em 2.027 de 2.500 tokens.
+- Nenhum `SKILL.md` muda, a não ser que o laço cortado mostre que o texto em `references/` não é lido a tempo. Esta linha foi superada pela seção "Segunda rodada": dois `SKILL.md` mudaram (`implementing` e `verifying`). A `visual-direction` está em 2.027 de 2.500 tokens.
 
 ## Testes
 
@@ -76,11 +76,11 @@ A rodada cheia em `devorb@31f827d` aprovou 1 de 3 (33%), US$ 8,63, abaixo da bar
 2. **A mensagem final de um trabalho de interface nomeia as fontes.** Em 2 de 3 rodadas a mensagem final não nomeou as fontes (grader 3). A regra está na `visual-direction` §4, mas a mensagem final sai muitos turnos depois, por caminhos diferentes: uma rodada passou pelo `implementing`, a outra só pelo `verifying`. A linha entra nos dois moldes de mensagem final: no `implementing/SKILL.md`, junto das três listas, e no `verifying/SKILL.md`, em "Hand-off". Ao dono eu tinha dito só `implementing`; o trace mostrou que uma das duas rodadas que falharam nunca carregou essa skill.
 3. **A regra 6 diz onde o aviso não fica.** Na rodada 3 o agente leu a regra e escreveu "o aviso da newsletter é inline". O texto ganha uma oração: o aviso de resultado usa o especialista e nunca é uma linha de status montada no formulário ou na página.
 
-RED dos três: as rodadas 2 e 3 de `devorb@31f827d`, com as frases e os arquivos citados no ledger. GREEN: uma rodada cheia, a mesma linha de comando, mais a conferência do grader 6 novo contra dois arquivos guardados (o build certo da rodada 2 tem de passar; o aviso feito à mão da rodada 3 tem de falhar). Previsão: perto de US$ 9, total perto de US$ 31.
+RED dos três: as rodadas 2 e 3 de `devorb@31f827d`, com as frases e os arquivos citados no ledger. GREEN: uma rodada cheia, a mesma linha de comando, mais a conferência do grader 6 novo contra dois arquivos guardados (o build certo da rodada 2 tem de passar; o aviso feito à mão da rodada 3 tem de falhar). Previsão: perto de US$ 9, total perto de US$ 31. Resultado real: US$ 16,13, total US$ 37,67; 2 de 3 aprovadas; `accepted: false` por causa de uma rodada que estourou os 1200 s; o item 1 não está fechado pela regra da casa.
 
 ## Hipóteses (decididas por mim, corrigíveis)
 
-- "Resultado de uma ação" cobre o sucesso e a falha que vem do servidor depois do envio. Erro que o formulário já sabe antes de enviar (campo vazio, formato) fica junto do campo.
+- "Resultado de uma ação" cobre o sucesso e a falha que vem do servidor depois do envio. Erro que o formulário já sabe antes de enviar (campo vazio, formato) fica junto do campo. O 400 sobre o campo de e-mail é a exceção que o plano e o ledger mantiveram junto do campo, e o texto da regra não diz isso (item em aberto no ledger).
 - Com o Sonner escolhido, o agente segue o caminho sem rede que já está em `sources.md` (dependência escrita no `package.json`, código contra ela, aviso de que falta instalar). Se o GREEN mostrar que não segue, esse é um segundo defeito, com o mesmo ciclo.
 - O modelo dos evals fica o `claude-opus-5-5` do `fusion/eval-config.json`.
 

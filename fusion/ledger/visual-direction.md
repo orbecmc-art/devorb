@@ -217,15 +217,15 @@ Plano `docs/plans/2026-11-20-aviso-de-acao-toast.md`, regra 6. Opus 5.5 (`claude
 
 | Rodada | Braço | Resultado | Custo |
 |---|---|---|---|
-| Diagnóstico, 1 rodada inteira, trace guardado | `devorb@d7dc0a1` | 0,73, 0% de aprovação; falham 4 e 6 | US$ 6,19 |
+| Diagnóstico, 1 rodada inteira, trace guardado | `devorb@d7dc0a1` | 0,73, 0% de aprovação; falham 4 e 6 | US$ 6,20 |
 | RED, caso cortado em 20 turnos, 3 rodadas | `devorb@d7dc0a1` | contrato sem especialista em 3 de 3 | US$ 3,28 |
 | GREEN, caso cortado em 20 turnos, 3 rodadas | `devorb@31f827d` | contrato com Sonner em 3 de 3; erro 400 junto do campo em 3 de 3 | US$ 3,40 |
-| GREEN 1, 3 rodadas inteiras | `devorb@31f827d` | 33% de aprovação (1 de 3), 0,73 | US$ 7,27 |
-| GREEN 1, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,36 |
+| GREEN 1, 3 rodadas inteiras | `devorb@31f827d` | 33% de aprovação (1 de 3), 0,73 | US$ 7,29 |
+| GREEN 1, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,37 |
 
 Primeira rodada inteira: `accepted: false`, abaixo da barra de 2/3.
 
-O que a regra mudou na primeira rodada: o grader `4-sonner-dependency` passou em 2 de 3 rodadas inteiras (antes, 0 em 9), e uma rodada passou nos seis graders, a primeira aprovação do caso. Somando o caso cortado e as rodadas inteiras, o contrato nomeou o Sonner em 5 de 6.
+O que a regra mudou na primeira rodada: o grader `4-sonner-dependency` passou em 2 de 3 rodadas inteiras (antes, 0 em 9 rodadas inteiras com detalhe por grader, mesmo texto do grader), e uma rodada passou nos seis graders, a primeira aprovação do caso. Somando o caso cortado e as rodadas inteiras, o contrato nomeou o Sonner em 5 de 6.
 
 Rodada por rodada, `devorb@31f827d`:
 
@@ -245,8 +245,8 @@ Segunda rodada inteira, com os três ajustes:
 
 | Rodada | Braço | Resultado | Custo |
 |---|---|---|---|
-| GREEN 2, 3 rodadas inteiras | `devorb@2502b5c` | 67% de aprovação (2 de 3), 0,94 | US$ 15,02 |
-| GREEN 2, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,08 |
+| GREEN 2, 3 rodadas inteiras | `devorb@2502b5c` | 67% de aprovação (2 de 3), 0,94 | US$ 15,03 |
+| GREEN 2, 3 rodadas inteiras | `none` | 0%, 0,18 | US$ 1,11 |
 
 | Rodada | 1 | 2 | 3 | 4 | 5 | 6 | O que aconteceu |
 |---|---|---|---|---|---|---|---|
@@ -254,12 +254,27 @@ Segunda rodada inteira, com os três ajustes:
 | 2 | passa | passa | passa | passa | passa | passa | 1177 s, a 23 s do limite |
 | 3 | passa | passa | passa | passa | passa | passa | 659 s |
 
-- A barra de 2/3 foi atingida: 67%. Os graders 4 e 6 passaram em 3 de 3 (antes da regra, 0 em 9). Nos três builds guardados: `sonner` no `package.json`, `toast.success` depois do `await` da função de envio, `<Toaster />` montado e o erro do campo ligado por `aria-describedby`.
+- A barra de 2/3 foi atingida: 67% (2 de 3 rodadas aprovadas).
+- O grader 4 (`sonner` no `package.json`), cujo texto não mudou, passou em 3 de 3. Antes da regra, falhou nas 9 rodadas inteiras que têm detalhe por grader (`devorb@af8adfb` 3 rodadas, `devorb@35cdc27` 2, `devorb@1126ff4` 2, `devorb@4a966e3` 1, `devorb@d7dc0a1` 1). O GREEN de 2 rodadas de `devorb@4a966e3` não tem detalhe por grader.
+- O grader 6 passou em 3 de 3, mas **com a condição 2 afrouxada**: os três builds enviam por uma função importada chamada com `await` (`lib/newsletter.ts`), então com o texto antigo os três falhariam. A comparação antes e depois do grader 6 cruza dois textos de grader e não mede igual com igual. Toda linha de resultado anterior a `2502b5c` usou o grader 6 antigo.
+- O que o controlador leu nos três builds guardados: `sonner` no `package.json`; `toast.success` depois do `await` da função de envio; `<Toaster />` montado (`app/layout.tsx` em dois, `app/page.tsx` em um); e cada `lib/newsletter.ts` faz `POST /api/newsletter` e só devolve sucesso quando a resposta é ok. Essa última leitura é a única conferência do `POST` na segunda rodada: nenhum grader o vê.
+- Erro de campo: em 2 dos 3 builds o 400 "E-mail inválido." aparece só junto do campo (`aria-describedby`). Na rodada 3, aprovada, o formulário chama `toast.error(result.message)` em toda falha e também marca o erro do campo quando o motivo é `invalid`: o e-mail inválido aparece junto do campo **e** num toast. É o antiobjetivo da spec ("toast empilhado em cima de uma mensagem que já está no formulário"), em 1 dos 3 builds, e nenhum grader o pega.
 - **A `compare.mjs` imprimiu `accepted: false`**, com o motivo "rodadas com erro da ferramenta": a rodada que estourou os 1200 s conta como erro da ferramenta e bloqueia o `accepted`. Pela regra da casa (GREEN é `accepted: true`), **este GREEN não está aprovado**, embora a barra de aprovação tenha sido atingida. A decisão é do dono.
 - O limite de tempo virou a lacuna do caso: o fluxo inteiro do `implementing` (subagente por task, revisão do branch, onda de correção) leva de 11 a 20 minutos aqui, e duas das três rodadas ficaram em cima dos 1200 s. As rodadas correram 3 de cada vez (`--concurrency 3`) na mesma credencial, com outra sessão rodando evals; isso pode ter alongado o tempo. A rodada de diagnóstico, sozinha, levou 973 s.
 - O grader 3 passou nas duas rodadas que chegaram à mensagem final. São duas rodadas: não dá para dizer que a frase nova foi a causa.
 
-Custo total: US$ 37,61 dos US$ 50 do teto da frente (6,19 + 3,28 + 3,40 + 8,63 + 16,10). O saldo não paga outra rodada cheia de 3.
+Custo total: US$ 37,67 dos US$ 50 do teto da frente (6,20 + 3,28 + 3,40 + 8,66 + 16,13), contando o custo do juiz. A linha "Custo total desta execução" que a `compare.mjs` imprime (US$ 8,63 e US$ 16,10) deixa o custo do juiz de fora. O saldo não paga outra rodada cheia de 3.
+
+Em aberto:
+
+- A regra 6 se lê de dois jeitos para um erro que o servidor devolve sobre um campo: "falhou no servidor" (toast) e "erro de validação de um campo" (campo). Visto na rodada 2, rodada 3 (acima). A hipótese da spec ("a falha que vem do servidor depois do envio" é resultado da ação) diz uma coisa e o Review Focus do plano diz outra. Uma redação que resolveria: o erro do campo fica junto do campo também quando o servidor o devolve. Não aplicado: qualquer mudança na regra pede nova rodada paga.
+- A regra 6 diz "usa o especialista da lista", e o bullet seguinte de `sources.md` diz que o que já está instalado e faz o trabalho fica. Com outra biblioteca de toast já no `package.json`, os dois podem ser lidos um contra o outro. Nenhuma rodada exercitou isso.
+- A frase que manda nomear as fontes mora em duas skills (`implementing/SKILL.md` e `verifying/SKILL.md`), ao lado da original em `visual-direction/SKILL.md` §4: três lugares que podem divergir. Ela também supõe que a spec tem uma linha `Sources:`; um ajuste de interface sem contrato não tem. A evidência é 2 de 2 rodadas, e o grader 3 já tinha passado sem ela (1 de 1 em `devorb@d7dc0a1`, 1 de 3 em `devorb@31f827d`).
+- Grader 6, condição 2, afrouxada (dono aprovou, 2026-11-20): nenhum grader vê mais o `POST`. Se ficar assim, falta uma conferência que veja a requisição fora do formulário.
+- A conferência do juiz do grader 6 novo antes de pagar (passa, passa, falha) foi feita com três subagentes juízes avulsos na sessão, não com o juiz da harness, e a saída não está guardada.
+- Nenhuma rodada `--reserved` correu, e nenhum caso `implementing-*` ou `verifying-*` correu, embora três skills tenham mudado. `skills/writing-skills/references/devorb.md` pede os dois.
+- A segunda rodada custou o dobro da primeira no braço `devorb`, e duas das três rodadas ficaram nos 1200 s do limite: as três passaram pelo fluxo inteiro do `implementing`, enquanto as da primeira rodada tomaram caminhos mais curtos. Não se investigou se as frases novas têm parte nisso.
+- O laço com teto (o caso real parado em 20 turnos) é um script fora do repositório; os resultados dele existem só neste ledger.
 
 Não conferido: os outros casos da `visual-direction`, do `implementing` e do `verifying` e o reservado `visual-direction-guia-restaurante` não rodaram com estas mudanças; nenhuma rodada mede a regra 6 numa tela de operação.
 
