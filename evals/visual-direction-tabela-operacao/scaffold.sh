@@ -244,9 +244,9 @@ o cliente".
 
 - 20.134 pedidos no sistema hoje, cerca de 1.700 novos por mês.
 - Cada pedido tem 85 campos, que a API devolve todos. A lista está abaixo.
-- A API já existe e não faz parte desta spec: `GET /api/pedidos` aceita busca,
-  filtros, ordenação e página; `PATCH /api/pedidos/:numero` muda o status e
-  responde `{ "ok": true }` ou `{ "ok": false, "error": "..." }`.
+- A API já existe e não faz parte desta spec: `GET /api/pedidos` devolve os
+  pedidos, e `PATCH /api/pedidos/:numero` muda o status com o motivo. O
+  servidor pode recusar a mudança (um pedido já faturado não cancela).
 
 ### Os 85 campos de um pedido
 

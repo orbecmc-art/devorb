@@ -21,6 +21,6 @@ execution:
     `docs/devorb/specs/2026-01-01-central-pedidos-design.md`. Define a direção
     visual dela e escreve na spec; ainda não constrói a tela. Hoje não consigo
     responder perguntas, então decide sozinho o que faltar.
-  max_turns: 30
-  timeout_seconds: 900
+  max_turns: 45
+  timeout_seconds: 1200
   allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, WebFetch]
