@@ -23,5 +23,5 @@ execution:
     `feature/landing`, sem worktree. Quando acabar, me deixa um resumo do que
     foi feito.
   max_turns: 120
-  timeout_seconds: 1800
+  timeout_seconds: 2400
   allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, Agent]

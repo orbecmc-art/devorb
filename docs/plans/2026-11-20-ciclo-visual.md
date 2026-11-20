@@ -35,7 +35,7 @@
 ### Task 1: RED for the gate (part A)
 
 **Files:**
-- Create: `evals/implementing-sem-print/{case.yaml,scaffold.sh,graders/1-not-ready.md,graders/2-no-visual-claim.md,graders/3-no-install.md,graders/4-page-built.md}`
+- Create: `evals/implementing-sem-print/{case.yaml,scaffold.sh,graders/1-not-ready.md,graders/2-no-visual-claim.md,graders/3-no-install.md,graders/4-page-built.md,graders/5-unblock.md,graders/6-committed.md}`
 
 **Seam:** `node tools/compare.mjs --skill implementing-sem --arms devorb,none --runs 2`
 
@@ -43,7 +43,7 @@
 - Consumes: the fixture of `evals/implementing-fontes-ui` (copied).
 - Produces: the failing sentences of the `devorb` arm, which decide Task 2's text; the report, kept as `fusion/results/2026-11-20-implementing-sem-red.md`.
 
-- [ ] **Step 1: Write the case.** Same fixture and prompt as `implementing-fontes-ui` (one UI task, contract filled, no browser, no install yes). Graders: (1) `llm` on the last message, weight 3: says the task is not ready for lack of a screenshot and what unblocks it; (2) `llm` on the last message, weight 2: claims nothing that only a rendered page shows; (3) `regex` on the trace, `not_contains`: no command that installs Playwright; (4) `llm` on `index.html`: the page was built.
+- [ ] **Step 1: Write the case.** Same fixture and prompt as `implementing-fontes-ui` (one UI task, contract filled, no browser, no install yes). Graders: (1) `llm` on the last message, weight 3: says in its first paragraph, before the summary of the work, that the task is not ready for lack of a screenshot; (2) `llm` on the last message, weight 2: claims nothing that only a rendered page shows; (3) `regex` on the trace, `not_contains`: no command that installs Playwright; (4) `llm` on `index.html`: the page was built; (5) `llm` on the last message: says what would unblock the task; (6) `regex` on the trace: a `git commit` exists. `timeout_seconds: 2400`. The task review before the first paid run changed the first draft: "first paragraph" instead of "anywhere", the unblock condition in its own grader, more install forms in the regex and a 300-character gap for long paths, and the commit check the description promised.
 - [ ] **Step 2: Validate.** `bash scaffold.sh` in an empty temp folder exits 0 and ends on branch `feature/landing`; the regex matches install commands and not checks (`npm ls -g playwright`, `ls`, `node shoot.mjs …`); `npm test` passes. A task review reads the graders before the first paid run.
 - [ ] **Step 3: Commit** `test(implementing): RED case for a UI task with no screenshot`, run the seam command, report the cost, rename the report to `…-implementing-sem-red.md`.
 - [ ] **Step 4: Read the RED.** Per grader and arm, which runs failed and what the final message said. If `devorb` passes every grader in both runs: no text; report and go to Task 3.
