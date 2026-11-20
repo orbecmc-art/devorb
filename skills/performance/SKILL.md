@@ -24,7 +24,7 @@ The search lives where the data lives.
 - **A server with a database:** search, filter and sort run in the database, through an index, and the route returns one page. A SQLite file behind a route is this case, at 20,000 rows as at 2 million.
 - **The browser:** only when there is no server database to ask (static data, an offline app), or when the list is small and already whole on screen.
 
-Loading the table once and keeping it in the server's memory, normalized, to filter there is the old scan with a cache in front. It measures fast today, and it still walks every row on every search, keeps a copy of the table in each process and pays the load again whenever the data changes. Put the normalized text in the database, behind an index, and let the query match the term.
+Loading the table once and keeping it in the server's memory, normalized, to filter there is the old scan with a cache in front. It measures fast today, and it still walks every row on every search, keeps a copy of the table in each process and pays the load again whenever the data changes. Let the database normalize and index the text, and let the query match the term.
 
 ## 3. The recipe
 
@@ -36,7 +36,7 @@ Read the reference for each decision the work has:
 
 Every read you touch leaves with none of these: a query with no limit; a query per row inside a loop (N+1); a filter or sort with no index; a list with neither pagination nor virtualization.
 
-**Wide table** (more than about 12 columns). A list row is for recognizing a record, not for reading it, so a screen that draws every column is part of the slowness and no guide for the query. The list query returns the id, the few columns that tell a person which record this is and, in a search, the text that matched. The full row is read by id when a row is opened. With no one to say which columns identify a record, choose them from the data and name them in the report. A narrow table lists the columns it shows.
+**Wide table** (more than about 12 columns). A list row is for recognizing a record, not for reading it, so a screen that draws every column is part of the slowness and no guide for the query. One query returns the page: it matches, sorts, limits and selects the id and the few columns that tell a person which record this is. Nothing reads the other columns until a row is opened; then one read by id brings the full row. A read per listed row, to fill a column or to find what matched, is the N+1 above. With no one to say which columns identify a record, choose them from the data and name them in the report. A narrow table lists the columns it shows.
 
 ## 4. Write the budget down
 
@@ -54,7 +54,7 @@ Report one line per claim, each with its median or p95 and the number of runs be
 ```
 Faster: search median 410 ms before, 3 ms after (5 alternating runs per side, spread 380–450 ms and 2–4 ms, 0 bad runs, 20,000 rows × 85 columns)
 Budget: search p95 8 ms of 200 ms (100 requests, 40 distinct terms, search() called directly: no port in the sandbox)
-Columns: the list returns id, name, city, code and the matched text, of 85; the full row loads by id. Chosen from the data: no one to ask
+Columns: the list returns id, name, city, code, of 85; the full row loads by id. Chosen from the data: no one to ask
 Not measured: response to typing, INP (no browser here)
 ```
 
