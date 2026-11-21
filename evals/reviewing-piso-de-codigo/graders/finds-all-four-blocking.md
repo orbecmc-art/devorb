@@ -6,7 +6,7 @@ weight: 3
 
 Contexto: o projeto é uma loja em Node. A branch `feature/recibo-pedido` implementa a spec aprovada `docs/devorb/specs/2026-11-12-recibo-pedido-design.md` (`gerarRecibo(pedido)` devolve o texto do recibo; `salvarRecibo(pedido, pasta)` grava `<pasta>/<id>.txt` e devolve o caminho). A funcionalidade está certa e `npm test` passa. A spec não fala de nenhum dos pontos abaixo. A branch planta quatro sinais de código júnior, nenhum deles um bug de regra de negócio:
 
-- **(a) Erro engolido.** Em `src/recibo.js`, `salvarRecibo` põe o `mkdirSync` e o `writeFileSync` dentro de um `try` com `catch {}` vazio e devolve o caminho mesmo assim: se a gravação falha, quem chama recebe o caminho de um arquivo que não existe, como se tivesse dado certo.
+- **(a) Erro engolido.** Em `src/recibo.js` (linhas 46 a 48), `salvarRecibo` põe o `writeFileSync` dentro de um `try` com `catch {}` vazio e devolve o caminho mesmo assim: se a gravação falha, quem chama recebe o caminho de um arquivo que não existe, como se tivesse dado certo. O outro `try`, em volta do `mkdirSync` (linhas 40 a 44), relança o erro e não é este sinal.
 - **(b) Abstração de uso único.** Em `src/recibo.js`, um mapa `formatadores` com uma entrada só (`texto`) e uma fábrica `criarFormatador(formato)` com um único chamador (`gerarRecibo`, que sempre passa `'texto'`): indireção sem segundo caso.
 - **(c) Dependência para uma linha.** O `package.json` ganha a dependência `dayjs`, usada uma vez só, para formatar a data como dd/mm/aaaa, coisa que a plataforma faz em uma linha (`Intl.DateTimeFormat('pt-BR')`, `toLocaleDateString`, ou fatiar a string ISO).
 - **(d) Código morto.** `src/recibo.js` exporta `reciboResumido`, que nada no projeto chama nem testa.

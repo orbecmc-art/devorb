@@ -3,13 +3,21 @@
 # formatting in reais (src/dinheiro.js) and an approved design doc for an order
 # receipt. The branch feature/recibo-pedido (checked out at the end) implements
 # the receipt correctly, with four planted code-floor signals and no bug:
-#   1. swallowed error: salvarRecibo wraps mkdir + write in try/catch {} and
+#   1. swallowed error: salvarRecibo wraps the write in try/catch {} and
 #      returns the path anyway, so a failed write looks like success;
 #   2. single-use abstraction: a `formatadores` map with one entry (`texto`)
 #      and a criarFormatador factory with one caller (gerarRecibo);
 #   3. dependency for a one-liner: package.json gains `dayjs`, used once to
 #      format a date as DD/MM/YYYY (Intl.DateTimeFormat does it in a line);
 #   4. dead code: an exported reciboResumido that nothing calls.
+# It also carries three decoys, sound code that looks a little like a signal,
+# which a review must not block:
+#   A. a comment that gives the why (the id check in salvarRecibo);
+#   B. a private helper with one caller that names one step (linhaDoItem);
+#   C. a catch that rethrows a failure the caller sees (around mkdirSync).
+# Nothing else is meant to block: the id is validated before it becomes a file
+# name, and the date is the UTC day cut from the ISO string, so it does not
+# depend on the machine's timezone.
 # No network: a tiny stand-in for dayjs is vendored under the git-ignored
 # node_modules/ after the commits, so `npm test` passes on both branches.
 # Self-contained. Reproducible: fixed author, dates and git config.
@@ -64,19 +72,21 @@ Quando um cliente pede o recibo de uma compra, o atendimento monta o texto à
 mão a partir do painel. Queremos gerar o recibo direto do pedido e guardar o
 arquivo, que o atendimento anexa no e-mail para o cliente.
 
-O pedido chega como objeto: `id`, `criado_em` (data ISO em UTC), `cliente`
-(nome), `itens` (cada um com `nome`, `preco` em centavos e `quantidade`) e
-`total` em centavos.
+O pedido chega como objeto: `id` (inteiro positivo), `criado_em` (data ISO em
+UTC), `cliente` (nome), `itens` (cada um com `nome`, `preco` em centavos e
+`quantidade`) e `total` em centavos.
 
 ## O que muda
 
 1. **Texto do recibo.** `gerarRecibo(pedido)` em `src/recibo.js` devolve o
    texto: número do pedido, data no formato dd/mm/aaaa, nome do cliente, uma
    linha por item (quantidade, nome e valor da linha em reais) e o total em
-   reais.
+   reais. A data é o dia em UTC de `criado_em`, o mesmo em qualquer fuso da
+   máquina que gera o recibo.
 2. **Arquivo do recibo.** `salvarRecibo(pedido, pasta)` grava o texto em
    `<pasta>/<id>.txt`, criando a pasta se preciso, e devolve o caminho do
-   arquivo.
+   arquivo. O `id` vira nome de arquivo, então um `id` que não seja inteiro
+   positivo é recusado com erro.
 
 ## Fora do escopo
 
@@ -107,13 +117,17 @@ import { join } from 'node:path';
 import dayjs from 'dayjs';
 import { formatarReais } from './dinheiro.js';
 
+function linhaDoItem(item) {
+  return `${item.quantidade} x ${item.nome}: ${formatarReais(item.preco * item.quantidade)}`;
+}
+
 function formatarTexto(pedido) {
   const linhas = [
     `Pedido nº ${pedido.id}`,
-    `Data: ${dayjs(pedido.criado_em).format('DD/MM/YYYY')}`,
+    `Data: ${dayjs(pedido.criado_em.slice(0, 10)).format('DD/MM/YYYY')}`,
     `Cliente: ${pedido.cliente}`,
     '',
-    ...pedido.itens.map((i) => `${i.quantidade} x ${i.nome}: ${formatarReais(i.preco * i.quantidade)}`),
+    ...pedido.itens.map(linhaDoItem),
     '',
     `Total: ${formatarReais(pedido.total)}`,
   ];
@@ -133,9 +147,17 @@ export function gerarRecibo(pedido) {
 }
 
 export function salvarRecibo(pedido, pasta) {
-  const caminho = join(pasta, `${pedido.id}.txt`);
+  // O id vira nome de arquivo: um id como "../42" gravaria fora da pasta.
+  if (!Number.isInteger(pedido.id) || pedido.id <= 0) {
+    throw new TypeError(`id de pedido inválido: ${pedido.id}`);
+  }
   try {
     mkdirSync(pasta, { recursive: true });
+  } catch (erro) {
+    throw new Error(`não foi possível criar a pasta de recibos ${pasta}`, { cause: erro });
+  }
+  const caminho = join(pasta, `${pedido.id}.txt`);
+  try {
     writeFileSync(caminho, gerarRecibo(pedido));
   } catch {}
   return caminho;
@@ -148,14 +170,14 @@ __EOF__
 cat > test/recibo.test.js <<'__EOF__'
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { gerarRecibo, salvarRecibo } from '../src/recibo.js';
 
 const pedido = {
   id: 42,
-  criado_em: '2026-11-03T12:00:00Z',
+  criado_em: '2026-11-03T01:30:00Z',
   cliente: 'Ana Lima',
   itens: [
     { nome: 'Caneca esmaltada', preco: 4500, quantidade: 2 },
@@ -184,17 +206,31 @@ test('salvarRecibo grava <pasta>/<id>.txt e devolve o caminho', () => {
   assert.equal(caminho, join(pasta, '42.txt'));
   assert.equal(readFileSync(caminho, 'utf8'), gerarRecibo(pedido));
 });
+
+test('salvarRecibo recusa id que não é inteiro positivo', () => {
+  const pasta = mkdtempSync(join(tmpdir(), 'recibos-'));
+  assert.throws(() => salvarRecibo({ ...pedido, id: '../42' }, pasta), TypeError);
+});
+
+test('salvarRecibo falha quando não consegue criar a pasta', () => {
+  const ocupado = join(mkdtempSync(join(tmpdir(), 'recibos-')), 'ocupado');
+  writeFileSync(ocupado, '');
+  assert.throws(() => salvarRecibo(pedido, join(ocupado, 'recibos')), /não foi possível criar a pasta/);
+});
 __EOF__
 commit_at "2026-11-14T15:00:00Z" "feat: recibo do pedido"
 
-# Installed dependency (git-ignored), as `npm install` would leave it.
+# Installed dependency (git-ignored), as `npm install` would leave it. Like
+# dayjs, the stand-in reads a date with no time as local midnight, so the day
+# it formats is the same in every timezone.
 mkdir -p node_modules/dayjs
 cat > node_modules/dayjs/package.json <<'__EOF__'
 { "name": "dayjs", "version": "1.11.13", "main": "dayjs.min.js" }
 __EOF__
 cat > node_modules/dayjs/dayjs.min.js <<'__EOF__'
 module.exports = function dayjs(data) {
-  const d = new Date(data);
+  const dia = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data);
+  const d = dia ? new Date(dia[1], dia[2] - 1, dia[3]) : new Date(data);
   const dois = (n) => String(n).padStart(2, '0');
   return {
     format(molde) {
