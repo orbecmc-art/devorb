@@ -110,6 +110,28 @@ Agent (general-purpose):
       interface; units understandable and testable on their own; the plan's
       file structure followed; new files already large, or files this change
       grew significantly (not pre-existing size).
+    - **Data:** on each changed read, each of these is Important (blocking):
+      a query with no limit; a query per row inside a loop (N+1); a filter or
+      sort with no index; a list with neither pagination nor virtualization.
+      For the index, read the schema or the migrations: the diff may not
+      show it.
+      A limit answers only the no-limit signal. One read by key outside a
+      loop, a write, and a list whose source is a set the code or schema
+      fixes (statuses, countries) are none of the four. Where the spec or
+      the task's `**Performance budget:**` states that a list stays under
+      about 1,000 rows in a year, it needs only its limit: no index,
+      pagination or virtualization finding.
+      A brief with a `**Performance budget:**` needs the measured number
+      against it in the report: a missing number is Important too.
+      Fix: a limit and a cursor; a join or one batched load; an index on the
+      filtered or sorted columns; pagination or virtualization (the recipes
+      are in `devorb:performance`).
+    - **Floor:** read `[CODE_FLOOR]`. Each of its signals in the lines this
+      diff adds or changes, with no reason written where the floor says, is
+      Important at least. If you cannot read it (the bracket is unfilled or
+      the file is missing), say so in the first line of your report, before
+      the spec-compliance verdict, and set Task quality to Needs fixes: the
+      floor check did not run.
 
     Point at evidence: file:line for every finding and for any check you'd
     otherwise answer with a bare "yes".
@@ -158,4 +180,5 @@ requirements copied verbatim from the plan's Global Constraints or the spec
 (values, formats, stated relationships between components), not process
 rules. `[REPORT_FILE]` is the implementer's report. `[BASE_SHA]` is the
 commit you recorded before dispatch, `[HEAD_SHA]` the current one.
-`[DIFF_FILE]` is the path `scripts/review-package` printed.
+`[DIFF_FILE]` is the path `scripts/review-package` printed. `[CODE_FLOOR]` is
+the absolute path of `devorb:reviewing`'s `references/code-floor.md`.

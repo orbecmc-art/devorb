@@ -120,10 +120,10 @@ test('mobile sources only lend ideas', () => {
   }
 });
 
-test('registry has the 19 base skills and the 5 design skills of the spec', () => {
+test('registry has the 20 base skills and the 5 design skills of the spec', () => {
   const design = Object.keys(registry).filter((name) => registry[name].sector === 'design');
   const base = Object.keys(registry).filter((name) => !registry[name].sector);
-  assert.equal(base.length, 19);
+  assert.equal(base.length, 20);
   assert.deepEqual(design.sort(), ['design-system', 'diagram', 'motion', 'ui-review', 'visual-direction']);
   for (const name of design) {
     assert.equal(registry[name].ceilingTokens, 2500, name);

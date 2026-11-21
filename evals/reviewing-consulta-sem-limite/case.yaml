@@ -1,0 +1,21 @@
+schema_version: "1.0"
+name: reviewing-consulta-sem-limite
+description: >-
+  Loja em Node + node:sqlite com uma spec aprovada de relatório de pedidos; a
+  branch feature/relatorio-pedidos implementa listarPedidos com SELECT * sem
+  limite sobre todos os pedidos e uma consulta do nome do cliente por pedido,
+  dentro do laço. Os testes passam com três pedidos. O agente revisa a branch
+  antes do merge, sem mexer no código.
+tags: [reviewing]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Revisa a branch `feature/relatorio-pedidos` antes de eu fazer o merge na
+    `main`. Ela implementa a spec do relatório de pedidos, que já foi aprovada.
+    Não vou conseguir responder perguntas hoje, então me entrega a revisão
+    completa numa resposta só.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Bash, Skill, Agent]

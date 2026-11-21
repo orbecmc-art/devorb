@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: performance-painel-pedidos
+description: >-
+  Painel de uma distribuidora em Node com node:sqlite e uma cópia do banco no
+  volume real (60 mil pedidos, cerca de 180 mil itens). A listagem da tela de
+  Pedidos lê todos os pedidos com SELECT *, faz duas consultas por pedido
+  (N+1) e só depois filtra, ordena e pagina em JavaScript. O agente conserta a
+  leitura, mede antes de editar e prova o ganho e o orçamento com números.
+tags: [performance]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    A tela de Pedidos do painel está lenta pra abrir, e o pessoal da expedição
+    diz que piora toda semana. Ela só mostra 50 pedidos por página, então não
+    entendo a demora. Tem uma cópia do banco de produção em `data/painel.db`.
+    Resolve isso pra mim? Não vou conseguir responder perguntas hoje, então
+    decide o que precisar e me conta no final o que fez e como ficou.
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill]
