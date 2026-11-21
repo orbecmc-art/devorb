@@ -111,6 +111,8 @@ When the review is clean, or every open finding is parked with a ruling at the c
 
 Mark the todo complete and take the next task. Never move on with an open Critical or Important finding that is neither fixed, parked at the cap, nor a Critique finding stated to the user.
 
+A user-interface task whose report says `Mirror: not run` is not complete: nobody has seen the page. Keep its commits, write `Task <N>: not ready: no screenshot (<why>)` in place of a `complete` line, and open your final message with it: which task is not ready, and what would unblock it (a browser tool, or the user's yes to install Playwright).
+
 ## Final review and finish
 
 When every task is complete, read `references/final-review.md` and follow it: one whole-branch review through `devorb:reviewing`, one fix wave, fresh evidence through `devorb:verifying`, then the hand-off.
