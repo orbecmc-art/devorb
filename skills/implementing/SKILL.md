@@ -111,7 +111,7 @@ When the review is clean, or every open finding is parked with a ruling at the c
 
 Mark the todo complete and take the next task. Never move on with an open Critical or Important finding that is neither fixed, parked at the cap, nor a Critique finding stated to the user.
 
-A user-interface task whose report says `Mirror: not run` is not complete: nobody has seen the page. The rest of the loop still runs on it: the review, `devorb:ui-review` and the fix rounds. Then keep its commits and write `Task <N>: not ready: no screenshot (<why>)` in place of a `complete` line; that line closes the task for resuming and for the final review, which still runs. Open your final message with it, before any summary and without calling the page ready: which task is not ready, and what would unblock it (a browser tool, or the user's yes to install Playwright).
+A user-interface task whose report says `Mirror: not run` is not complete: nobody has seen the page. The rest of the loop still runs on it: the review, `devorb:ui-review` (it critiques from the code when nothing can render the page) and the fix rounds. Then keep its commits and write `Task <N>: not ready: no screenshot (<why>)` in place of a `complete` line; that line closes the task for resuming and for the final review, which still runs. Your final message starts with that fact, as its title and first sentence, in the user's language: "Task <N> is not ready: nobody has seen the page." The word "ready" never describes the page or the branch there. Next comes what would unblock it (a browser tool, or the user's yes to install Playwright), then the summary.
 
 ## Final review and finish
 
