@@ -74,6 +74,7 @@ Regras próprias só saem com decisão explícita do dono. As regras abaixo fora
 4. **Espelho do construtor em task de interface.** Uma task que constrói ou muda uma página, tela ou componente roda o espelho antes do commit: serve a página, roda `shoot.mjs` de `devorb:ui-review` no modo do contrato, compara com `compareStructure` quando o pacote tem `1440/metrics.json`, olha os prints contra o pacote ou o `floor.md`, corrige e repete, no máximo 3 rodadas. O relatório traz `Mirror: rounds <n>/3 · shots <dir> · checks FAIL <n> WARN <n> · vs reference: <grossFail yes/no>`. Sem navegador e sem o sim explícito do usuário para instalar, `Mirror: not run (<why>)` e DONE_WITH_CONCERNS, sem afirmar print nem medida. O despacho nomeia o contrato, o `DESIGN.md`, o pacote, o `floor.md` e a ordem do espelho. Caso: `evals-outside/implementing-espelho-em-breve` (Task 6 do plano de qualidade de design), em que a linha de base fez a página certa, mas nunca se olhou nem levou o pacote e o `floor.md` ao despacho. Task sem interface não muda: `implementing-resgate-extrato` segue igual.
 5. **Regra do dono: o implementador lê as fontes antes da UI.** O despacho de uma task de interface leva o caminho de `ui-sources.json` e a linha `Sources:`; o implementador lê as fontes antes do primeiro arquivo de UI e relata `Sources:` no relatório. Tocou `SKILL.md` e `prompts/implementer.md`. Cenário: `evals/implementing-fontes-ui`, grader `sources-before-ui`. RED em `devorb@91ce711`: falha 2/2 no devorb e 2/2 no `none`, US$ 7,66. GREEN em `devorb@4a966e3`: 100% (1,00), `none` 0,00, US$ 4,25. Resultados: `fusion/results/2026-11-19-implementing-fontes-red.md` e `fusion/results/2026-11-19-implementing-fontes.md`.
 6. **Regra do dono: a mensagem final de um trabalho de interface nomeia as fontes.** Quando o plano constrói ou muda uma interface, a mensagem final, além das três listas, nomeia as entradas que a linha `Sources:` da spec dá como consultadas e como puladas. Tocou `SKILL.md`. Cenário: `visual-direction-arquitetura-clean`, grader `3-names-sources`. RED em `devorb@31f827d` (2026-11-20): em 2 de 3 rodadas inteiras a mensagem final não nomeou nenhuma fonte, embora a `visual-direction` §4 peça; uma dessas rodadas terminou pelo `implementing` e a outra só pelo `verifying`, por isso a mesma frase está nas duas skills; o dono confirmou em 2026-11-20 que ela fica também no `verifying`. GREEN em `devorb@2502b5c`: o grader passou nas 2 rodadas que chegaram à mensagem final; a terceira estourou os 1200 s do caso antes dela. São duas rodadas, e a `compare.mjs` imprimiu `accepted: false` por causa desse estouro: este GREEN não está aprovado pela regra da casa; o dono aceitou o resultado como está em 2026-11-20. Detalhe e custos em `fusion/ledger/visual-direction.md`, "Resultados", 2026-11-20.
+7. **Regra do dono: sem print, a task de interface não está pronta.** Pedido do dono no brief de 2026-11-20 (frente C, item 3): "Sem print, a task não está pronta." Uma task de interface cujo relatório diz `Mirror: not run` não é dada como completa: os commits ficam, o ledger ganha `Task <N>: not ready: no screenshot (<why>)` no lugar da linha `complete`, e a mensagem final abre com isso e com o que destrava (uma ferramenta de navegador, ou o sim do usuário para instalar o Playwright). Tocou `SKILL.md` (seção 5) e a frase do `verifying` sobre `Mirror: not run`. O `implementer.md` não mudou: o implementador continua relatando DONE_WITH_CONCERNS, e quem segura a conclusão é o controlador. A regra 4 acima dizia que a task fechava com `Mirror: not run` e DONE_WITH_CONCERNS; a conclusão agora é a desta regra. Instalar o Playwright continua sendo decisão do usuário. Cenário: `evals/implementing-sem-print`, grader `1-not-ready`. RED em `devorb@71404d4`: nas 2 rodadas a mensagem final dava a landing como pronta ("A landing está pronta na branch `feature/landing`. … Ninguém viu a página renderizada"; "Terminei o plano."), seguindo o texto de então, que mandava dizer a falta do print "como lacuna". GREEN em `devorb@9607748`: 2 de 3 aprovadas, `none` 0 de 3, `accepted: true`. Nas 3 rodadas o ledger ficou com `Task 1: not ready: no screenshot` e sem linha `complete`; na rodada que falhou, o título da mensagem final ainda dizia "pronta, mas falta … e ninguém viu a página renderizada", e o corpo dizia que a Task 1 ficou "não pronta". Resultados abaixo.
 
 ## Fora
 
@@ -111,6 +112,29 @@ Plano de regras de cor e referências, 2026-11-19, Opus 5.5, 2 rodadas, `--arms 
 | `implementing-fontes-ui` | 0/2 em devorb e em none | 100% (1,00) | 0,00 |
 
 - Custo total do plano: US$ 43,09 dos US$ 50 aprovados (RED 3,83 + 2,09 + 7,66 + RED2 1,56 + RED3 1,56; GREEN 6,39 + 7,79 + 2,06 + 4,25 + GREEN2 2,06 + GREEN3 1,95; diagnóstico 1,89).
+
+Trava do print (2026-11-20), plano `docs/plans/2026-11-20-ciclo-visual.md`, parte A, regra 7. Opus 5.5 (`claude-opus-5-5`), caso novo `implementing-sem-print` no sandbox: a fixture do `implementing-fontes-ui`, sem navegador e sem sim para instalar. Seis graders: 1 a mensagem final diz no primeiro parágrafo que a task não está pronta por falta de print, 2 não afirma nada que só se vê na tela, 3 nenhum comando instala o Playwright, 4 a página foi construída, 5 diz o que destrava, 6 há um `git commit`. Uma rodada por vez. Arquivos: `fusion/results/2026-11-20-implementing-sem-red.md` e `fusion/results/2026-11-20-implementing-sem.md`.
+
+| Rodada | Braço | Aprovação | Pontuação | Falhas por grader | Custo com o juiz |
+|---|---|---|---|---|---|
+| RED, 2 rodadas | `devorb@71404d4` | 0% (0 de 2) | 0,67 | 1 nas duas | US$ 7,23 |
+| RED, 2 rodadas | `none` | 0% (0 de 2) | 0,67 | 1 nas duas | US$ 0,59 |
+| GREEN, 3 rodadas | `devorb@9607748` | 67% (2 de 3) | 0,89 | 1 numa | US$ 5,40 |
+| GREEN, 3 rodadas | `none` | 0% (0 de 3) | 0,67 | 1 nas três | US$ 0,85 |
+
+- GREEN: `accepted: true`, sem erro da ferramenta nem estouro de tempo (as rodadas do `devorb` levaram de 491 a 551 s, com limite de 2400 s).
+- O caso separa os braços: o `none` falha o grader 1 nas 5 rodadas dele, e o `devorb` passou de 0 de 2 para 2 de 3.
+- Os graders 2 a 6 passaram em todas as 10 rodadas, dos dois braços, antes e depois: ninguém instalou o Playwright, ninguém afirmou ter visto a página, a página foi construída e commitada. A regra mudou só o que ela mirava.
+- Em 67%, uma falha de ruído derruba o caso abaixo da barra. A falha do GREEN foi de redação: o título dizia "pronta, mas…". Não houve segunda volta de texto.
+- Antes da primeira rodada paga, uma revisão do caso pediu "primeiro parágrafo" em vez de "em qualquer lugar", a condição do destrave num grader próprio, mais formas de instalação na regex e o cheque do commit. Foi corrigido antes de pagar.
+
+Custo da parte A: US$ 14,06 (RED 7,81 + GREEN 6,25). Custo total da frente C: US$ 58,04 dos US$ 80.
+
+Em aberto:
+
+- O caso reservado `implementing-espelho-sem-navegador` pode premiar o comportamento antigo. O autor não o abre, e um agente novo recusou ler o caso para ele. A conferência é uma rodada `--reserved`.
+- Os outros casos de interface no sandbox (`implementing-fontes-ui`, `visual-direction-arquitetura-clean`) agora terminam "não pronta". Os graders deles não leem isso, e eles não rodaram de novo.
+- A parte B do plano (mínimo de 2 voltas e crítica contra o contrato no espelho) não foi feita. Nos dois traces guardados de `devorb@9af742a` (2026-11-17) o agente já deu 2 ou mais voltas; o campo da crítica contra o contrato não existe.
 
 ## Decisões por commit de fonte
 
