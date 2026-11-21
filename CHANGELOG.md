@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.17.0
+
+- Piso de código: `skills/reviewing/references/code-floor.md` lista nove sinais de código júnior que a revisão recusa como bloqueantes (`useEffect` para estado derivado, fetch em loop, `catch` que engole erro, `any`, abstração de um uso só, dependência nova para dez linhas, comentário que narra, arquivo que faz tudo, código morto), cada um com o conserto. Um sinal só fica com motivo escrito em comentário na linha; padrão documentado do repositório vence o piso. Lido pela `reviewing`, pelo `task-reviewer` e pelo caminho inline do `implementing`.
+- Evals: `reviewing-piso-de-codigo` RED 0%, GREEN 100% (sem plugin 50%), com três chamarizes de código são que a revisão não pode bloquear. Os outros dois casos da `reviewing` seguem em 100%.
+- Considerado e não construído: portões automáticos no `verifying` e a proposta de ligá-los no `aligning`. O caso passou nos dois braços duas vezes: o modelo já acha e roda os portões.
+- Medido e removido: o caso `implementing-enxuto-recibo` (os dois braços escrevem o mesmo arquivo de 20 a 22 linhas) e o `verifying-portoes-do-projeto`. Os relatórios ficam em `fusion/results/`.
+- Custo: US$ 12,94 de US$ 20 aprovados.
+- Lacuna conhecida: nada no `implementing/SKILL.md` manda preencher o caminho do piso no despacho do revisor de task; o prompt avisa quando não leu.
+
 ## 1.16.0
 
 - Skill nova `performance`: projeta para o volume real de dados e prova a velocidade com número. Receitas de busca (Postgres com `search_text` e `pg_trgm` ou full-text, SQLite com FTS5, navegador só sem banco), leitura (cursor, colunas enxutas, sem N+1, índice por filtro e ordenação) e lista (virtualização). Orçamento padrão: busca abaixo de 200 ms no p95, digitação abaixo de 100 ms, INP abaixo de 200 ms. As receitas de Postgres foram rodadas no PostgreSQL 17.
