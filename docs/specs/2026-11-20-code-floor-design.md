@@ -73,3 +73,14 @@ Cada regra entra como **Regra própria** no ledger da skill tocada (`reviewing`,
 - `aligning/SKILL.md` tem 13 bytes de folga: se o item 4 entrar, o texto novo é pago cortando o mesmo tanto, sem tirar regra.
 - `npm test` verde em cada commit; cada `SKILL.md` dentro do teto.
 - Nunca duas `compare.mjs` ao mesmo tempo no mesmo HEAD.
+
+## O que mudou na execução (2026-11-20)
+
+Os RED mostraram que dois dos três itens não tinham falha para corrigir. O que segue vale no lugar dos trechos acima que dizem o contrário.
+
+- **`implementing-enxuto` é caso fraco.** Renomeado para `implementing-enxuto-recibo` (a `compare.mjs` escolhe por `<prefixo>-*`). No RED, `devorb` e `none` passaram 2 de 2 e escreveram o mesmo arquivo de 20 a 22 linhas, sem biblioteca e sem fábrica. Fica em `evals/` como o caso do brief, registrado como fraco; não justifica edição de `SKILL.md`.
+- **A reescrita permitida virou um caso de revisão**, `reviewing-piso-de-codigo`: branch que funciona e carrega quatro sinais (um `catch {}` que engole erro, uma fábrica de um uso só, uma biblioteca de datas para um formato, uma função exportada que ninguém chama). RED: `devorb` 0%, `none` 0%. É esse caso que justifica o piso e a edição de `skills/reviewing/SKILL.md`.
+- **`skills/implementing/SKILL.md` não é editado**: não há caso de `implementing` em RED. O caminho do piso chega ao revisor de task e ao implementador pelas notas de preenchimento dos próprios prompts.
+- **Os portões no `verifying` não foram construídos (objetivo 3).** O caso `verifying-portoes-do-projeto` passou nos dois braços duas vezes: com os portões como scripts do `package.json` e, reescrito, só como configuração e ferramentas instaladas. O modelo já acha e roda os portões sem a regra. O caso fica em `evals/` na segunda forma.
+- **A proposta no `aligning` não foi construída (objetivo 4)**: dependia do verde do objetivo 3.
+- **Comparação de linhas do brief:** `src/recibo.js` com 21 e 20 linhas no `devorb`, 21 e 22 no `none`. Empate.
