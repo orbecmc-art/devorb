@@ -134,7 +134,7 @@ Em aberto:
 
 - O caso reservado `implementing-espelho-sem-navegador` pode premiar o comportamento antigo. O autor não o abre, e um agente novo recusou ler o caso para ele. A conferência é uma rodada `--reserved`.
 - Os outros casos de interface no sandbox (`implementing-fontes-ui`, `visual-direction-arquitetura-clean`) agora terminam "não pronta". Os graders deles não leem isso, e eles não rodaram de novo.
-- A parte B do plano (mínimo de 2 voltas e crítica contra o contrato no espelho) não foi feita. Nos dois traces guardados de `devorb@9af742a` (2026-11-17) o agente já deu 2 ou mais voltas; o campo da crítica contra o contrato não existe.
+- A parte B do plano (mínimo de 2 voltas e crítica contra o contrato no espelho) não foi feita, por decisão do dono em 2026-11-20, depois de ver estes dados: nos dois traces guardados de `devorb@9af742a` (2026-11-17) o agente já deu 2 ou mais voltas, então não há falha gravada para o mínimo; o campo da crítica contra o contrato não existe no espelho, mas essa crítica já acontece depois, no `devorb:ui-review`, com um crítico novo. Nenhuma rodada da parte B foi paga. Do pedido do brief ("pelo menos 2 voltas", "crítica contra o contrato") ficam sem texto novo e sem medição própria.
 
 ## Decisões por commit de fonte
 

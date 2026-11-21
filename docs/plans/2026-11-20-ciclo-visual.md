@@ -91,3 +91,10 @@ for `implementing/SKILL.md`; in `implementer.md`, "report DONE_WITH_CONCERNS" be
 ### Task 4: Two rounds and the contract, GREEN (part B) — only with the owner's go
 
 - [ ] Text in `skills/implementing/prompts/implementer.md` (Mirror steps 4 and 5, the report line), trimmed to what Task 3 showed failing; `npm test`; commit; `node tools/compare.mjs --skill implementing-espelho --arms devorb,none --outside-sandbox --runs 3`; ledger; commit.
+
+## Outcome
+
+- Part A (Tasks 1 and 2): done. RED at `devorb@71404d4`: devorb 0 of 2, none 0 of 2, only grader 1 failing, US$ 7.81. Text in `9607748`: one paragraph in `skills/implementing/SKILL.md` section 5 and one sentence in `skills/verifying/SKILL.md`; `implementer.md` and `inline.md` were left as they are. GREEN at `devorb@9607748`: devorb 2 of 3, none 0 of 3, `accepted: true`, US$ 6.25. Part A cost US$ 14.06; front total US$ 58.04 of 80.
+- Part B (Tasks 3 and 4): not done, by the owner's decision of 2026-11-20. No paid round. The saved traces of `devorb@9af742a` show two or more mirror rounds in 2 of 2 runs, so "at least 2 rounds" has no failing run; the contract critique already happens in `devorb:ui-review` after the task review. The two graders written for Task 3 were not committed.
+- The reserved case `implementing-espelho-sem-navegador` was not run (about US$ 11 for 2 runs on a case already at 0%): someone who is not the author should read it against the new gate.
+- Stopped before the merge.

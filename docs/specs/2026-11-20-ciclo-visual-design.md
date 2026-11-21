@@ -51,3 +51,10 @@ Teto da frente: US$ 80. Gasto: US$ 43,98. Saldo: US$ 36,02. Estimativas: parte A
 - "Não pronta" quer dizer: sem linha `complete` no ledger, status BLOCKED do implementador, e a primeira coisa da mensagem final. A página fica commitada para não se perder.
 - O texto entra onde o RED mostrar a falha, começando pelo `implementing/SKILL.md`, que os dois caminhos (subagente e inline) leem.
 - O modelo dos evals fica o `claude-opus-5-5`.
+
+## Resultado (2026-11-20)
+
+- **Parte A, feita.** RED em `devorb@71404d4`: 0 de 2 nos dois braços, só o grader 1 falhando, US$ 7,81. GREEN em `devorb@9607748`: `devorb` 2 de 3, `none` 0 de 3, `accepted: true`, US$ 6,25. O texto entrou em dois lugares, não nos quatro candidatos: um parágrafo no `implementing/SKILL.md` e uma frase no `verifying/SKILL.md`. O status do implementador continua DONE_WITH_CONCERNS; quem segura a conclusão é o controlador.
+- **Parte B, não feita, por decisão do dono.** As 2 voltas já acontecem nos traces guardados, e a crítica contra o contrato já existe no `devorb:ui-review`. Do pedido do brief, "pelo menos 2 voltas" e "crítica contra o contrato" ficam sem texto novo.
+- **Reservado não rodado.** Fica para alguém que não seja o autor.
+- Custo do item 3: US$ 14,06. Total da frente C: US$ 58,04 dos US$ 80.
