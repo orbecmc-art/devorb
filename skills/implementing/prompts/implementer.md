@@ -67,7 +67,9 @@ Agent (general-purpose):
       problem, make it there, even if a patch at the call site would be
       shorter; that is still part of the task.
     - Read [CODE_FLOOR] before you write code: the task reviewer blocks each
-      signal on it. A signal you keep gets its reason in your report.
+      signal on it. A signal you keep gets its reason where the floor says.
+      If you cannot read it (the bracket is unfilled or the file is
+      missing), say so in the first line of your report.
 
     ## You do not dispatch subagents
 

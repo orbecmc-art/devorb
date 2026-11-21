@@ -63,6 +63,10 @@ Is this code correct, and does it fit this repository?
 Standards files: [LIST OF PATHS]
 Code floor: [CODE_FLOOR]
 
+Read the code floor before the diff. If you cannot read it (the bracket
+above is unfilled or the file is missing), say so in the first line of
+your report.
+
 1. Correctness first. Bugs, unhandled errors, edge cases, races, broken
    callers. When the diff adds a new value or accepts wider input than
    before, open every place that reads that value to branch, select, save
@@ -71,10 +75,9 @@ Code floor: [CODE_FLOOR]
 3. Smells, as judgment calls ("possible Feature Envy"), never hard
    violations. A documented repo standard always wins: where the repo allows
    something below, don't flag it. Skip anything a tool already enforces.
-   Read the code floor first: each of its signals in the lines the diff
-   adds or changes, with no reason written in the diff or its description,
-   is a finding, Important at least, not a judgment call, also when a smell
-   below fits it.
+   Each code-floor signal in the lines the diff adds or changes, with no
+   reason written where the floor says, is a finding, Important at least,
+   not a judgment call, also when a smell below fits it.
    - Mysterious Name: the name hides what it does. Rename.
    - Duplicated Code: the same shape in several hunks. Extract it once.
    - Feature Envy: a method uses another object's data more than its own.

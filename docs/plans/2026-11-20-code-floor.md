@@ -10,6 +10,8 @@
 
 **Spec:** `docs/specs/2026-11-20-code-floor-design.md`
 
+**Mudou na execução:** ver a última seção da spec. A Task 2 abaixo ainda diz que `skills/implementing/SKILL.md` é editado; não foi.
+
 ## Global Constraints
 
 - Skill text in English; ledgers, eval prompts and graders in Portuguese. Skill changes follow `skills/writing-skills/references/devorb.md`; invoke `devorb:writing-skills` before writing or editing any skill file.

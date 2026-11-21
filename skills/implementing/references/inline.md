@@ -27,8 +27,7 @@ pre-flight scan. Two changes to setup:
   `prompts/implementer.md` ("Your diff answers to the brief") binds you
   as it binds a subagent: read it once now. Its `[CODE_FLOOR]` is
   `devorb:reviewing`'s `references/code-floor.md`: read it before the first
-  code file, and write the reason for a signal you keep as a `Ruling:` line,
-  since you have no report.
+  code file, and write the reason for a signal you keep where it says.
 
 ## The task loop
 

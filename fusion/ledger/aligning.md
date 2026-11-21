@@ -73,6 +73,7 @@ As mudanças além das fontes que não estão na lista abaixo vêm de decisões 
 - **Dos scripts:** nada foi cortado. Ficam com a marca do Superpowers (título "Superpowers Brainstorming", texto "Superpowers v" e link para o repositório deles) e com `readSuperpowersVersion`, que lê o `package.json` três pastas acima. O da raiz do DevOrb não tem `version`, então a página mostra "vunknown".
 - **Do Matt:** `grill-me` e `grill-with-docs` só chamam outras skills, então viraram o gatilho da rodada e a linha de `devorb:domain-modeling`; o formato com emoji da rodada; `agents/openai.yaml` dos três, metadado de outra ferramenta.
 - **Do ECC:** os critérios de aceite numerados, os dois níveis de profundidade, o modelo de documento, a tabela de categorias de risco, a revisão de spec existente, os exemplos de passa e falha, a regra de não escrever no repositório nem bloquear a implementação (o DevOrb tem trava e documento próprios), e as regras sobre segredos e testes destrutivos, que pertencem a `planning`, `verifying` e `reviewing`. A ideia de critério observável pode servir a `devorb:planning` (Task 11), mas não entrou aqui.
+- **Portões em projeto novo (frente B, 2026-11-20):** proposta de ligar os portões em projeto novo não construída: dependia do verde dos portões no `verifying`.
 
 ## Resultados
 
