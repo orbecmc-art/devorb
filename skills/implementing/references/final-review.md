@@ -25,6 +25,8 @@ branch, on the most capable available model, and hand it:
 - a pointer to the ledger's `Ruling:`, `parked` and `minor (deferred)` lines,
   so it can weigh your calls and decide which deferred items must be fixed
   before merge;
+- the absolute path of its own `references/code-floor.md`, the code floor its
+  Standards reviewer grades by;
 - the suite command and its counts from the fresh run above.
 
 This is the review the whole run is built around. Don't skip it, and don't

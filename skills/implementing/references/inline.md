@@ -25,7 +25,10 @@ pre-flight scan. Two changes to setup:
   task, even in a plan whose steps already say "write the failing test first".
 - **Your diff answers to the brief.** The rule in
   `prompts/implementer.md` ("Your diff answers to the brief") binds you
-  as it binds a subagent: read it once now.
+  as it binds a subagent: read it once now. Its `[CODE_FLOOR]` is
+  `devorb:reviewing`'s `references/code-floor.md`: read it before the first
+  code file, and write the reason for a signal you keep as a `Ruling:` line,
+  since you have no report.
 
 ## The task loop
 

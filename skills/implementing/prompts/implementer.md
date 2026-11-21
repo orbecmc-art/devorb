@@ -66,6 +66,8 @@ Agent (general-purpose):
       not the fewest lines. When the right fix sits at the source of the
       problem, make it there, even if a patch at the call site would be
       shorter; that is still part of the task.
+    - Read [CODE_FLOOR] before you write code: the task reviewer blocks each
+      signal on it. A signal you keep gets its reason in your report.
 
     ## You do not dispatch subagents
 
@@ -204,3 +206,6 @@ Agent (general-purpose):
     DONE_WITH_CONCERNS: done, with doubts about correctness. Never silently
     hand over work you're unsure about.
 ```
+
+**Placeholders:** `[CODE_FLOOR]` is the absolute path of `devorb:reviewing`'s
+`references/code-floor.md`.

@@ -25,7 +25,7 @@ Stop here if `BASE` doesn't resolve, or if the diff and `git status` are both em
 ### 2. Gather the context
 
 - **Spec:** the plan task and spec in `docs/devorb/plans/` and `docs/devorb/specs/`, an issue the commits cite, or a path the user gave, plus the plan's Review Focus section, verbatim, when given. None found? Ask once where it is. If there is none, the Spec axis is skipped and the report says so.
-- **Standards:** every file in the repo that says how code is written: `CLAUDE.md`, `CONTRIBUTING.md`, a coding-standards file, linter config, `docs/adr/`, `GLOSSARY.md`. The reviewer also carries the smell list in `references/code-reviewer.md`. **The repo's documented standards beat that list:** a smell the repo endorses is not a finding, and anything a tool already enforces is skipped.
+- **Standards:** every file in the repo that says how code is written: `CLAUDE.md`, `CONTRIBUTING.md`, a coding-standards file, linter config, `docs/adr/`, `GLOSSARY.md`. The reviewer also carries the smell list in `references/code-reviewer.md`, and whoever runs this axis, you included, first reads the code floor, `references/code-floor.md` (its absolute path fills `[CODE_FLOOR]`): each floor signal the diff adds, with no reason written in the diff or its description, is a Standards finding, Important at least. **The repo's documented standards beat both lists:** a smell the repo endorses is not a finding, and anything a tool already enforces is skipped.
 - **Evidence:** what `devorb:verifying` ran, with counts, so reviewers read results instead of guessing.
 
 ### 3. Check for risk triggers
@@ -55,7 +55,7 @@ Reviewers are read-only and dispatch no one. Without subagents, run each axis yo
 Keep one heading per axis, `## Standards`, `## Spec`, and `## Risk` when it ran. Don't merge findings across axes or rank one axis against another: a change can follow every rule and build the wrong thing, or build the right thing badly, and merging hides one behind the other. Inside each axis:
 
 - **Critical:** wrong behavior, security hole, data loss, broken build or test.
-- **Important:** a requirement missing or wrong on some path, poor error handling, a test gap, a loosened gate.
+- **Important:** a requirement missing or wrong on some path, poor error handling, a test gap, a loosened gate, a code-floor signal with no written reason.
 - **Minor:** style, naming, small cleanup.
 
 Each finding gives `file:line`, what is wrong, why it matters and the fix if it isn't obvious. A lead nobody could settle goes under **Needs checking**, with no severity: the fact that is missing and the check that would settle it. End with one line per axis (count and worst finding) and a verdict: ready, ready with fixes, or not ready.
