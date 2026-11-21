@@ -96,6 +96,10 @@ prints the tail and, only if they pass, appends
 A failing run records nothing. When it records, mark the todo complete and take
 the next task.
 
+A user-interface task whose ledger line says `Mirror: not run` is not done: run
+no `task-done` for it and write `Task <N>: not ready: no screenshot (<why>)`
+instead, as section 5 of `SKILL.md` says.
+
 ## Final review
 
 First run the full suite fresh through `devorb:verifying` and keep the command

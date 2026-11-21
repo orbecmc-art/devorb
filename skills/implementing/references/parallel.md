@@ -67,6 +67,9 @@ run; merging the integration branch anywhere else is `devorb:finishing`'s.
   Red: the tasks weren't independent. Dispatch one fix implementer on the
   integration branch with the failing output (it uses `devorb:debugging`),
   then a scoped re-review of its fix, as one fix-loop round.
+- **A user-interface task with `Mirror: not run`:** merge it the same way and
+  append `Task <N>: not ready: no screenshot (<why>)` in place of the
+  `complete` line, as section 5 of `SKILL.md` says.
 - **Conflict:** `git merge --abort`. Resume that task's implementer: merge the
   integration tip into its branch, resolve, re-run its tests, append a fix
   report. Re-review with `review-package` over `<integration tip>..<task head>`,

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.18.0
+
+- Aviso de resultado de ação é trabalho de toast: em `visual-direction/references/sources.md`, o trabalho é nomeado pelo que acontece na tela. O aviso que informa o resultado de uma ação (salvou, inscreveu, enviou, falhou no servidor) usa o especialista da lista e nunca é uma linha de status montada no formulário; erro de validação de campo fica junto do campo. `visual-direction-arquitetura-clean`: de 0% para 67% (2 de 3), com o `sonner` no `package.json` em 3 de 3. A `compare.mjs` imprimiu `accepted: false`, porque uma rodada estourou os 1200 s do caso; aceito pelo dono como está.
+- O grader `6-newsletter-toast` desse caso foi afrouxado por decisão do dono: aceita o envio por uma função importada chamada com `await`, e nenhum grader vê mais o `POST`.
+- A mensagem final de um trabalho de interface nomeia as fontes consultadas e puladas (`implementing` e `verifying`).
+- Tela de operação: o contrato nomeia as teclas (`visual-direction/references/operate.md`). Caso novo `visual-direction-tabela-operacao`, com 20 mil pedidos e 85 campos: `devorb` 67%, sem plugin 67%, `accepted: true`. O caso não separa os braços.
+- Considerado e não construído: a seção de tabela densa do `operate.md`. Colunas padrão, lugar para os outros campos, paginação, estados, busca e mudança de status já saem certos sem texto novo; colunas fixas, visões salvas, filtros e atualização otimista não foram medidos.
+- Sem print, a task de interface não está pronta: no `implementing` (laço, inline e paralelo) e no `verifying`. Com `Mirror: not run`, a task não ganha linha `complete`, o resto do laço continua (revisão, crítica do `ui-review` a partir do código, correções) e a mensagem final abre dizendo que a task não está pronta e o que a destrava. Instalar o Playwright continua sendo decisão do usuário. Caso novo `implementing-sem-print`: RED 0%, GREEN 100% na terceira versão do texto (sem plugin 0%).
+- Considerado e não construído, por decisão do dono: mínimo de 2 voltas e crítica contra o contrato no espelho do implementador. As 2 voltas já aparecem nos traces guardados.
+- Não rodou: o reservado `visual-direction-guia-restaurante` e nenhuma rodada `--reserved`.
+- Lacunas conhecidas: num build aprovado o erro de e-mail inválido aparece no campo e também num toast; o texto da trava diz que `not ready` fecha a task para a retomada e para a revisão final, mas as linhas que mandam nisso ainda dizem `complete`; o ponteiro do `operate.md` para `devorb:performance` não foi escrito.
+- Custo: US$ 80,58, US$ 0,58 acima dos US$ 80 aprovados.
+
 ## 1.17.0
 
 - Piso de código: `skills/reviewing/references/code-floor.md` lista nove sinais de código júnior que a revisão recusa como bloqueantes (`useEffect` para estado derivado, fetch em loop, `catch` que engole erro, `any`, abstração de um uso só, dependência nova para dez linhas, comentário que narra, arquivo que faz tudo, código morto), cada um com o conserto. Um sinal só fica com motivo escrito em comentário na linha; padrão documentado do repositório vence o piso. Lido pela `reviewing`, pelo `task-reviewer` e pelo caminho inline do `implementing`.

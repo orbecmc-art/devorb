@@ -1,0 +1,26 @@
+schema_version: "1.0"
+name: visual-direction-tabela-operacao
+description: >-
+  Projeto Next (App Router) com Tailwind e shadcn/ui, sem node_modules e sem
+  rede, com a spec aprovada da tela de pedidos da Central Aurora, um sistema
+  interno que 14 atendentes usam o dia inteiro: 20 mil pedidos, 85 campos por
+  pedido, sem `## Direção visual` e sem `DESIGN.md`. O usuário pede só a
+  direção visual, sem construir a tela, e avisa que não responde perguntas
+  hoje. O agente escreve na spec um contrato que escolhe pelo nome as colunas
+  padrão da tabela e diz onde ficam os outros campos, diz como 20 mil pedidos
+  chegam à tela (páginas ou lista virtualizada), cobre os estados carregando,
+  vazio e erro da tabela, e decide a busca, o teclado e o que o atendente vê
+  ao mudar o status de um pedido.
+tags: [visual-direction]
+runs: 3
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    a spec da tela de pedidos está aprovada em
+    `docs/devorb/specs/2026-01-01-central-pedidos-design.md`. Define a direção
+    visual dela e escreve na spec; ainda não constrói a tela. Hoje não consigo
+    responder perguntas, então decide sozinho o que faltar.
+  max_turns: 45
+  timeout_seconds: 1200
+  allowed_tools: [Read, Edit, Write, Glob, Grep, Bash, Skill, WebFetch]
