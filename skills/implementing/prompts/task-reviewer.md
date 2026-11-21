@@ -126,6 +126,12 @@ Agent (general-purpose):
       Fix: a limit and a cursor; a join or one batched load; an index on the
       filtered or sorted columns; pagination or virtualization (the recipes
       are in `devorb:performance`).
+    - **Floor:** read `[CODE_FLOOR]`. Each of its signals in the lines this
+      diff adds or changes, with no reason written where the floor says, is
+      Important at least. If you cannot read it (the bracket is unfilled or
+      the file is missing), say so in the first line of your report, before
+      the spec-compliance verdict, and set Task quality to Needs fixes: the
+      floor check did not run.
 
     Point at evidence: file:line for every finding and for any check you'd
     otherwise answer with a bare "yes".
@@ -174,4 +180,5 @@ requirements copied verbatim from the plan's Global Constraints or the spec
 (values, formats, stated relationships between components), not process
 rules. `[REPORT_FILE]` is the implementer's report. `[BASE_SHA]` is the
 commit you recorded before dispatch, `[HEAD_SHA]` the current one.
-`[DIFF_FILE]` is the path `scripts/review-package` printed.
+`[DIFF_FILE]` is the path `scripts/review-package` printed. `[CODE_FLOOR]` is
+the absolute path of `devorb:reviewing`'s `references/code-floor.md`.

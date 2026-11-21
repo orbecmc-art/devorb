@@ -1,0 +1,22 @@
+schema_version: "1.0"
+name: reviewing-piso-de-codigo
+description: >-
+  Loja em Node com uma spec aprovada de recibo do pedido; a branch
+  feature/recibo-pedido faz o que a spec pede e os testes passam, mas planta
+  quatro sinais de código júnior: um catch vazio que engole o erro de gravação,
+  um mapa de formatadores com uma entrada só e uma fábrica com um chamador, a
+  dependência dayjs para formatar uma data e uma função exportada que ninguém
+  chama. O agente revisa a branch antes do merge, sem mexer no código.
+tags: [reviewing]
+runs: 2
+context:
+  scaffold_script: scaffold.sh
+execution:
+  prompt: >-
+    Revisa a branch `feature/recibo-pedido` antes de eu fazer o merge na
+    `main`. Ela implementa a spec do recibo do pedido, que já foi aprovada. Não
+    vou conseguir responder perguntas hoje, então me entrega a revisão completa
+    numa resposta só.
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Bash, Skill, Agent]
