@@ -58,3 +58,4 @@ Teto da frente: US$ 80. Gasto: US$ 43,98. Saldo: US$ 36,02. Estimativas: parte A
 - **Parte B, não feita, por decisão do dono.** As 2 voltas já acontecem nos traces guardados, e a crítica contra o contrato já existe no `devorb:ui-review`. Do pedido do brief, "pelo menos 2 voltas" e "crítica contra o contrato" ficam sem texto novo.
 - **Reservado não rodado.** Fica para alguém que não seja o autor.
 - Custo do item 3: US$ 36,60. Total da frente C: US$ 80,58, US$ 0,58 acima do teto de US$ 80: a última rodada saiu com US$ 12,00 de saldo, numa estimativa de US$ 10, e custou US$ 12,58.
+- **Re-revisão final: "precisa de ajustes", não feitos.** O dono viu os achados e o estouro do teto em 2026-11-20 e decidiu deixar o item 3 como está. Eles ficam em aberto no ledger do `implementing`.
